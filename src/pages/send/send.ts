@@ -27,8 +27,10 @@ export class SendPage extends WalletTabsChild {
   public search: string = '';
   public walletsBtc;
   public walletsBch;
+  public walletsBcd;
   public hasBtcWallets: boolean;
   public hasBchWallets: boolean;
+  public hasBcdWallets: boolean;
   public invalidAddress: boolean;
 
   private scannerOpened: boolean;
@@ -68,8 +70,10 @@ export class SendPage extends WalletTabsChild {
 
     this.walletsBtc = this.profileProvider.getWallets({ coin: 'btc' });
     this.walletsBch = this.profileProvider.getWallets({ coin: 'bch' });
+    this.walletsBcd = this.profileProvider.getWallets({ coin: 'bcd' });
     this.hasBtcWallets = !_.isEmpty(this.walletsBtc);
     this.hasBchWallets = !_.isEmpty(this.walletsBch);
+    this.hasBcdWallets = !_.isEmpty(this.walletsBcd);
   }
 
   ionViewWillLeave() {

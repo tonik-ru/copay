@@ -50,6 +50,7 @@ export class ConfirmPage extends WalletTabsChild {
 
   private bitcore;
   protected bitcoreCash;
+  protected bitcoreDiamond;
 
   public countDown = null;
   public CONFIRM_LIMIT_USD: number;
@@ -117,6 +118,7 @@ export class ConfirmPage extends WalletTabsChild {
     super(navCtrl, profileProvider, walletTabsProvider);
     this.bitcore = this.bwcProvider.getBitcore();
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
+    this.bitcoreDiamond = this.bwcProvider.getBitcoreDiamond();
     this.CONFIRM_LIMIT_USD = 20;
     this.FEE_TOO_HIGH_LIMIT_PER = 15;
     this.config = this.configProvider.get();
@@ -142,8 +144,8 @@ export class ConfirmPage extends WalletTabsChild {
   ionViewWillEnter() {
     this.navCtrl.swipeBackEnabled = false;
     this.isOpenSelector = false;
-    const B =
-      this.navParams.data.coin == 'bch' ? this.bitcoreCash : this.bitcore;
+    const B = this.navParams.data.coin == 'bcd' ? this.bitcoreDiamond :
+          (this.navParams.data.coin == 'bch' ? this.bitcoreCash : this.bitcore);
     let networkName;
     let amount;
     if (this.fromMultiSend) {

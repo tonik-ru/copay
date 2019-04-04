@@ -102,7 +102,9 @@ export class CreateWalletPage implements OnInit {
     this.createLabel =
       this.coin === 'btc'
         ? this.translate.instant('Create BTC Wallet')
-        : this.translate.instant('Create BCH Wallet');
+        : (this.coin === 'bch') ? this.translate.instant('Create BCH Wallet')
+        : (this.coin === 'bcd') ? this.translate.instant('Create BCD Wallet') : 'UNKNOWN';
+
 
     this.setTotalCopayers(this.tc);
     this.updateRCSelect(this.tc);

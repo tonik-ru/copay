@@ -60,7 +60,7 @@ export class AddressProvider {
   ): boolean {
     if (this.isValid(str)) {
       const address = this.extractAddress(str);
-      return this.getCoin(address) == coin &&
+      return (this.getCoin(address) == coin  || (this.getCoin(address) == 'btc' && coin == 'bcd')) &&
         this.getNetwork(address) == network
         ? true
         : false;

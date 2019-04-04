@@ -225,6 +225,14 @@ export class AmountPage extends WalletTabsChild {
       });
     }
 
+    if (parentWalletCoin === 'bcd' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Bitcoin Diamond',
+        id: 'bcd',
+        shortName: 'BCD'
+      });
+    }
+
     this.unitIndex = 0;
 
     if (this.navParams.data.coin) {

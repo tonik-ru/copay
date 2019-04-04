@@ -20,6 +20,11 @@ export class BwcProvider {
     return BWC.BitcoreCash;
   }
 
+  public getBitcoreDiamond() {
+    return BWC.BitcoreDiamond;
+  }
+
+
   public getErrors() {
     return BWC.errors;
   }
@@ -37,7 +42,7 @@ export class BwcProvider {
 
     // note opts use `bwsurl` all lowercase;
     let bwc = new BWC({
-      baseUrl: opts.bwsurl || 'https://bws.bitpay.com/bws/api',
+      baseUrl: opts.bwsurl || 'http://127.0.0.1:3232/bws/api',
       verbose: opts.verbose,
       timeout: 100000,
       transports: ['polling']

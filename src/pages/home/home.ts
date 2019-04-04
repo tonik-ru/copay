@@ -46,6 +46,7 @@ export class HomePage {
   public wallets;
   public walletsBtc;
   public walletsBch;
+  public walletsBcd;
   public cachedBalanceUpdateOn: string;
   public txpsN: number;
   public serverMessages: any[];
@@ -61,6 +62,7 @@ export class HomePage {
   public showRateCard: boolean;
   public showReorderBtc: boolean;
   public showReorderBch: boolean;
+  public showReorderBcd: boolean;
   public showReorderVaultWallets: boolean;
   public showIntegration;
   public hideHomeIntegrations: boolean;
@@ -102,6 +104,7 @@ export class HomePage {
     this.isElectron = this.platformProvider.isElectron;
     this.showReorderBtc = false;
     this.showReorderBch = false;
+    this.showReorderBcd = false;
     this.showReorderVaultWallets = false;
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.events.subscribe('Home/reloadStatus', () => {
@@ -357,6 +360,13 @@ export class HomePage {
     this.walletsBch = _.filter(this.wallets, (x: any) => {
       return (
         x.credentials.coin == 'bch' &&
+        !this.profileProvider.vaultHasWallet(x.credentials.walletId)
+      );
+    });
+
+    this.walletsBcd = _.filter(this.wallets, (x: any) => {
+      return (
+        x.credentials.coin == 'bcd' &&
         !this.profileProvider.vaultHasWallet(x.credentials.walletId)
       );
     });
@@ -633,6 +643,7 @@ export class HomePage {
     if (
       this.showReorderBtc ||
       this.showReorderBch ||
+      this.showReorderBcd ||
       this.showReorderVaultWallets
     )
       return;
@@ -646,6 +657,10 @@ export class HomePage {
 
   public reorderBch(): void {
     this.showReorderBch = !this.showReorderBch;
+  }
+
+  public reorderBcd(): void {
+    this.showReorderBcd = !this.showReorderBcd;
   }
 
   public reorderVault(): void {
@@ -666,6 +681,15 @@ export class HomePage {
     this.walletsBch.splice(indexes.from, 1);
     this.walletsBch.splice(indexes.to, 0, element);
     _.each(this.walletsBch, (wallet, index: number) => {
+      this.profileProvider.setWalletOrder(wallet.id, index);
+    });
+  }
+
+  public reorderWalletsBcd(indexes): void {
+    const element = this.walletsBcd[indexes.from];
+    this.walletsBcd.splice(indexes.from, 1);
+    this.walletsBcd.splice(indexes.to, 0, element);
+    _.each(this.walletsBcd, (wallet, index: number) => {
       this.profileProvider.setWalletOrder(wallet.id, index);
     });
   }

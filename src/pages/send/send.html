@@ -38,7 +38,7 @@
   </div>
 
   <div *ngIf="!shouldShowZeroState()">
-    <div *ngIf="hasBtcWallets || hasBchWallets">
+    <div *ngIf="hasBtcWallets || hasBchWallets || hasBcdWallets">
       <div class="send-header-wrapper">
         <span class="send-heading" translate>Recipient</span>
         <ion-item class="search-wrapper" [ngClass]="{'invalid': invalidAddress && search != ''}">
@@ -67,7 +67,7 @@
       <page-transfer-to [wallet]="wallet" [searchInput]="search" [useAsModal]="false" #transferTo></page-transfer-to>
 
     </div>
-    <div *ngIf="!hasBtcWallets && !hasBchWallets" class="no-wallet-message">
+    <div *ngIf="!hasBtcWallets && !hasBchWallets &&!hasBcdWallets" class="no-wallet-message">
       <span translate>To get started, you'll need to create a bitcoin wallet and get some bitcoin.</span>
     </div>
   </div>
