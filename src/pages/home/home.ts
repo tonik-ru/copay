@@ -34,6 +34,8 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { Coin, WalletProvider } from '../../providers/wallet/wallet';
 import { SettingsPage } from '../settings/settings';
 
+import { UserstatsPage } from '../userstats/userstats';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -733,5 +735,9 @@ export class HomePage {
 
   public settings(): void {
     this.navCtrl.push(SettingsPage);
+  }
+
+  public goToUserStats(): void{
+    this.navCtrl.push(UserstatsPage);
   }
 }

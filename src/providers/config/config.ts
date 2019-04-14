@@ -96,6 +96,11 @@ export interface Config {
   blockExplorerUrl: {
     btc: string;
     bch: string;
+    bcd: string;
+  };
+
+  trader: {
+    baseUrl: string;
   };
 }
 
@@ -201,7 +206,12 @@ export class ConfigProvider {
 
       blockExplorerUrl: {
         btc: 'insight.bitcore.io/#/BTC/',
-        bch: 'insight.bitcore.io/#/BCH/'
+        bch: 'insight.bitcore.io/#/BCH/',
+        bcd: '127.0.0.1:8200/#/BCD/'
+      },
+
+      trader: {
+        baseUrl: 'http://websocket.rekdeck.com/ui/'
       }
     };
   }
@@ -306,6 +316,10 @@ export class ConfigProvider {
       this.configCache.wallet.settings.unitToSatoshi = this.configDefault.wallet.settings.unitToSatoshi;
       this.configCache.wallet.settings.unitDecimals = this.configDefault.wallet.settings.unitDecimals;
       this.configCache.wallet.settings.unitCode = this.configDefault.wallet.settings.unitCode;
+    }
+
+    if (!this.configCache.trader) {
+      this.configCache.trader = this.configDefault.trader;
     }
   }
 }

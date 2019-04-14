@@ -58,6 +58,7 @@ import {
   Toast,
   TouchID,
   TouchIdProvider,
+  TraderProvider,
   TxConfirmNotificationProvider,
   TxFormatProvider,
   UserAgent,
@@ -129,7 +130,8 @@ import {
     DecimalPipe,
     PersistenceProvider,
     File,
-    WalletTabsProvider
+    WalletTabsProvider,
+    TraderProvider
   ]
 })
 export class ProvidersModule {}

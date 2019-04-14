@@ -9,24 +9,29 @@ export class RateProvider {
   private rates;
   private alternatives;
   private ratesBCH;
+  private ratesBCD;
   private ratesBtcAvailable: boolean;
   private ratesBchAvailable: boolean;
+  private ratesBcdAvailable: boolean;
 
   private SAT_TO_BTC: number;
   private BTC_TO_SAT: number;
 
   private rateServiceUrl = env.ratesAPI.btc;
   private bchRateServiceUrl = env.ratesAPI.bch;
+  private bcdRateServiceUrl = env.ratesAPI.bcd;
 
   constructor(private http: HttpClient, private logger: Logger) {
     this.logger.debug('RateProvider initialized');
     this.rates = {};
     this.alternatives = [];
     this.ratesBCH = {};
+    this.ratesBCD = {};
     this.SAT_TO_BTC = 1 / 1e8;
     this.BTC_TO_SAT = 1e8;
     this.ratesBtcAvailable = false;
     this.ratesBchAvailable = false;
+    this.ratesBcdAvailable = false;
     this.updateRatesBtc();
     this.updateRatesBch();
   }
@@ -44,11 +49,36 @@ export class RateProvider {
             });
           });
           this.ratesBtcAvailable = true;
+          this.logger.debug('BTC rates updated');
+
+          resolve();
+        })
+        .then(x => {
+          this.updateRatesBcd();
           resolve();
         })
         .catch(errorBTC => {
           this.logger.error(errorBTC);
           reject(errorBTC);
+        });
+    });
+  }
+
+  public updateRatesBcd(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.logger.debug('Updating BCD rates');
+      this.getBCD()
+        .then(dataBCD => {
+          for (var code in this.rates) {
+            this.ratesBCD[code] = this.rates[code] * dataBCD.rate;
+          };
+          this.ratesBCD['bcd'] = 1;
+          this.ratesBcdAvailable = true;
+          resolve();
+        })
+        .catch(errorBCD => {
+          this.logger.error(errorBCD);
+          reject(errorBCD);
         });
     });
   }
@@ -86,8 +116,17 @@ export class RateProvider {
     });
   }
 
+  public getBCD(): Promise<any> {
+    return new Promise(resolve => {
+      this.http.get(this.bcdRateServiceUrl).subscribe(data => {
+        resolve(data);
+      });
+    });
+  }
+
   public getRate(code: string, chain?: string): number {
     if (chain == 'bch') return this.ratesBCH[code];
+    if (chain == 'bcd') return this.ratesBCD[code];
     else return this.rates[code];
   }
 
@@ -103,10 +142,15 @@ export class RateProvider {
     return this.ratesBchAvailable;
   }
 
+  public isBcdAvailable() {
+    return this.ratesBcdAvailable;
+  }
+
   public toFiat(satoshis: number, code: string, chain: string): number {
     if (
       (!this.isBtcAvailable() && chain == 'btc') ||
-      (!this.isBchAvailable() && chain == 'bch')
+      (!this.isBchAvailable() && chain == 'bch') ||
+      (!this.isBcdAvailable() && chain == 'bcd')
     ) {
       return null;
     }
@@ -116,7 +160,8 @@ export class RateProvider {
   public fromFiat(amount: number, code: string, chain: string): number {
     if (
       (!this.isBtcAvailable() && chain == 'btc') ||
-      (!this.isBchAvailable() && chain == 'bch')
+      (!this.isBchAvailable() && chain == 'bch') ||
+      (!this.isBcdAvailable() && chain == 'bcd')
     ) {
       return null;
     }
@@ -142,7 +187,8 @@ export class RateProvider {
     return new Promise(resolve => {
       if (
         (this.ratesBtcAvailable && chain == 'btc') ||
-        (this.ratesBchAvailable && chain == 'bch')
+        (this.ratesBchAvailable && chain == 'bch') ||
+        (this.ratesBcdAvailable && chain == 'bcd')
       )
         resolve();
       else {

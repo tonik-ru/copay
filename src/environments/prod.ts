@@ -8,7 +8,8 @@ const env: EnvironmentSchema = {
   enableAnimations: true,
   ratesAPI: {
     btc: 'https://bitpay.com/api/rates',
-    bch: 'https://bitpay.com/api/rates/bch'
+    bch: 'https://bitpay.com/api/rates/bch',
+    bcd: 'http://localhost:3232/bws/api/v1/fiatrates/BCD?provider=Binance',
   },
   activateScanner: true
 };

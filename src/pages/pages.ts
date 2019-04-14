@@ -110,6 +110,8 @@ import { WalletTabsChild } from './wallet-tabs/wallet-tabs-child';
 import { CardCatalogPage } from './integrations/gift-cards/card-catalog/card-catalog';
 import { GIFT_CARD_PAGES } from './integrations/gift-cards/gift-cards';
 
+import { UserstatsPage } from '../pages/userstats/userstats';
+
 export const PAGES = [
   AddPage,
   AmountPage,
@@ -197,5 +199,6 @@ export const PAGES = [
   WalletActivityPage,
   WideHeaderPage,
   CardItemPage,
-  SlideToAcceptPage
+  SlideToAcceptPage,
+  UserstatsPage
 ];
