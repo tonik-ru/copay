@@ -8,6 +8,7 @@ export class AccountTrade {
 }
 
 export class StatsViewModel {
+  TotalBalanceUSD: number;
   BalanceGain: number;
   EndBalance: number;
   LossTrades: number;

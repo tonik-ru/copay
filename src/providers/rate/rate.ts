@@ -53,7 +53,7 @@ export class RateProvider {
 
           resolve();
         })
-        .then(x => {
+        .then(() => {
           this.updateRatesBcd();
           resolve();
         })

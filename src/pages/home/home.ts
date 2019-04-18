@@ -34,7 +34,8 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { Coin, WalletProvider } from '../../providers/wallet/wallet';
 import { SettingsPage } from '../settings/settings';
 
-import { UserstatsPage } from '../userstats/userstats';
+import { TopcoinsPage } from '../trader/topcoins/topcoins';
+import { UserstatsPage } from '../trader/userstats/userstats';
 
 @Component({
   selector: 'page-home',
@@ -737,7 +738,11 @@ export class HomePage {
     this.navCtrl.push(SettingsPage);
   }
 
-  public goToUserStats(): void{
+  public goToUserStats(): void {
     this.navCtrl.push(UserstatsPage);
+  }
+
+  public goToTopCoins(): void {
+    this.navCtrl.push(TopcoinsPage);
   }
 }

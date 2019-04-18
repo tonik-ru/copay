@@ -110,7 +110,10 @@ import { WalletTabsChild } from './wallet-tabs/wallet-tabs-child';
 import { CardCatalogPage } from './integrations/gift-cards/card-catalog/card-catalog';
 import { GIFT_CARD_PAGES } from './integrations/gift-cards/gift-cards';
 
-import { UserstatsPage } from '../pages/userstats/userstats';
+/* Trader */
+import { DatafeedPage } from '../pages/trader/datafeed/datafeed';
+import { TopcoinsPage } from '../pages/trader/topcoins/topcoins';
+import { UserstatsPage } from '../pages/trader/userstats/userstats';
 
 export const PAGES = [
   AddPage,
@@ -200,5 +203,7 @@ export const PAGES = [
   WideHeaderPage,
   CardItemPage,
   SlideToAcceptPage,
-  UserstatsPage
+  UserstatsPage,
+  TopcoinsPage,
+  DatafeedPage
 ];

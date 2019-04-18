@@ -1,0 +1,119 @@
+<!--
+  Generated template for the DatafeedPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar> <ion-title>datafeed</ion-title> </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ul class="links">
+    <li
+      *ngFor="let p of pairs"
+      [ngClass]="{ 'text-success': p == selectedPair }"
+    >
+      <a (click)="selectPair(p)">{{ formatPair(p) }}</a>
+    </li>
+  </ul>
+  <ul class="links">
+    <li
+      *ngFor="let d of resistanceData"
+      [ngClass]="{ 'text-success': d.Interval == selectedInterval }"
+    >
+      <a (click)="selectInterval(d.Interval)">{{ d.Interval.Name }}</a>
+    </li>
+  </ul>
+
+  <div *ngIf="d && d.AvgIntData && d.Breakout">
+    <table>
+      <tr>
+        <th>Score</th>
+        <th>Details</th>
+        <th>Prev. score</th>
+        <th>Prev. Details</th>
+      </tr>
+      <tr *ngIf="d.Speedometer">
+        <td>{{ d.Speedometer.Score }}</td>
+        <td>
+          <pre>{{ d.Speedometer.DetailsString }}</pre>
+        </td>
+        <td>{{ d.Speedometer.PrevData.Score }}</td>
+        <td>
+          <pre>{{ d.Speedometer.PrevData.DetailsString }}</pre>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td>Current Price Zone:</td>
+        <td>{{ d.PositionPercent | number: '1.2-2' }}</td>
+      </tr>
+      <tr>
+        <td>Prev. Price Zone:</td>
+        <td>{{ d.PrevPositionPercent | number: '1.2-2' }}</td>
+      </tr>
+      <tr>
+        <td>Current Swing Ratio:</td>
+        <td>{{ d.AvgIntData.Current | number: '1.2-2' }}</td>
+      </tr>
+      <tr>
+        <td>Prev Swing Ratio:</td>
+        <td>{{ d.AvgIntData.Prev | number: '1.2-2' }}</td>
+      </tr>
+      <tr>
+        <td>Breakout age:</td>
+        <td>{{ d.Breakout.Age }} x {{ d.Breakout.Count }}</td>
+      </tr>
+      <tr>
+        <td>Breakdown age:</td>
+        <td>{{ d.Breakdown.Age }} x {{ d.Breakdown.Count }}</td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <!-- you can use positiveKeys and negativeKeys -->
+    <!--
+      d.Data[k].IsCurrent -- this indicates if this level is current (should be highlighted)
+    -->
+    <!--
+      d.Data[k].IsPriceInRange -- is this false, hide price. this means that this level was already passed
+    -->
+
+    <div *ngIf="d">
+      <table class="table table-hover table-striped">
+        <tr
+          *ngFor="let k of positiveKeys"
+          [ngClass]="{ 'text-success': d.Data[k].IsCurrent }"
+        >
+          <td>{{ d.Interval.Name }}</td>
+          <td>{{ d.Data[k].Value }}</td>
+          <td>x{{ d.Data[k].Hits }}</td>
+          <td>{{ d.Data[k].Age }}</td>
+          <td>{{ d.Data[k].IsPriceInRange }}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            {{ priceTick.lastTradePriceFormatted }} --
+            {{ priceTick.prevLastTradePriceFormatted }}
+          </td>
+          <td>current price - prev price</td>
+          <td></td>
+        </tr>
+        <tr
+          *ngFor="let k of negativeKeys"
+          [ngClass]="{ 'text-success': d.Data[k].IsCurrent }"
+        >
+          <td>{{ d.Interval.Name }}</td>
+          <td>{{ d.Data[k].Value }}</td>
+          <td>x{{ d.Data[k].Hits }}</td>
+          <td>{{ d.Data[k].Age }}</td>
+          <td>{{ d.Data[k].IsPriceInRange }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</ion-content>

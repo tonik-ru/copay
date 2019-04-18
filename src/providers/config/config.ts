@@ -211,7 +211,7 @@ export class ConfigProvider {
       },
 
       trader: {
-        baseUrl: 'http://websocket.rekdeck.com/ui/'
+        baseUrl: 'http://websocket.rekdeck.com/'
       }
     };
   }

@@ -28,6 +28,7 @@ import {
   ExternalLinkProvider,
   FCM,
   FeedbackProvider,
+  FeedProvider,
   FeeProvider,
   File,
   FilterProvider,
@@ -131,7 +132,8 @@ import {
     PersistenceProvider,
     File,
     WalletTabsProvider,
-    TraderProvider
+    TraderProvider,
+    FeedProvider
   ]
 })
 export class ProvidersModule {}

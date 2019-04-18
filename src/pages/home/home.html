@@ -26,6 +26,18 @@
   <div class="wrapper">
     <div class="header-extend"></div>
 
+    <button ion-item (click)="goToUserStats()">
+        <ion-icon class="item-img" item-start>
+            <span class="item-title">Trader Stats</span>
+        </ion-icon>
+    </button>
+    
+    <button ion-item (click)="goToTopCoins()">
+        <ion-icon class="item-img" item-start>
+            <span class="item-title">Top Coins</span>
+        </ion-icon>
+    </button>
+    
     <div class="card clipboard-card" *ngIf="validDataFromClipboard">
       <ion-item-divider>
         <div class="title" item-start>
@@ -339,6 +351,8 @@
       </div>
     </div>
   </div>
+
+  
 
   <ion-fab *ngIf="wallets && wallets[0]" id="scan-button" right bottom>
     <button ion-fab color="primary" (click)="scan()">
