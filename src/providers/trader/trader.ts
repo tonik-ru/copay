@@ -16,7 +16,7 @@ export class TraderProvider {
     // private logger: Logger,
     private http: HttpClient,
     private configProvider: ConfigProvider
-  ) {}
+  ) { }
 
   public getUserStats(period: number): Promise<StatsViewModel> {
     var url =
@@ -29,13 +29,13 @@ export class TraderProvider {
   public getPairs(): Promise<any[]> {
     var url =
       this.configProvider.get().trader.baseUrl +
-      'InfoService.svc/GetValidCalculators';
+      'Trader.Web/InfoService.svc/GetValidCalculators';
     return this.http.get<any[]>(url).toPromise();
   }
 
   public getTopCoins(): Promise<any[]> {
     var url =
-      this.configProvider.get().trader.baseUrl + 'InfoService.svc/GetTopCoins';
+      this.configProvider.get().trader.baseUrl + 'Trader.Web/InfoService.svc/GetTopCoins';
     return this.http
       .get<any[]>(url)
       .map(res => {
