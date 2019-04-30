@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="19.069" height="19.01" viewBox="0 0 19.069 19.01">
+  <g id="Group_61" data-name="Group 61" transform="translate(0.066)">
+    <g id="Group_59" data-name="Group 59" transform="translate(0.503 0.5)">
+      <g id="Group_58" data-name="Group 58">
+        <path id="Path_74" data-name="Path 74" d="M4.1,13.316C-2.109,10,.212.5,7.3.5a6.814,6.814,0,0,1,5.556,10.735" transform="translate(-0.503 -0.5)" fill="none" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+        <line id="Line_22" data-name="Line 22" y2="0.905" transform="translate(6.794 9.526)" fill="none" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+        <line id="Line_23" data-name="Line 23" y2="0.905" transform="translate(6.794 3.178)" fill="none" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+        <path id="Path_75" data-name="Path 75" d="M7.29,9.683A1.361,1.361,0,1,0,8.651,8.322a1.361,1.361,0,1,1,1.361-1.361" transform="translate(-1.857 -1.517)" fill="none" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+      </g>
+    </g>
+    <g id="Group_60" data-name="Group 60" transform="translate(1.693 9.705)">
+      <path id="Path_76" data-name="Path 76" d="M1.99,21.306l7.037-6.4,3.909,3.2L18.8,12.5" transform="translate(-1.99 -12.5)" fill="none" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+      <path id="Path_77" data-name="Path 77" d="M19.49,12.5h3.2v3.2" transform="translate(-5.882 -12.5)" fill="none" stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+    </g>
+  </g>
+</svg>
