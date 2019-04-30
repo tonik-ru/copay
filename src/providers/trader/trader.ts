@@ -41,7 +41,7 @@ export class TraderProvider {
       .map(res => {
         let idx = 1;
         _.each(res, x => {
-          if (x.Symbol != 'TOP20') {
+          if (x.Symbol == 'TOP20') {
             x.Position = 0;
           } else {
             x.Position = idx;

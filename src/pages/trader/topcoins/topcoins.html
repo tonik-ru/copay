@@ -5,22 +5,98 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar> <ion-title>topcoins</ion-title> </ion-navbar>
+  <ion-navbar>
+    <ion-title
+      ><img
+        src="../../assets/sell-title1.svg"
+        style="margin-right: 10px; margin-bottom: -3px;width:19px"
+      />Trade</ion-title
+    >
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-segment (ionChange)="slider.slideTo(showlook)" [(ngModel)]="showlook">
+      <ion-segment-button value="0">
+        <ion-label>Coins</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="1">
+        <ion-label>Funds</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content no-padding>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content> </ion-refresher-content>
   </ion-refresher>
-  <div *ngIf="topCoins">
-    <div *ngFor="let p of topCoins">
-      <ul>
-        <li>
-          <a ng-class="{'text-success': p.IsIncreasing, 'text-danger': !p.IsIncreasing}"
-            (click)="selectCoin(p)">{{ p.Symbol }}</a>
-          {{ p.PriceUSD }} {{ p.PercentChange24h | number: '1.2-2' }}
-        </li>
-      </ul>
-    </div>
-  </div>
+  <ion-slides
+    #slider
+    (ionSlideWillChange)="showlook = '' + slider.getActiveIndex()"
+  >
+    <ion-slide>
+      <ion-row>
+        <ion-col col-8 class="searchbtn1">
+          <ion-searchbar
+            [(ngModel)]="filter"
+            (ionInput)="getTopics($event)"
+            [showCancelButton]="false"
+            placeholder="Search Symbol"
+          >
+          </ion-searchbar
+        ></ion-col>
+        <ion-col col-4 class="searchbtn1">
+          <ion-select placeholder="Exchange">
+            <ion-option value="binance" selected>Binance</ion-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <ion-spinner
+        name="crescent"
+        *ngIf="topCoins.length <= 2"
+        class="loaderblock"
+      ></ion-spinner>
+      <ion-list *ngIf="topCoins">
+        <ion-item
+          *ngFor="let p of items"
+          (click)="selectCoin(p)"
+          class="market-link"
+        >
+          <span class="num-market">{{ p.Position }}.</span>
+          <div class="market-coinlogoblock">
+            <span class="market-coinlogo">
+              <img
+                class="clogo-market"
+                src="assets/logoscoinss/{{p.Symbol}}.png"
+              />
+            </span>
+          </div>
+          <ul class="market-table" id="{{p.Symbol}}">
+            <li>
+              <span>{{ p.Symbol }}</span>
+            </li>
+            <li>
+              <span class="market-coinprice"> ${{ p.PriceUSD }}</span>
+            </li>
+            <li>
+              <p
+                class=""
+                [ngClass]="{
+                  'bullish-btn': p.IsIncreasing,
+                  'bearish-btn': !p.IsIncreasing
+                }"
+              >
+                {{ p.PercentChange24h | number: '1.2-2' }}%
+                <span class="subtextbtn" *ngIf="p.IsIncreasing">BULLISH</span>
+                <span class="subtextbtn" *ngIf="!p.IsIncreasing">BEARISH</span>
+              </p>
+            </li>
+          </ul>
+        </ion-item>
+      </ion-list>
+    </ion-slide>
+    <ion-slide>
+      <img src="../../assets/img/coming-soon1.png" class="commingsoonimg" />
+    </ion-slide>
+  </ion-slides>
 </ion-content>

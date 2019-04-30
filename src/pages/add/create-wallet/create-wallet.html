@@ -1,4 +1,14 @@
-<wide-header-page title="{{'Wallet Configuration' | translate}}">
+<ion-header>
+    <ion-navbar>
+      <ion-title
+        > {{'Wallet Configuration' | translate}}</ion-title
+      >
+    </ion-navbar>
+  </ion-header>
+
+
+<ion-content>
+
   <div page-content>
     <form [formGroup]="createForm">
       <ion-item>
@@ -94,11 +104,14 @@
       </div>
     </form>
   </div>
-  <div footer-content>
-    <ion-toolbar>
-      <button ion-button full class="button-footer" (click)="setOptsAndCreate()" [disabled]="!createForm.valid">
-        {{createLabel}}
-      </button>
-    </ion-toolbar>
-  </div>
-</wide-header-page>
+  
+</ion-content>
+<ion-footer no-shadow>
+    <div footer-content>
+        <ion-toolbar>
+          <button ion-button full class="button-footer" (click)="setOptsAndCreate()" [disabled]="!createForm.valid">
+            {{createLabel}}
+          </button>
+        </ion-toolbar>
+      </div>
+</ion-footer>

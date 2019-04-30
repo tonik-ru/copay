@@ -1,6 +1,14 @@
 page-home {
   background: $toolbar-background;
 
+  .item-title {
+    width: 50%;
+    float: left;
+  }
+  .item-subtitle {
+    text-align: right;
+    padding-top: 5px;
+  }
   .home-header {
     .add-button {
       margin-left: 1rem;
@@ -20,9 +28,117 @@ page-home {
       top: 3px;
     }
   }
+  /*header background*/
+  .scroll-content {
+    background: #fff !important;
+  }
+  .action-card__header .icon-wallet {
+    background: #fac239 !important;
+  }
+
+  .balance-block {
+    background: #fff;
+    display: block;
+    color: #667;
+    width: 85%;
+    border-radius: 15px !important;
+    margin-top: 110px;
+    text-align: center;
+    box-shadow: 0 0px 11px rgba(0, 0, 0, 0.2);
+    z-index: 999999999;
+    margin-bottom: -10px;
+  }
+  .balance-block h2 {
+    font-size: 1rem;
+  }
+  .balance-block h3 {
+    font-size: 28px;
+    font-weight: 800;
+    font-family: Montserrat;
+  }
+
+  .header-extend {
+    background: #f79421;
+    height: 200px;
+  }
 
   .toolbar-title-ios {
     text-align: center;
+  }
+  .card {
+    width: 100%;
+    margin: 5px auto;
+    border-radius: 0;
+  }
+  .toolbar-background-ios,
+  .toolbar-background-md {
+    background: linear-gradient(to top, #f79421, #fac239);
+  }
+  .card:first-of-type {
+    z-index: 1;
+    position: relative;
+    margin-top: 125px;
+  }
+  .toolbar.toolbar-ios .title-ios .toolbar-title-ios,
+  .toolbar.toolbar-md .title-md .toolbar-title-md {
+    font-family: 'Montserrat';
+  }
+  #ion-diagnostics-toast {
+    background: #fac239;
+  }
+  .fixed-content {
+    background-image: linear-gradient(to top, #f79421, #fac239) !important;
+  }
+  .scroll-content {
+    background: #fff;
+  }
+  page-home ion-refresher {
+    background: #f9c038 !important;
+  }
+  .refresherclass {
+    background: #f79622 !important;
+  }
+  .refresher-pulling-icon,
+  .refresher-refreshing-icon {
+    color: #060606;
+  }
+  .fab-md-primary {
+    background: #000;
+  }
+  .fab-ios-primary {
+    background: #000;
+  }
+  page-home .card .wallets-list-title > span,
+  page-home ion-card .wallets-list-title > span,
+  .card .input-wrapper {
+    font-family: Montserrat;
+  }
+  page-home .card .wallets-list-title > span,
+  page-home ion-card .wallets-list-title > span {
+    font-family: Montserrat;
+  }
+  .title.wallets-list-title {
+    font-family: Montserrat;
+  }
+
+  .label-ios {
+    margin: 0px 8px 0px 0;
+  }
+  .icon-wallet {
+    border-radius: 30px;
+    background: #fff !important;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  }
+  ion-spinner {
+    * {
+      stroke: black !important;
+    }
+
+    &.spinner-circles circle,
+    &.spinner-bubbles circle,
+    &.spinner-dots circle {
+      fill: black !important;
+    }
   }
 
   .card,
@@ -118,7 +234,7 @@ page-home {
 
   ion-refresher {
     height: 120px;
-    background: $toolbar-background;
+    background: #fac239;
 
     &-content {
       margin-top: -25px;
@@ -364,4 +480,18 @@ page-home {
       transform: translateY(0);
     }
   }
+}
+.tabs-md[tabsLayout='icon-top'] .has-icon .tab-button-text {
+  font-family: Montserrat !important;
+}
+.tabbar .tab-button .tab-button-text {
+  font-family: Montserrat !important;
+}
+img.commingsoonimg {
+  display: block;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  opacity: 0.6;
 }

@@ -16,7 +16,7 @@ import { WalletTabsProvider } from './wallet-tabs.provider';
     <ion-tabs selectedIndex="1" #tabs>
       <ion-tab
         [root]="receiveRoot"
-        tabTitle="{{'Receive'|translate}}"
+        tabTitle="{{'Receive'|translate}}1"
         tabIcon="tab-receive"
       ></ion-tab>
       <ion-tab

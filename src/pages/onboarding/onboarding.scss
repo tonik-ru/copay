@@ -1,8 +1,13 @@
 page-onboarding {
+  .fixed-content {
+    background: transparent !important;
+    background-image: none !important;
+  }
   & > ion-content {
-    background-image: $onboarding-welcome-bg, $onboarding-background-image;
+    /*background-image: $onboarding-welcome-bg, $onboarding-background-image;*/
+    background: url(../../assets/img/main-screen-bg.png);
     background-position: top center;
-    background-size: contain;
+    background-size: cover;
   }
   .logo-tagline {
     height: 75%;
@@ -12,5 +17,16 @@ page-onboarding {
     img {
       width: 15rem;
     }
+  }
+  .scroll-content {
+    background: url(../../assets/img/main-screen-bg.png) no-repeat;
+    background-size: cover !important;
+    background-position: top right;
+  }
+
+  .content-md {
+    background: url(../../assets/img/main-screen-bg.png) no-repeat;
+    background-size: cover !important;
+    background-position: top right;
   }
 }

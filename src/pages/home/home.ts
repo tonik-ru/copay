@@ -1,6 +1,6 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Events, NavController, Platform } from 'ionic-angular';
+import { Events, NavController, NavParams, Platform } from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Observable, Subscription } from 'rxjs';
@@ -38,6 +38,7 @@ import { TopcoinsPage } from '../trader/topcoins/topcoins';
 import { UserstatsPage } from '../trader/userstats/userstats';
 
 import { BwcProvider } from '../../providers/bwc/bwc';
+import { ScanPage } from '../scan/scan';
 
 @Component({
   selector: 'page-home',
@@ -48,7 +49,7 @@ export class HomePage {
   showCard;
   public vault;
   public vaultWallets;
-  public wallets;
+  public wallets: any[];
   public walletsBtc;
   public walletsBch;
   public walletsBcd;
@@ -76,6 +77,7 @@ export class HomePage {
   public accessDenied: boolean;
 
   public bcdExists: boolean = false;
+  public status;
 
   private isElectron: boolean;
   private updatingWalletId: object;
@@ -104,8 +106,10 @@ export class HomePage {
     private emailProvider: EmailNotificationsProvider,
     private clipboardProvider: ClipboardProvider,
     private incomingDataProvider: IncomingDataProvider,
-    private bwcProvider: BwcProvider
+    private bwcProvider: BwcProvider,
+    private navParams: NavParams
   ) {
+    this.status = this.navParams.data.status;
     this.slideDown = false;
     this.updatingWalletId = {};
     this.cachedBalanceUpdateOn = '';
@@ -134,6 +138,7 @@ export class HomePage {
   private _willEnter() {
     // Update list of wallets, status and TXPs
     this.setWallets();
+    this.totalb();
 
     // Update Wallet on Focus
     if (this.isElectron) {
@@ -738,7 +743,7 @@ export class HomePage {
   }
 
   public scan(): void {
-    this.navCtrl.parent.select(1);
+    this.navCtrl.push(ScanPage);
   }
 
   public settings(): void {
@@ -751,5 +756,56 @@ export class HomePage {
 
   public goToTopCoins(): void {
     this.navCtrl.push(TopcoinsPage);
+  }
+
+  public totalb() {
+    let profit = _.sumBy(this.wallets, day => {
+      return parseFloat(day.status.spendableBalanceAlternative);
+    });
+    /* console.log(profit.toFixed(2)); // 450  + day.status.alternativeIsoCode */
+    if (this.wallets !== undefined) {
+      var isocode = this.wallets[0].status.alternativeIsoCode;
+      return profit.toFixed(2) + isocode;
+    } else {
+      return profit.toFixed(2);
+    }
+  }
+
+  public checkHiddenBalance() {
+    if (this.wallets == undefined) return true;
+    /*for(var o of this.wallets)
+           if(!o.balanceHidden) return hiddenVar=false;
+         
+       return hiddenVar=True;*/
+
+    var howmanyhidden = 0;
+
+    for (var o of this.wallets) {
+      if (o.balanceHidden == true) {
+        howmanyhidden = howmanyhidden + 1;
+        /*this.logger.log('howmanyhidden:'+howmanyhidden)*/
+      }
+    }
+
+    var hiddenVar = this.wallets.length != howmanyhidden;
+
+    return hiddenVar;
+  }
+
+  public toggleBalance() {
+    /*this.logger.log(this.wallets.toString());*/
+    /*this.logger.log(this.wallets.length.toString());*/
+
+    for (var value of this.wallets) {
+      /*this.logger.log(value.credentials.walletId);*/
+      this.profileProvider.toggleHideBalanceFlagall(value.credentials.walletId);
+    }
+  }
+
+  public toggleBalanceNew() {
+    for (var value of this.wallets) {
+      this.logger.log(value.credentials.walletId);
+      this.profileProvider.toggleHideBalanceFlag(value.credentials.walletId);
+    }
   }
 }

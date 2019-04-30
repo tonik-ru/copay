@@ -1,3 +1,362 @@
 page-topcoins {
+  ul.market-table {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 0px;
+    font-family: Montserrat;
+    color: #000;
+    font-size: 16px;
+    transition: 0.5s ease;
+    margin-bottom: 0px;
+    margin-top: 0;
+  }
+  .segment-ios .segment-button.segment-activated {
+    background-color: #161b26;
+  }
+  .segment-ios .segment-button,
+  .segment-md .segment-button {
+    border-color: #161b26;
+    color: #161b26;
+  }
+  .segment-md .segment-button.activated,
+  .segment-md .segment-button.segment-activated {
+    border-color: #fff;
+    color: #fff;
+  }
 
+  .toolbar-background-ios,
+  .toolbar-background-md {
+    background: transparent;
+  }
+  ion-header.header.header-ios,
+  ion-header.header.header-md {
+    background: -webkit-gradient(
+      linear,
+      left bottom,
+      left top,
+      from(#f79421),
+      to(#fac239)
+    );
+    padding: 10px 0;
+  }
+  .label-ios {
+    margin: -1px auto 0;
+  }
+  .selecttitle {
+    padding-left: 10px !important;
+  }
+  .toolbar-title-ios {
+    padding-top: 10px;
+  }
+
+  ion-slide.swiper-slide {
+    align-items: flex-start;
+  }
+  .num-market {
+    color: #cecece;
+    font-size: 16px;
+    display: inline-block;
+    float: left;
+    padding-left: 10px;
+    padding-top: 17px !important;
+    padding-bottom: 10px !important;
+
+    transition: 0.5s ease;
+    line-height: 18px;
+    width: 35px;
+  }
+  .market-link:first-of-type .num-market {
+    opacity: 0;
+  }
+  .num-market span,
+  ul.market-table li {
+    line-height: 18px;
+  }
+  .market-table li {
+    padding-top: 17px !important;
+    padding-bottom: 0px !important;
+  }
+  .market-table li span {
+    margin: 0 0;
+  }
+  a.market-link {
+    color: #000;
+  }
+  .market-coinlogoblock {
+    display: inline-block;
+    float: left;
+    transition: 0.5s ease;
+  }
+  .item-ios,
+  .item-md {
+    padding-left: 0;
+  }
+  a.market-link:hover ul,
+  a.market-link:hover .num-market,
+  a.market-link:hover,
+  a.market-link:hover .market-coinlogoblock {
+    background: #f9eacc;
+    text-decoration: none !important;
+  }
+  a.market-link:focus ul,
+  a.market-link:focus .num-market,
+  a.market-link:focus,
+  a.market-link:focus .market-coinlogoblock {
+    background: #f9eacc;
+    text-decoration: none !important;
+  }
+
+  a.very-bearish-btn {
+    border: 1px solid #e2446a;
+    border-radius: 30px;
+    color: #e2446a;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    padding: 3px 8px;
+    transition: 0.5s ease;
+    margin-top: -5px;
+  }
+  .subtextbtn {
+    display: block;
+    margin: 0 auto;
+    font-size: 8px;
+    font-weight: 300;
+    line-height: 8px;
+  }
+
+  .bearish-btn {
+    border: 1px solid #e8a2b3;
+    border-radius: 30px;
+    color: #e8a2b3;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    padding: 3px 8px;
+    transition: 0.5s ease;
+    width: 90px;
+    float: right;
+    line-height: 13px;
+    margin-top: -5px;
+  }
+  .stable-btn {
+    border: 1px solid #2d3340;
+    border-radius: 30px;
+    color: #2d3340;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    padding: 3px 8px;
+    transition: 0.5s ease;
+    width: 90px;
+    float: right;
+    line-height: 13px;
+    margin-top: -5px;
+  }
+  .bullish-btn {
+    border: 1px solid #8acf20;
+    border-radius: 30px;
+    color: #8acf20;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    padding: 3px 8px;
+    transition: 0.5s ease;
+    width: 90px;
+    float: right;
+    line-height: 13px;
+    margin-top: -5px;
+  }
+  .very-bullish-btn {
+    border: 1px solid #16ac0c;
+    border-radius: 30px;
+    color: #16ac0c;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    padding: 3px 8px;
+    transition: 0.5s ease;
+    width: 90px;
+    float: right;
+    line-height: 13px;
+    margin-top: -5px;
+  }
+
+  .very-bearish-btn:hover {
+    background: #e2446a;
+    color: #fff;
+    text-decoration: none;
+  }
+  .bearish-btn:hover {
+    background: #e8a2b3;
+    color: #fff;
+    text-decoration: none;
+  }
+  .stable-btn:hover {
+    background: #2d3340;
+    color: #fff;
+    text-decoration: none;
+  }
+  .bullish-btn:hover {
+    background: #8acf20;
+    color: #fff;
+    text-decoration: none;
+  }
+  .very-bullish-btn:hover {
+    background: #16ac0c;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  #TOP20 {
+    padding-left: 0px !important;
+    font-weight: 600;
+  }
+  #TOP20 li:nth-of-type(2) {
+    font-weight: 800;
+  }
+  a.market-link[href='DataFeed.html?currencyId=1653'] {
+    display: block;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.05);
+  }
+  .market-table li:nth-of-type(2) {
+    margin-left: 20px;
+    margin-right: 0px;
+  }
+
+  .bordergreen {
+    border-color: #8acf20 !important;
+  }
+  .borderred {
+    border-color: #e8a2b3 !important;
+  }
+
+  /*.loader{position: absolute;
+    background: rgba(0,0,0,0.97);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 998;opacity: 1; transition: 1s ease; display:none; }
+.logoloader{position: absolute;
+animation: load 2s infinite;
+ left: 50%; top: 50%; transition: 1s ease; transform: translate(-50%, -50%);}
+
+
+@keyframes load {
+  0%   {opacity: 0.0;}
+  10%   {opacity: 0.2;}
+  20%   {opacity: 0.4;}
+  30%   {opacity: 0.6;}
+  40%   {opacity: 0.8;}
+  50%   {opacity: 1;}
+  60%   {opacity: 0.8;}
+  70%   {opacity: 0.6;}
+  80%   {opacity: 0.4;}
+  90%   {opacity: 0.2;}
+  100%   {opacity: 0;}
+
+}*/
+
+  img[src='images/coins/{{p.BaseAsset}}.png'] {
+    display: none;
+  }
+  .market-coinlogo {
+    width: 22px;
+    height: 22px;
+    background: #fff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+    border-radius: 30px;
+    float: left;
+    text-align: center;
+    margin-top: 14px;
+    margin-left: 8px;
+  }
+  .market-coinlogo img {
+    max-width: 20px;
+    border-radius: 30px;
+    max-height: 20px;
+    padding: 2px;
+  }
+
+  .market-coinlogo img[src='images/coins/TOP20.png'] {
+    display: none;
+  }
+
+  a.market-link[href='DataFeed.html?currencyId=1653'] .market-coinlogo {
+    display: none;
+  }
+  div.coinblock:last-of-type {
+    margin-bottom: 100px;
+  }
+
+  .coinnameblock {
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    width: 200px;
+  }
+  .loaderblock {
+    display: block;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .searchbtn {
+    padding: 0;
+  }
+  .searchbtn1 {
+    padding: 0;
+    background: #fff;
+  }
+  .searchbtn .label-ios {
+    text-align: center;
+    padding: 15px;
+  }
+  .searchbtn .label-md {
+    text-align: center;
+  }
+  /*.searchbar-ios .searchbar-input {
+    height: 1.8rem;
+  }
+  .searchbar-ios {
+    padding: 6px 8px;
+  }*/
+
+  .swiper-container {
+    overflow-y: auto;
+  }
+  .select-ios {
+    padding: 20px 8px 20px 16px;
+    max-width: 100%;
+  }
+  .select-md {
+    max-width: 100%;
+  }
+  .select-md .select-text {
+    padding: 6px 0;
+
+    border-radius: 2px;
+    background-position: left 8px center;
+    height: auto;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 3rem;
+    color: #141414;
+    background-color: #fff;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+  }
 }

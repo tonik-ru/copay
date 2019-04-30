@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import {
+  AlertController,
+  NavController,
+  NavParams,
+  Slides
+} from 'ionic-angular';
 
 import { FormatUtils } from '../topcoins/formatutils';
 
@@ -7,6 +12,15 @@ import { FormatUtils } from '../topcoins/formatutils';
 
 import { Logger } from '../../../providers/logger/logger';
 import { FeedProvider } from '../../../providers/trader/feed';
+
+import * as $ from 'jquery';
+/*import { pairs } from 'rxjs/observable/pairs';*/
+
+import '../../../assets/js/rang';
+import { TopcoinsPage } from '../topcoins/topcoins';
+declare var startgraph: any;
+/*declare var starttest: any;*/
+
 // import { TraderProvider } from '../../../providers/trader/trader';
 
 /**
@@ -25,28 +39,52 @@ export class DatafeedPage {
   public pairs = [];
 
   private knownIntervals = [
-    { Caption: '0.001', TimeSpan: '00:01:00', Name: '1 min' },
-    { Caption: '0.003', TimeSpan: '00:03:00', Name: '3 min' },
-    { Caption: '0.005', TimeSpan: '00:05:00', Name: '5 min' },
-    { Caption: '0.01', TimeSpan: '00:15:00', Name: '15 min' },
-    { Caption: '0.03', TimeSpan: '00:30:00', Name: '30 min' },
-    { Caption: '0.04', TimeSpan: '00:45:00', Name: '45 min' },
-    { Caption: '0.1', TimeSpan: '01:00:00', Name: '1 hr' },
-    { Caption: '0.2', TimeSpan: '02:00:00', Name: '2 hr' },
-    { Caption: '0.4', TimeSpan: '04:00:00', Name: '4 hr' },
-    { Caption: '0.5', TimeSpan: '05:00:00', Name: '5 hr' },
-    { Caption: '0.6', TimeSpan: '06:00:00', Name: '6 hr' },
-    { Caption: '0.9', TimeSpan: '09:00:00', Name: '9 hr' },
-    { Caption: '0.12', TimeSpan: '12:00:00', Name: '12 hr' },
-    { Caption: '1', TimeSpan: '1.00:00:00', Name: '1 days' },
-    { Caption: '2', TimeSpan: '2.00:00:00', Name: '2 days' },
-    { Caption: '3', TimeSpan: '3.00:00:00', Name: '3 days' },
-    { Caption: '7', TimeSpan: '7.00:00:00', Name: '7 days' },
-    { Caption: '14', TimeSpan: '14.00:00:00', Name: '14 days' },
-    { Caption: '30', TimeSpan: '30.00:00:00', Name: '30 days' },
-    { Caption: '45', TimeSpan: '45.00:00:00', Name: '45 days' },
-    { Caption: '60', TimeSpan: '60.00:00:00', Name: '60 days' },
-    { Caption: '90', TimeSpan: '90.00:00:00', Name: '90 days' }
+    { Caption: '0.001', TimeSpan: '00:01:00', Name: '1 min', isVisible: false },
+    { Caption: '0.003', TimeSpan: '00:03:00', Name: '3 min', isVisible: false },
+    { Caption: '0.005', TimeSpan: '00:05:00', Name: '5 min', isVisible: false },
+    { Caption: '0.01', TimeSpan: '00:15:00', Name: '15 min', isVisible: false },
+    { Caption: '0.03', TimeSpan: '00:30:00', Name: '30 min', isVisible: false },
+    { Caption: '0.04', TimeSpan: '00:45:00', Name: '45 min', isVisible: false },
+    { Caption: '0.1', TimeSpan: '01:00:00', Name: '1 hr', isVisible: true },
+    { Caption: '0.2', TimeSpan: '02:00:00', Name: '2 hr', isVisible: false },
+    { Caption: '0.4', TimeSpan: '04:00:00', Name: '4 hr', isVisible: true },
+    { Caption: '0.6', TimeSpan: '06:00:00', Name: '6 hr', isVisible: false },
+    { Caption: '0.9', TimeSpan: '09:00:00', Name: '9 hr', isVisible: false },
+    { Caption: '0.12', TimeSpan: '12:00:00', Name: '12 hr', isVisible: false },
+    { Caption: '1', TimeSpan: '1.00:00:00', Name: '1 day', isVisible: true },
+    { Caption: '2', TimeSpan: '2.00:00:00', Name: '2 days', isVisible: true },
+    { Caption: '3', TimeSpan: '3.00:00:00', Name: '3 days', isVisible: false },
+    { Caption: '7', TimeSpan: '7.00:00:00', Name: '7 days', isVisible: true },
+    {
+      Caption: '14',
+      TimeSpan: '14.00:00:00',
+      Name: '14 days',
+      isVisible: false
+    },
+    {
+      Caption: '30',
+      TimeSpan: '30.00:00:00',
+      Name: '30 days',
+      isVisible: true
+    },
+    {
+      Caption: '45',
+      TimeSpan: '45.00:00:00',
+      Name: '45 days',
+      isVisible: false
+    },
+    {
+      Caption: '60',
+      TimeSpan: '60.00:00:00',
+      Name: '60 days',
+      isVisible: false
+    },
+    {
+      Caption: '90',
+      TimeSpan: '90.00:00:00',
+      Name: '90 days',
+      isVisible: false
+    }
   ];
 
   public resistanceData = [];
@@ -57,6 +95,7 @@ export class DatafeedPage {
     lastTradePriceFormatted: '-',
     prevLastTradePriceFormatted: '-'
   };
+
   // $scope.currentPair = null;
   public decimals = 2;
   public selectedInterval = this.knownIntervals[8];
@@ -68,16 +107,64 @@ export class DatafeedPage {
   private lastTickData = null;
   // private connectedPair = {};
 
+  public myPair: {};
+
+  @ViewChild('slider') slider: Slides;
+  showlook = '0';
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private logger: Logger, // private traderProvider: TraderProvider
-    private feedProvider: FeedProvider
+    private feedProvider: FeedProvider,
+    public alertController: AlertController
   ) {
     this.feedProvider.on('ProcessMarketTick', x => this.processMarketTick(x));
     this.feedProvider.on('ProcessResistance', x => this.onProcessResistance(x));
+    this.showlook = '0';
   }
+  async showInfoCurrentPrizeZone() {
+    const alert = await this.alertController.create({
+      title: 'Current Price Zone',
+      message:
+        'Current Price Zone: Shows the current price location on a Fibonacci retracement of the specified interval. Fibonacci retracement is created by taking two extreme points of the lowest price and highest price within the specified interval. The normal range is between -100% to 100%, during high volatility this range can range between -300% to 300%.',
+      buttons: ['OK']
+    });
 
+    await alert.present();
+  }
+  async showInfoCurrentSwingRatio() {
+    const alert = await this.alertController.create({
+      title: 'Current Swing Ratio',
+
+      message:
+        'Current Swing Ratio: Shows the market trend of the price increasing or decreasing over time within the specified interval. The range can be between -7 to +7. A swing ratio greater than 1 is likely to continue increasing the price of the asset, while a swing ratio less than -1 is likely to continue decreasing the price of the asset.',
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+  async showInfoBrakeDown() {
+    const alert = await this.alertController.create({
+      title: 'Last Breakdown',
+
+      message:
+        'Last Breakdown: Shows how many attempts the price tried to break-down from the lowest support recorded on the specified interval, and when was the last attempt. Typically, if the price can’t break-down it will attempt to break-out after some time.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+  async showInfoBrakeOut() {
+    const alert = await this.alertController.create({
+      title: 'Last Breakout',
+
+      message:
+        'Last Breakout:  Shows how many attempts the price tried to break-out from the highest resistance recorded on the specified interval, and when was the last attempt. Typically, if the price can’t break-out it will attempt to break-down after som',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
   ionViewWillEnter() {
     this.logger.log('Starting feed');
     var pairs = [];
@@ -85,6 +172,41 @@ export class DatafeedPage {
     this.pairs = pairs.sort(this.compareByUSDT);
     this.selectedPair = this.pairs[0];
     this.startConnection();
+    setTimeout(() => {
+      this.logger.log('--------START Animation ---------');
+      new startgraph(1);
+    }, 1500);
+  }
+  selectedTab(index) {
+    this.slider.slideTo(index);
+  }
+  ngAfterViewInit() {
+    $('#showmore').click(() => {
+      $('#moretime').toggleClass('showmore');
+      $('#standart').toggleClass('hider');
+      if ($('#showmore i').hasClass('fas fa-plus')) {
+        $('#showmore i')
+          .removeClass('fas fa-plus')
+          .addClass('fas fa-minus');
+      } else {
+        $('#showmore i')
+          .removeClass('fas fa-minus')
+          .addClass('fas fa-plus');
+      }
+    });
+    $('#showmore2').click(() => {
+      $('#moretime2').toggleClass('showmore');
+      $('#standart2').toggleClass('hider');
+      if ($('#showmore2 i').hasClass('fas fa-plus')) {
+        $('#showmore2 i')
+          .removeClass('fas fa-plus')
+          .addClass('fas fa-minus');
+      } else {
+        $('#showmore2 i')
+          .removeClass('fas fa-minus')
+          .addClass('fas fa-plus');
+      }
+    });
   }
 
   private processMarketTick(data) {
@@ -195,6 +317,7 @@ export class DatafeedPage {
 
   private processSpeedometers(rdi, speedometers) {
     if (!speedometers) return;
+
     var curVal = speedometers.Speedometers[rdi.Interval.TimeSpan];
     if (!curVal) return;
     if (!rdi.Speedometer) rdi.Speedometer = { PrevData: {} };
@@ -270,6 +393,9 @@ export class DatafeedPage {
   private startConnection(): Promise<any> {
     this.cleanupPrevData();
 
+    this.myPair = this.pairs[0];
+    this.logger.log(this.myPair as string);
+
     return new Promise(() => {
       let p = this.selectedPair;
       return this.feedProvider
@@ -291,6 +417,9 @@ export class DatafeedPage {
 
   ionViewWillLeave() {
     this.feedProvider.stop();
+    this.logger.log('EXIT');
+
+    new startgraph(2);
   }
 
   cleanupPrevData() {
@@ -344,6 +473,7 @@ export class DatafeedPage {
 
       var keys = ['-7', '7'];
       for (let k = 0; k < keys.length; k++) {
+        /*let key = `${-(i + 1)}@${keys[k]}`;*/
         let key = `${-(i + 1)}@${keys[k]}`;
 
         rdi.Data[keys[k]] = {
@@ -454,9 +584,12 @@ export class DatafeedPage {
   }
 
   public formatPairImp(pair) {
-    return pair.Symbol + '@' + pair.Exchange;
+    /*return pair.Symbol + '@' + pair.Exchange;*/
+    return pair.Symbol;
   }
-
+  public onClickCancel() {
+    this.navCtrl.setRoot(TopcoinsPage);
+  }
   /*
 function compareByDisplayName(a, b) {
     var str1 = formatPairImp(a);

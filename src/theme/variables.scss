@@ -2,8 +2,12 @@
 // http://ionicframework.com/docs/theming/
 // Font path is used to include ionicons,
 // roboto, and noto sans fonts
+@font-face {
+  font-family: 'Montserrat';
+  src: url(../assets/fonts/Montserrat-Regular.ttf) format('truetype');
+}
 $font-path: '../assets/fonts';
-$font-family-base: 'Roboto';
+$font-family-base: 'Montserrat';
 // The app direction is used to include
 // rtl styles in your app. For more info, please see:
 // http://ionicframework.com/docs/theming/rtl-support/
@@ -28,7 +32,7 @@ $colors: (
   secondary: $color-secondary,
   warning: #fdb455,
   danger: #df5264,
-  success: #01d1a2,
+  success: #f0ae20,
   info: #5476eb,
   light: #f4f4f4,
   blank: #fff,
@@ -134,6 +138,8 @@ $button-md-text-transform: none;
   font-family: 'AmazonEmberDisplay';
   src: url(../assets/fonts/AmazonEmberDisplay_Rg.ttf) format('truetype');
 }
+
+
 
 /* Ionic Overrides and Workarounds */
 

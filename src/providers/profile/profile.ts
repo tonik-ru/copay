@@ -83,7 +83,7 @@ export class ProfileProvider {
     const config = this.configProvider.get();
     const defaults = this.configProvider.getDefaults();
     const defaultColor =
-      this.appProvider.info.nameCase == 'Copay' ? '#1abb9b' : '#647ce8';
+      this.appProvider.info.nameCase == 'Copay' ? '#FAC239' : '#fac239';
     // this.config.whenAvailable( (config) => { TODO
     wallet.usingCustomBWS =
       config.bwsFor &&
@@ -1496,6 +1496,14 @@ export class ProfileProvider {
 
   public toggleHideBalanceFlag(walletId: string): void {
     this.wallet[walletId].balanceHidden = !this.wallet[walletId].balanceHidden;
+    this.persistenceProvider.setHideBalanceFlag(
+      walletId,
+      this.wallet[walletId].balanceHidden
+    );
+  }
+
+  public toggleHideBalanceFlagall(walletId: string): void {
+    this.wallet[walletId].balanceHidden = true;
     this.persistenceProvider.setHideBalanceFlag(
       walletId,
       this.wallet[walletId].balanceHidden

@@ -47,6 +47,8 @@ export class WalletDetailsPage extends WalletTabsChild {
   private analyzeUtxosDone: boolean;
   private zone;
 
+  public hiddenBalance: boolean;
+
   public requiresMultipleSignatures: boolean;
   public wallet;
   public history = [];
@@ -101,6 +103,8 @@ export class WalletDetailsPage extends WalletTabsChild {
       if (this.wallet.completeHistory) this.showHistory();
     }
 
+    this.hiddenBalance = this.wallet.balanceHidden;
+    
     this.requiresMultipleSignatures = this.wallet.credentials.m > 1;
     this.supportedCards = this.giftCardProvider.getSupportedCardMap();
 
@@ -255,6 +259,13 @@ export class WalletDetailsPage extends WalletTabsChild {
       this.wallet.credentials.walletId
     );
   }
+
+  public hiddenBalanceChange(): void {
+    this.profileProvider.toggleHideBalanceFlag(
+      this.wallet.credentials.walletId
+    );
+  }
+
 
   public loadHistory(loading) {
     if (

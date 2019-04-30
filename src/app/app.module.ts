@@ -51,6 +51,12 @@ import { WideHeaderBarButton } from '../pages/templates/wide-header-page/wide-he
 import { COMPONENTS } from '../components/components';
 
 /* Providers */
+/*import { from } from 'rxjs/observable/from';*/
+
+import { Tab4PageModule } from '../pages/tab4/tab4.module';
+
+import { Tab3PageModule } from '../pages/tab3/tab3.module';
+
 import { LanguageLoader } from '../providers/language-loader/language-loader';
 import { ProvidersModule } from '../providers/providers.module';
 
@@ -121,7 +127,10 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         useClass: LanguageLoader
       }
     }),
-    ZXingScannerModule.forRoot()
+    ZXingScannerModule.forRoot(),
+
+    Tab4PageModule,
+    Tab3PageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [CopayApp, ...PAGES, ...COMPONENTS],

@@ -1,4 +1,21 @@
-<ion-tabs #tabs class="hide-tabbar">
-  <ion-tab [root]="homeRoot" tabTitle="{{'Home'|translate}}" tabIcon="tab-home"></ion-tab>
-  <ion-tab [root]="scanRoot" tabTitle="{{'Scan'|translate}}" tabIcon="tab-scan"></ion-tab>
+<ion-tabs #tabs class="">
+  <ion-tab
+    [root]="homeRoot"
+    tabTitle="{{'Wallet'|translate}}"
+    tabIcon="custom-wallet"
+    >></ion-tab
+  >
+
+  <ion-tab [root]="tab2Root" tabTitle="Trade" tabIcon="custom-trade"></ion-tab>
+  <ion-tab
+    [root]="tab4Root"
+    tabTitle="Invest"
+    tabIcon="custom-invest"
+  ></ion-tab>
+  <ion-tab [root]="tab5Root" tabTitle="Shop" tabIcon="custom-shop"></ion-tab>
+  <ion-tab
+    [root]="tab3Root"
+    tabTitle="{{'Settings'|translate}}"
+    tabIcon="custom-settings"
+  ></ion-tab>
 </ion-tabs>
