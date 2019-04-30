@@ -172,10 +172,6 @@ export class DatafeedPage {
     this.pairs = pairs.sort(this.compareByUSDT);
     this.selectedPair = this.pairs[0];
     this.startConnection();
-    setTimeout(() => {
-      this.logger.log('--------START Animation ---------');
-      new startgraph(1);
-    }, 1500);
   }
   selectedTab(index) {
     this.slider.slideTo(index);
@@ -396,7 +392,7 @@ export class DatafeedPage {
     this.myPair = this.pairs[0];
     this.logger.log(this.myPair as string);
 
-    return new Promise(() => {
+    return new Promise((resolve) => {
       let p = this.selectedPair;
       return this.feedProvider
         .connect(
@@ -409,6 +405,13 @@ export class DatafeedPage {
             p.Precision == 0
               ? 0
               : Math.round(Math.log(1 / p.Precision) / Math.LN10);
+
+          setTimeout(() => {
+            this.logger.log('--------START Animation ---------');
+            new startgraph(1);
+          }, 1500);
+      
+          resolve();
         });
     }).catch(error => this.logger.error(error));
   }
