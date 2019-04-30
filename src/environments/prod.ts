@@ -9,7 +9,7 @@ const env: EnvironmentSchema = {
   ratesAPI: {
     btc: 'https://bitpay.com/api/rates',
     bch: 'https://bitpay.com/api/rates/bch',
-    bcd: 'http://localhost:3232/bws/api/v1/fiatrates/BCD?provider=Binance',
+    bcd: 'https://wallet.bitcoindiamond.org/bws/api/v1/fiatrates/BCD?provider=Binance',
   },
   activateScanner: true
 };
