@@ -44,7 +44,7 @@ export class TopcoinsPage {
   }
 
   private loadTopCoins(): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.traderProvider
         .getTopCoins()
         .then(res => {
@@ -56,7 +56,7 @@ export class TopcoinsPage {
         })
         .catch(error => {
           this.logger.error(error);
-          reject(error);
+          // reject(error);
         });
     });
   }

@@ -16,7 +16,7 @@ export class TraderProvider {
     // private logger: Logger,
     private http: HttpClient,
     private configProvider: ConfigProvider
-  ) {}
+  ) { }
 
   public getUserStats(period: number): Promise<StatsViewModel> {
     var url =
