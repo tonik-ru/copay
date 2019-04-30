@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.bitpay.*BUNDLENAME*"
+<widget id="com.chimpion.*BUNDLENAME*"
   version="*VERSION*"
   android-versionCode="*ANDROIDVERSION*"
   ios-CFBundleVersion="*VERSION*"
@@ -8,8 +8,8 @@
     <description>
       *PURPOSELINE*
     </description>
-    <author email="support@bitpay.com" href="*URL*">
-        BitPay Inc.
+    <author email="support@chimpion.io" href="*URL*">
+        Chimpion Inc.
     </author>
     <content src="index.html" />
     <access origin="https://bws.bitpay.com" />
@@ -19,6 +19,14 @@
     <access origin="https://shapeshift.io" />
     <access origin="https://api.coinbase.com" />
     <access origin="https://coinbase.com" />
+    
+    <access origin="https://websocket.rekdeck.com" />
+    <access origin="http://websocket.rekdeck.com" />
+    <access origin="https://wallet.bitcoindiamond.org" />
+
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+
     <allow-navigation href="gap://ready" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />

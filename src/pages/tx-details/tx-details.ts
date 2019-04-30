@@ -51,7 +51,7 @@ export class TxDetailsPage {
     private txFormatProvider: TxFormatProvider,
     private walletProvider: WalletProvider,
     private translate: TranslateService
-  ) {}
+  ) { }
 
   ionViewDidLoad() {
     this.config = this.configProvider.get();
@@ -68,9 +68,12 @@ export class TxDetailsPage {
 
     let defaults = this.configProvider.getDefaults();
     this.blockexplorerUrl =
-      this.wallet.coin === 'bch'
-        ? defaults.blockExplorerUrl.bch
-        : defaults.blockExplorerUrl.btc;
+
+      this.wallet.coin === 'bcd'
+        ? defaults.blockExplorerUrl.bcd :
+        this.wallet.coin === 'bch'
+          ? defaults.blockExplorerUrl.bch
+          : defaults.blockExplorerUrl.btc;
 
     this.txConfirmNotificationProvider.checkIfEnabled(this.txId).then(res => {
       this.txNotification = {
@@ -259,6 +262,15 @@ export class TxDetailsPage {
       (this.getShortNetworkName() == 'test' ? 'testnet/' : 'mainnet/') +
       'tx/' +
       btx.txid;
+
+    if (this.wallet.coin == 'bcd')
+      url =
+        'https://' +
+        this.blockexplorerUrl +
+        // (this.getShortNetworkName() == 'test' ? 'testnet/' : 'mainnet/') +
+        'TX?loading=true&TX=' +
+        btx.txid;
+
     let optIn = true;
     let title = null;
     let message = this.translate.instant('View Transaction on Insight');

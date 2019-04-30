@@ -143,7 +143,7 @@ export class ConfigProvider {
 
       // Bitcore wallet service URL
       bws: {
-        url: 'https://bws.bitpay.com/bws/api'
+        url: 'https://wallet.bitcoindiamond.org/bws/api'
       },
 
       download: {
@@ -207,7 +207,7 @@ export class ConfigProvider {
       blockExplorerUrl: {
         btc: 'insight.bitcore.io/#/BTC/',
         bch: 'insight.bitcore.io/#/BCH/',
-        bcd: '127.0.0.1:8200/#/BCD/'
+        bcd: 'explorer.btcd.io/#/'
       },
 
       trader: {
@@ -244,11 +244,11 @@ export class ConfigProvider {
 
     this.logger.debug(
       'Config | spendUnconfirmed: ' +
-        spendUnconfirmed +
-        ' - useLegacyAddress: ' +
-        useLegacyAddress +
-        ' - lockMethod: ' +
-        lockMethod
+      spendUnconfirmed +
+      ' - useLegacyAddress: ' +
+      useLegacyAddress +
+      ' - lockMethod: ' +
+      lockMethod
     );
   }
 

@@ -37,6 +37,8 @@ import { SettingsPage } from '../settings/settings';
 import { TopcoinsPage } from '../trader/topcoins/topcoins';
 import { UserstatsPage } from '../trader/userstats/userstats';
 
+import { BwcProvider } from '../../providers/bwc/bwc';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -73,6 +75,8 @@ export class HomePage {
   public showBitpayCardGetStarted: boolean;
   public accessDenied: boolean;
 
+  public bcdExists: boolean = false;
+
   private isElectron: boolean;
   private updatingWalletId: object;
   private zone;
@@ -99,7 +103,8 @@ export class HomePage {
     private translate: TranslateService,
     private emailProvider: EmailNotificationsProvider,
     private clipboardProvider: ClipboardProvider,
-    private incomingDataProvider: IncomingDataProvider
+    private incomingDataProvider: IncomingDataProvider,
+    private bwcProvider: BwcProvider
   ) {
     this.slideDown = false;
     this.updatingWalletId = {};
@@ -114,6 +119,8 @@ export class HomePage {
       this._willEnter();
       this._didEnter();
     });
+
+    this.bcdExists = this.bwcProvider.getBitcoreDiamond() == undefined ? false : true;
   }
 
   ionViewWillEnter() {
