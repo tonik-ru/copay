@@ -39,11 +39,15 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div class="wrapper">
-    <div class="header-extend" *ngIf="wallets?.length !== 0">
+    <div class="header-extend" *ngIf="wallets">
       <div class="balance-block" (longPress)="toggleBalanceNew()">
         <h3 *ngIf="checkHiddenBalance()">
           {{ totalb() }}
-          <ion-icon (click)="toggleBalance()" name="eye-off"></ion-icon>
+          <ion-icon
+            *ngIf="!totalb()"
+            (click)="toggleBalance()"
+            name="eye-off"
+          ></ion-icon>
         </h3>
         <h3 *ngIf="!checkHiddenBalance()">[BALANCE HIDDEN]</h3>
 

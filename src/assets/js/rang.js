@@ -6,6 +6,10 @@ var intervalId = null;
 function startgraph(e) {
   ('use strict');
 
+  if (document.querySelector('#speedometr') == null) {
+    e = 0;
+  }
+
   var rangeClock = document.querySelector('.meter-clock');
   var rangeClock2 = document.querySelector('.meter-clock2');
   var rangeClock21 = document.querySelector('.meter-clock2-1');
@@ -93,6 +97,7 @@ function startgraph(e) {
   var verybearishcirc4 =
     'M86 139.5C86 136.816 86.1402 134.146 86.4164 131.5L164 139.5L86 139.5Z;';
   var verybearishcirc3 = 'M86 139.5L164 139.5L86 139.5Z;';
+
   if (e == 1) {
     console.log(e);
     intervalId = setInterval(function() {

@@ -57,6 +57,8 @@ import { Tab4PageModule } from '../pages/tab4/tab4.module';
 
 import { Tab3PageModule } from '../pages/tab3/tab3.module';
 
+import { Tab3Page } from '../pages/tab3/tab3';
+import { Tab4Page } from '../pages/tab4/tab4';
 import { LanguageLoader } from '../providers/language-loader/language-loader';
 import { ProvidersModule } from '../providers/providers.module';
 
@@ -133,7 +135,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
     Tab3PageModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [CopayApp, ...PAGES, ...COMPONENTS],
+  entryComponents: [Tab3Page, Tab4Page, CopayApp, ...PAGES, ...COMPONENTS],
   providers: [
     {
       provide: ErrorHandler,

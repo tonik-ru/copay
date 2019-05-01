@@ -75,14 +75,16 @@ export class TopcoinsPage {
   ionViewDidLoad() {}
 
   ionViewWillEnter() {
-    this.refreshTimer = timer(30000, 30000).subscribe(() => this.loadTopCoins());
+    this.refreshTimer = timer(30000, 30000).subscribe(() =>
+      this.loadTopCoins()
+    );
     // this.refreshTimer = timer(5000, 5000).subscribe(() =>
     //   this.initializeItems()
     // );
   }
 
   private loadTopCoins(): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.traderProvider
         .getTopCoins()
         .then(res => {
@@ -120,7 +122,7 @@ export class TopcoinsPage {
     let validPairs = this.pairs.filter(
       x => x.BaseAssetCurrencyId == coin.CurrencyId
     );
-    this.navCtrl.setRoot(DatafeedPage, { coin, validPairs });
+    this.navCtrl.push(DatafeedPage, { coin, validPairs });
   }
 
   ionViewWillLeave() {

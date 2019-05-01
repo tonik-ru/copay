@@ -17,4 +17,19 @@ page-addressbook-add {
   label-tip {
     margin-top: 1.8rem;
   }
+  ion-header.header.header-ios,
+  ion-header.header.header-md {
+    background: -webkit-gradient(
+      linear,
+      left bottom,
+      left top,
+      from(#f79421),
+      to(#fac239)
+    );
+    padding: 10px 0;
+  }
+  .toolbar-background-md {
+    border-color: #b2b2b2;
+    background: transparent;
+  }
 }

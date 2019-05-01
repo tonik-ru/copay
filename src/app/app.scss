@@ -17,7 +17,7 @@
   src: url(../assets/fonts/Montserrat-Regular.ttf) format('truetype');
 }
 
-$font-family-base: 'Montserrat',sans-serif;
+$font-family-base: 'Montserrat', sans-serif;
 
 html {
   height: 100vh;
@@ -553,7 +553,7 @@ label-tip.warn.no-arrowhead:before {
 }
 
 ion-icon {
-  &[class*="custom-"] {
+  &[class*='custom-'] {
     mask-size: contain;
     mask-position: 50% 50%;
     mask-repeat: no-repeat;
@@ -562,25 +562,25 @@ ion-icon {
     height: 1em;
   }
 
-  &[class*="custom-wallet"] {
+  &[class*='custom-wallet'] {
     mask-image: url(../assets/wallet-icon.svg);
   }
-  &[class*="custom-market"] {
+  &[class*='custom-market'] {
     mask-image: url(../assets/market-icon.svg);
   }
-  &[class*="custom-invest"] {
+  &[class*='custom-invest'] {
     mask-image: url(../assets/invest-icon.svg);
   }
-  &[class*="custom-apps"] {
+  &[class*='custom-apps'] {
     mask-image: url(../assets/apps-icon.svg);
   }
-  &[class*="custom-settings"] {
+  &[class*='custom-settings'] {
     mask-image: url(../assets/settings-icon.svg);
   }
-  &[class*="custom-trade"] {
+  &[class*='custom-trade'] {
     mask-image: url(../assets/sell.svg);
   }
-  &[class*="custom-shop"] {
+  &[class*='custom-shop'] {
     mask-image: url(../assets/shop.svg);
   }
 }

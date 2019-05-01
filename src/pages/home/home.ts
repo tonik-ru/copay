@@ -124,7 +124,8 @@ export class HomePage {
       this._didEnter();
     });
 
-    this.bcdExists = this.bwcProvider.getBitcoreDiamond() == undefined ? false : true;
+    this.bcdExists =
+      this.bwcProvider.getBitcoreDiamond() == undefined ? false : true;
   }
 
   ionViewWillEnter() {
@@ -138,7 +139,6 @@ export class HomePage {
   private _willEnter() {
     // Update list of wallets, status and TXPs
     this.setWallets();
-    this.totalb();
 
     // Update Wallet on Focus
     if (this.isElectron) {
@@ -758,19 +758,6 @@ export class HomePage {
     this.navCtrl.push(TopcoinsPage);
   }
 
-  public totalb() {
-    let profit = _.sumBy(this.wallets, day => {
-      return parseFloat(day.status.spendableBalanceAlternative);
-    });
-    /* console.log(profit.toFixed(2)); // 450  + day.status.alternativeIsoCode */
-    if (this.wallets !== undefined) {
-      var isocode = this.wallets[0].status.alternativeIsoCode;
-      return profit.toFixed(2) + isocode;
-    } else {
-      return profit.toFixed(2);
-    }
-  }
-
   public checkHiddenBalance() {
     if (this.wallets == undefined) return true;
     /*for(var o of this.wallets)
@@ -806,6 +793,27 @@ export class HomePage {
     for (var value of this.wallets) {
       this.logger.log(value.credentials.walletId);
       this.profileProvider.toggleHideBalanceFlag(value.credentials.walletId);
+    }
+  }
+
+  public totalb() {
+    let isocode;
+    let profit = 0;
+    if (this.wallets[0].status !== null) {
+      profit = _.sumBy(this.wallets, w => {
+        if(!w.status || !w.status.spendableBalanceAlternative)
+          return 0;
+        isocode = w.status.alternativeIsoCode;
+        return parseFloat(w.status.spendableBalanceAlternative);
+      });
+
+      if (!isocode) {
+        return 'Could not update';
+      } else {
+        return profit.toFixed(2) + " " + isocode;
+      }
+    } else {
+      return 'Could not update';
     }
   }
 }
