@@ -579,6 +579,8 @@ export class DatafeedPage {
 
   public selectPair(pair) {
     this.selectedPair = pair;
+    new startgraph(2);
+    this.feedProvider.stop();
     this.startConnection();
   }
 
