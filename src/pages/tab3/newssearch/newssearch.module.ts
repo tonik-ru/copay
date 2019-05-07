@@ -1,3 +1,4 @@
+/*
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { NewssearchPage } from './newssearch';
@@ -11,3 +12,4 @@ import { NewssearchPage } from './newssearch';
   ],
 })
 export class NewssearchPageModule {}
+*/

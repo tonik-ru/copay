@@ -369,7 +369,8 @@ export class CopayApp {
       return;
     }
     await this.toggleScannerVisibilityFromWithinWallet(false, 300);
-    await this.getGlobalTabs().select(0);
+    this.nav.pop();
+    // await this.getGlobalTabs().select(0);
   }
 
   private toggleScannerVisibilityFromWithinWallet(

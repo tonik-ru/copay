@@ -10,7 +10,6 @@ import { FullpostPage } from '../fullpost/fullpost';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-newssearch',
   templateUrl: 'newssearch.html'

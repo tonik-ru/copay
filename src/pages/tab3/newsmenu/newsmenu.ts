@@ -11,7 +11,6 @@ import { Tab3Page } from '../tab3';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
 @Component({
   selector: 'page-newsmenu',
   templateUrl: 'newsmenu.html'

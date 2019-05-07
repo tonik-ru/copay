@@ -1,3 +1,4 @@
+/*
 import { NgModule } from '@angular/core';
 import { AutoHideDirective } from './auto-hide/auto-hide';
 @NgModule({
@@ -6,3 +7,4 @@ import { AutoHideDirective } from './auto-hide/auto-hide';
 	exports: [AutoHideDirective]
 })
 export class DirectivesModule {}
+*/
