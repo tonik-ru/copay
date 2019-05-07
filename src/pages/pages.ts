@@ -110,10 +110,21 @@ import { WalletTabsChild } from './wallet-tabs/wallet-tabs-child';
 import { CardCatalogPage } from './integrations/gift-cards/card-catalog/card-catalog';
 import { GIFT_CARD_PAGES } from './integrations/gift-cards/gift-cards';
 
+/* Tabs */
+import { Tab3Page } from '../pages/tab3/tab3';
+import { Tab4Page } from '../pages/tab4/tab4';
+
+
 /* Trader */
 import { DatafeedPage } from '../pages/trader/datafeed/datafeed';
 import { TopcoinsPage } from '../pages/trader/topcoins/topcoins';
 import { UserstatsPage } from '../pages/trader/userstats/userstats';
+
+/* BCD News */
+import { FullpostPage } from '../pages/tab3/fullpost/fullpost';
+import { NewsmenuPage } from '../pages/tab3/newsmenu/newsmenu';
+import { NewssearchPage } from '../pages/tab3/newssearch/newssearch';
+
 
 export const PAGES = [
   AddPage,
@@ -205,5 +216,10 @@ export const PAGES = [
   SlideToAcceptPage,
   UserstatsPage,
   TopcoinsPage,
-  DatafeedPage
+  DatafeedPage,
+  FullpostPage,
+  NewsmenuPage,
+  NewssearchPage,
+  Tab3Page,
+  Tab4Page
 ];

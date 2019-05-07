@@ -12,11 +12,12 @@ import { PlatformProvider } from '../../providers/platform/platform';
 import { WalletTabsProvider } from './wallet-tabs.provider';
 
 @Component({
+  selector: 'page-wallet-tabs',
   template: `
     <ion-tabs selectedIndex="1" #tabs>
       <ion-tab
         [root]="receiveRoot"
-        tabTitle="{{'Receive'|translate}}1"
+        tabTitle="{{'Receive'|translate}}"
         tabIcon="tab-receive"
       ></ion-tab>
       <ion-tab

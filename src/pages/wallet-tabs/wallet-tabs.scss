@@ -1,0 +1,27 @@
+page-wallet-tabs {
+  .tabs-ios .tabbar {
+    width: 90%;
+
+    left: 50%;
+    transform: translate(-50%, 0%);
+    bottom: 2% !important;
+    border-radius: 10px;
+    background: #fac239;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  }
+  .tabs-ios .tab-button-icon {
+    color: #fff;
+  }
+  .tabs-ios .tab-button {
+    color: #fff;
+  }
+
+  .tabs-ios .tab-button[aria-selected='true'] .tab-button-icon {
+    color: #444;
+  }
+  .tabs-ios .tab-button:hover:not(.disable-hover),
+  .tabs-ios .tab-button[aria-selected='true'] {
+    color: #444;
+  }
+}

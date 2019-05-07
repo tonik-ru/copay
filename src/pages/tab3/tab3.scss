@@ -14,4 +14,90 @@ page-tab3 {
     border-color: #b2b2b2;
     background: transparent;
   }
+  .item-cover {
+    height: auto;
+  }
+  .searchbtn1 {
+    padding: 0;
+    background: #fff;
+  }
+  .searchbtn1 .label-ios {
+    float: left;
+    padding-top: 5px;
+  }
+  .searchbtn .label-ios {
+    text-align: center;
+    padding: 15px;
+  }
+  .searchbtn .label-md {
+    text-align: center;
+  }
+  .fabmy {
+    z-index: 9000;
+    position: fixed;
+  }
+  #stay-cancel {
+    &.searchbar-has-value {
+      .searchbar-clear-icon {
+        display: block;
+      }
+    }
+  }
+
+  ion-fab#scan-button {
+    bottom: 80px;
+  }
+  /*.searchbar-ios .searchbar-input {
+    height: 1.8rem;
+  }
+  .searchbar-ios {
+    padding: 6px 8px;
+  }*/
+
+  .swiper-container {
+    overflow-y: auto;
+  }
+  .select-ios {
+    padding: 20px 8px 20px 16px;
+    max-width: 100%;
+  }
+  .select-md {
+    max-width: 100%;
+  }
+  /*.select-md .select-text {
+    padding: 6px 0;
+
+    border-radius: 2px;
+    background-position: left 8px center;
+    height: auto;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 3rem;
+    color: #141414;
+    background-color: #fff;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+  }*/
+  ion-select.select.select-md {
+    padding: 6px 40px;
+    border-radius: 2px;
+    background-position: left 8px center;
+    height: auto;
+    font-size: 1.6rem;
+    font-weight: 400;
+    line-height: 3rem;
+    color: #141414;
+    background-color: #fff;
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+      0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+    margin-top: 15px;
+  }
+
+  .bottominfo {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
 }

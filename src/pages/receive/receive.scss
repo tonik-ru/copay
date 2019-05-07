@@ -8,6 +8,10 @@ page-receive {
       content: '\f1c8';
     }
   }
+  ion-header.header.header-ios,
+  ion-header.header.header-md {
+    padding: 0;
+  }
 
   .scroll-content .wrapper {
     display: flex;

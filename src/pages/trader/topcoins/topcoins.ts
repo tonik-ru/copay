@@ -7,6 +7,7 @@ import { Logger } from '../../../providers/logger/logger';
 import { TraderProvider } from '../../../providers/trader/trader';
 
 import { SettingsPage } from '../../settings/settings';
+
 import { DatafeedPage } from '../datafeed/datafeed';
 import { FormatUtils } from './formatutils';
 
@@ -73,6 +74,9 @@ export class TopcoinsPage {
   }
 
   ionViewDidLoad() {}
+  ionViewDidEnter() {
+    this.slider.onlyExternal = true;
+  }
 
   ionViewWillEnter() {
     this.refreshTimer = timer(30000, 30000).subscribe(() =>
@@ -128,6 +132,7 @@ export class TopcoinsPage {
     let validPairs = this.pairs.filter(
       x => x.BaseAssetCurrencyId == coin.CurrencyId
     );
+
     this.navCtrl.push(DatafeedPage, { coin, validPairs });
   }
 

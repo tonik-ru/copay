@@ -6,6 +6,10 @@ page-send {
       margin-right: 5px;
     }
   }
+  ion-header.header.header-ios,
+  ion-header.header.header-md {
+    padding: 0;
+  }
   .no-wallet-message {
     height: 100%;
     display: flex;

@@ -584,3 +584,33 @@ ion-icon {
     mask-image: url(../assets/shop.svg);
   }
 }
+.header-ios .toolbar-ios:last-child .toolbar-background-ios {
+  background: transparent;
+}
+ion-header.header.header-ios,
+ion-header.header.header-md {
+  background: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    from(#f79421),
+    to(#fac239)
+  );
+  padding: 10px 0;
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 10px !important;
+  background-color: #f5f5f5 !important;
+}
+
+::-webkit-scrollbar {
+  width: 10px !important;
+  background-color: #f5f5f5 !important;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px !important;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
+  background-color: #fac239 !important;
+}

@@ -50,6 +50,7 @@ import { AddressbookAddPage } from '../pages/settings/addressbook/add/add';
 import { TabsPage } from '../pages/tabs/tabs';
 import { WalletDetailsPage } from '../pages/wallet-details/wallet-details';
 import { WalletTabsPage } from '../pages/wallet-tabs/wallet-tabs';
+import { ApiProvider } from '../providers/api/api';
 
 // As the handleOpenURL handler kicks in before the App is started,
 // declare the handler function at the top of app.component.ts (outside the class definition)
@@ -71,6 +72,7 @@ export class CopayApp {
     | typeof DisclaimerPage
     | typeof TabsPage
     | typeof OnboardingPage;
+
   private onResumeSubscription: Subscription;
   private isWalletModalOpen: boolean;
   private walletModal: any;
@@ -114,7 +116,8 @@ export class CopayApp {
     private walletTabsProvider: WalletTabsProvider,
     private renderer: Renderer,
     private userAgent: UserAgent,
-    private device: Device
+    private device: Device,
+    public api: ApiProvider
   ) {
     this.imageLoaderConfig.setFileNameCachedWithExtension(true);
     this.imageLoaderConfig.useImageTag(true);
@@ -136,6 +139,7 @@ export class CopayApp {
       .catch(e => {
         this.logger.error('Platform is not ready.', e);
       });
+    this.api.getCategories();
   }
 
   private onPlatformReady(readySource): void {

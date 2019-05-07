@@ -1,4 +1,12 @@
 <ion-tabs #tabs class="">
+  <!--
+    <ion-tab
+      class="hide"
+      [root]="scanRoot"
+      tabTitle="{{'Scan'|translate}}"
+      tabIcon="tab-scan"
+    ></ion-tab>
+  -->
   <ion-tab
     [root]="homeRoot"
     tabTitle="{{'Wallet'|translate}}"
@@ -7,12 +15,12 @@
   >
 
   <ion-tab [root]="tab2Root" tabTitle="Trade" tabIcon="custom-trade"></ion-tab>
+  <ion-tab [root]="tab4Root" tabTitle="News" tabIcon="custom-invest"></ion-tab>
   <ion-tab
-    [root]="tab4Root"
-    tabTitle="Invest"
-    tabIcon="custom-invest"
+    (ionSelect)="openBcdBazaar()"
+    tabTitle="Shop"
+    tabIcon="custom-shop"
   ></ion-tab>
-  <ion-tab [root]="tab5Root" tabTitle="Shop" tabIcon="custom-shop"></ion-tab>
   <ion-tab
     [root]="tab3Root"
     tabTitle="{{'Settings'|translate}}"

@@ -104,7 +104,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     }
 
     this.hiddenBalance = this.wallet.balanceHidden;
-    
+
     this.requiresMultipleSignatures = this.wallet.credentials.m > 1;
     this.supportedCards = this.giftCardProvider.getSupportedCardMap();
 
@@ -123,6 +123,8 @@ export class WalletDetailsPage extends WalletTabsChild {
       this.updateAll();
       this.events.subscribe('Wallet/updateAll', this.walletUpdateAllHandler);
     });
+
+    this.logger.log(this.wallet.coin);
   }
 
   ionViewDidEnter() {
@@ -265,7 +267,6 @@ export class WalletDetailsPage extends WalletTabsChild {
       this.wallet.credentials.walletId
     );
   }
-
 
   public loadHistory(loading) {
     if (

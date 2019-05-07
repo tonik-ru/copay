@@ -799,18 +799,21 @@ export class HomePage {
   public totalb() {
     let isocode;
     let profit = 0;
-    if (this.wallets[0].status !== null) {
-      profit = _.sumBy(this.wallets, w => {
-        if(!w.status || !w.status.spendableBalanceAlternative)
-          return 0;
-        isocode = w.status.alternativeIsoCode;
-        return parseFloat(w.status.spendableBalanceAlternative);
-      });
+    if (this.wallets !== undefined) {
+      if (this.wallets[0].status !== null) {
+        profit = _.sumBy(this.wallets, w => {
+          if (!w.status || !w.status.spendableBalanceAlternative) return 0;
+          isocode = w.status.alternativeIsoCode;
+          return parseFloat(w.status.spendableBalanceAlternative);
+        });
 
-      if (!isocode) {
-        return 'Could not update';
+        if (!isocode) {
+          return 'Could not update';
+        } else {
+          return profit.toFixed(2) + ' ' + isocode;
+        }
       } else {
-        return profit.toFixed(2) + " " + isocode;
+        return 'Could not update';
       }
     } else {
       return 'Could not update';

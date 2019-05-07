@@ -3,22 +3,24 @@ import {
   AlertController,
   NavController,
   NavParams,
-  Slides
+  Slides,
+  ViewController
 } from 'ionic-angular';
 
 import { FormatUtils } from '../topcoins/formatutils';
 
 // import { ProfileProvider } from '../../../providers';
 
+import * as $ from 'jquery';
 import { Logger } from '../../../providers/logger/logger';
 import { FeedProvider } from '../../../providers/trader/feed';
-
-import * as $ from 'jquery';
+/*import { TabsPage } from '../../tabs/tabs';
+ */
 /*import { pairs } from 'rxjs/observable/pairs';*/
 
 import '../../../assets/js/rang';
-import { TopcoinsPage } from '../topcoins/topcoins';
-// import { DecimalPipe } from '@angular/common';
+/*import { TabsPage } from '../../tabs/tabs';
+import { TopcoinsPage } from '../topcoins/topcoins';*/
 declare var startgraph: any;
 /*declare var starttest: any;*/
 
@@ -47,7 +49,7 @@ export class DatafeedPage {
     { Caption: '0.03', TimeSpan: '00:30:00', Name: '30 min', isVisible: false },
     { Caption: '0.04', TimeSpan: '00:45:00', Name: '45 min', isVisible: false },
     { Caption: '0.1', TimeSpan: '01:00:00', Name: '1 hr', isVisible: true },
-    { Caption: '0.2', TimeSpan: '02:00:00', Name: '2 hr', isVisible: false },
+    /*{ Caption: '0.2', TimeSpan: '02:00:00', Name: '2 hr', isVisible: false },*/
     { Caption: '0.4', TimeSpan: '04:00:00', Name: '4 hr', isVisible: true },
     { Caption: '0.6', TimeSpan: '06:00:00', Name: '6 hr', isVisible: false },
     { Caption: '0.9', TimeSpan: '09:00:00', Name: '9 hr', isVisible: false },
@@ -111,24 +113,30 @@ export class DatafeedPage {
   public myPair: {};
 
   @ViewChild('slider') slider: Slides;
-  showlook = '0';
 
+  showlook = '0';
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private logger: Logger, // private traderProvider: TraderProvider
     private feedProvider: FeedProvider,
-    public alertController: AlertController
+    public alertController: AlertController,
+    public viewCtrl: ViewController
   ) {
     this.feedProvider.on('ProcessMarketTick', x => this.processMarketTick(x));
     this.feedProvider.on('ProcessResistance', x => this.onProcessResistance(x));
     this.showlook = '0';
   }
+
+  public onClickCancel() {
+    /*this.navCtrl.setRoot(TabsPage);*/
+    this.viewCtrl.dismiss();
+  }
   async showInfoCurrentPrizeZone() {
     const alert = await this.alertController.create({
       title: 'Current Price Zone',
       message:
-        'Current Price Zone: Shows the current price location on a Fibonacci retracement of the specified interval. Fibonacci retracement is created by taking two extreme points of the lowest price and highest price within the specified interval. The normal range is between -100% to 100%, during high volatility this range can range between -300% to 300%.',
+        'Shows the current price location on a Fibonacci retracement of the specified interval. Fibonacci retracement is created by taking two extreme points of the lowest price and highest price within the specified interval. The normal range is between -100% to 100%, during high volatility this range can range between -300% to 300%.',
       buttons: ['OK']
     });
 
@@ -139,7 +147,7 @@ export class DatafeedPage {
       title: 'Current Swing Ratio',
 
       message:
-        'Current Swing Ratio: Shows the market trend of the price increasing or decreasing over time within the specified interval. The range can be between -7 to +7. A swing ratio greater than 1 is likely to continue increasing the price of the asset, while a swing ratio less than -1 is likely to continue decreasing the price of the asset.',
+        'Shows the market trend of the price increasing or decreasing over time within the specified interval. The range can be between -7 to +7. A swing ratio greater than 1 is likely to continue increasing the price of the asset, while a swing ratio less than -1 is likely to continue decreasing the price of the asset.',
       buttons: ['OK']
     });
     await alert.present();
@@ -149,7 +157,7 @@ export class DatafeedPage {
       title: 'Last Breakdown',
 
       message:
-        'Last Breakdown: Shows how many attempts the price tried to break-down from the lowest support recorded on the specified interval, and when was the last attempt. Typically, if the price can’t break-down it will attempt to break-out after some time.',
+        'Shows how many attempts the price tried to break-down from the lowest support recorded on the specified interval, and when was the last attempt. Typically, if the price can’t break-down it will attempt to break-out after some time.',
       buttons: ['OK']
     });
 
@@ -160,7 +168,7 @@ export class DatafeedPage {
       title: 'Last Breakout',
 
       message:
-        'Last Breakout:  Shows how many attempts the price tried to break-out from the highest resistance recorded on the specified interval, and when was the last attempt. Typically, if the price can’t break-out it will attempt to break-down after som',
+        'Shows how many attempts the price tried to break-out from the highest resistance recorded on the specified interval, and when was the last attempt. Typically, if the price can’t break-out it will attempt to break-down after som',
       buttons: ['OK']
     });
 
@@ -179,6 +187,7 @@ export class DatafeedPage {
   }
   ngAfterViewInit() {
     $('#showmore').click(() => {
+      this.logger.log('SHOW MORE!!!!');
       $('#moretime').toggleClass('showmore');
       $('#standart').toggleClass('hider');
       if ($('#showmore i').hasClass('fas fa-plus')) {
@@ -191,6 +200,7 @@ export class DatafeedPage {
           .addClass('fas fa-plus');
       }
     });
+
     $('#showmore2').click(() => {
       $('#moretime2').toggleClass('showmore');
       $('#standart2').toggleClass('hider');
@@ -205,6 +215,8 @@ export class DatafeedPage {
       }
     });
   }
+
+
 
   private processMarketTick(data) {
     this.logger.log(data);
@@ -393,7 +405,7 @@ export class DatafeedPage {
     this.myPair = this.pairs[0];
     this.logger.log(this.myPair as string);
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       let p = this.selectedPair;
       this.decimals =
         p.Precision == 0
@@ -411,13 +423,17 @@ export class DatafeedPage {
             this.logger.log('--------START Animation ---------');
             new startgraph(1);
           }, 1500);
-      
+
           resolve();
         });
     }).catch(error => this.logger.error(error));
   }
 
   ionViewDidLoad() {}
+
+  ionViewDidEnter() {
+    this.slider.onlyExternal = true;
+  }
 
   ionViewWillLeave() {
     this.feedProvider.stop();
@@ -593,9 +609,7 @@ export class DatafeedPage {
     /*return pair.Symbol + '@' + pair.Exchange;*/
     return pair.Symbol;
   }
-  public onClickCancel() {
-    this.navCtrl.setRoot(TopcoinsPage);
-  }
+
   /*
 function compareByDisplayName(a, b) {
     var str1 = formatPairImp(a);

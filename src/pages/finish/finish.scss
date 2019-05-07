@@ -54,6 +54,12 @@ page-finish {
       cursor: pointer;
     }
   }
+  .body-text {
+    line-height: 2.9rem;
+  }
+  .body-comment {
+    margin: 0 auto;
+  }
   .primary {
     background-color: color($colors, secondary);
   }

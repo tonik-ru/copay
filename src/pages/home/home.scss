@@ -72,7 +72,8 @@ page-home {
   }
   .toolbar-background-ios,
   .toolbar-background-md {
-    background: linear-gradient(to top, #f79421, #fac239);
+    /*background: linear-gradient(to top, #f79421, #fac239);*/
+    background: transparent;
   }
   .card:first-of-type {
     z-index: 1;

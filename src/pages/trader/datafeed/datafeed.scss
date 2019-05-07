@@ -36,7 +36,7 @@ page-datafeed {
     padding: 5px;
   }
   table.table.table-hover.table-striped tr td:nth-of-type(2) {
-    width: 100px;
+    width: 160px;
   }
   .coinnameblock {
     margin: 0 auto 8px;
@@ -502,7 +502,8 @@ page-datafeed {
     font-family: Montserrat !important;
   }
   table.table.table-hover.table-striped {
-    font-size: 11px;
+    font-size: 14px;
+    line-height: 28px;
     margin-top: 20px;
   }
   table.table.table-hover.table-striped tr td:first-of-type {
@@ -517,14 +518,23 @@ page-datafeed {
     background: #424448 !important;
   }
   table.table.table-hover.table-striped {
-    font-size: 11px;
     width: 100%;
   }
   tr.currentfib {
-    background: #1f2430;
+    background: #395429 !important;
   }
+  tr.currentfibred {
+    background: #395429 !important;
+  }
+
   tr.currentfib td {
-    font-size: 13px;
+    font-size: 16px;
+    line-height: 30px;
+    font-weight: 600;
+  }
+  tr.currentfibred td {
+    font-size: 16px;
+    line-height: 30px;
     font-weight: 600;
   }
   .currentfibtext {
@@ -551,7 +561,7 @@ page-datafeed {
     text-align: center;
 
     margin: 15px auto;
-    font-size: 18px;
+    font-size: 11px;
     line-height: 18px;
   }
 
@@ -560,7 +570,7 @@ page-datafeed {
     font-family: Montserrat;
     font-size: 30px;
     color: #2d3340;
-    margin: 0px auto 80px;
+    margin: 0px auto 0px;
   }
 
   p.first img {
@@ -579,5 +589,8 @@ page-datafeed {
   }
   .hider {
     display: none !important;
+  }
+  .footer .toolbar-title-ios {
+    padding: 0;
   }
 }

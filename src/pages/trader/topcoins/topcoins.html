@@ -41,13 +41,20 @@
             (ionInput)="getTopics($event)"
             [showCancelButton]="false"
             placeholder="Search Symbol"
+            id="stay-cancel"
           >
           </ion-searchbar
         ></ion-col>
+
         <ion-col col-4 class="searchbtn1">
-          <ion-select placeholder="Exchange">
-            <ion-option value="binance" selected>Binance</ion-option>
-          </ion-select>
+          <ion-item>
+            <ion-label class="labelexchange" style="display:none"
+              >Select Exchange</ion-label
+            >
+            <ion-select placeholder="Exchange" title="Exchange">
+              <ion-option value="binance" selected>Binance</ion-option>
+            </ion-select></ion-item
+          >
         </ion-col>
       </ion-row>
 
@@ -60,7 +67,7 @@
         <ion-item
           *ngFor="let p of items"
           (click)="selectCoin(p)"
-          class="market-link"
+          class="market-link {{p.Symbol}}"
         >
           <span class="num-market">{{ p.Position }}.</span>
           <div class="market-coinlogoblock">
@@ -76,7 +83,18 @@
               <span>{{ p.Symbol }}</span>
             </li>
             <li>
-              <span class="market-coinprice"> ${{ p.PriceUSD }}</span>
+              <span class="market-coinprice" *ngIf="p.PriceUSD > 100000">
+                {{ p.PriceUSD | currency: 'CAD':'symbol-narrow':'4.0-2' }}B
+              </span>
+              <span
+                class="market-coinprice"
+                *ngIf="p.PriceUSD < 100000 && p.PriceUSD > 1"
+              >
+                {{ p.PriceUSD | currency }}</span
+              >
+              <span class="market-coinprice" *ngIf="p.PriceUSD < 1">
+                ${{ p.PriceUSD }}</span
+              >
             </li>
             <li>
               <p

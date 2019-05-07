@@ -63,8 +63,12 @@
               !updateStatusError && wallet.balanceHidden && !wallet.scanning
             "
           >
-            <span class="title" translate>[Balance Hidden]</span>
-            <div translate>Tap and hold to show</div>
+            <div class="balance-str">
+              *.** {{ wallet.coin }} <ion-icon name="eye"></ion-icon>
+            </div>
+            <div class="balance-alt-str">
+              *.**{{ wallet.status.alternativeIsoCode }}
+            </div>
           </div>
         </div>
 

@@ -5,7 +5,6 @@ import { MarkdownModule } from 'ngx-markdown';
 
 import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 /* Modules */
 import {
@@ -18,6 +17,7 @@ import {
 } from '@ngx-translate/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { MomentModule } from 'angular2-moment';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 
@@ -37,6 +37,7 @@ import { SatToUnitPipe } from '../pipes/satToUnit';
 
 /* Directives */
 import { Animate } from '../directives/animate/animate';
+import { AutoHideDirective } from '../directives/auto-hide/auto-hide';
 import { CopyToClipboard } from '../directives/copy-to-clipboard/copy-to-clipboard';
 import { ExternalizeLinks } from '../directives/externalize-links/externalize-links';
 import { FixedScrollBgColor } from '../directives/fixed-scroll-bg-color/fixed-scroll-bg-color';
@@ -53,15 +54,10 @@ import { COMPONENTS } from '../components/components';
 /* Providers */
 /*import { from } from 'rxjs/observable/from';*/
 
-import { Tab4PageModule } from '../pages/tab4/tab4.module';
-
-import { Tab3PageModule } from '../pages/tab3/tab3.module';
-
-import { Tab3Page } from '../pages/tab3/tab3';
-import { Tab4Page } from '../pages/tab4/tab4';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { ApiProvider } from '../providers/api/api';
 import { LanguageLoader } from '../providers/language-loader/language-loader';
 import { ProvidersModule } from '../providers/providers.module';
-
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
 }
@@ -99,12 +95,14 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
     KeysPipe,
     SatToUnitPipe,
     SatToFiatPipe,
-    OrderByPipe
+    OrderByPipe,
+    AutoHideDirective
   ],
   imports: [
     IonicModule.forRoot(CopayApp, {
+      mode: 'ios',
       animate: env.enableAnimations,
-      tabsHideOnSubPages: true,
+      tabsHideOnSubPages: false,
       tabsPlacement: 'bottom',
       backButtonIcon: 'arrow-round-back',
       backButtonText: ''
@@ -129,18 +127,21 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         useClass: LanguageLoader
       }
     }),
-    ZXingScannerModule.forRoot(),
-
-    Tab4PageModule,
-    Tab3PageModule
+    ZXingScannerModule.forRoot()
   ],
   bootstrap: [IonicApp],
-  entryComponents: [Tab3Page, Tab4Page, CopayApp, ...PAGES, ...COMPONENTS],
+  entryComponents: [
+    CopayApp,
+    ...PAGES,
+    ...COMPONENTS
+  ],
   providers: [
     {
       provide: ErrorHandler,
       useClass: IonicErrorHandler
-    }
+    },
+    ApiProvider,
+    InAppBrowser
   ]
 })
 export class AppModule {}

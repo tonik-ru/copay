@@ -1,3 +1,4 @@
+/* 
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { Tab3Page } from './tab3';
@@ -11,3 +12,4 @@ import { Tab3Page } from './tab3';
   ],
 })
 export class Tab3PageModule {}
+*/

@@ -1,5 +1,27 @@
 page-wallet-details {
+  .tabs-ios .tabbar {
+    width: 90%;
+
+    left: 50%;
+    transform: translate(-50%, 0%);
+    bottom: 2%;
+    border-radius: 10px;
+    background: #fac239;
+    color: #fff;
+  }
+  .tabs-ios .tab-button-icon {
+    color: #fff;
+  }
+  .tabs-ios .tab-button {
+    color: #fff !important;
+  }
+
   $icon-width: 36px;
+  ion-header.header.header-ios,
+  ion-header.header.header-md {
+    background: transparent;
+    padding: 0;
+  }
 
   ion-refresher {
     height: 120px;
@@ -53,6 +75,7 @@ page-wallet-details {
     cursor: pointer;
     font-size: 32px;
     font-weight: 600;
+    text-transform: uppercase;
   }
 
   .balance-alt-str {
