@@ -89,8 +89,14 @@ export class TopcoinsPage {
         .getTopCoins()
         .then(res => {
           this.logger.log('Loaded ' + res.length + ' top coins');
-          for (let i = 0; i < res.length; i++)
-            res[i].PriceUSD = FormatUtils.formatPrice(res[i].PriceUSD);
+          for (let i = 0; i < res.length; i++) {
+            let decimals = 4;
+            if(res[i].PriceUSD < 0.000001)
+              decimals = 8;
+            if(res[i].PriceUSD < 0.0001)
+            decimals = 6; 
+            res[i].PriceUSD = FormatUtils.formatPrice(res[i].PriceUSD, decimals);
+          }
           this.topCoins = res;
           return resolve();
         })

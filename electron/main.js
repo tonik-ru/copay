@@ -22,7 +22,7 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 400,
-    height: 650,
+    height: 960,
     minWidth: 400,
     maxWidth: 800,
     minHeight: 650,
@@ -173,7 +173,7 @@ if (process.platform !== 'darwin') {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
-  createMenu();
+//  createMenu();
 });
 
 // Quit when all windows are closed.

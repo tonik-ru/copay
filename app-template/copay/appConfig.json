@@ -1,5 +1,5 @@
 {
-  "packageName": "copay",
+  "packageName": "bcdpay",
   "packageDescription": "BCDPay Bitcoin Wallet",
   "packageNameId": "com.chimpion.bcdpay",
   "packageNameIdDesktop": "com.bitpay.copay.desktop2",

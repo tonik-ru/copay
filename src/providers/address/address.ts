@@ -8,10 +8,12 @@ export class AddressProvider {
   private bitcore;
   private bitcoreCash;
   private Bitcore;
+  private bitcoreDiamond;
 
   constructor(private bwcProvider: BwcProvider) {
     this.bitcore = this.bwcProvider.getBitcore();
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
+    this.bitcoreDiamond = this.bwcProvider.getBitcoreDiamond();
     this.Bitcore = {
       btc: {
         lib: this.bitcore,
@@ -81,7 +83,7 @@ export class AddressProvider {
 
   public extractAddress(str: string): string {
     const extractedAddress = str
-      .replace(/^(bitcoincash:|bchtest:|bitcoin:)/i, '')
+      .replace(/^(bitcoincash:|bchtest:|bitcoin:|bitcoindiamond:)/i, '')
       .replace(/\?.*/, '');
     return extractedAddress;
   }
@@ -92,6 +94,7 @@ export class AddressProvider {
     const Address = this.bitcore.Address;
     const URICash = this.bitcoreCash.URI;
     const AddressCash = this.bitcoreCash.Address;
+    const URIDiamond = this.bitcoreDiamond.URI;
 
     // Bip21 uri
     let uri, uriAddress;
@@ -101,6 +104,14 @@ export class AddressProvider {
         uriAddress = uri.address.toString();
         if (Address.isValid(uriAddress, 'livenet')) return true;
         if (Address.isValid(uriAddress, 'testnet')) return true;
+      }
+    }
+    else if (/^bitcoindiamond:/.test(str)) {
+      if (this.bitcoreDiamond.URI.isValid(str)) {
+        uri = new URIDiamond(str);
+        uriAddress = uri.address.toString();
+        if (this.bitcoreDiamond.Address.isValid(uriAddress, 'livenet')) return true;
+        if (this.bitcoreDiamond.Address.isValid(uriAddress, 'testnet')) return true;
       }
     } else if (/^bitcoincash:/i.test(str) || /^bchtest:/i.test(str)) {
       if (URICash.isValid(str)) {

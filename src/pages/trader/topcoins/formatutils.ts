@@ -7,14 +7,13 @@ export class FormatUtils {
     return roundedValue;
   }
 
-  static formatPrice(val) {
+  static formatPrice(val: number, decimals: number = 2) {
     var v2 = val;
-    var decimals = 2;
     if (val > 100000) {
       v2 = val / 1000000;
       decimals = 0;
     }
-    if (val < 10) decimals = 4;
+    // if (val < 10) decimals = 4;
 
     return FormatUtils.formatMoney(v2, decimals);
   }

@@ -66,6 +66,11 @@ export class IncomingDataProvider {
     return !!this.bwcProvider.getBitcore().URI.isValid(data);
   }
 
+  private isValidBitcoinDiamondUri(data: string): boolean {
+    data = this.sanitizeUri(data);
+    return !!this.bwcProvider.getBitcoreDiamond().URI.isValid(data);
+  }
+
   private isValidBitcoinCashUri(data: string): boolean {
     data = this.sanitizeUri(data);
     return !!this.bwcProvider.getBitcoreCash().URI.isValid(data);
@@ -180,6 +185,18 @@ export class IncomingDataProvider {
     else this.goSend(address, amount, message, coin);
   }
 
+  private handleBitcoinDiamondUri(data: string, redirParams?: RedirParams): void {
+    this.logger.debug('Incoming-data: Bitcoin Diamond URI');
+    let amountFromRedirParams =
+      redirParams && redirParams.amount ? redirParams.amount : '';
+    const coin = Coin.BTC;
+    let parsed = this.bwcProvider.getBitcoreDiamond().URI(data);
+    let address = parsed.address ? parsed.address.toString() : '';
+    let message = parsed.message;
+    let amount = parsed.amount || amountFromRedirParams;
+    if (parsed.r) this.goToPayPro(data, coin);
+    else this.goSend(address, amount, message, coin);
+  }
   private handleBitcoinCashUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Bitcoin Cash URI');
     let amountFromRedirParams =
@@ -364,6 +381,11 @@ export class IncomingDataProvider {
       this.handlePayProNonBackwardsCompatible(data);
       return true;
 
+      // Bitcoin Diamond URI
+    } else if (this.isValidBitcoinDiamondUri(data)) {
+      this.handleBitcoinDiamondUri(data, redirParams);
+      return true;
+
       // Bitcoin  URI
     } else if (this.isValidBitcoinUri(data)) {
       this.handleBitcoinUri(data, redirParams);
@@ -448,7 +470,15 @@ export class IncomingDataProvider {
         type: 'PayPro',
         title: this.translate.instant('Payment URL')
       };
-
+    
+      // Bitcoin Diamond  URI
+    } else if (this.isValidBitcoinDiamondUri(data)) {
+      return {
+        data,
+        type: 'BitcoinDiamondUri',
+        title: this.translate.instant('Bitcoin Diamond URI')
+      };
+      
       // Bitcoin  URI
     } else if (this.isValidBitcoinUri(data)) {
       return {

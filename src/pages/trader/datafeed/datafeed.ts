@@ -18,6 +18,7 @@ import * as $ from 'jquery';
 
 import '../../../assets/js/rang';
 import { TopcoinsPage } from '../topcoins/topcoins';
+// import { DecimalPipe } from '@angular/common';
 declare var startgraph: any;
 /*declare var starttest: any;*/
 
@@ -212,7 +213,7 @@ export class DatafeedPage {
 
     this.logger.log('ProcessMarketTick');
 
-    var lastTradePriceFormatted = FormatUtils.formatPrice(data.LastTradePrice);
+    var lastTradePriceFormatted = FormatUtils.formatPrice(data.LastTradePrice, this.decimals);
     if (this.priceTick.lastTradePriceFormatted != lastTradePriceFormatted) {
       this.priceTick.prevLastTradePrice = this.priceTick.lastTradePrice;
       this.priceTick.prevLastTradePriceFormatted = this.priceTick.lastTradePriceFormatted;
@@ -394,6 +395,11 @@ export class DatafeedPage {
 
     return new Promise((resolve) => {
       let p = this.selectedPair;
+      this.decimals =
+        p.Precision == 0
+          ? 0
+          : Math.round(Math.log(1 / p.Precision) / Math.LN10);
+
       return this.feedProvider
         .connect(
           this.selectedPair.Exchange,
@@ -401,11 +407,6 @@ export class DatafeedPage {
         )
         .then(() => {
           // this.connectedPair = p;
-          this.decimals =
-            p.Precision == 0
-              ? 0
-              : Math.round(Math.log(1 / p.Precision) / Math.LN10);
-
           setTimeout(() => {
             this.logger.log('--------START Animation ---------');
             new startgraph(1);
@@ -480,7 +481,7 @@ export class DatafeedPage {
         let key = `${-(i + 1)}@${keys[k]}`;
 
         rdi.Data[keys[k]] = {
-          Value: FormatUtils.formatPrice(values[key]),
+          Value: FormatUtils.formatPrice(values[key], this.decimals),
           FullValue: values[key],
           IsPriceInRange: true
         };
@@ -518,13 +519,13 @@ export class DatafeedPage {
         var keyNegative = this.knownIntervals[i].Caption + '@' + -k;
 
         rdi.Data[k.toString()] = {
-          Value: FormatUtils.formatPrice(values[keyPositive]),
+          Value: FormatUtils.formatPrice(values[keyPositive], this.decimals),
           FullValue: values[keyPositive],
           IsPriceInRange: lastTradePrice <= values[keyPositive] || k == 7
         };
 
         rdi.Data[(-k).toString()] = {
-          Value: FormatUtils.formatPrice(values[keyNegative]),
+          Value: FormatUtils.formatPrice(values[keyNegative], this.decimals),
           FullValue: values[keyNegative],
           IsPriceInRange: lastTradePrice >= values[keyNegative] || k == 7
         };

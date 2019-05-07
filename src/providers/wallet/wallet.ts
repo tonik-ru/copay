@@ -431,8 +431,15 @@ export class WalletProvider {
     network: string,
     address: string
   ): string {
-    if (coin != 'bch' || this.useLegacyAddress()) return address;
-    const protoAddr = this.getProtoAddress(
+    if (coin == 'btc' || this.useLegacyAddress()) return address;
+    if (coin != 'bch')
+      return this.getProtoAddress(
+        coin,
+        network,
+        address
+      );
+    
+      const protoAddr = this.getProtoAddress(
       coin,
       network,
       this.txFormatProvider.toCashAddress(address)
@@ -1699,9 +1706,12 @@ export class WalletProvider {
   public getProtocolHandler(coin: string, network?: string): string {
     if (coin == 'bch') {
       return network == 'testnet' ? 'bchtest' : 'bitcoincash';
-    } else {
-      return 'bitcoin';
     }
+    else if(coin == 'bcd'){
+        return 'bitcoindiamond';
+      }
+      else
+        return 'bitcoin';        
   }
 
   public copyCopayers(wallet, newWallet): Promise<any> {
