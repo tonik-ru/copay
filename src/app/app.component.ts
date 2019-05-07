@@ -43,6 +43,7 @@ import { DisclaimerPage } from '../pages/onboarding/disclaimer/disclaimer';
 import { OnboardingPage } from '../pages/onboarding/onboarding';
 import { PaperWalletPage } from '../pages/paper-wallet/paper-wallet';
 import { PinModalPage } from '../pages/pin/pin-modal/pin-modal';
+import { ScanPage } from '../pages/scan/scan';
 import { AmountPage } from '../pages/send/amount/amount';
 import { ConfirmPage } from '../pages/send/confirm/confirm';
 import { AddressbookAddPage } from '../pages/settings/addressbook/add/add';
@@ -350,7 +351,8 @@ export class CopayApp {
 
   private scanFromWalletEvent(): void {
     this.events.subscribe('ScanFromWallet', async () => {
-      await this.getGlobalTabs().select(1);
+      // await this.getGlobalTabs().select(1);
+      this.nav.push(ScanPage);
       await this.toggleScannerVisibilityFromWithinWallet(true, 300);
     });
     this.events.subscribe('ExitScan', async () => {
