@@ -170,6 +170,17 @@ page-datafeed {
     text-decoration: none !important;
   }
 
+  .showmoreclass{
+    color: #fff;
+
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 18px;
+    transition: 0.5s ease;
+
+    border-radius: 8px;
+    text-decoration: none !important;
+  }
   .showmore {
     display: block !important;
   }
@@ -518,8 +529,11 @@ page-datafeed {
     background: #424448 !important;
   }
   table.table.table-hover.table-striped {
-    width: 100%;
+    margin: 20px auto 0;
+    width: 95%;
+
   }
+  
   tr.currentfib {
     background: #395429 !important;
   }
@@ -593,4 +607,17 @@ page-datafeed {
   .footer .toolbar-title-ios {
     padding: 0;
   }
+  .segment-ios .segment-button.segment-activated .label-ios{ color:#FFF!important;}
+ 
+  img.chim-in-feb {
+    max-width: 100px;
 }
+.lineblock{ background: #CCC;
+  max-width: 35%;
+  height: 2px;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 10px;
+  opacity: 0.5;}
+}
+

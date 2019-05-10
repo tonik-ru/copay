@@ -11,7 +11,6 @@ import { FormatUtils } from '../topcoins/formatutils';
 
 // import { ProfileProvider } from '../../../providers';
 
-import * as $ from 'jquery';
 import { Logger } from '../../../providers/logger/logger';
 import { FeedProvider } from '../../../providers/trader/feed';
 /*import { TabsPage } from '../../tabs/tabs';
@@ -49,14 +48,14 @@ export class DatafeedPage {
     { Caption: '0.03', TimeSpan: '00:30:00', Name: '30 min', isVisible: false },
     { Caption: '0.04', TimeSpan: '00:45:00', Name: '45 min', isVisible: false },
     { Caption: '0.1', TimeSpan: '01:00:00', Name: '1 hr', isVisible: true },
-    /*{ Caption: '0.2', TimeSpan: '02:00:00', Name: '2 hr', isVisible: false },*/
+    /* { Caption: '0.2', TimeSpan: '02:00:00', Name: '2 hr', isVisible: false },*/
     { Caption: '0.4', TimeSpan: '04:00:00', Name: '4 hr', isVisible: true },
     { Caption: '0.6', TimeSpan: '06:00:00', Name: '6 hr', isVisible: false },
     { Caption: '0.9', TimeSpan: '09:00:00', Name: '9 hr', isVisible: false },
     { Caption: '0.12', TimeSpan: '12:00:00', Name: '12 hr', isVisible: false },
     { Caption: '1', TimeSpan: '1.00:00:00', Name: '1 day', isVisible: true },
-    { Caption: '2', TimeSpan: '2.00:00:00', Name: '2 days', isVisible: true },
-    { Caption: '3', TimeSpan: '3.00:00:00', Name: '3 days', isVisible: false },
+    { Caption: '2', TimeSpan: '2.00:00:00', Name: '2 days', isVisible: false },
+    { Caption: '3', TimeSpan: '3.00:00:00', Name: '3 days', isVisible: true },
     { Caption: '7', TimeSpan: '7.00:00:00', Name: '7 days', isVisible: true },
     {
       Caption: '14',
@@ -101,7 +100,7 @@ export class DatafeedPage {
 
   // $scope.currentPair = null;
   public decimals = 2;
-  public selectedInterval = this.knownIntervals[8];
+  public selectedInterval = this.knownIntervals[7];
   public currentData = {};
   public d = null;
   public positiveKeys = ['7', '6', '5', '4', '3', '2', '1'];
@@ -109,6 +108,9 @@ export class DatafeedPage {
 
   private lastTickData = null;
   // private connectedPair = {};
+
+  private showmmmoretimeblock: boolean = false;
+  private showmmmoretimeblockfeb: boolean = false;
 
   public myPair: {};
 
@@ -185,38 +187,14 @@ export class DatafeedPage {
   selectedTab(index) {
     this.slider.slideTo(index);
   }
-  ngAfterViewInit() {
-    $('#showmore').click(() => {
-      this.logger.log('SHOW MORE!!!!');
-      $('#moretime').toggleClass('showmore');
-      $('#standart').toggleClass('hider');
-      if ($('#showmore i').hasClass('fas fa-plus')) {
-        $('#showmore i')
-          .removeClass('fas fa-plus')
-          .addClass('fas fa-minus');
-      } else {
-        $('#showmore i')
-          .removeClass('fas fa-minus')
-          .addClass('fas fa-plus');
-      }
-    });
-
-    $('#showmore2').click(() => {
-      $('#moretime2').toggleClass('showmore');
-      $('#standart2').toggleClass('hider');
-      if ($('#showmore2 i').hasClass('fas fa-plus')) {
-        $('#showmore2 i')
-          .removeClass('fas fa-plus')
-          .addClass('fas fa-minus');
-      } else {
-        $('#showmore2 i')
-          .removeClass('fas fa-minus')
-          .addClass('fas fa-plus');
-      }
-    });
+  public showMoreTime() {
+    this.showmmmoretimeblock = !this.showmmmoretimeblock;
+  }
+  public showMoreTimeFeb() {
+    this.showmmmoretimeblockfeb = !this.showmmmoretimeblockfeb;
   }
 
-
+  ngAfterViewInit() {}
 
   private processMarketTick(data) {
     this.logger.log(data);
@@ -225,7 +203,10 @@ export class DatafeedPage {
 
     this.logger.log('ProcessMarketTick');
 
-    var lastTradePriceFormatted = FormatUtils.formatPrice(data.LastTradePrice, this.decimals);
+    var lastTradePriceFormatted = FormatUtils.formatPrice(
+      data.LastTradePrice,
+      this.decimals
+    );
     if (this.priceTick.lastTradePriceFormatted != lastTradePriceFormatted) {
       this.priceTick.prevLastTradePrice = this.priceTick.lastTradePrice;
       this.priceTick.prevLastTradePriceFormatted = this.priceTick.lastTradePriceFormatted;
@@ -579,6 +560,7 @@ export class DatafeedPage {
   }
 
   public selectInterval(interval) {
+    this.logger.log(interval);
     var rd = this.resistanceData;
     this.selectedInterval = interval;
     if (this.resistanceData.length > 0) {

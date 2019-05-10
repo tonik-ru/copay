@@ -1,6 +1,11 @@
 page-home {
   background: $toolbar-background;
 
+  .scroll-content .wrapper {
+ 
+    min-height: auto;}
+    .scroll-content{ overflow-x: auto;}
+
   .item-title {
     width: 50%;
     float: left;
@@ -496,3 +501,4 @@ img.commingsoonimg {
   position: absolute;
   opacity: 0.6;
 }
+

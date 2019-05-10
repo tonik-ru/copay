@@ -91,10 +91,14 @@
         <ion-slide>
           <script src="assets/js/rang.js"></script>
           <p class="timerange">
-            Time Range <span id="showmore" ><i class="fas fa-plus"></i></span>
+            Time Range <span id="showmore" (click)="showMoreTime()">
+              <i *ngIf="!showmmmoretimeblock" class="fas fa-plus"></i>
+              <i *ngIf="showmmmoretimeblock" class="fas fa-minus"></i>
+            </span>
           </p>
+          
 
-          <ul class="links" id="standart">
+          <ul class="links"  *ngIf="!showmmmoretimeblock">
             <ng-container *ngFor="let d of resistanceData">
               <li
                 *ngIf="d.Interval.isVisible"
@@ -106,7 +110,7 @@
               </li>
             </ng-container>
           </ul>
-          <ul class="links" id="moretime">
+          <ul class="links"  *ngIf="showmmmoretimeblock">
             <ng-container *ngFor="let d of resistanceData">
               <li
                 *ngIf="
@@ -425,7 +429,7 @@
                 Last Breakout:
               </td>
               <td>
-                <span class="breakout" id="bout">{{ d.Breakout.Age }}</span> ago
+                <span class="breakout" id="bout">{{ d.Breakout.Age }} ago</span>
                 ({{ d.Breakout.Count }} attempts)
               </td>
             </tr>
@@ -438,8 +442,8 @@
                 Last Breakdown:
               </td>
               <td>
-                <span class="breakdown" id="bdwn">{{ d.Breakdown.Age }}</span>
-                ago ({{ d.Breakdown.Count }} attempts)
+                <span class="breakdown" id="bdwn">{{ d.Breakdown.Age }}
+                ago</span> ({{ d.Breakdown.Count }} attempts)
               </td>
             </tr>
           </table>
@@ -449,7 +453,10 @@
 
     <ion-slide>
       <p class="timerange">
-        Time Range <span id="showmore2"><i class="fas fa-plus"></i></span>
+        Time Range <span class="showmoreclass" (click)="showMoreTimeFeb()">
+          <i *ngIf="!showmmmoretimeblockfeb" class="fas fa-plus"></i>
+          <i *ngIf="showmmmoretimeblockfeb" class="fas fa-minus"></i>
+        </span>
       </p>
       <!--
         PART FOR NEXT VERSION <ul class="links">
@@ -467,7 +474,7 @@
           >
         </ul>
       -->
-      <ul class="links" id="standart2">
+      <ul class="links" *ngIf="!showmmmoretimeblockfeb">
         <ng-container *ngFor="let d of resistanceData">
           <li
             *ngIf="d.Interval.isVisible"
@@ -477,7 +484,7 @@
           </li>
         </ng-container>
       </ul>
-      <ul class="links" id="moretime2">
+      <ul class="links" *ngIf="showmmmoretimeblockfeb">
         <ng-container *ngFor="let d of resistanceData">
           <li
             *ngIf="
@@ -899,10 +906,51 @@
 
               <td>{{ d.Data['1'].Age }}</td>
             </tr>
+            <tr
+            class="currentfibred"
+            *ngIf="d.PositionPercent > -10 && d.PositionPercent < 0"
+          >
+            <td id="febcurproc">
+              {{ d.PositionPercent | number: '1.0-0' }}%
+            </td>
+            <td id="febcur" *ngIf="lastTradePrice > 100000">
+              {{
+                lastTradePrice / 1000000
+                  | currency: 'CAD':'symbol-narrow':'4.0-2'
+              }}B
+              <i
+                id="febcurar"
+                class="fas fa-arrow-up"
+                style="transition: 0.5s ease"
+              ></i>
+            </td>
+            <td id="febcur" *ngIf="lastTradePrice < 100000">
+              ${{ lastTradePrice
+              }}<i
+                id="febcurar"
+                class="fas fa-arrow-up"
+                style="transition: 0.5s ease"
+              ></i>
+            </td>
 
+            <td style="text-align: center;">
+              <span id="swing">
+                {{ d.AvgIntData.Current | number: '1.2-2' }}
+              </span>
+              <div id="prevswing" style="display: none">
+                {{ d.AvgIntData.Prev | number: '1.2-2' }}
+              </div>
+            </td>
+            <!-- <td class="currentfibtext">current price</td> -->
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="5" valing="middle"><span class="lineblock"></span><img src="assets/img/chimp.png" class="chim-in-feb"><span class="lineblock"></span></td>
+          </tr>
             <tr
               class="currentfibred"
-              *ngIf="d.PositionPercent > -10 && d.PositionPercent < 10"
+              *ngIf="d.PositionPercent > -10 && d.PositionPercent < 0"
             >
               <td id="febcurproc">
                 {{ d.PositionPercent | number: '1.0-0' }}%

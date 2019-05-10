@@ -96,8 +96,14 @@ page-tab3 {
   }
 
   .bottominfo {
-    position: absolute;
+    margin-top: 10px;
+    /*position: absolute;
     bottom: 0;
-    width: 100%;
+    width: 100%;*/
   }
+
+  .bottominfo .badge-ios {
+    
+    font-size: 1rem;}
+    img{max-width:100px;}
 }

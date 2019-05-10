@@ -76,7 +76,7 @@ export class Tab3Page {
       this.category_id = this.navParams.get('cat_id');
       this.cat_name_title = this.navParams.get('cat_name');
     } else {
-      this.cat_name_title = 'News';
+      this.cat_name_title = 'Daily News';
     }
     this.loadData();
   }

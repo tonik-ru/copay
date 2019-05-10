@@ -87,7 +87,7 @@ page-topcoins {
   .market-coinlogoblock {
     display: inline-block;
     float: left;
-    transition: 0.5s ease;
+    transition: 0.5s ease; margin-right: 10px;
   }
   .item-ios,
   .item-md {
@@ -386,6 +386,7 @@ animation: load 2s infinite;
     margin-top: 15px;
   }
   .select-ios .select-icon {
-    margin-right: 20%;
+    margin-right: 15px;
   }
+  .segment-ios .segment-button.segment-activated .label-ios{ color:#FFF!important;}
 }

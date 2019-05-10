@@ -10,6 +10,7 @@ import { HomePage } from '../home/home';
 import { ScanPage } from '../scan/scan';
 import { SettingsPage } from '../settings/settings';
 import { Tab3Page } from '../tab3/tab3';
+import { Tab4Page } from '../tab4/tab4';
 import { DatafeedPage } from '../trader/datafeed/datafeed';
 /*import { Tab4Page } from '../tab4/tab4';*/
 import { TopcoinsPage } from '../trader/topcoins/topcoins';
@@ -47,6 +48,7 @@ export class TabsPage {
   tab3Root = SettingsPage;
   tab4Root = Tab3Page;
   datafeed = DatafeedPage;
+  bcd4Root = Tab4Page;
 
   /*tab5Root = Tab4Page;*/
   constructor(
