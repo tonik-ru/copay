@@ -1402,8 +1402,8 @@
   <div *ngIf="myPair != undefined">
     <div *ngIf="myPair.BaseAsset !== 'TOP20'">
       <div *ngIf="d && d.AvgIntData && d.Breakout">
-        <p id="speedometr" style="display:none">{{ d.Speedometer.Score }}</p>
-        <p id="speedometrprev" style="display:none">
+        <p id="speedometr" style="opacity:0">{{ d.Speedometer.Score }}</p>
+        <p id="speedometrprev" style="opacity: 0">
           {{ d.Speedometer.PrevData.Score }}
         </p>
       </div>

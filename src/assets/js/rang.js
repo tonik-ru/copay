@@ -7,9 +7,12 @@ function startgraph(e) {
   ('use strict');
 
   if (document.querySelector('#speedometr') == null) {
-    e = 0;
+    e = 2;
+    setTimeout(startgraph(1), 500);
+    return false; 
+   
   }
-
+ 
   var rangeClock = document.querySelector('.meter-clock');
   var rangeClock2 = document.querySelector('.meter-clock2');
   var rangeClock21 = document.querySelector('.meter-clock2-1');
