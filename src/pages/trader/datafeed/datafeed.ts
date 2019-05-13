@@ -109,10 +109,11 @@ export class DatafeedPage {
   private lastTickData = null;
   // private connectedPair = {};
 
-  private showmmmoretimeblock: boolean = false;
-  private showmmmoretimeblockfeb: boolean = false;
+  public showmmmoretimeblock: boolean = false;
+  public showmmmoretimeblockfeb: boolean = false;
+  public isTop20: boolean = false;
 
-  public myPair: {};
+  public myPair: any;
 
   @ViewChild('slider') slider: Slides;
 
@@ -128,6 +129,7 @@ export class DatafeedPage {
     this.feedProvider.on('ProcessMarketTick', x => this.processMarketTick(x));
     this.feedProvider.on('ProcessResistance', x => this.onProcessResistance(x));
     this.showlook = '0';
+    this.myPair = {};
   }
 
   public onClickCancel() {
@@ -375,7 +377,11 @@ export class DatafeedPage {
       rdi.Data[ks].IsCurrent = false;
       if (rdi.Data[ks].IsPriceInRange && !levelFound) {
         levelFound = true;
-        rdi.Data[ks].IsCurrent = true;
+        if (
+          (rdi.Data[ks].PositionPercent > 0 && sign > 0) ||
+          (rdi.Data[ks].PositionPercent < 0 && sign < 0)
+        )
+          rdi.Data[ks].IsCurrent = true;
       }
     }
   }
@@ -388,6 +394,7 @@ export class DatafeedPage {
 
     return new Promise(resolve => {
       let p = this.selectedPair;
+      this.isTop20 = this.selectedPair.BaseAsset == 'TOP20';
       this.decimals =
         p.Precision == 0
           ? 0
