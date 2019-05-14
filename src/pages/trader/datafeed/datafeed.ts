@@ -374,12 +374,13 @@ export class DatafeedPage {
               rdi.Data[ks].FullValue > 0) ||
             k == 7;
 
+      
       rdi.Data[ks].IsCurrent = false;
-      if (rdi.Data[ks].IsPriceInRange && !levelFound) {
+      if (rdi.PositionPercent && rdi.Data[ks].IsPriceInRange && !levelFound) {
         levelFound = true;
         if (
-          (rdi.Data[ks].PositionPercent > 0 && sign > 0) ||
-          (rdi.Data[ks].PositionPercent < 0 && sign < 0)
+          (rdi.PositionPercent >= 50 && sign > 0) ||
+          (rdi.PositionPercent < 50 && sign < 0)
         )
           rdi.Data[ks].IsCurrent = true;
       }
