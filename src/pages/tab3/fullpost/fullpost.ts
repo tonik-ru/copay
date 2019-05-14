@@ -3,6 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers';
 import { ApiProvider } from '../../../providers/api/api';
 
+import * as $ from 'jquery';
 /**
  * Generated class for the FullpostPage page.
  *
@@ -29,6 +30,11 @@ export class FullpostPage {
     this.post = navParams.get('post');
   }
 
+  ionViewWillEnter(){
+    $('a').attr("target","_blank");
+    $('p:contains("Also read:")').remove();
+    $('p:contains("Source:")').remove();
+  }
   ionViewDidLoad() {
     this.getRelated();
   }

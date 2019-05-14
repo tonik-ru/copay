@@ -10,6 +10,7 @@
     }}</ion-title>
   </ion-navbar>
   <ion-toolbar *ngIf="wallet" [navbar-bg]="wallet.color">
+    
     <div
       *ngIf="!wallet.balanceHidden && !wallet.scanning && wallet.status"
       class="wallet-details-header__balance"
@@ -57,7 +58,7 @@
           [ngClass]="{ invalid: invalidAddress && search != '' }"
         >
           <ion-input
-            placeholder="{{'Search or enter bitcoin address' | translate}}"
+            placeholder="{{'Enter Address' | translate}}"
             [(ngModel)]="search"
             (ngModelChange)="processInput()"
           ></ion-input>

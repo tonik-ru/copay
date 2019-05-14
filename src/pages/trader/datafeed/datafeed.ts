@@ -1,9 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   AlertController,
   NavController,
   NavParams,
-  Slides,
+  
   ViewController
 } from 'ionic-angular';
 
@@ -41,50 +41,50 @@ export class DatafeedPage {
   public pairs = [];
 
   private knownIntervals = [
-    { Caption: '0.001', TimeSpan: '00:01:00', Name: '1 min', isVisible: false },
-    { Caption: '0.003', TimeSpan: '00:03:00', Name: '3 min', isVisible: false },
-    { Caption: '0.005', TimeSpan: '00:05:00', Name: '5 min', isVisible: false },
-    { Caption: '0.01', TimeSpan: '00:15:00', Name: '15 min', isVisible: false },
-    { Caption: '0.03', TimeSpan: '00:30:00', Name: '30 min', isVisible: false },
-    { Caption: '0.04', TimeSpan: '00:45:00', Name: '45 min', isVisible: false },
-    { Caption: '0.1', TimeSpan: '01:00:00', Name: '1 hr', isVisible: true },
+    { Caption: '0.001', TimeSpan: '00:01:00', Name: '1 m', isVisible: false },
+    { Caption: '0.003', TimeSpan: '00:03:00', Name: '3 m', isVisible: false },
+    { Caption: '0.005', TimeSpan: '00:05:00', Name: '5 m', isVisible: false },
+    { Caption: '0.01', TimeSpan: '00:15:00', Name: '15 m', isVisible: false },
+    { Caption: '0.03', TimeSpan: '00:30:00', Name: '30 m', isVisible: false },
+    { Caption: '0.04', TimeSpan: '00:45:00', Name: '45 m', isVisible: false },
+    { Caption: '0.1', TimeSpan: '01:00:00', Name: '1 h', isVisible: true },
     /* { Caption: '0.2', TimeSpan: '02:00:00', Name: '2 hr', isVisible: false },*/
-    { Caption: '0.4', TimeSpan: '04:00:00', Name: '4 hr', isVisible: true },
-    { Caption: '0.6', TimeSpan: '06:00:00', Name: '6 hr', isVisible: false },
-    { Caption: '0.9', TimeSpan: '09:00:00', Name: '9 hr', isVisible: false },
-    { Caption: '0.12', TimeSpan: '12:00:00', Name: '12 hr', isVisible: false },
-    { Caption: '1', TimeSpan: '1.00:00:00', Name: '1 day', isVisible: true },
-    { Caption: '2', TimeSpan: '2.00:00:00', Name: '2 days', isVisible: false },
-    { Caption: '3', TimeSpan: '3.00:00:00', Name: '3 days', isVisible: true },
-    { Caption: '7', TimeSpan: '7.00:00:00', Name: '7 days', isVisible: true },
+    { Caption: '0.4', TimeSpan: '04:00:00', Name: '4 h', isVisible: true },
+    { Caption: '0.6', TimeSpan: '06:00:00', Name: '6 h', isVisible: false },
+    { Caption: '0.9', TimeSpan: '09:00:00', Name: '9 h', isVisible: false },
+    { Caption: '0.12', TimeSpan: '12:00:00', Name: '12 h', isVisible: false },
+    { Caption: '1', TimeSpan: '1.00:00:00', Name: '1 d', isVisible: true },
+    { Caption: '2', TimeSpan: '2.00:00:00', Name: '2 d', isVisible: false },
+    { Caption: '3', TimeSpan: '3.00:00:00', Name: '3 d', isVisible: true },
+    { Caption: '7', TimeSpan: '7.00:00:00', Name: '7 d', isVisible: true },
     {
       Caption: '14',
       TimeSpan: '14.00:00:00',
-      Name: '14 days',
+      Name: '14 d',
       isVisible: false
     },
     {
       Caption: '30',
       TimeSpan: '30.00:00:00',
-      Name: '30 days',
+      Name: '30 d',
       isVisible: true
     },
     {
       Caption: '45',
       TimeSpan: '45.00:00:00',
-      Name: '45 days',
+      Name: '45 d',
       isVisible: false
     },
     {
       Caption: '60',
       TimeSpan: '60.00:00:00',
-      Name: '60 days',
+      Name: '60 d',
       isVisible: false
     },
     {
       Caption: '90',
       TimeSpan: '90.00:00:00',
-      Name: '90 days',
+      Name: '90 d',
       isVisible: false
     }
   ];
@@ -115,9 +115,9 @@ export class DatafeedPage {
 
   public myPair: any;
 
-  @ViewChild('slider') slider: Slides;
+  /*@ViewChild('slider') slider: Slides;*/
 
-  showlook = '0';
+ /* showlook = '0';*/
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -128,7 +128,7 @@ export class DatafeedPage {
   ) {
     this.feedProvider.on('ProcessMarketTick', x => this.processMarketTick(x));
     this.feedProvider.on('ProcessResistance', x => this.onProcessResistance(x));
-    this.showlook = '0';
+    /*this.showlook = '0';*/
     this.myPair = {};
   }
 
@@ -186,9 +186,9 @@ export class DatafeedPage {
     this.selectedPair = this.pairs[0];
     this.startConnection();
   }
-  selectedTab(index) {
+  /*selectedTab(index) {
     this.slider.slideTo(index);
-  }
+  }*/
   public showMoreTime() {
     this.showmmmoretimeblock = !this.showmmmoretimeblock;
   }
@@ -411,7 +411,7 @@ export class DatafeedPage {
           setTimeout(() => {
             this.logger.log('--------START Animation ---------');
             new startgraph(1);
-          }, 1500);
+          }, 300);
 
           resolve();
         });
@@ -421,7 +421,7 @@ export class DatafeedPage {
   ionViewDidLoad() {}
 
   ionViewDidEnter() {
-    this.slider.onlyExternal = true;
+    /*this.slider.onlyExternal = true;*/
   }
 
   ionViewWillLeave() {
@@ -585,7 +585,8 @@ export class DatafeedPage {
   }
 
   public selectPair(pair) {
-    this.selectedPair = pair;
+    this.logger.log('------>'+pair as string);
+    /*this.selectedPair = pair;*/
     new startgraph(2);
     this.feedProvider.stop();
     this.startConnection();

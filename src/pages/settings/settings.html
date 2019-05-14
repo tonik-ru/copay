@@ -15,12 +15,7 @@
           <span translate>Address book</span>
         </button>
   
-        <button ion-item (click)="openHelpExternalLink()">
-          <ion-icon class="item-img" item-start>
-            <img src="assets/img/settings-icons/icon-help-support.svg" width="22">
-          </ion-icon>
-          <span translate>Help &amp; support</span>
-        </button>
+       
   
         <button ion-item *ngIf="isCordova" (click)="openSharePage()">
           <ion-icon class="item-img" item-start>
@@ -55,7 +50,7 @@
             <img src="assets/img/settings-icons/icon-alternative-currency.svg" width="22">
           </ion-icon>
           <ion-label>
-            {{'Alternative currency' | translate}}
+            {{'Currency' | translate}}
           </ion-label>
           <ion-note *ngIf="selectedAlternative" item-end>
             {{ selectedAlternative.name }}
@@ -67,7 +62,7 @@
             <img src="assets/img/settings-icons/icon-network.svg" width="22">
           </ion-icon>
           <ion-label>
-            {{'Bitcoin network fee policy' | translate}}
+            {{'Bitcoin fees' | translate}}
           </ion-label>
         </button>
   
@@ -84,7 +79,7 @@
             {{'PIN' | translate}}
           </ion-note>
           <ion-note *ngIf="lockMethod === 'fingerprint'" item-end>
-            {{'Fingerprint' | translate}}
+            {{'Scan' | translate}}
           </ion-note>
         </button>
   
@@ -177,6 +172,12 @@
           </ion-icon>
           <span translate>About</span> {{appName}}
         </button>
+        <button ion-item (click)="openHelpExternalLink()">
+            <ion-icon class="item-img" item-start>
+              <img src="assets/img/settings-icons/icon-help-support.svg" width="22">
+            </ion-icon>
+            <span translate>Help &amp; support</span>
+          </button>
         <ion-item-divider></ion-item-divider>
       </ion-list>
     </div>

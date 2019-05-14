@@ -34,7 +34,7 @@
     </ion-title>
   </ion-navbar>
 
-  <ion-toolbar *ngIf="myPair != undefined">
+  <!--<ion-toolbar *ngIf="myPair != undefined">
     <ion-segment
       *ngIf="myPair.BaseAsset !== 'TOP20'"
       (ionChange)="slider.slideTo(showlook)"
@@ -48,20 +48,54 @@
         <ion-label>Fibonacci</ion-label>
       </ion-segment-button>
     </ion-segment>
-  </ion-toolbar>
+  </ion-toolbar>-->
 </ion-header>
 
 <ion-content no-padding>
+  
   <div class="topbar">
     <div class="topblock">
-      <h1 *ngIf="myPair != undefined">
-        <img
-          *ngIf="myPair != undefined"
-          src="assets/logoscoinss/{{ myPair.BaseAsset }}.png"
-          class="coinlogo2"
-        />${{ priceTick.lastTradePriceFormatted }}
-        <span> <i id="arrowprice" class="fas fa-arrow-up"></i></span>
-      </h1>
+      <ion-row>
+        
+        <ion-col col-12>
+          <h1 *ngIf="myPair != undefined">
+            <span *ngIf="priceTick.lastTradePriceFormatted > 100000"
+              >{{
+                priceTick.lastTradePriceFormatted
+                  | currency: 'CAD':'symbol-narrow':'4.0-0'
+              }}B</span
+            >
+            <span *ngIf="priceTick.lastTradePriceFormatted < 100000">${{
+              priceTick.lastTradePriceFormatted
+            }}</span>
+            <span> <i id="arrowprice" class="fas fa-arrow-up"></i></span>
+          </h1>
+          <p *ngIf="d && d.AvgIntData && d.Breakout"><span (click)="showInfoCurrentSwingRatio()"
+            ><i class="fas fa-info-circle"></i
+          ></span>
+          Swing Ratio:<span class="big" id="swing2">
+              {{ d.AvgIntData.Current | number: '1.2-2' }}
+            </span></p>
+        </ion-col>
+        <ion-col col-12 text-center>
+            <ion-item class="pairsblock">
+                <ion-label><img
+                *ngIf="myPair != undefined"
+                src="assets/logoscoinss/{{ myPair.BaseAsset }}.png"
+                class="coinlogo2"
+              /></ion-label>
+              <ion-select placeholder="Pairs"
+                [(ngModel)]="selectedPair"
+                class="links"
+                (ionChange)="selectPair(pair)"
+                interface="popover"
+              >
+                <ion-option *ngFor="let p of pairs" [value]="p">{{      formatPair(p)              }}</ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+      </ion-row>
+
       <div id="prevprice" style="opacity: 0; display: none">
         {{ priceTick.prevLastTradePrice }}
       </div>
@@ -69,65 +103,55 @@
         {{ lastTradePrice }}
       </div>
 
-      <ul class="links" style="margin-top:20px">
-        <li
-          *ngFor="let p of pairs"
-          [ngClass]="{ activelink: p == selectedPair }"
-        >
-          <a (click)="selectPair(p)">{{ formatPair(p) }}</a>
-        </li>
-      </ul>
       <!-- <p>Current Price</p> -->
     </div>
   </div>
+  <div class="topblocknew" [ngClass]="{'topblocknew-opened': showmmmoretimeblock }">
 
-  <ion-slides
-    drag-content="false"
-    #slider
-    (ionSlideWillChange)="showlook = '' + slider.getActiveIndex()"
-  >
-    <div *ngIf="myPair != undefined">
-      <div *ngIf="myPair.BaseAsset !== 'TOP20'">
-        <ion-slide>
-          <script src="assets/js/rang.js"></script>
-          <p class="timerange">
-            Time Range <span id="showmore" (click)="showMoreTime()">
-              <i *ngIf="!showmmmoretimeblock" class="fas fa-plus"></i>
-              <i *ngIf="showmmmoretimeblock" class="fas fa-minus"></i>
-            </span>
-          </p>
-          
-
-          <ul class="links"  *ngIf="!showmmmoretimeblock">
-            <ng-container *ngFor="let d of resistanceData">
-              <li
-                *ngIf="d.Interval.isVisible"
-                [ngClass]="{ activelink: d.Interval == selectedInterval }"
-              >
-                <a (click)="selectInterval(d.Interval)">{{
-                  d.Interval.Name
-                }}</a>
-              </li>
-            </ng-container>
-          </ul>
-          <ul class="links"  *ngIf="showmmmoretimeblock">
-            <ng-container *ngFor="let d of resistanceData">
-              <li
-                *ngIf="
-                  d.Interval.Name !== '15 min-4 hr' &&
-                  d.Interval.Name !== '4 hr-1 days' &&
-                  d.Interval.Name !== '9 hr-7 days'
-                "
-                [ngClass]="{ activelink: d.Interval == selectedInterval }"
-              >
-                <a (click)="selectInterval(d.Interval)">{{
-                  d.Interval.Name
-                }}</a>
-              </li></ng-container
+      <ul class="linksnew" *ngIf="!showmmmoretimeblock">
+          <ng-container *ngFor="let d of resistanceData">
+            <li
+              *ngIf="d.Interval.isVisible"
+              [ngClass]="{ activelink: d.Interval == selectedInterval }"
             >
-          </ul>
+              <a (click)="selectInterval(d.Interval)">{{
+                d.Interval.Name
+              }}</a>
+            </li>
+          </ng-container>
+        </ul>
+        <ul class="linksnew" *ngIf="showmmmoretimeblock">
+          <ng-container *ngFor="let d of resistanceData">
+            <li
+              *ngIf="
+                d.Interval.Name !== '15 min-4 hr' &&
+                d.Interval.Name !== '4 hr-1 days' &&
+                d.Interval.Name !== '9 hr-7 days'
+              "
+              [ngClass]="{ activelink: d.Interval == selectedInterval }"
+            >
+              <a (click)="selectInterval(d.Interval)">{{
+                d.Interval.Name
+              }}</a>
+            </li></ng-container
+          >
+        </ul> 
+        <span (click)="showMoreTime()" class="showmorenewclass">
+       
+        <ion-icon  *ngIf="!showmmmoretimeblock" name="more"></ion-icon>
+        <ion-icon  *ngIf="showmmmoretimeblock" name="arrow-up"></ion-icon>
+       
+      </span>
+  </div>
+ 
+    <div [ngClass]="{hidecontent: isTop20}">
+     
+       
+          <script src="assets/js/rang.js"></script>
+          
+          
           <table
-            class="outlooktabletop"
+            class="outlooktabletop hidecontent"
             *ngIf="d && d.AvgIntData && d.Breakout"
           >
             <tr>
@@ -369,22 +393,30 @@
                       id="cute1"
                       width="220"
                       height="191"
-                      xlink:href="assets/img/speedometer/cute.png" xmlns:xlink="http://www.w3.org/1999/xlink" />
+                      xlink:href="assets/img/speedometer/cute.png"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                    />
                     <image
                       id="surprised1"
                       width="220"
                       height="191"
-                      xlink:href="assets/img/speedometer/stars.png" xmlns:xlink="http://www.w3.org/1999/xlink"  />
+                      xlink:href="assets/img/speedometer/stars.png"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                    />
                     <image
                       id="angry1"
                       width="220"
                       height="191"
-                      xlink:href="assets/img/speedometer/angry.png" xmlns:xlink="http://www.w3.org/1999/xlink" />
+                      xlink:href="assets/img/speedometer/angry.png"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                    />
                     <image
                       id="image0"
                       width="2378"
                       height="535"
-                      xlink:href="assets/img/speedometer/start.png" xmlns:xlink="http://www.w3.org/1999/xlink" />
+                      xlink:href="assets/img/speedometer/start.png"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                    />
                   </defs>
                 </svg>
                 <h2 class="cls-2d" id="BULLISH" style="display:none">STABLE</h2>
@@ -417,10 +449,11 @@
                     </div>
                   </div>
                 </div>
+                <div class="lineblockafter"></div>
               </div>
             </div>
           </div>
-          <table class="outlooktable" *ngIf="d && d.AvgIntData && d.Breakout">
+          <table class="outlooktable hidecontent" *ngIf="d && d.AvgIntData && d.Breakout">
             <tr>
               <td>
                 <span (click)="showInfoBrakeOut()"
@@ -442,955 +475,125 @@
                 Last Breakdown:
               </td>
               <td>
-                <span class="breakdown" id="bdwn">{{ d.Breakdown.Age }}
-                ago</span> ({{ d.Breakdown.Count }} attempts)
+                <span class="breakdown" id="bdwn"
+                  >{{ d.Breakdown.Age }} ago</span
+                >
+                ({{ d.Breakdown.Count }} attempts)
               </td>
             </tr>
           </table>
-        </ion-slide>
+        
       </div>
-    </div>
-
-    <ion-slide>
-      <p class="timerange">
-        Time Range <span class="showmoreclass" (click)="showMoreTimeFeb()">
-          <i *ngIf="!showmmmoretimeblockfeb" class="fas fa-plus"></i>
-          <i *ngIf="showmmmoretimeblockfeb" class="fas fa-minus"></i>
-        </span>
-      </p>
-      <!--
-        PART FOR NEXT VERSION <ul class="links">
-          <ng-container *ngFor="let d of resistanceData">
-            <li
-              *ngIf="
-                d.Interval.Name == '15 min-4 hr' ||
-                d.Interval.Name == '4 hr-1 days' ||
-                d.Interval.Name == '9 hr-7 days'
-              "
-              [ngClass]="{ activelink: d.Interval == selectedInterval }"
-            >
-              <a (click)="selectInterval(d.Interval)">{{ d.Interval.Name }}</a>
-            </li></ng-container
-          >
-        </ul>
-      -->
-      <ul class="links" *ngIf="!showmmmoretimeblockfeb">
-        <ng-container *ngFor="let d of resistanceData">
-          <li
-            *ngIf="d.Interval.isVisible"
-            [ngClass]="{ activelink: d.Interval == selectedInterval }"
-          >
-            <a (click)="selectInterval(d.Interval)">{{ d.Interval.Name }}</a>
-          </li>
-        </ng-container>
-      </ul>
-      <ul class="links" *ngIf="showmmmoretimeblockfeb">
-        <ng-container *ngFor="let d of resistanceData">
-          <li
-            *ngIf="
-              d.Interval.Name !== '15 min-4 hr' &&
-              d.Interval.Name !== '4 hr-1 days' &&
-              d.Interval.Name !== '9 hr-7 days'
-            "
-            [ngClass]="{ activelink: d.Interval == selectedInterval }"
-          >
-            <a (click)="selectInterval(d.Interval)">{{ d.Interval.Name }}</a>
-          </li></ng-container
-        >
-      </ul>
+    
+    <!--<ion-slides
+    drag-content="false"
+    #slider
+    (ionSlideWillChange)="showlook = '' + slider.getActiveIndex()"
+  ><ion-slide></ion-slide>
+    <ion-slide> </ion-slide>
+  </ion-slides>-->
+     
 
       <div *ngIf="d">
+        <div id="prevswing" style="display: none">
+          {{ d.AvgIntData.Prev | number: '1.2-2' }}
+        </div>
+
+       
+
+
         <table class="table table-hover table-striped">
           <tbody>
             <tr>
-              <td>Position</td>
+              <td>Hits</td>
               <td>Price</td>
               <td>Swing</td>
-              <td>Hits</td>
+              <td>Position</td>
               <td>Age</td>
+             
             </tr>
-            <tr [ngClass]="{ recent: d.Data[7].IsCurrent }">
-              <!-- <td>{{d.Interval.Name}}</td> -->
-              <td>100%</td>
-              <td>${{ d.Data['7'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['7'].Hits }}</td>
-
-              <td>{{ d.Data['7'].Age }}</td>
-            </tr>
-
-            <tr
-              class="currentfib"
-              *ngIf="d.PositionPercent > 85 && d.PositionPercent < 100"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[6].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[6].IsCurrent }"
-            >
-              <td>85%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[6].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[6].IsCurrent }"
-            >
-              <td>85%</td>
-              <td>${{ d.Data['6'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['6'].Hits }}</td>
-
-              <td>{{ d.Data['6'].Age }}</td>
-            </tr>
-
-            <tr
-              class="currentfib"
-              *ngIf="d.PositionPercent > 70 && d.PositionPercent < 85"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[5].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[5].IsCurrent }"
-            >
-              <td>70%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[5].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[5].IsCurrent }"
-            >
-              <td>70%</td>
-              <td>${{ d.Data['5'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['5'].Hits }}</td>
-
-              <td>{{ d.Data['5'].Age }}</td>
-            </tr>
-            <tr
-              class="currentfib"
-              *ngIf="d.PositionPercent > 55 && d.PositionPercent < 70"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[4].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[4].IsCurrent }"
-            >
-              <td>55%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[4].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[4].IsCurrent }"
-            >
-              <td>55%</td>
-              <td>${{ d.Data['4'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['4'].Hits }}</td>
-
-              <td>{{ d.Data['4'].Age }}</td>
-            </tr>
-            <tr
-              class="currentfib"
-              *ngIf="d.PositionPercent > 40 && d.PositionPercent < 55"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[3].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[3].IsCurrent }"
-            >
-              <td>40%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[3].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[3].IsCurrent }"
-            >
-              <td>40%</td>
-              <td>${{ d.Data['3'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['3'].Hits }}</td>
-
-              <td>{{ d.Data['3'].Age }}</td>
-            </tr>
-
-            <tr
-              class="currentfib"
-              *ngIf="d.PositionPercent > 25 && d.PositionPercent < 40"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[2].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[2].IsCurrent }"
-            >
-              <td>25%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[2].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[2].IsCurrent }"
-            >
-              <td>25%</td>
-              <td>${{ d.Data['2'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['2'].Hits }}</td>
-
-              <td>{{ d.Data['2'].Age }}</td>
-            </tr>
-
-            <tr
-              class="currentfib"
-              *ngIf="d.PositionPercent > 10 && d.PositionPercent < 25"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[1].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[1].IsCurrent }"
-            >
-              <td>10%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[1].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[1].IsCurrent }"
-            >
-              <td>10%</td>
-              <td>${{ d.Data['1'].Value }}</td>
-              <td></td>
-              <td>x{{ d.Data['1'].Hits }}</td>
-
-              <td>{{ d.Data['1'].Age }}</td>
-            </tr>
-            <tr
-            class="currentfibred"
-            *ngIf="d.PositionPercent > -10 && d.PositionPercent < 0"
-          >
-            <td id="febcurproc">
-              {{ d.PositionPercent | number: '1.0-0' }}%
-            </td>
-            <td id="febcur" *ngIf="lastTradePrice > 100000">
-              {{
-                lastTradePrice / 1000000
-                  | currency: 'CAD':'symbol-narrow':'4.0-2'
-              }}B
-              <i
-                id="febcurar"
-                class="fas fa-arrow-up"
-                style="transition: 0.5s ease"
-              ></i>
-            </td>
-            <td id="febcur" *ngIf="lastTradePrice < 100000">
-              ${{ lastTradePrice
-              }}<i
-                id="febcurar"
-                class="fas fa-arrow-up"
-                style="transition: 0.5s ease"
-              ></i>
-            </td>
-
-            <td style="text-align: center;">
-              <span id="swing">
-                {{ d.AvgIntData.Current | number: '1.2-2' }}
-              </span>
-              <div id="prevswing" style="display: none">
-                {{ d.AvgIntData.Prev | number: '1.2-2' }}
-              </div>
-            </td>
-            <!-- <td class="currentfibtext">current price</td> -->
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td colspan="5" valing="middle"><span class="lineblock"></span><img src="assets/img/chimp.png" class="chim-in-feb"><span class="lineblock"></span></td>
-          </tr>
-            <tr
-              class="currentfibred"
-              *ngIf="d.PositionPercent > -10 && d.PositionPercent < 0"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[-1].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[-1].IsCurrent }"
-            >
-              <td>-10%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[-1].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[-1].IsCurrent }"
-            >
-              <td>-10%</td>
-              <td>${{ d.Data['-1'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['-1'].Hits }}</td>
-
-              <td>{{ d.Data['-1'].Age }}</td>
-            </tr>
-
-            <tr
-              class="currentfibred"
-              *ngIf="d.PositionPercent > -25 && d.PositionPercent < -10"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[-2].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[-2].IsCurrent }"
-            >
-              <td>-25%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[-2].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[-2].IsCurrent }"
-            >
-              <td>-25%</td>
-              <td>${{ d.Data['-2'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['-2'].Hits }}</td>
-
-              <td>{{ d.Data['-2'].Age }}</td>
-            </tr>
-
-            <tr
-              class="currentfibred"
-              *ngIf="d.PositionPercent > -40 && d.PositionPercent < -25"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[-3].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[-3].IsCurrent }"
-            >
-              <td>-40%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[-3].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[-3].IsCurrent }"
-            >
-              <td>-40%</td>
-              <td>${{ d.Data['-3'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['-3'].Hits }}</td>
-
-              <td>{{ d.Data['-3'].Age }}</td>
-            </tr>
-
-            <tr
-              class="currentfibred"
-              *ngIf="d.PositionPercent > -55 && d.PositionPercent < -40"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[-4].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[-4].IsCurrent }"
-            >
-              <td>-55%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[-4].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[-4].IsCurrent }"
-            >
-              <td>-55%</td>
-              <td>${{ d.Data['-4'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['-4'].Hits }}</td>
-
-              <td>{{ d.Data['-4'].Age }}</td>
-            </tr>
-
-            <tr
-              class="currentfibred"
-              *ngIf="d.PositionPercent > -70 && d.PositionPercent < -55"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[-5].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[-5].IsCurrent }"
-            >
-              <td>-70%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[-5].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[-5].IsCurrent }"
-            >
-              <td>-70%</td>
-              <td>${{ d.Data['-5'].Value }}</td>
-              <td></td>
-              <td>x{{ d.Data['-5'].Hits }}</td>
-              <td>{{ d.Data['-5'].Age }}</td>
-            </tr>
-
-            <tr
-              class="currentfibred"
-              *ngIf="d.PositionPercent > -85 && d.PositionPercent < -70"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr
-              *ngIf="d.Data[-6].IsPriceInRange == false"
-              [ngClass]="{ recent: d.Data[-6].IsCurrent }"
-            >
-              <td>-85%</td>
-              <td>-</td>
-
-              <td></td>
-              <td>-</td>
-
-              <td>-</td>
-            </tr>
-            <tr
-              *ngIf="d.Data[-6].IsPriceInRange == true"
-              [ngClass]="{ recent: d.Data[-6].IsCurrent }"
-            >
-              <td>-85%</td>
-              <td>${{ d.Data['-6'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['-6'].Hits }}</td>
-
-              <td>{{ d.Data['-6'].Age }}</td>
-            </tr>
-
-            <tr
-              class="currentfibred"
-              *ngIf="d.PositionPercent > -100 && d.PositionPercent < -85"
-            >
-              <td id="febcurproc">
-                {{ d.PositionPercent | number: '1.0-0' }}%
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice > 100000">
-                {{
-                  lastTradePrice / 1000000
-                    | currency: 'CAD':'symbol-narrow':'4.0-2'
-                }}B
-                <i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-              <td id="febcur" *ngIf="lastTradePrice < 100000">
-                ${{ lastTradePrice
-                }}<i
-                  id="febcurar"
-                  class="fas fa-arrow-up"
-                  style="transition: 0.5s ease"
-                ></i>
-              </td>
-
-              <td style="text-align: center;">
-                <span id="swing">
-                  {{ d.AvgIntData.Current | number: '1.2-2' }}
-                </span>
-                <div id="prevswing" style="display: none">
-                  {{ d.AvgIntData.Prev | number: '1.2-2' }}
-                </div>
-              </td>
-              <!-- <td class="currentfibtext">current price</td> -->
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr [ngClass]="{ recent: d.Data['-7'].IsCurrent }">
-              <!-- <td>{{d.Interval.Name}}</td> -->
-              <td>-100%</td>
-              <td>${{ d.Data['-7'].Value }}</td>
-
-              <td></td>
-              <td>x{{ d.Data['-7'].Hits }}</td>
-
-              <td>{{ d.Data['-7'].Age }}</td>
-            </tr>
+            <ng-container *ngFor="let k of positiveKeys">
+             <tr *ngIf="!d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+                <td>x{{ d.Data[k].Hits }}</td>
+                <td><p>${{ d.Data[k].Value }}</p></td>
+                <td><span></span></td>
+                <td><span ></span></td>
+                <td>{{ d.Data[k].Age }}</td>
+             </tr>
+             <tr *ngIf="!d.Data[k].IsCurrent && !d.Data[k].IsPriceInRange">
+               <td>-</td>
+               <td>-</td>
+               <td>-</td>
+               <td>-</td>
+               <td>-</td>
+             </tr>
+            
+              
+              <tr class="recent" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+                  <td>x{{ d.Data[k].Hits }}</td>
+                  <td><p>${{ d.Data[k].Value }}</p></td>
+                  <td><span></span></td>
+                  <td><span ></span></td>
+                  <td>{{ d.Data[k].Age }}</td>
+              </tr>
+              <tr class="currentfib" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+                  <td></td>
+                  <td><p id="febcur">${{lastTradePrice}}<i id="febcurar" class="fas fa-arrow-up" style="transition: 0.5s ease"></i></p></td>
+                  <td><span id="swing">{{ d.AvgIntData.Current | number: '1.2-2' }}</span></td>
+                  <td><p id="febcurproc">{{ d.PositionPercent | number: '1.0-0' }}% </p></td>
+                  <td></td>
+                </tr> 
+            </ng-container>
+            
+            
+          
+                <tr>
+                    <td colspan="5" valing="middle">
+                      <span class="lineblock"></span
+                      ><img src="assets/img/chimp.png" class="chim-in-feb" /><span
+                        class="lineblock"
+                      ></span>
+                    </td>
+                  </tr>
+                  <ng-container
+                  *ngFor="let k of negativeKeys"
+                 
+                >
+                <tr *ngIf="!d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+                    <td>x{{ d.Data[k].Hits }}</td>
+                    <td><p>${{ d.Data[k].Value }}</p></td>
+                    <td><span></span></td>
+                    <td><span ></span></td>
+                    <td>{{ d.Data[k].Age }}</td>
+                 </tr>
+                 <tr *ngIf="!d.Data[k].IsCurrent && !d.Data[k].IsPriceInRange">
+                   <td>-</td>
+                   <td>-</td>
+                   <td>-</td>
+                   <td>-</td>
+                   <td>-</td>
+                 </tr>
+                
+                 <tr class="currentfib" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+                    <td></td>
+                    <td><p id="febcur">${{lastTradePrice}}<i id="febcurar" class="fas fa-arrow-up" style="transition: 0.5s ease"></i></p></td>
+                    <td><span id="swing">{{ d.AvgIntData.Current | number: '1.2-2' }}</span></td>
+                    <td><p id="febcurproc">{{ d.PositionPercent | number: '1.0-0' }}% </p></td>
+                    <td></td>
+                  </tr> 
+                  <tr class="recent" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+                      <td>x{{ d.Data[k].Hits }}</td>
+                      <td><p>${{ d.Data[k].Value }}</p></td>
+                      <td><span></span></td>
+                      <td><span ></span></td>
+                      <td>{{ d.Data[k].Age }}</td>
+                  </tr>
+                   
+                </ng-container>
           </tbody>
         </table>
       </div>
-    </ion-slide>
-  </ion-slides>
+   
 
   <!-- you can use positiveKeys and negativeKeys -->
   <!--

@@ -63,11 +63,14 @@
         *ngIf="topCoins.length <= 2"
         class="loaderblock"
       ></ion-spinner>
+
+      
+
       <ion-list *ngIf="topCoins">
         <ion-item
           *ngFor="let p of items"
           (click)="selectCoin(p)"
-          class="market-link {{p.Symbol}}"
+          class="market-link item item-block item-ios {{p.Symbol}}"
         >
           <span class="num-market">{{ p.Position }}.</span>
           <div class="market-coinlogoblock">
@@ -78,6 +81,7 @@
               />
             </span>
           </div>
+          
           <ul class="market-table" id="{{p.Symbol}}">
             <li>
               <span>{{ p.Symbol }}</span>
