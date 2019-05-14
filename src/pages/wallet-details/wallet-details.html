@@ -602,6 +602,9 @@
                   >
                 </div>
                 <div class="date">
+                  <span>{{ tx.alternativeAmountStr }}</span>
+                </div>
+                <div class="date">
                   <span
                     *ngIf="tx.time && createdWithinPastDay(tx.time * 1000)"
                     >{{ tx.time * 1000 | amTimeAgo }}</span

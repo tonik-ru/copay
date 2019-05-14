@@ -265,7 +265,7 @@ export class TxDetailsPage {
 
     if (this.wallet.coin == 'bcd')
       url =
-        'https://' +
+        'http://' +
         this.blockexplorerUrl +
         // (this.getShortNetworkName() == 'test' ? 'testnet/' : 'mainnet/') +
         'TX?loading=true&TX=' +

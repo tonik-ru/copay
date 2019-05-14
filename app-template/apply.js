@@ -153,6 +153,7 @@ package.build.protocols.schemes = [
   'bitcoin',
   'bitcoincash',
   'bchtest',
+  'bitcoindiamond',
   config.name
 ];
 package.build.mac.icon = `resources/${config.name}/mac/app.icns`;

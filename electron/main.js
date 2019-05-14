@@ -1,3 +1,6 @@
+const { autoUpdater } = require("electron-updater");
+
+
 const { app, Menu, BrowserWindow, Notification, ipcMain } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -21,10 +24,10 @@ const isDevMode = process.execPath.match(/[\\/]electron/);
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 400,
+    width: 900,
     height: 960,
     minWidth: 400,
-    maxWidth: 800,
+    maxWidth: 1800,
     minHeight: 650,
     show: false
   });
@@ -125,6 +128,7 @@ function createMenu() {
 app.setAsDefaultProtocolClient('bitcoin');
 app.setAsDefaultProtocolClient('bitcoincash');
 app.setAsDefaultProtocolClient('bchtest');
+app.setAsDefaultProtocolClient('bitcoindiamond');
 app.setAsDefaultProtocolClient(appConfig.name);
 app.setVersion(appConfig.version);
 app.setName(appConfig.nameCase);
@@ -172,6 +176,8 @@ if (process.platform !== 'darwin') {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  if(!isDevMode)
+    autoUpdater.checkForUpdates();
   createWindow();
 //  createMenu();
 });
@@ -210,3 +216,12 @@ app.on('open-url', function(e, url) {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+autoUpdater.on('update-downloaded', () => {
+  // Wait 5 seconds, then quit and install
+  // In your application, you don't need to wait 5 seconds.
+  // You could call autoUpdater.quitAndInstall(); immediately
+  setTimeout(function() {
+    autoUpdater.quitAndInstall();  
+  }, 5000)
+})

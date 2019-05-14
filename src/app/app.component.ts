@@ -428,6 +428,10 @@ export class CopayApp {
     } else if (pathData.indexOf('bitcoin:/') != -1) {
       this.logger.debug('Bitcoin URL found');
       this.handleOpenUrl(pathData.substring(pathData.indexOf('bitcoin:/')));
+    }
+    else if (pathData.indexOf('bitcoindiamond:/') != -1) {
+      this.logger.debug('Bitcoin Diamond URL found');
+      this.handleOpenUrl(pathData.substring(pathData.indexOf('bitcoindiamond:/')));
     } else if (pathData.indexOf(this.appProvider.info.name + '://') != -1) {
       this.logger.debug(this.appProvider.info.name + ' URL found');
       this.handleOpenUrl(

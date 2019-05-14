@@ -9,6 +9,18 @@
       "webRoot": "${workspaceFolder}/www"
     },
     {
+      "name": "Debug Main Process",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+      },
+      "args" : ["."],
+      "outputCapture": "std"
+    },
+    {
       // To watch and rebuild changes in the app, use `npm run ionic:serve` in
       // an external terminal, then re-run this task as often as needed.
       "type": "node",

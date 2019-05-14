@@ -14,6 +14,7 @@ import { Coin, WalletProvider } from '../../../providers/wallet/wallet';
 import { AmountPage } from '../amount/amount';
 
 export interface FlatWallet {
+  id: string;
   color: string;
   name: string;
   recipientType: 'wallet';
@@ -34,13 +35,16 @@ export class TransferToPage {
   public search: string = '';
   public walletsBtc;
   public walletsBch;
+  public walletsBcd;
   public walletBchList: FlatWallet[];
   public walletBtcList: FlatWallet[];
+  public walletBcdList: FlatWallet[];
   public contactsList = [];
   public filteredContactsList = [];
   public filteredWallets = [];
   public hasBtcWallets: boolean;
   public hasBchWallets: boolean;
+  public hasBcdWallets: boolean;
   public hasContacts: boolean;
   public contactsShowMore: boolean;
   public amount: string;
@@ -66,8 +70,10 @@ export class TransferToPage {
   ) {
     this.walletsBtc = this.profileProvider.getWallets({ coin: 'btc' });
     this.walletsBch = this.profileProvider.getWallets({ coin: 'bch' });
+    this.walletsBcd = this.profileProvider.getWallets({ coin: 'bcd' });
     this.hasBtcWallets = !_.isEmpty(this.walletsBtc);
     this.hasBchWallets = !_.isEmpty(this.walletsBch);
+    this.hasBcdWallets = !_.isEmpty(this.walletsBcd);
   }
 
   @Input()
@@ -78,6 +84,8 @@ export class TransferToPage {
 
     this.walletBchList = this.getBchWalletsList();
     this.walletBtcList = this.getBtcWalletsList();
+    this.walletBcdList = this.getBcdWalletsList();
+    this.searchWallets();
     this.updateContactsList();
   }
 
@@ -110,6 +118,10 @@ export class TransferToPage {
 
   private getBtcWalletsList(): FlatWallet[] {
     return this.hasBtcWallets ? this.getRelevantWallets(this.walletsBtc) : [];
+  }
+
+  private getBcdWalletsList(): FlatWallet[] {
+    return this.hasBcdWallets ? this.getRelevantWallets(this.walletsBcd) : [];
   }
 
   private getRelevantWallets(rawWallets): FlatWallet[] {
@@ -152,6 +164,7 @@ export class TransferToPage {
 
   private flattenWallet(wallet): FlatWallet {
     return {
+      id: wallet.id,
       color: wallet.color,
       name: wallet.name,
       recipientType: 'wallet',
@@ -199,12 +212,26 @@ export class TransferToPage {
   public searchWallets(): void {
     if (this.hasBchWallets && this._wallet.coin === 'bch') {
       this.filteredWallets = this.walletBchList.filter(wallet => {
-        return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
+        return (
+          wallet.id != this.wallet.id &&
+          _.includes(wallet.name.toLowerCase(), this.search.toLowerCase())
+        );
       });
     }
     if (this.hasBtcWallets && this._wallet.coin === 'btc') {
       this.filteredWallets = this.walletBtcList.filter(wallet => {
-        return _.includes(wallet.name.toLowerCase(), this.search.toLowerCase());
+        return (
+          wallet.id != this.wallet.id &&
+          _.includes(wallet.name.toLowerCase(), this.search.toLowerCase())
+        );
+      });
+    }
+    if (this.hasBcdWallets && this._wallet.coin === 'bcd') {
+      this.filteredWallets = this.walletBcdList.filter(wallet => {
+        return (
+          wallet.id != this.wallet.id &&
+          _.includes(wallet.name.toLowerCase(), this.search.toLowerCase())
+        );
       });
     }
   }

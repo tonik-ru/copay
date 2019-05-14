@@ -189,7 +189,7 @@ export class IncomingDataProvider {
     this.logger.debug('Incoming-data: Bitcoin Diamond URI');
     let amountFromRedirParams =
       redirParams && redirParams.amount ? redirParams.amount : '';
-    const coin = Coin.BTC;
+    const coin = Coin.BCD;
     let parsed = this.bwcProvider.getBitcoreDiamond().URI(data);
     let address = parsed.address ? parsed.address.toString() : '';
     let message = parsed.message;

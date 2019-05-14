@@ -79,7 +79,7 @@ export class TopcoinsPage {
   }
 
   ionViewWillEnter() {
-    this.refreshTimer = timer(30000, 30000).subscribe(() =>
+    this.refreshTimer = timer(15000, 15000).subscribe(() =>
       this.loadTopCoins()
     );
     // this.refreshTimer = timer(5000, 5000).subscribe(() =>
