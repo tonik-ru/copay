@@ -243,13 +243,13 @@ msgid "Be sure to store your recovery phrase in a secure place. If this app is d
 msgstr "Asegúrate de guardar la frase de recuperación en un lugar seguro. Si se elimina esta aplicación, no se podrá recuperar el dinero."
 
 msgid "Because you are sending the maximum amount contained in this wallet, the {coinName} miner fee ({fee} {coin}) will be deducted from the total. {msg}"
-msgstr "Dado que va a enviar la cantidad máxima contenida en esta billetera, la comisión de la red {coinName} ({fee} {coin}) se deducirá del total. {msg}"
+msgstr "Because you are sending the maximum amount contained in this wallet, the {coinName} miner fee ({fee} {coin}) will be deducted from the total. {msg}"
 
 msgid "Before retrieving your wallet address, it's recommended that you first write down your recovery phrase and store it securely so that your wallet can be recovered in the case your device was lost or stolen."
 msgstr "Before retrieving your wallet address, it's recommended that you first write down your paper key and store it securely so that your wallet can be recovered in the case your device was lost or stolen."
 
 msgid "Below Minimum Amount"
-msgstr "En dessous du montant minimal"
+msgstr "Below Minimum Amount"
 
 msgid "BitPay Card URI"
 msgstr "URI thẻ bitPay"
@@ -261,7 +261,7 @@ msgid "Bitcoin Address"
 msgstr "比特币地址"
 
 msgid "Bitcoin Cash Address"
-msgstr "Địa chỉ Bitcoin Cash"
+msgstr "Bitcoin Cash Address"
 
 msgid "Bitcoin Cash URI"
 msgstr "Bitcoin Cash URI"

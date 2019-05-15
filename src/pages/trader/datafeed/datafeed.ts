@@ -324,7 +324,8 @@ export class DatafeedPage {
 
     var curVal = speedometers.Speedometers[rdi.Interval.TimeSpan];
     if (!curVal) return;
-    if (!rdi.Speedometer) rdi.Speedometer = { PrevData: {}, FutureScore: 0 };
+    if (!rdi.Speedometer)
+      rdi.Speedometer = { PrevData: { Score: 0 }, FutureScore: 0 };
 
     rdi.Speedometer.Score = curVal.Score;
     var str = '';
@@ -345,7 +346,7 @@ export class DatafeedPage {
 
       rdi.Speedometer.PrevData.Score = val.Score;
       rdi.Speedometer.PrevData.DetailsString = str;
-    } else {
+    } else if (rdi.Speedometer.PrevData.Score == 0) {
       rdi.Speedometer.PrevData.Score = rdi.Speedometer.Score;
     }
   }
