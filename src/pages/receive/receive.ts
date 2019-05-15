@@ -118,7 +118,8 @@ export class ReceivePage extends WalletTabsChild {
     if (this.address && this.address != address) {
       this.playAnimation = true;
     }
-    this.updateQrAddress(address, newAddr);
+    this.updateQrAddress(addr, newAddr);
+    this.qrAddress = address;
   }
 
   private async updateQrAddress(address, newAddr?: boolean): Promise<void> {

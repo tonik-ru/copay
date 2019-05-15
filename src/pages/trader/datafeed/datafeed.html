@@ -59,13 +59,13 @@
         
         <ion-col col-12>
           <h1 *ngIf="myPair != undefined">
-            <span *ngIf="priceTick.lastTradePriceFormatted > 100000"
+            <span *ngIf="isTop20"
               >{{
                 priceTick.lastTradePriceFormatted
                   | currency: 'CAD':'symbol-narrow':'4.0-0'
               }}B</span
             >
-            <span *ngIf="priceTick.lastTradePriceFormatted < 100000">${{
+            <span *ngIf="!isTop20">${{
               priceTick.lastTradePriceFormatted
             }}</span>
             <span> <i id="arrowprice" class="fas fa-arrow-up"></i></span>
@@ -87,7 +87,7 @@
               <ion-select placeholder="Pairs"
                 [(ngModel)]="selectedPair"
                 class="links"
-                (ionChange)="selectPair(pair)"
+                (ionChange)="selectPair()"
                 interface="popover"
               >
                 <ion-option *ngFor="let p of pairs" [value]="p">{{      formatPair(p)              }}</ion-option>
@@ -421,7 +421,7 @@
                 </svg>
                 <h2 class="cls-2d" id="BULLISH" style="display:none">STABLE</h2>
                 <div *ngIf="myPair != undefined">
-                  <div *ngIf="myPair.BaseAsset !== 'TOP20'">
+                  <div *ngIf="!isTop20">
                     <div class="col10" *ngIf="d && d.AvgIntData && d.Breakout">
                       <div class="col5">
                         <h2 class="prevcore">Current Score</h2>
@@ -603,7 +603,7 @@
     d.Data[k].IsPriceInRange -- is this false, hide price. this means that this level was already passed
   -->
   <div *ngIf="myPair != undefined">
-    <div *ngIf="myPair.BaseAsset !== 'TOP20'">
+    <div *ngIf="!isTop20">
       <div *ngIf="d && d.AvgIntData && d.Breakout">
         <p id="speedometr" style="opacity:0">{{ d.Speedometer.Score }}</p>
         <p id="speedometrprev" style="opacity: 0">

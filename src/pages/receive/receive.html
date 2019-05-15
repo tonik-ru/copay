@@ -66,7 +66,7 @@
     <div class="qr-container" *ngIf="wallet && wallet.isComplete() && !wallet.needsBackup">
       <div class="lines-background"></div>
       <div class="card qr-card" [ngClass]="{'qr-code-bounce': playAnimation}" *ngIf="address">
-        <ngx-qrcode (click)="showFullAddr()" *ngIf="address" copy-to-clipboard="{{ address }}" hide-toast="true" qrc-value="{{address}}" qrc-class="aclass" qrc-errorCorrectionLevel="M"></ngx-qrcode>
+        <ngx-qrcode (click)="showFullAddr()" *ngIf="address" copy-to-clipboard="{{ address }}" hide-toast="true" qrc-value="{{qrAddress}}" qrc-class="aclass" qrc-errorCorrectionLevel="M"></ngx-qrcode>
       </div>
     </div>
   </div>

@@ -3,7 +3,6 @@ import {
   AlertController,
   NavController,
   NavParams,
-  
   ViewController
 } from 'ionic-angular';
 
@@ -117,7 +116,7 @@ export class DatafeedPage {
 
   /*@ViewChild('slider') slider: Slides;*/
 
- /* showlook = '0';*/
+  /* showlook = '0';*/
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -291,6 +290,8 @@ export class DatafeedPage {
         }
       }
 
+      this.calculateNextSpeedometerValue(rdi);
+
       this.processPositionPercents(rdi, data.ResistanceTick.PositionPercents);
 
       // if (!rdi.data[100]) {
@@ -307,12 +308,20 @@ export class DatafeedPage {
     }
   }
 
+  // calculate FUTURE speedometer value
+  private calculateNextSpeedometerValue(rdi) {
+    if (!rdi.Speedometer) return;
+    let dir = rdi.AvgIntData.Current - rdi.AvgIntData.Prev;
+    rdi.Speedometer.FutureScore =
+      rdi.Speedometer.Score + rdi.Speedometer.Score * dir;
+  }
+
   private processSpeedometers(rdi, speedometers) {
     if (!speedometers) return;
 
     var curVal = speedometers.Speedometers[rdi.Interval.TimeSpan];
     if (!curVal) return;
-    if (!rdi.Speedometer) rdi.Speedometer = { PrevData: {} };
+    if (!rdi.Speedometer) rdi.Speedometer = { PrevData: {}, FutureScore: 0 };
 
     rdi.Speedometer.Score = curVal.Score;
     var str = '';
@@ -333,6 +342,8 @@ export class DatafeedPage {
 
       rdi.Speedometer.PrevData.Score = val.Score;
       rdi.Speedometer.PrevData.DetailsString = str;
+    } else {
+      rdi.Speedometer.PrevData.Score = rdi.Speedometer.Score;
     }
   }
 
@@ -374,7 +385,6 @@ export class DatafeedPage {
               rdi.Data[ks].FullValue > 0) ||
             k == 7;
 
-      
       rdi.Data[ks].IsCurrent = false;
       if (rdi.PositionPercent && rdi.Data[ks].IsPriceInRange && !levelFound) {
         levelFound = true;
@@ -584,8 +594,8 @@ export class DatafeedPage {
     }
   }
 
-  public selectPair(pair) {
-    this.logger.log('------>'+pair as string);
+  public selectPair() {
+    // this.logger.log('------>'+pair as string);
     /*this.selectedPair = pair;*/
     new startgraph(2);
     this.feedProvider.stop();
