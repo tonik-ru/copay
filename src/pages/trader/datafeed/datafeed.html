@@ -615,7 +615,7 @@
     d.Data[k].IsPriceInRange -- is this false, hide price. this means that this level was already passed
   -->
   <div *ngIf="myPair != undefined">
-    <div *ngIf="myPair.BaseAsset !== 'TOP20'">
+    <div *ngIf="!isTop20">
       <div *ngIf="d && d.AvgIntData && d.Breakout">
         <p id="speedometr" style="opacity:0">{{ d.Speedometer.Score }}</p>
         <p id="speedometrprev" style="opacity: 0">

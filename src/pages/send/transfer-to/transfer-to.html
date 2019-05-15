@@ -15,7 +15,7 @@
   </ion-list>
 </div>
 
-<div class="card" *ngIf="filteredWallets">
+<div class="card" *ngIf="filteredWallets[0]">
   <ion-item-divider class="title">
     <img src="assets/img/icon-bitcoin.svg" alt="Bitcoin Wallets" width="16" />
     <span translate>Transfer to Bitcoin Wallet</span>
@@ -41,7 +41,7 @@
   </ion-list>
 </div>
 
-<div class="card" *ngIf="filteredWallets">
+<div class="card" *ngIf="filteredWallets[0]">
   <ion-item-divider class="title">
     <img src="assets/img/bitcoin-cash-logo.svg" alt="Bitcoin Cash Wallets" width="22" />
     <span translate>Transfer to Bitcoin Cash Wallet</span>
@@ -67,7 +67,7 @@
   </ion-list>
 </div>
 
-<div class="card" *ngIf="filteredWallets">
+<div class="card" *ngIf="filteredWallets[0]">
   <ion-item-divider class="title">
     <img src="assets/img/Bitcoin-Diamond-Icon.svg" alt="Bitcoin Diamond Wallets" width="22" />
     <span translate>Transfer to Bitcoin Diamond Wallet</span>
