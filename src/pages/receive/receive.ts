@@ -179,6 +179,12 @@ export class ReceivePage extends WalletTabsChild {
   }
 
   public showFullAddr(): void {
+    // let data = document
+    //  .getElementsByTagName('ngx-qrcode')[0]
+    //  .children[0].children[0].getAttribute('src');
+    // let p1 = data.indexOf(',');
+    // let binData = atob(data.substr(p1 + 1));
+
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'address-copied',
       { address: this.address, coin: this.wallet.coin }

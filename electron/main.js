@@ -24,9 +24,9 @@ const isDevMode = process.execPath.match(/[\\/]electron/);
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 650,
+    width: 450,
     height: 960,
-    minWidth: 400,
+    minWidth:  400,
     maxWidth: 1800,
     minHeight: 650,
     show: false
