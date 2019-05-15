@@ -4,10 +4,11 @@ action-card.card {
   text-align: center;
   padding: 20px;
   padding-bottom: 0;
+  
 
   .action-card {
     &__content {
-      background: white;
+      background: transparent;
       > * {
         margin: 15px;
       }
@@ -24,7 +25,7 @@ action-card.card {
     }
 
     &__cta {
-      background: #f8f8f8;
+      background: #ff9800;
       cursor: pointer;
       font-size: 18px;
       margin: 30px -20px 0;

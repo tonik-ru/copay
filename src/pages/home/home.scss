@@ -35,10 +35,13 @@ page-home {
   }
   /*header background*/
   .scroll-content {
-    background: #fff !important;
+    /*background: #fff !important;*/
     margin-bottom: 55px!important;
     margin-top: 43px!important;
   }
+  
+  
+
   .action-card__header .icon-wallet {
     background: #fac239 !important;
   }
@@ -488,6 +491,21 @@ page-home {
       transform: translateY(0);
     }
   }
+  .wrapper{background:transparent!important;
+  }
+  .item-ios{color:#fff!important;}
+  .item-block{ border-color: #000!important }
+  .card{background: transparent!important;}
+  .scroll-content{
+    background: #161b26!important;
+    color: #fff !important;
+  }
+  .item-ios{background: transparent}
+  .item-ios p{color:#fff!important;}
+  .list-ios .item-block .item-inner {
+    border-bottom: 0.55px solid #000;
+  }
+  
 }
 .tabs-md[tabsLayout='icon-top'] .has-icon .tab-button-text {
   font-family: Montserrat !important;

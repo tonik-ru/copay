@@ -7,6 +7,16 @@ page-fullpost {
     font-size: 1rem;}
 
     .card-content-ios{
-       font-size: 1.1rem;
+       font-size: 1.1rem;    color: #444;
+    }
+
+    .scroll-content{
+      background: #161b26!important;
+      color: #fff !important;
+    }
+    .item-ios{background: transparent}
+    .item-ios p{color:#fff!important;}
+    .list-ios .item-block .item-inner {
+      border-bottom: 0.55px solid #000;
     }
 }

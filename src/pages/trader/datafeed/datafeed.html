@@ -55,46 +55,22 @@
   
   <div class="topbar">
     <div class="topblock">
-      <ion-row>
-        
-        <ion-col col-12>
-          <h1 *ngIf="myPair != undefined">
-            <span *ngIf="priceTick.lastTradePriceFormatted > 100000"
-              >{{
-                priceTick.lastTradePriceFormatted
-                  | currency: 'CAD':'symbol-narrow':'4.0-0'
-              }}B</span
-            >
-            <span *ngIf="priceTick.lastTradePriceFormatted < 100000">${{
-              priceTick.lastTradePriceFormatted
-            }}</span>
-            <span> <i id="arrowprice" class="fas fa-arrow-up"></i></span>
-          </h1>
-          <p *ngIf="d && d.AvgIntData && d.Breakout"><span (click)="showInfoCurrentSwingRatio()"
-            ><i class="fas fa-info-circle"></i
-          ></span>
-          Swing Ratio:<span class="big" id="swing2">
-              {{ d.AvgIntData.Current | number: '1.2-2' }}
-            </span></p>
-        </ion-col>
-        <ion-col col-12 text-center>
-            <ion-item class="pairsblock">
-                <ion-label><img
-                *ngIf="myPair != undefined"
-                src="assets/logoscoinss/{{ myPair.BaseAsset }}.png"
-                class="coinlogo2"
-              /></ion-label>
-              <ion-select placeholder="Pairs"
-                [(ngModel)]="selectedPair"
-                class="links"
-                (ionChange)="selectPair(pair)"
-                interface="popover"
-              >
-                <ion-option *ngFor="let p of pairs" [value]="p">{{      formatPair(p)              }}</ion-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
-      </ion-row>
+        <ion-row>
+            <ion-col col-12 text-center>
+                <ion-item class="pairsblock">
+                   
+                  <ion-select placeholder="Pairs"
+                    [(ngModel)]="selectedPair"
+                    class="links"
+                    (ionChange)="selectPair(pair)"
+                    interface="popover"
+                  >
+                    <ion-option *ngFor="let p of pairs" [value]="p">{{      formatPair(p)              }}</ion-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              </ion-row>
+     
 
       <div id="prevprice" style="opacity: 0; display: none">
         {{ priceTick.prevLastTradePrice }}
@@ -106,44 +82,38 @@
       <!-- <p>Current Price</p> -->
     </div>
   </div>
-  <div class="topblocknew" [ngClass]="{'topblocknew-opened': showmmmoretimeblock }">
-
-      <ul class="linksnew" *ngIf="!showmmmoretimeblock">
-          <ng-container *ngFor="let d of resistanceData">
-            <li
-              *ngIf="d.Interval.isVisible"
-              [ngClass]="{ activelink: d.Interval == selectedInterval }"
-            >
-              <a (click)="selectInterval(d.Interval)">{{
-                d.Interval.Name
-              }}</a>
-            </li>
-          </ng-container>
-        </ul>
-        <ul class="linksnew" *ngIf="showmmmoretimeblock">
-          <ng-container *ngFor="let d of resistanceData">
-            <li
-              *ngIf="
-                d.Interval.Name !== '15 min-4 hr' &&
-                d.Interval.Name !== '4 hr-1 days' &&
-                d.Interval.Name !== '9 hr-7 days'
-              "
-              [ngClass]="{ activelink: d.Interval == selectedInterval }"
-            >
-              <a (click)="selectInterval(d.Interval)">{{
-                d.Interval.Name
-              }}</a>
-            </li></ng-container
-          >
-        </ul> 
-        <span (click)="showMoreTime()" class="showmorenewclass">
-       
-        <ion-icon  *ngIf="!showmmmoretimeblock" name="more"></ion-icon>
-        <ion-icon  *ngIf="showmmmoretimeblock" name="arrow-up"></ion-icon>
-       
-      </span>
-  </div>
  
+ 
+  <ion-row>
+        
+      <ion-col col-12 text-center>
+        <h1 *ngIf="myPair != undefined">
+            <img
+            *ngIf="myPair != undefined"
+            src="assets/logoscoinss/{{ myPair.BaseAsset }}.png"
+            class="coinlogo2"
+          />
+          <span *ngIf="priceTick.lastTradePriceFormatted > 100000"
+            >{{
+              priceTick.lastTradePriceFormatted
+                | currency: 'CAD':'symbol-narrow':'4.0-0'
+            }}B</span
+          >
+          <span *ngIf="priceTick.lastTradePriceFormatted < 100000">${{
+            priceTick.lastTradePriceFormatted
+          }}</span>
+          <span> <i id="arrowprice" class="fas fa-arrow-up"></i></span>
+        </h1>
+        <p *ngIf="d && d.AvgIntData && d.Breakout"><span (click)="showInfoCurrentSwingRatio()"
+          ><i class="fas fa-info-circle"></i
+        ></span>
+        Swing Ratio:<span class="big" id="swing2">
+            {{ d.AvgIntData.Current | number: '1.2-2' }}
+          </span></p>
+      </ion-col>
+      
+    </ion-row>
+
     <div [ngClass]="{hidecontent: isTop20}">
      
        
@@ -187,6 +157,7 @@
               </td>
             </tr>
           </table>
+
 
           <div class="speedsvg">
             <div class="wrapper">
@@ -420,39 +391,74 @@
                   </defs>
                 </svg>
                 <h2 class="cls-2d" id="BULLISH" style="display:none">STABLE</h2>
-                <div *ngIf="myPair != undefined">
-                  <div *ngIf="myPair.BaseAsset !== 'TOP20'">
-                    <div class="col10" *ngIf="d && d.AvgIntData && d.Breakout">
-                      <div class="col5">
-                        <h2 class="prevcore">Current Score</h2>
-                        <h2
-                          class="prevscoresc"
-                          id="BULLISH1"
-                          *ngIf="d.Speedometer"
+
+              <ion-row  *ngIf="d && d.AvgIntData && d.Breakout">
+                <ion-col col-6 text-right>
+                    <h2 class="prevcore">Previous</h2>
+                    <h2 class="prevscorescs" id="cursc"  *ngIf="d.Speedometer">
+                      {{ d.Speedometer.PrevData.Score }} 
+                    </h2>
+
+                </ion-col>
+
+                <ion-col col-6 text-left> 
+                  <h2 class="prevcore"> Score</h2>
+                  <h2 class="prevscoresc" id="BULLISH1" *ngIf="d.Speedometer">
+                    {{ d.Speedometer.Score }}
+                  <i id="curscc" class="fas fa-arrow-up"></i>
+                  </h2>
+                </ion-col>
+
+                <ion-col col-4 text-center class="hidecontent">
+                    <h2 class="prevcore"> Future</h2>
+                    <h2 *ngIf="d.Speedometer">{{d.Speedometer.FutureScore}}</h2>
+                </ion-col>
+              </ion-row>
+                    
+              <div class="topblocknew" [ngClass]="{'topblocknew-opened': showmmmoretimeblock }">
+
+                  <ul class="linksnew" *ngIf="!showmmmoretimeblock">
+                      <ng-container *ngFor="let d of resistanceData">
+                        <li
+                          *ngIf="d.Interval.isVisible"
+                          [ngClass]="{ activelink: d.Interval == selectedInterval }"
                         >
-                          {{ d.Speedometer.Score
-                          }}<span>
-                            <i id="curscc" class="fas fa-arrow-up"></i
-                          ></span>
-                        </h2>
-                      </div>
-                      <div class="col5">
-                        <h2 class="prevcore">Previous Score</h2>
-                        <h2
-                          class="prevscorescs"
-                          id="cursc"
-                          *ngIf="d.Speedometer"
+                          <a (click)="selectInterval(d.Interval)">{{
+                            d.Interval.Name
+                          }}</a>
+                        </li>
+                      </ng-container>
+                    </ul>
+                    <ul class="linksnew" *ngIf="showmmmoretimeblock">
+                      <ng-container *ngFor="let d of resistanceData">
+                        <li
+                          *ngIf="
+                            d.Interval.Name !== '15 min-4 hr' &&
+                            d.Interval.Name !== '4 hr-1 days' &&
+                            d.Interval.Name !== '9 hr-7 days'
+                          "
+                          [ngClass]="{ activelink: d.Interval == selectedInterval }"
                         >
-                          {{ d.Speedometer.PrevData.Score }} <span></span>
-                        </h2>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="lineblockafter"></div>
+                          <a (click)="selectInterval(d.Interval)">{{
+                            d.Interval.Name
+                          }}</a>
+                        </li></ng-container
+                      >
+                    </ul> 
+                    <span (click)="showMoreTime()" class="showmorenewclass">
+                   
+                    <ion-icon  *ngIf="!showmmmoretimeblock" name="more"></ion-icon>
+                    <ion-icon  *ngIf="showmmmoretimeblock" name="arrow-up"></ion-icon>
+                   
+                  </span>
+              </div>
+
+
+              
               </div>
             </div>
           </div>
+
           <table class="outlooktable hidecontent" *ngIf="d && d.AvgIntData && d.Breakout">
             <tr>
               <td>
@@ -492,24 +498,29 @@
   ><ion-slide></ion-slide>
     <ion-slide> </ion-slide>
   </ion-slides>-->
-     
+     <ion-row text-center>
+       <span *ngIf="!showChart" class="showchart" (click)="showChartClick()">SHOW CHART</span>
+     </ion-row>
 
+<div [ngClass]="{'hidecontent': !showChart, 'someclass': showChart }">
       <div *ngIf="d">
         <div id="prevswing" style="display: none">
           {{ d.AvgIntData.Prev | number: '1.2-2' }}
         </div>
 
        
-
+        
 
         <table class="table table-hover table-striped">
           <tbody>
             <tr>
-              <td>Hits</td>
-              <td>Price</td>
-              <td>Swing</td>
-              <td>Position</td>
-              <td>Age</td>
+              <td><img src="assets/img/fibonacci/hits.svg" style="width:40px;"></td>
+              <td><img *ngIf="myPair != undefined"
+                src="assets/logoscoinss/{{ myPair.BaseAsset }}.png"
+                class="coinlogo2"></td>
+              <td><img src="assets/img/fibonacci/swing.svg"  style="width:30px;"></td>
+              <td><img src="assets/img/fibonacci/position.svg"  style="width:30px;"></td>
+              <td><img src="assets/img/fibonacci/age.svg"  style="width:30px;"></td>
              
             </tr>
             <ng-container *ngFor="let k of positiveKeys">
@@ -593,8 +604,9 @@
           </tbody>
         </table>
       </div>
-   
-
+   <ion-row text-center> <ion-icon style="    margin: 0 auto;
+    font-size: 4rem;" (click)="showChartClick()" name="arrow-up"></ion-icon> </ion-row>
+    </div>
   <!-- you can use positiveKeys and negativeKeys -->
   <!--
     d.Data[k].IsCurrent -- this indicates if this level is current (should be highlighted)

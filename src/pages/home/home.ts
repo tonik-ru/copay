@@ -808,15 +808,15 @@ export class HomePage {
         });
 
         if (!isocode) {
-          return 'Could not update';
+          return 'no balance';
         } else {
           return profit.toFixed(2) + ' ' + isocode;
         }
       } else {
-        return 'Could not update';
+        return 'no balance';
       }
     } else {
-      return 'Could not update';
+      return 'no balance';
     }
   }
 }

@@ -566,7 +566,7 @@ page-datafeed {
     width: 80px;
   }
   .table-striped > tbody > tr td:nth-of-type(3) {
-    width: 40px;
+    width: 90px;
   }
   table.table.table-hover.table-striped p {
     margin: 0;
@@ -700,6 +700,12 @@ display: block!important;
 align-items: center;
 justify-content: center;
 }
+
+.showchart{display: table;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  padding: 4px 10px;
+  margin: 0 auto;}
 
 }
 

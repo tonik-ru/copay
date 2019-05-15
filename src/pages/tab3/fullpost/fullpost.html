@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content no-padding>
-  <img
+  <img width="100%"
     *ngIf="post.better_featured_image !== null"
     src="{{
               post._embedded['wp:featuredmedia'][0].media_details.sizes.full.source_url
@@ -42,7 +42,7 @@
   <div padding>
     <h2 text-center>Related News</h2>
     <ion-card *ngFor="let item of relatedItems" (click)="openFullPost(item)">
-      <img
+      <img width="100%"
         *ngIf="item.better_featured_image"
         src="{{
             item.better_featured_image.media_details.sizes.medium.source_url

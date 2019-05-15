@@ -128,4 +128,13 @@ ion-label p:first-of-type{
 
   margin-bottom: 20px;
 }
+.scroll-content{
+  background: #161b26!important;
+  color: #fff !important;
+}
+.item-ios{background: transparent}
+.item-ios p{color:#fff!important;}
+.list-ios .item-block .item-inner {
+  border-bottom: 0.55px solid #000;
+}
 }

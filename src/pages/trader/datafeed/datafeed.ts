@@ -110,6 +110,7 @@ export class DatafeedPage {
   // private connectedPair = {};
 
   public showmmmoretimeblock: boolean = false;
+  public showChart: boolean = false;
   public showmmmoretimeblockfeb: boolean = false;
   public isTop20: boolean = false;
 
@@ -195,7 +196,9 @@ export class DatafeedPage {
   public showMoreTimeFeb() {
     this.showmmmoretimeblockfeb = !this.showmmmoretimeblockfeb;
   }
-
+  public showChartClick() {
+    this.showChart = !this.showChart;
+  }
   ngAfterViewInit() {}
 
   private processMarketTick(data) {
