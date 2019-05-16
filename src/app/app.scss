@@ -65,10 +65,11 @@ ion-label {
 }
 
 .button-footer {
-  margin: 0px;
+  margin: 0px auto 20px;;
   height: 70px;
-  width: 100%;
+  width:90%;
   font-size: 18px;
+  border-radius: 5px;
 }
 
 // Hide border when refresh

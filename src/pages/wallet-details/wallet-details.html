@@ -35,7 +35,7 @@
       [ngStyle]="{ background: wallet.color }"
     >
       <expandable-header-primary class="balance-header">
-        <div (longPress)="toggleBalance()">
+        <div (click)="toggleBalance()">
           <div
             (tap)="updateAll(true)"
             *ngIf="

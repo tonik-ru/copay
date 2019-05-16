@@ -684,6 +684,9 @@ ul.linksnew li a {
 ul.linksnew li:hover {
   background: #fff;
 }
+ul.linksnew li:hover a {
+  color: #000;
+}
 
 .topblocknew{
   text-align: center;

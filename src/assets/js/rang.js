@@ -27,7 +27,9 @@ function startgraph(e) {
 
   var textscore;
   var arrow;
-
+  var futuretext;
+  var futurearrow;
+  var futureval;
 
   var verybullishcirc7 =
     'M86 139.5C86 136.816в 86.1402 134.146 86.4164 131.5C86.6623 129.145 87.016 126.81 87.4746 124.5C87.9438 122.137 88.5228 119.801 89.2086 117.5C89.9156 115.128 90.736 112.792 91.6666 110.5C92.5643 108.29 93.5645 106.121 94.6642 104C95.8169 101.777 97.0789 99.6079 98.4469 97.5C99.8538 95.3321 101.373 93.2292 103 91.2005C104.816 88.937 106.766 86.7658 108.846 84.6992C110.344 83.2105 111.897 81.7886 113.5 80.4355C115.43 78.8061 117.433 77.2764 119.5 75.8497C121.603 74.3983 123.773 73.0535 126 71.8189C128.117 70.6457 130.286 69.572 132.5 68.6009C134.627 67.6678 136.796 66.8295 139 66.0885C141.943 65.099 144.948 64.2833 148 63.6477C150.472 63.1329 152.975 62.7362 155.5 62.4613C158.31 62.1553 161.147 62 164 62C166.853 62 169.69 62.1553 172.5 62.4613C175.025 62.7362 177.528 63.1329 180 63.6477C183.052 64.2833 186.057 65.099 189 66.0885C192.255 67.1828 195.433 68.4895 198.514 70C199.691 70.5768 200.853 71.1832 202 71.8189C204.227 73.0535 206.397 74.3983 208.5 75.8497C210.567 77.2764 212.57 78.8061 214.5 80.4355C216.103 81.7886 217.656 83.2105 219.154 84.6992C221.234 86.7658 223.184 88.937 225 91.2005C226.627 93.2292 228.146 95.3321 229.553 97.5C230.921 99.6079 232.183 101.777 233.336 104C234.435 106.121 235.436 108.29 236.333 110.5C237.264 112.792 238.084 115.128 238.791 117.5C239.477 119.801 240.056 122.137 240.525 124.5C240.984 126.81 241.338 129.145 241.584 131.5C241.86 134.146 242 136.816 242 139.5L164 139.5L86 139.5Z;';
@@ -113,6 +115,10 @@ function startgraph(e) {
       textscore = document.querySelector('#BULLISH1');
       arrow = document.querySelector('#curscc');
 
+      futurearrow = document.querySelector('#future');
+      futuretext = document.querySelector('#futurecolor');
+      futureval = document.querySelector('#futureval').innerHTML;;
+
       var znachenie = document.querySelector('#speedometr').innerHTML;
       var znachenie3 = document.querySelector('#speedometr').innerHTML;
       var znachenie31 = document.querySelector('#speedometr').innerHTML;
@@ -147,6 +153,23 @@ function startgraph(e) {
       } else {
         pricezoneproctext.style.color = '#e2446a';
         pricezonefeb.style.color = '#e2446a';
+      }
+
+      if (parseFloat(znachenie31) > parseFloat(futureval)) {
+        futurearrow.style.color = '#e2446a';
+        futuretext.style.color = '#e2446a';
+        futurearrow.style.opacity = '1';
+        futurearrow.style.transform = 'rotate(180deg)';
+      } else if (parseFloat(znachenie31) < parseFloat(futureval)) {
+        futurearrow.style.color = '#8acf20';
+        futuretext.style.color = '#8acf20';
+        futurearrow.style.opacity = '1';
+        futurearrow.style.transform = 'rotate(0deg)';
+      } else if (parseFloat(znachenie31) == parseFloat(futureval)) {
+        futuretext.style.color = '#f79924';
+        futurearrow.style.opacity = '0';
+      } else if (parseFloat(futureval) >= '') {
+        futurearrow.style.opacity = '0';
       }
 
       if (parseFloat(swing.innerHTML) > parseFloat(prevswing)) {
@@ -528,3 +551,82 @@ function startgraph(e) {
 }
 
 
+
+function topstart(e) {
+  if (e == 1) {
+    
+    intervalId = setInterval(function() {
+      if(document.querySelector('#prevprice') == undefined)
+        return;
+    var prevprice = document.querySelector('#prevprice');
+    var curprice = document.querySelector('#curprice');
+    var arrowprice = document.querySelector('#arrowprice');
+
+    var swing = document.querySelector('#swing');
+    var swing2 = document.querySelector('#swing2');
+    var prevswing = document.querySelector('#prevswing').innerHTML;
+
+    var pricezoneproc = document.querySelector('#pricezoneproc');
+    var pricezonefeb = document.querySelector('#febcurproc');
+    var pricezoneproctext = document.querySelector('#pricezoneproctext');
+    var pricezoneprocprev = document.querySelector('#prevpricezoneproc').innerHTML;
+    
+    /* Current price arrows */
+    if (curprice.innerHTML <= prevprice.innerHTML) {
+      arrowprice.style.color = '#e2446a';
+      arrowprice.style.opacity = '1';
+      arrowprice.style.transform = 'rotate(180deg)';
+
+      febcurar.style.color = '#e2446a';
+      febcur.style.color = '#e2446a';
+      febcurar.style.opacity = '1';
+      febcurar.style.transform = 'rotate(180deg)';
+    } else {
+      arrowprice.style.color = 'rgb(138, 207, 32)';
+      arrowprice.style.opacity = '1';
+      arrowprice.style.transform = 'rotate(0deg)';
+
+      febcurar.style.color = 'rgb(138, 207, 32)';
+      febcur.style.color = 'rgb(138, 207, 32)';
+      febcurar.style.opacity = '1';
+      febcurar.style.transform = 'rotate(0deg)';
+    }
+
+    /* SWING ARORWS  */
+    if (parseFloat(swing.innerHTML) > parseFloat(prevswing)) {
+      swing.style.color = 'rgb(138, 207, 32)';
+      swing2.style.color = 'rgb(138, 207, 32)';
+    } else if (parseFloat(swing.innerHTML) == parseFloat(prevswing)) {
+      swing.style.color = '#FFF';
+      swing2.style.color = '#FFF';
+    } else {
+      swing.style.color = '#e2446a';
+      swing2.style.color = '#e2446a';
+    }
+
+
+    /*Price Zone colors */
+
+    if (parseFloat(pricezoneproc.innerHTML) > parseFloat(pricezoneprocprev)) {
+    
+      pricezonefeb.style.color = 'rgb(138, 207, 32)';
+    } else if (
+      parseFloat(pricezoneproc.innerHTML) == parseFloat(pricezoneprocprev)
+    ) {
+     
+      pricezonefeb.style.color = '#FFF';
+    } else {
+      
+      pricezonefeb.style.color = '#e2446a';
+    }
+
+  }, 1000);
+} else {
+  console.log(e + 'should stop interval');
+  clearInterval(intervalId);
+  intervalId = null;
+  e = 2;
+  return false;
+
+}
+}

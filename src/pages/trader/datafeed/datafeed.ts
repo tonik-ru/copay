@@ -20,6 +20,7 @@ import '../../../assets/js/rang';
 /*import { TabsPage } from '../../tabs/tabs';
 import { TopcoinsPage } from '../topcoins/topcoins';*/
 declare var startgraph: any;
+declare var topstart:any;
 /*declare var starttest: any;*/
 
 // import { TraderProvider } from '../../../providers/trader/trader';
@@ -113,6 +114,7 @@ export class DatafeedPage {
   public showmmmoretimeblockfeb: boolean = false;
   public isTop20: boolean = false;
 
+
   public myPair: any;
 
   /*@ViewChild('slider') slider: Slides;*/
@@ -130,6 +132,7 @@ export class DatafeedPage {
     this.feedProvider.on('ProcessResistance', x => this.onProcessResistance(x));
     /*this.showlook = '0';*/
     this.myPair = {};
+    
   }
 
   public onClickCancel() {
@@ -185,6 +188,9 @@ export class DatafeedPage {
     this.pairs = pairs.sort(this.compareByUSDT);
     this.selectedPair = this.pairs[0];
     this.startConnection();
+    if (this.isTop20 == true) {
+       this.showChart=true ;
+      }
   }
   /*selectedTab(index) {
     this.slider.slideTo(index);
@@ -415,7 +421,11 @@ export class DatafeedPage {
           // this.connectedPair = p;
           setTimeout(() => {
             this.logger.log('--------START Animation ---------');
+            if (this.isTop20 == true){
+              new topstart(1);
+            } else {
             new startgraph(1);
+          }
           }, 300);
 
           resolve();
@@ -434,6 +444,7 @@ export class DatafeedPage {
     this.logger.log('EXIT');
 
     new startgraph(2);
+    new topstart(2);
   }
 
   cleanupPrevData() {
@@ -593,6 +604,7 @@ export class DatafeedPage {
     // this.logger.log('------>'+pair as string);
     /*this.selectedPair = pair;*/
     new startgraph(2);
+    new topstart(2);
     this.feedProvider.stop();
     this.startConnection();
   }

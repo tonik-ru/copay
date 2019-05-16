@@ -40,13 +40,14 @@
   </ion-refresher>
   <div class="wrapper">
     <div class="header-extend" *ngIf="wallets?.length !== 0">
-      <div class="balance-block" (click)="toggleBalanceNew()">
+      <div class="balance-block">
         <h3 *ngIf="checkHiddenBalance()" style="    margin-top: 30px;">
           {{ totalb() }}
-          <ion-icon (click)="toggleBalance()" name="eye-off"></ion-icon>
+
+          <ion-icon name="eye-off" (click)="toggleBalanceNew()"></ion-icon>
         </h3>
         <h3 *ngIf="!checkHiddenBalance()" style="    margin-top: 30px;">
-          *** <ion-icon name="eye"></ion-icon>
+          *** <ion-icon name="eye" (click)="toggleBalanceNew()"></ion-icon>
         </h3>
 
         <!--
@@ -174,7 +175,7 @@
         </ion-card-content>
       </ion-card>
 
-    <page-feedback-card #showCard></page-feedback-card>
+      <page-feedback-card #showCard></page-feedback-card>
 
       <create-new-wallet *ngIf="!wallets || !wallets[0]"></create-new-wallet>
 
