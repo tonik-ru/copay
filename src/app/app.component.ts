@@ -369,7 +369,7 @@ export class CopayApp {
       return;
     }
     await this.toggleScannerVisibilityFromWithinWallet(false, 300);
-    this.nav.pop();
+    this.nav.popToRoot();
     // await this.getGlobalTabs().select(0);
   }
 

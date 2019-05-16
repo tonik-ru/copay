@@ -76,7 +76,7 @@
         {{ priceTick.prevLastTradePrice }}
       </div>
       <div id="curprice" style="opacity: 0; display: none">
-        {{ lastTradePrice }}
+        {{ priceTick.lastTradePrice }}
       </div>
 
       <!-- <p>Current Price</p> -->
@@ -93,13 +93,14 @@
             src="assets/logoscoinss/{{ myPair.BaseAsset }}.png"
             class="coinlogo2"
           />
-          <span *ngIf="isTop20"
+
+         <!--  <span *ngIf="isTop20"
             >{{
-              priceTick.lastTradePriceFormatted
+              priceTick.lastTradePrice
                 | currency: 'CAD':'symbol-narrow':'4.0-0'
             }}B</span
-          >
-          <span *ngIf="isTop20">${{
+          > -->
+          <span >${{
             priceTick.lastTradePriceFormatted
           }}</span>
           <span> <i id="arrowprice" class="fas fa-arrow-up"></i></span>
@@ -549,7 +550,7 @@
               </tr>
               <tr class="currentfib" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
                   <td></td>
-                  <td><p id="febcur">${{lastTradePrice}}<i id="febcurar" class="fas fa-arrow-up" style="transition: 0.5s ease"></i></p></td>
+                  <td><p id="febcur">${{priceTick.lastTradePriceFormatted}}<i id="febcurar" class="fas fa-arrow-up" style="transition: 0.5s ease"></i></p></td>
                   <td><span id="swing">{{ d.AvgIntData.Current | number: '1.2-2' }}</span></td>
                   <td><p id="febcurproc">{{ d.PositionPercent | number: '1.0-0' }}% </p></td>
                   <td></td>
@@ -587,7 +588,7 @@
                 
                  <tr class="currentfib" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
                     <td></td>
-                    <td><p id="febcur">${{lastTradePrice}}<i id="febcurar" class="fas fa-arrow-up" style="transition: 0.5s ease"></i></p></td>
+                    <td><p id="febcur">${{priceTick.lastTradePriceFormatted}}<i id="febcurar" class="fas fa-arrow-up" style="transition: 0.5s ease"></i></p></td>
                     <td><span id="swing">{{ d.AvgIntData.Current | number: '1.2-2' }}</span></td>
                     <td><p id="febcurproc">{{ d.PositionPercent | number: '1.0-0' }}% </p></td>
                     <td></td>

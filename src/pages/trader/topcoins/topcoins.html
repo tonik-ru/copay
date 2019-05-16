@@ -88,16 +88,11 @@
             </li>
             <li>
               <span class="market-coinprice" *ngIf="p.PriceUSD > 100000">
-                {{ p.PriceUSD | currency: 'CAD':'symbol-narrow':'4.0-2' }}B
+                ${{ p.PriceUSDFormatted }}B
               </span>
-              <span
-                class="market-coinprice"
-                *ngIf="p.PriceUSD < 100000 && p.PriceUSD > 1"
-              >
-                {{ p.PriceUSD | currency }}</span
-              >
-              <span class="market-coinprice" *ngIf="p.PriceUSD < 1">
-                ${{ p.PriceUSD }}</span
+              
+              <span class="market-coinprice" *ngIf="p.PriceUSD < 100000">
+                ${{ p.PriceUSDFormatted }}</span
               >
             </li>
             <li>

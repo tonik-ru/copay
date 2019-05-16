@@ -19,7 +19,14 @@ export class FormatUtils {
   }
 
   static formatMoney(n, c) {
-    return Number(n).toFixed(c);
+    if (c > 0)
+      return Number(n)
+        .toFixed(c)
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    else
+      return Number(n)
+        .toFixed(c)
+        .replace(/\d(?=(\d{3})+$)/g, '$&,');
   }
 
   static formatTimeSpan(ts) {

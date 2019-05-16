@@ -27,7 +27,7 @@ function createWindow() {
     width: 450,
     height: 960,
     minWidth:  400,
-    maxWidth: 1800,
+    maxWidth: 745,
     minHeight: 650,
     show: false
   });
