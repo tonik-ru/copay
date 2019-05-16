@@ -2,7 +2,7 @@
   "name": "bcdpay",
   "description": "A Secure Bitcoin Wallet",
   "author": "Chimpion",
-  "version": "5.7.4",
+  "version": "5.7.7",
   "keywords": [
     "bitcoin",
     "wallet",
@@ -121,7 +121,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "http://wallet.bitcoindiamond.org:8080/"
+        "url": "https://wallet.bitcoindiamond.org/static"
       }
     ],
     "mac": {

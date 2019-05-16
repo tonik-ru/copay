@@ -293,8 +293,6 @@ export class DatafeedPage {
         }
       }
 
-      this.calculateNextSpeedometerValue(rdi);
-
       this.processPositionPercents(rdi, data.ResistanceTick.PositionPercents);
 
       // if (!rdi.data[100]) {
@@ -311,14 +309,6 @@ export class DatafeedPage {
     }
   }
 
-  // calculate FUTURE speedometer value
-  private calculateNextSpeedometerValue(rdi) {
-    if (!rdi.Speedometer) return;
-    let dir = rdi.AvgIntData.Current - rdi.AvgIntData.Prev;
-    rdi.Speedometer.FutureScore =
-      rdi.Speedometer.Score + rdi.Speedometer.Score * dir;
-  }
-
   private processSpeedometers(rdi, speedometers) {
     if (!speedometers) return;
 
@@ -328,6 +318,7 @@ export class DatafeedPage {
       rdi.Speedometer = { PrevData: { Score: 0 }, FutureScore: 0 };
 
     rdi.Speedometer.Score = curVal.Score;
+    rdi.Speedometer.FutureScore = curVal.FutureScore;
     var str = '';
     curVal.Details.forEach(item => {
       str += item.Param + '=' + item.Value + ' Score=' + item.Score + '\n';
