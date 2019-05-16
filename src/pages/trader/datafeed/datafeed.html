@@ -62,7 +62,7 @@
                   <ion-select placeholder="Pairs"
                     [(ngModel)]="selectedPair"
                     class="links"
-                    (ionChange)="selectPair(pair)"
+                    (ionChange)="selectPair()"
                     interface="popover"
                   >
                     <ion-option *ngFor="let p of pairs" [value]="p">{{      formatPair(p)              }}</ion-option>
@@ -93,13 +93,13 @@
             src="assets/logoscoinss/{{ myPair.BaseAsset }}.png"
             class="coinlogo2"
           />
-          <span *ngIf="priceTick.lastTradePriceFormatted > 100000"
+          <span *ngIf="isTop20"
             >{{
               priceTick.lastTradePriceFormatted
                 | currency: 'CAD':'symbol-narrow':'4.0-0'
             }}B</span
           >
-          <span *ngIf="priceTick.lastTradePriceFormatted < 100000">${{
+          <span *ngIf="isTop20">${{
             priceTick.lastTradePriceFormatted
           }}</span>
           <span> <i id="arrowprice" class="fas fa-arrow-up"></i></span>
