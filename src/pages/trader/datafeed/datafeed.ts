@@ -324,7 +324,7 @@ export class DatafeedPage {
       rdi.Speedometer = { PrevData: { Score: 0 }, FutureScore: 0 };
 
     rdi.Speedometer.Score = curVal.Score;
-    rdi.Speedometer.FutureScore = curVal.FutureScore;
+    rdi.Speedometer.FutureScore = (curVal.FutureScore).toFixed();
     var str = '';
     curVal.Details.forEach(item => {
       str += item.Param + '=' + item.Value + ' Score=' + item.Score + '\n';
