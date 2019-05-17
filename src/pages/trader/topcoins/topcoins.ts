@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, Slides } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
 
 // import { ProfileProvider } from '../../../providers';
 import { timer } from 'rxjs/observable/timer';
@@ -31,8 +31,8 @@ export class TopcoinsPage {
 
   private refreshTimer;
 
-  @ViewChild('slider') slider: Slides;
-  showlook = '0';
+  // @ViewChild('slider') slider: Slides;
+  // showlook = '0';
 
   constructor(
     public navCtrl: NavController,
@@ -41,13 +41,13 @@ export class TopcoinsPage {
     private traderProvider: TraderProvider
   ) {
     this.loadTopCoins();
-    this.showlook = '0';
+    // this.showlook = '0';
     this.loadPairs();
     this.toggled = false;
   }
-  selectedTab(index) {
-    this.slider.slideTo(index);
-  }
+  // selectedTab(index) {
+  //   this.slider.slideTo(index);
+  // }
 
   public toggled: boolean = false;
 
@@ -75,7 +75,7 @@ export class TopcoinsPage {
 
   ionViewDidLoad() {}
   ionViewDidEnter() {
-    this.slider.onlyExternal = true;
+    // this.slider.onlyExternal = true;
   }
 
   ionViewWillEnter() {

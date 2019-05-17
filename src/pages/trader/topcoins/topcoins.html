@@ -10,37 +10,35 @@
       ><img
         src="assets/sell-title.svg"
         style="margin-right: 10px; margin-bottom: -3px;width:19px"
-      />Trade</ion-title
+      />{{ 'Trade' | translate }}</ion-title
     >
   </ion-navbar>
-  <!--<ion-toolbar>
-    <ion-segment (ionChange)="slider.slideTo(showlook)" [(ngModel)]="showlook">
-      <ion-segment-button value="0">
-        <ion-label>Coins</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="1">
-        <ion-label>Funds</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>-->
+  <!--
+    <ion-toolbar>
+      <ion-segment (ionChange)="slider.slideTo(showlook)" [(ngModel)]="showlook">
+        <ion-segment-button value="0">
+          <ion-label>Coins</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="1">
+          <ion-label>Funds</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+  -->
 </ion-header>
 
 <ion-content no-padding>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content> </ion-refresher-content>
   </ion-refresher>
-  <ion-slides
-    #slider
-    (ionSlideWillChange)="showlook = '' + slider.getActiveIndex()"
-  >
-    <ion-slide>
+  
       <ion-row>
         <ion-col col-7 class="searchbtn1">
           <ion-searchbar
             [(ngModel)]="filter"
             (ionInput)="getTopics($event)"
             [showCancelButton]="false"
-            placeholder="Search Symbol"
+            placeholder="{{'Search Symbol' | translate }}"
             id="stay-cancel"
           >
           </ion-searchbar
@@ -49,7 +47,7 @@
         <ion-col col-5 class="searchbtn1">
           <ion-item>
             <ion-label class="labelexchange" style="display:none"
-              >Select Exchange</ion-label
+              >{{'Select Exchange' | translate}}</ion-label
             >
             <ion-select placeholder="Exchange" title="Exchange">
               <ion-option value="binance" selected>Binance</ion-option>
@@ -63,8 +61,6 @@
         *ngIf="topCoins.length <= 2"
         class="loaderblock"
       ></ion-spinner>
-
-      
 
       <ion-list *ngIf="topCoins">
         <ion-item
@@ -81,7 +77,7 @@
               />
             </span>
           </div>
-          
+
           <ul class="market-table" id="{{p.Symbol}}">
             <li>
               <span>{{ p.Symbol }}</span>
@@ -90,7 +86,7 @@
               <span class="market-coinprice" *ngIf="p.PriceUSD > 100000">
                 ${{ p.PriceUSDFormatted }}B
               </span>
-              
+
               <span class="market-coinprice" *ngIf="p.PriceUSD < 100000">
                 ${{ p.PriceUSDFormatted }}</span
               >
@@ -111,9 +107,5 @@
           </ul>
         </ion-item>
       </ion-list>
-    </ion-slide>
-    <ion-slide>
-      <img src="assets/img/coming-soon1.png" class="commingsoonimg" />
-    </ion-slide>
-  </ion-slides>
+   
 </ion-content>
