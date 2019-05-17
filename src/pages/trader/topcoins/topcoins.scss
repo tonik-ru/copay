@@ -229,9 +229,19 @@ page-topcoins {
   .market-table li:nth-of-type(2) {
     margin-left: 20px;
     margin-right: 10px;
-    text-align: right!important;
+    text-align: left!important;
     width: 150px;
    
+  }
+  @media screen and (max-width:350px){
+    .market-table li:nth-of-type(2) {
+      margin-left: 5px;
+      margin-right: 5px;
+      text-align: left!important;
+      width: 100px;
+      font-size:11px;
+     
+    }
   }
   .market-table li:nth-of-type(1) {width: 100px;}
 .market-coinprice{ float:left;}
@@ -373,11 +383,9 @@ animation: load 2s infinite;
     padding: 6px 8px;
   }*/
 
-  .swiper-container {
-    overflow-y: auto;
-  }
+  
   .scroll-content {
-    overflow: hidden;
+    overflow-y: auto;
   }
   .select-ios {
     padding: 4px 8px 4px 16px;
@@ -437,5 +445,7 @@ animation: load 2s infinite;
     border-bottom: 0.55px solid #000;
   }
   .market-table li {color:#fff!important}
- 
+
+  
 }
+
