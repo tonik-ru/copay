@@ -8,6 +8,8 @@ import {
 
 import { FormatUtils } from '../topcoins/formatutils';
 
+import * as _ from 'lodash';
+
 // import { ProfileProvider } from '../../../providers';
 
 import { Logger } from '../../../providers/logger/logger';
@@ -39,8 +41,11 @@ declare var topstart: any;
 export class DatafeedPage {
   public selectedPair;
   public pairs = [];
+  public knownIntervals = [];
 
-  private knownIntervals = [
+  private customIntervalsAppended = false;
+
+  private defaultKnownIntervals = [
     { Caption: '0.001', TimeSpan: '00:01:00', Name: '1 m', isVisible: false },
     { Caption: '0.003', TimeSpan: '00:03:00', Name: '3 m', isVisible: false },
     { Caption: '0.005', TimeSpan: '00:05:00', Name: '5 m', isVisible: false },
@@ -48,45 +53,44 @@ export class DatafeedPage {
     { Caption: '0.03', TimeSpan: '00:30:00', Name: '30 m', isVisible: false },
     { Caption: '0.04', TimeSpan: '00:45:00', Name: '45 m', isVisible: false },
     { Caption: '0.1', TimeSpan: '01:00:00', Name: '1 h', isVisible: true },
-    /* { Caption: '0.2', TimeSpan: '02:00:00', Name: '2 hr', isVisible: false },*/
+    // { Caption: '0.2', TimeSpan: '02:00:00', Name: '2 hr', isVisible: false, Order: 0 },
     { Caption: '0.4', TimeSpan: '04:00:00', Name: '4 h', isVisible: true },
+    /*
+    {
+      Caption: '-1',
+      TimeSpan: '04:00:00',
+      Name: '15 m - 4 h',
+      isVisible: true
+    },
+    */
     { Caption: '0.6', TimeSpan: '06:00:00', Name: '6 h', isVisible: false },
     { Caption: '0.9', TimeSpan: '09:00:00', Name: '9 h', isVisible: false },
     { Caption: '0.12', TimeSpan: '12:00:00', Name: '12 h', isVisible: false },
     { Caption: '1', TimeSpan: '1.00:00:00', Name: '1 d', isVisible: true },
+    /*
+    {
+      Caption: '-2',
+      TimeSpan: '1.00:00:00',
+      Name: '4 h - 1 d',
+      isVisible: true
+    },
+    */
     { Caption: '2', TimeSpan: '2.00:00:00', Name: '2 d', isVisible: false },
     { Caption: '3', TimeSpan: '3.00:00:00', Name: '3 d', isVisible: true },
     { Caption: '7', TimeSpan: '7.00:00:00', Name: '7 d', isVisible: true },
+    /*
     {
-      Caption: '14',
-      TimeSpan: '14.00:00:00',
-      Name: '14 d',
-      isVisible: false
-    },
-    {
-      Caption: '30',
-      TimeSpan: '30.00:00:00',
-      Name: '30 d',
+      Caption: '-3',
+      TimeSpan: '7.00:00:00',
+      Name: '9 h - 7 d',
       isVisible: true
     },
-    {
-      Caption: '45',
-      TimeSpan: '45.00:00:00',
-      Name: '45 d',
-      isVisible: false
-    },
-    {
-      Caption: '60',
-      TimeSpan: '60.00:00:00',
-      Name: '60 d',
-      isVisible: false
-    },
-    {
-      Caption: '90',
-      TimeSpan: '90.00:00:00',
-      Name: '90 d',
-      isVisible: false
-    }
+    */
+    { Caption: '14', TimeSpan: '14.00:00:00', Name: '14 d', isVisible: false },
+    { Caption: '30', TimeSpan: '30.00:00:00', Name: '30 d', isVisible: true },
+    { Caption: '45', TimeSpan: '45.00:00:00', Name: '45 d', isVisible: false },
+    { Caption: '60', TimeSpan: '60.00:00:00', Name: '60 d', isVisible: false },
+    { Caption: '90', TimeSpan: '90.00:00:00', Name: '90 d', isVisible: false }
   ];
 
   public resistanceData = [];
@@ -100,11 +104,11 @@ export class DatafeedPage {
 
   // $scope.currentPair = null;
   public decimals = 2;
-  public selectedInterval = this.knownIntervals[7];
+  public selectedInterval;
   public currentData = {};
   public d = null;
-  public positiveKeys = ['7', '6', '5', '4', '3', '2', '1'];
-  public negativeKeys = ['-1', '-2', '-3', '-4', '-5', '-6', '-7'];
+  public positiveKeys = ['9', '8', '7', '6', '5', '4', '3', '2', '1'];
+  public negativeKeys = ['-1', '-2', '-3', '-4', '-5', '-6', '-7', '-8', '-9'];
 
   private lastTickData = null;
   // private connectedPair = {};
@@ -131,6 +135,11 @@ export class DatafeedPage {
     this.feedProvider.on('ProcessResistance', x => this.onProcessResistance(x));
     /*this.showlook = '0';*/
     this.myPair = {};
+    this.initKnownIntervals();
+    this.selectedInterval = _.find(
+      this.knownIntervals,
+      x => x.TimeSpan == '04:00:00'
+    );
   }
 
   public onClickCancel() {
@@ -193,8 +202,25 @@ export class DatafeedPage {
   /*selectedTab(index) {
     this.slider.slideTo(index);
   }*/
+  private showMoreTimeImp() {
+    for (let ki of this.knownIntervals) {
+      let dki = _.find(
+        this.defaultKnownIntervals,
+        x => x.TimeSpan == ki.TimeSpan
+      );
+
+      if (!dki) {
+        ki.isVisible = true;
+      } else {
+        ki.isVisible = this.showmmmoretimeblock == false ? dki.isVisible : true;
+        ki.isVisible = ki.isVisible;
+      }
+    }
+  }
+
   public showMoreTime() {
     this.showmmmoretimeblock = !this.showmmmoretimeblock;
+    this.showMoreTimeImp();
   }
   public showMoreTimeFeb() {
     this.showmmmoretimeblockfeb = !this.showmmmoretimeblockfeb;
@@ -247,10 +273,10 @@ export class DatafeedPage {
 
     var lti = resLevelsTouchDates[rdi.Interval.TimeSpan];
     if (lti) {
-      for (let k = 1; k <= 7; k++) {
+      for (let k = 1; k <= 9; k++) {
         this.processLevelTouchDate(rdi, lti, k);
       }
-      for (let k = -7; k <= -1; k++) {
+      for (let k = -9; k <= -1; k++) {
         this.processLevelTouchDate(rdi, lti, k);
       }
 
@@ -316,7 +342,9 @@ export class DatafeedPage {
   private processSpeedometers(rdi, speedometers) {
     if (!speedometers) return;
 
-    var curVal = speedometers.Speedometers[rdi.Interval.TimeSpan];
+    var spKey = rdi.Interval.TimeSpan;
+    if (rdi.Interval.SpeedometerKey) spKey = rdi.Interval.SpeedometerKey;
+    var curVal = speedometers.Speedometers[spKey];
     if (!curVal) return;
     if (!rdi.Speedometer)
       rdi.Speedometer = { PrevData: { Score: 0 }, FutureScore: 0 };
@@ -333,7 +361,7 @@ export class DatafeedPage {
       speedometers.PrevPeriodSpeedometers &&
       Object.keys(speedometers.PrevPeriodSpeedometers).length > 0
     ) {
-      var val = speedometers.PrevPeriodSpeedometers[rdi.Interval.TimeSpan];
+      var val = speedometers.PrevPeriodSpeedometers[spKey];
       str = '';
       curVal.Details.forEach(item => {
         str += item.Param + '=' + item.Value + ' Score=' + item.Score + '\n';
@@ -372,7 +400,7 @@ export class DatafeedPage {
     var lastTradePrice = this.priceTick.lastTradePrice;
     var levelFound = false;
 
-    for (var k = 1; k <= 7; k++) {
+    for (var k = 1; k <= 9; k++) {
       var ks = (k * sign).toString();
 
       rdi.Data[ks].IsPriceInRange =
@@ -398,39 +426,37 @@ export class DatafeedPage {
     }
   }
 
+  private initKnownIntervals() {
+    this.knownIntervals = _.cloneDeep(this.defaultKnownIntervals);
+  }
+
   private startConnection(): Promise<any> {
     this.cleanupPrevData();
 
     this.myPair = this.pairs[0];
     this.logger.log(this.myPair as string);
 
-    return new Promise(resolve => {
-      let p = this.selectedPair;
-      this.isTop20 = this.selectedPair.BaseAsset == 'TOP20';
-      this.decimals =
-        p.Precision == 0
-          ? 0
-          : Math.round(Math.log(1 / p.Precision) / Math.LN10);
+    let p = this.selectedPair;
+    this.isTop20 = this.selectedPair.BaseAsset == 'TOP20';
+    this.decimals =
+      p.Precision == 0 ? 0 : Math.round(Math.log(1 / p.Precision) / Math.LN10);
 
-      return this.feedProvider
-        .connect(
-          this.selectedPair.Exchange,
-          this.selectedPair.Symbol
-        )
-        .then(() => {
-          // this.connectedPair = p;
-          setTimeout(() => {
-            this.logger.log('--------START Animation ---------');
-            if (this.isTop20 == true) {
-              new topstart(1);
-            } else {
-              new startgraph(1);
-            }
-          }, 300);
-
-          resolve();
-        });
-    }).catch(error => this.logger.error(error));
+    return this.feedProvider
+      .connect(
+        this.selectedPair.Exchange,
+        this.selectedPair.Symbol
+      )
+      .then(() => {
+        setTimeout(() => {
+          this.logger.log('--------START Animation ---------');
+          if (this.isTop20 == true) {
+            new topstart(1);
+          } else {
+            new startgraph(1);
+          }
+        }, 300);
+      })
+      .catch(error => this.logger.error(error));
   }
 
   ionViewDidLoad() {}
@@ -535,7 +561,7 @@ export class DatafeedPage {
 
       if (rdi.Interval == this.selectedInterval) this.currentData = rdi;
 
-      for (var k = 1; k <= 7; k++) {
+      for (var k = 1; k <= 9; k++) {
         var keyPositive = this.knownIntervals[i].Caption + '@' + k;
         var keyNegative = this.knownIntervals[i].Caption + '@' + -k;
 
@@ -559,6 +585,7 @@ export class DatafeedPage {
           rdi.Data[(-k).toString()].Hits = 0;
         }
       }
+      /*
       var indicators = data.IndicatorResults;
       if (indicators) {
         var emas = indicators.EMAValues;
@@ -569,12 +596,19 @@ export class DatafeedPage {
           }
         }
       }
+      */
     }
 
     this.processCustomIntervals(data);
   }
 
   private processLevelTouchDate(rdi, lti, k) {
+    if (Math.abs(k) > 7) {
+      rdi.Data[k].Count = 0;
+      rdi.Data[k].Age = '';
+      return;
+    }
+
     var d = Date.parse(lti[k].Date);
     if (d > -10000) {
       var ageSeconds = (Date.now() - d) / 1000;

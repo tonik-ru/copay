@@ -78,7 +78,7 @@ export class FeedProvider {
               WallLinesCount: 5
             })
             .done(() => resolve())
-            .fail(() => reject('Failed to sibscribe'));
+            .fail(() => reject('Failed to subscribe'));
         })
         .fail(() => reject('Failed to start'));
     });
