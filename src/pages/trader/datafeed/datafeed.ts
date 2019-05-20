@@ -20,7 +20,7 @@ import '../../../assets/js/rang';
 /*import { TabsPage } from '../../tabs/tabs';
 import { TopcoinsPage } from '../topcoins/topcoins';*/
 declare var startgraph: any;
-declare var topstart:any;
+declare var topstart: any;
 /*declare var starttest: any;*/
 
 // import { TraderProvider } from '../../../providers/trader/trader';
@@ -114,7 +114,6 @@ export class DatafeedPage {
   public showmmmoretimeblockfeb: boolean = false;
   public isTop20: boolean = false;
 
-
   public myPair: any;
 
   /*@ViewChild('slider') slider: Slides;*/
@@ -132,7 +131,6 @@ export class DatafeedPage {
     this.feedProvider.on('ProcessResistance', x => this.onProcessResistance(x));
     /*this.showlook = '0';*/
     this.myPair = {};
-    
   }
 
   public onClickCancel() {
@@ -189,8 +187,8 @@ export class DatafeedPage {
     this.selectedPair = this.pairs[0];
     this.startConnection();
     if (this.isTop20 == true) {
-       this.showChart=true ;
-      }
+      this.showChart = true;
+    }
   }
   /*selectedTab(index) {
     this.slider.slideTo(index);
@@ -324,7 +322,7 @@ export class DatafeedPage {
       rdi.Speedometer = { PrevData: { Score: 0 }, FutureScore: 0 };
 
     rdi.Speedometer.Score = curVal.Score;
-    rdi.Speedometer.FutureScore = (curVal.FutureScore).toFixed();
+    rdi.Speedometer.FutureScore = curVal.FutureScore.toFixed();
     var str = '';
     curVal.Details.forEach(item => {
       str += item.Param + '=' + item.Value + ' Score=' + item.Score + '\n';
@@ -379,15 +377,17 @@ export class DatafeedPage {
 
       rdi.Data[ks].IsPriceInRange =
         sign == 1
-          ? (lastTradePrice <= rdi.Data[ks].FullValue &&
-              rdi.Data[ks].FullValue > 0) ||
-            k == 7
-          : (lastTradePrice >= rdi.Data[ks].FullValue &&
-              rdi.Data[ks].FullValue > 0) ||
-            k == 7;
+          ? lastTradePrice <= rdi.Data[ks].FullValue &&
+            rdi.Data[ks].FullValue > 0
+          : lastTradePrice >= rdi.Data[ks].FullValue &&
+            rdi.Data[ks].FullValue > 0;
 
       rdi.Data[ks].IsCurrent = false;
-      if (rdi.PositionPercent && rdi.Data[ks].IsPriceInRange && !levelFound) {
+      if (
+        rdi.PositionPercent &&
+        (rdi.Data[ks].IsPriceInRange || k == 7) &&
+        !levelFound
+      ) {
         levelFound = true;
         if (
           (rdi.PositionPercent >= 50 && sign > 0) ||
@@ -421,11 +421,11 @@ export class DatafeedPage {
           // this.connectedPair = p;
           setTimeout(() => {
             this.logger.log('--------START Animation ---------');
-            if (this.isTop20 == true){
+            if (this.isTop20 == true) {
               new topstart(1);
             } else {
-            new startgraph(1);
-          }
+              new startgraph(1);
+            }
           }, 300);
 
           resolve();

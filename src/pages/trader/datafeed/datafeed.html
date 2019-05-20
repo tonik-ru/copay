@@ -544,7 +544,7 @@
                   <td><span ></span></td>
                   <td>{{ d.Data[k].Age }}</td>
               </tr>
-              <tr class="currentfib" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+              <tr class="currentfib" *ngIf="d.Data[k].IsCurrent">
                   <td></td>
                   <td><p id="febcur">${{priceTick.lastTradePriceFormatted}}<i id="febcurar" class="fas fa-arrow-up"  style="transition: 0.5s ease"></i></p></td>
                   <td><span id="swing">{{ d.AvgIntData.Current | number: '1.2-2' }}</span></td>
@@ -569,7 +569,7 @@
                  </tr>
                 
                 
-                 <tr class="currentfib" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+                 <tr class="currentfib" *ngIf="d.Data[k].IsCurrent">
                     <td></td>
                     <td><p id="febcur">${{priceTick.lastTradePriceFormatted}}<i id="febcurar" class="fas fa-arrow-up"  style="transition: 0.5s ease"></i></p></td>
                     <td><span id="swing">{{ d.AvgIntData.Current | number: '1.2-2' }}</span></td>
