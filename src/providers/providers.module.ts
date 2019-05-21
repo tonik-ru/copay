@@ -32,6 +32,7 @@ import {
   FeeProvider,
   File,
   FilterProvider,
+  GAnalyticsProvider,
   GiftCardProvider,
   HomeIntegrationsProvider,
   IncomingDataProvider,
@@ -133,7 +134,8 @@ import {
     File,
     WalletTabsProvider,
     TraderProvider,
-    FeedProvider
+    FeedProvider,
+    GAnalyticsProvider
   ]
 })
 export class ProvidersModule {}
