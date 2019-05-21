@@ -2,7 +2,7 @@
   "name": "bcdpay",
   "description": "A Secure Bitcoin Wallet",
   "author": "Chimpion",
-  "version": "5.7.7",
+  "version": "5.7.12",
   "keywords": [
     "bitcoin",
     "wallet",
@@ -113,8 +113,8 @@
       "schemes": [
         "bitcoin",
         "bitcoincash",
-        "bitcoindiamond",
         "bchtest",
+        "bitcoindiamond",
         "bcdpay"
       ]
     },
@@ -191,6 +191,7 @@
     "@ionic-native/vibration": "4.14.0",
     "@ionic/storage": "2.1.3",
     "@ngx-translate/core": "9.1.1",
+    "@types/google.analytics": "0.0.39",
     "@zxing/library": "0.8.2",
     "@zxing/ngx-scanner": "1.2.1",
     "angular2-moment": "1.7.1",
