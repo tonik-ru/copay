@@ -543,6 +543,21 @@ export class PersistenceProvider {
   removeEmailLawCompliance() {
     return this.storage.remove('emailLawCompliance');
   }
+
+  setGAClientId(value: string) {
+    return this.storage.set('ga:clientId', value);
+  }
+
+  getGAClientId() {
+    return this.storage.get('ga:clientId');
+  }
+
+  getNewsLastDate(){
+    return this.storage.get('newsLastDate');
+  }
+  setNewsLastDate(value: Date) {
+    return this.storage.set('newsLastDate', value);
+  }
 }
 
 function getLegacyGiftCardKey(cardName: string, network: Network) {

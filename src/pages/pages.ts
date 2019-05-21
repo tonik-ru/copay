@@ -111,9 +111,8 @@ import { CardCatalogPage } from './integrations/gift-cards/card-catalog/card-cat
 import { GIFT_CARD_PAGES } from './integrations/gift-cards/gift-cards';
 
 /* Tabs */
-import { Tab3Page } from '../pages/tab3/tab3';
-import { Tab4Page } from '../pages/tab4/tab4';
-
+import { TabBcdbazaar } from './bcdvazaar/bcdbazaar';
+import { TabNews } from './news/news';
 
 /* Trader */
 import { DatafeedPage } from '../pages/trader/datafeed/datafeed';
@@ -121,10 +120,9 @@ import { TopcoinsPage } from '../pages/trader/topcoins/topcoins';
 import { UserstatsPage } from '../pages/trader/userstats/userstats';
 
 /* BCD News */
-import { FullpostPage } from '../pages/tab3/fullpost/fullpost';
-import { NewsmenuPage } from '../pages/tab3/newsmenu/newsmenu';
-import { NewssearchPage } from '../pages/tab3/newssearch/newssearch';
-
+import { FullpostPage } from './news/fullpost/fullpost';
+import { NewsmenuPage } from './news/newsmenu/newsmenu';
+import { NewssearchPage } from './news/newssearch/newssearch';
 
 export const PAGES = [
   AddPage,
@@ -220,6 +218,6 @@ export const PAGES = [
   FullpostPage,
   NewsmenuPage,
   NewssearchPage,
-  Tab3Page,
-  Tab4Page
+  TabNews,
+  TabBcdbazaar
 ];

@@ -18,22 +18,15 @@ import {
 } from 'ionic-angular';
 
 /*import { Observable } from 'rxjs';*/
-import { Logger } from '../../providers';
+import { Logger, PersistenceProvider } from '../../providers';
 import { ApiProvider } from '../../providers/api/api';
 import { FullpostPage } from './fullpost/fullpost';
 import { NewsmenuPage } from './newsmenu/newsmenu';
 import { NewssearchPage } from './newssearch/newssearch';
 
-/**
- * Generated class for the Tab3Page page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @Component({
-  selector: 'page-tab3',
-  templateUrl: 'tab3.html',
+  selector: 'page-news',
+  templateUrl: 'news.html',
   animations: [
     trigger('fadeInUp', [
       state('void', style({ opacity: '0' })),
@@ -42,9 +35,9 @@ import { NewssearchPage } from './newssearch/newssearch';
     ])
   ]
 })
-export class Tab3Page {
+export class TabNews {
   @ViewChild('pageTop') pageTop: Content;
-  public items: any = [];
+  public items = [];
   private per_page: number = 10;
   private page: number = 1;
   private showLoadMore: boolean = false;
@@ -65,7 +58,8 @@ export class Tab3Page {
     public http: HttpClient,
     public logger: Logger,
     public api: ApiProvider,
-    public menuCtrl: MenuController
+    public menuCtrl: MenuController,
+    private persistenceProvider: PersistenceProvider
   ) {
     this.cat_name_title;
 
@@ -78,11 +72,15 @@ export class Tab3Page {
     } else {
       this.cat_name_title = 'Daily News';
     }
-    this.loadData();
+    // this.loadData();
   }
+
   loadData(infiniteScroll = null) {
     if (!this.isLoading) {
       this.isLoading = true;
+
+      this.logger.log('Loading news');
+
       if (infiniteScroll != null && infiniteScroll.ionRefresh) {
         this.page = 1;
       }
@@ -101,7 +99,7 @@ export class Tab3Page {
 
       /*let data: Observable<any>; data =*/
       this.api.get(url).subscribe(
-        (result: any = []) => {
+        (result: any[]) => {
           this.isLoading = false;
           this.items =
             infiniteScroll != null && infiniteScroll.ionRefresh
@@ -136,6 +134,17 @@ export class Tab3Page {
   }
 
   openFullPost(item) {
+    this.persistenceProvider.getNewsLastDate().then(val => {
+      let lastDt = val ? new Date(val) : new Date(2019, 1, 1);
+      let itemDate = new Date(item.date);
+      if (itemDate > lastDt) {
+        this.persistenceProvider.setNewsLastDate(itemDate);
+        // let unreadCount = _.fill(this.items, x => new Date(x.date) > lastDt)
+        //  .length;
+        // this.tabs.setUnreadItemsCount(unreadCount);
+      }
+    });
+
     this.navCtrl.push(FullpostPage, { post: item });
   }
 
@@ -159,6 +168,10 @@ export class Tab3Page {
 
   ionViewDidLoad() {}
 
+  ionViewWillEnter() {
+    this.loadData();
+  }
+
   ngOnInit() {
     this.fabToHide = this.element.nativeElement.getElementsByClassName(
       'fab'
@@ -170,6 +183,7 @@ export class Tab3Page {
     );
     this.renderer.setElementStyle(this.fabToHide, 'opacity', '0');
   }
+
   onContentScroll(e) {
     if (e.scrollTop - this.oldScrollTop > 10) {
       this.logger.log('DOWN');

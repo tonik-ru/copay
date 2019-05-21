@@ -6,14 +6,18 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { Logger } from '../../providers/logger/logger';
+import { TabBcdbazaar } from '../bcdvazaar/bcdbazaar';
 import { HomePage } from '../home/home';
+import { TabNews } from '../news/news';
 import { ScanPage } from '../scan/scan';
 import { SettingsPage } from '../settings/settings';
-import { Tab3Page } from '../tab3/tab3';
-import { Tab4Page } from '../tab4/tab4';
 import { DatafeedPage } from '../trader/datafeed/datafeed';
 /*import { Tab4Page } from '../tab4/tab4';*/
 import { TopcoinsPage } from '../trader/topcoins/topcoins';
+
+// import { timer } from 'rxjs/observable/timer';
+
+// import { ApiProvider } from '../../providers/api/api';
 
 // import { UserstatsPage } from '../trader/userstats/userstats';
 
@@ -46,9 +50,12 @@ export class TabsPage {
   scanRoot = ScanPage;
   tab2Root = TopcoinsPage;
   tab3Root = SettingsPage;
-  tab4Root = Tab3Page;
+  tab4Root = TabNews;
   datafeed = DatafeedPage;
-  bcd4Root = Tab4Page;
+  bcd4Root = TabBcdbazaar;
+
+  // private refreshTimer;
+  private unreadNewsCount = 0;
 
   /*tab5Root = Tab4Page;*/
   constructor(
@@ -56,7 +63,28 @@ export class TabsPage {
     private translate: TranslateService,
     private logger: Logger,
     private iab: InAppBrowser
-  ) {}
+  ) {
+    // this.refreshTimer = timer(15000, 15000).subscribe(() =>
+    //   this.updateNewsCount()
+    // );
+    // this.refreshTimer = this.refreshTimer;
+  }
+
+  public setUnreadItemsCount(itemsCount) {
+    this.unreadNewsCount = itemsCount;
+  }
+
+  /*
+  private updateNewsCount() {
+    this.newsApi.getUnreadNewsCount().then(val => {
+      this.unreadNewsCount = val;
+    });
+  }
+*/
+
+  public getUnreadNewsCount() {
+    return this.unreadNewsCount > 0 ? this.unreadNewsCount.toString() : '';
+  }
 
   public openBcdBazaar1() {
     this.logger.log('open bcdbazaar');

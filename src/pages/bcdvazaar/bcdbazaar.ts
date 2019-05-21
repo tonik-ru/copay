@@ -9,10 +9,10 @@ import { NavController, NavParams } from 'ionic-angular';
  */
 
 @Component({
-  selector: 'page-tab4',
-  templateUrl: 'tab4.html'
+  selector: 'page-bcdbazaar',
+  templateUrl: 'bcdbazaar.html'
 })
-export class Tab4Page {
+export class TabBcdbazaar {
   constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
   ionViewDidLoad() {}

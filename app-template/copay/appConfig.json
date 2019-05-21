@@ -24,7 +24,7 @@
   "WindowsApplicationId": "BCDPayforWindows",
   "pushSenderId": "1036948132229",
   "description": "A Secure Bitcoin Wallet",
-  "version": "5.7.1",
+  "version": "5.7.12",
   "androidVersion": "57010000",
   "_extraCSS": null,
   "_enabledExtensions": {

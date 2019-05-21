@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers';
 import { ApiProvider } from '../../../providers/api/api';
-import { Tab3Page } from '../tab3';
+import { TabNews } from '../news';
 
 /**
  * Generated class for the NewsmenuPage page.
@@ -28,6 +28,6 @@ export class NewsmenuPage {
 
   ionViewDidLoad() {}
   openCategory(item: number, name) {
-    this.navCtrl.push(Tab3Page, { cat_id: item, cat_name: name });
+    this.navCtrl.push(TabNews, { cat_id: item, cat_name: name });
   }
 }
