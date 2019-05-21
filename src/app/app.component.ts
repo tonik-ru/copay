@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { UserAgent } from '@ionic-native/user-agent';
 import {
+  App,
   Config,
   Events,
   ModalController,
@@ -15,7 +16,7 @@ import { Observable, Subscription } from 'rxjs';
 
 // providers
 import { WalletTabsProvider } from '../pages/wallet-tabs/wallet-tabs.provider';
-import { GiftCardProvider } from '../providers';
+import { GAnalyticsProvider, GiftCardProvider } from '../providers';
 import { AppProvider } from '../providers/app/app';
 import { BitPayCardProvider } from '../providers/bitpay-card/bitpay-card';
 import { CoinbaseProvider } from '../providers/coinbase/coinbase';
@@ -117,7 +118,9 @@ export class CopayApp {
     private renderer: Renderer,
     private userAgent: UserAgent,
     private device: Device,
-    public api: ApiProvider
+    private ga: GAnalyticsProvider,
+    public api: ApiProvider,
+    private app: App
   ) {
     this.imageLoaderConfig.setFileNameCachedWithExtension(true);
     this.imageLoaderConfig.useImageTag(true);
@@ -147,6 +150,17 @@ export class CopayApp {
       .load()
       .then(() => {
         this.onAppLoad(readySource);
+      })
+      .then(() => {
+        this.app.viewDidEnter.subscribe(view => {
+          let title = view._nav.tabTitle;
+          if (view._ionCntRef)
+            title = view._ionCntRef.nativeElement.offsetParent.localName;
+          this.logger.log('app viewDidEnter ' + title);
+          this.ga.trackView(title);
+        });
+        this.ga.startTrackerWithId('UA-139727746-2');
+        this.logger.log('Started GA');
       })
       .catch(err => {
         const title = 'Could not initialize the app';
@@ -428,10 +442,11 @@ export class CopayApp {
     } else if (pathData.indexOf('bitcoin:/') != -1) {
       this.logger.debug('Bitcoin URL found');
       this.handleOpenUrl(pathData.substring(pathData.indexOf('bitcoin:/')));
-    }
-    else if (pathData.indexOf('bitcoindiamond:/') != -1) {
+    } else if (pathData.indexOf('bitcoindiamond:/') != -1) {
       this.logger.debug('Bitcoin Diamond URL found');
-      this.handleOpenUrl(pathData.substring(pathData.indexOf('bitcoindiamond:/')));
+      this.handleOpenUrl(
+        pathData.substring(pathData.indexOf('bitcoindiamond:/'))
+      );
     } else if (pathData.indexOf(this.appProvider.info.name + '://') != -1) {
       this.logger.debug(this.appProvider.info.name + ' URL found');
       this.handleOpenUrl(
