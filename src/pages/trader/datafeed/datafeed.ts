@@ -42,6 +42,8 @@ export class DatafeedPage {
   public selectedPair;
   public pairs = [];
   public knownIntervals = [];
+  public topRowIntervals = [];
+  public buttomRowIntervals = [];
 
   private defaultKnownIntervals = [
     { Caption: '0.001', TimeSpan: '00:01:00', Name: '1 m', isVisible: false },
@@ -53,37 +55,38 @@ export class DatafeedPage {
     { Caption: '0.1', TimeSpan: '01:00:00', Name: '1 h', isVisible: true },
     // { Caption: '0.2', TimeSpan: '02:00:00', Name: '2 hr', isVisible: false, Order: 0 },
     { Caption: '0.4', TimeSpan: '04:00:00', Name: '4 h', isVisible: true },
-    /*
-     {
+    {
       Caption: '-1',
       TimeSpan: '04:00:00',
       Name: '15 m - 4 h',
       isVisible: true,
-      ReplacementCaption: '0.4'
-    },*/
+      ReplacementCaption: '0.4',
+      isTopRow: true
+    },
     { Caption: '0.6', TimeSpan: '06:00:00', Name: '6 h', isVisible: false },
     { Caption: '0.9', TimeSpan: '09:00:00', Name: '9 h', isVisible: false },
     { Caption: '0.12', TimeSpan: '12:00:00', Name: '12 h', isVisible: false },
     { Caption: '1', TimeSpan: '1.00:00:00', Name: '1 d', isVisible: true },
-    /*
-     {
+
+    {
       Caption: '-2',
       TimeSpan: '1.00:00:00',
       Name: '4 h - 1 d',
       isVisible: true,
-      ReplacementCaption: '1'
-    },*/
+      ReplacementCaption: '1',
+      isTopRow: true
+    },
     { Caption: '2', TimeSpan: '2.00:00:00', Name: '2 d', isVisible: false },
     { Caption: '3', TimeSpan: '3.00:00:00', Name: '3 d', isVisible: true },
     { Caption: '7', TimeSpan: '7.00:00:00', Name: '7 d', isVisible: true },
-    /*
-     {
+    {
       Caption: '-3',
       TimeSpan: '7.00:00:00',
       Name: '9 h - 7 d',
       isVisible: true,
-      ReplacementCaption: '7'
-    },*/
+      ReplacementCaption: '7',
+      isTopRow: true
+    },
     { Caption: '14', TimeSpan: '14.00:00:00', Name: '14 d', isVisible: false },
     { Caption: '30', TimeSpan: '30.00:00:00', Name: '30 d', isVisible: true },
     { Caption: '45', TimeSpan: '45.00:00:00', Name: '45 d', isVisible: false },
@@ -136,7 +139,7 @@ export class DatafeedPage {
     this.initKnownIntervals();
     this.selectedInterval = _.find(
       this.knownIntervals,
-      x => x.TimeSpan == '04:00:00'
+      x => x.Caption == '0.4'
     );
   }
 
@@ -201,7 +204,7 @@ export class DatafeedPage {
     this.slider.slideTo(index);
   }*/
   private showMoreTimeImp() {
-    for (let ki of this.knownIntervals) {
+    for (let ki of this.buttomRowIntervals) {
       let dki = _.find(
         this.defaultKnownIntervals,
         x => x.TimeSpan == ki.TimeSpan
@@ -211,7 +214,7 @@ export class DatafeedPage {
         ki.isVisible = true;
       } else {
         ki.isVisible = this.showmmmoretimeblock == false ? dki.isVisible : true;
-        ki.isVisible = ki.isVisible;
+        ki.isVisible = ki.isVisible || ki == this.selectedInterval;
       }
     }
   }
@@ -427,6 +430,8 @@ export class DatafeedPage {
 
   private initKnownIntervals() {
     this.knownIntervals = _.cloneDeep(this.defaultKnownIntervals);
+    this.topRowIntervals = _.filter(this.knownIntervals, x => x.isTopRow);
+    this.buttomRowIntervals = _.filter(this.knownIntervals, x => !x.isTopRow);
   }
 
   private startConnection(): Promise<any> {

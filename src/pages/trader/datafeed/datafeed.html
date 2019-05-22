@@ -459,8 +459,8 @@
 
 
     <div class="topblocknew" [ngClass]="{'topblocknew-opened': showmmmoretimeblock }">
-      <ul class="linksnew">
-        <ng-container *ngFor="let d of knownIntervals">
+      <ul *ngIf="showChart" class="linksnew">
+        <ng-container *ngFor="let d of topRowIntervals">
           <li
             *ngIf=" d.isVisible"
             [ngClass]="{ activelink: d == selectedInterval }"
@@ -469,6 +469,16 @@
           </li></ng-container
         >
       </ul> 
+      <ul class="linksnew">
+          <ng-container *ngFor="let d of buttomRowIntervals">
+            <li
+              *ngIf=" d.isVisible"
+              [ngClass]="{ activelink: d == selectedInterval }"
+            >
+              <a (click)="selectInterval(d)">{{ d.Name}}</a>
+            </li></ng-container
+          >
+        </ul> 
       <span (click)="showMoreTime()" class="showmorenewclass">      
         <ion-icon  *ngIf="!showmmmoretimeblock" name="more"></ion-icon>
         <ion-icon  *ngIf="showmmmoretimeblock" name="arrow-up"></ion-icon>       
