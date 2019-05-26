@@ -14,11 +14,19 @@
     >></ion-tab
   >
 
-  <ion-tab [root]="tab2Root" tabTitle="Trade" tabIcon="custom-trade"></ion-tab>
-  <ion-tab [root]="tab4Root" tabTitle="News" tabIcon="custom-invest"></ion-tab>
   <ion-tab
-  [root]="bcd4Root"
-    tabTitle="Shop"
+    [root]="tab2Root"
+    tabTitle="{{'Trade'|translate}}"
+    tabIcon="custom-trade"
+  ></ion-tab>
+  <ion-tab
+    [root]="tab4Root"
+    tabTitle="{{'News'|translate}}"
+    tabIcon="custom-invest"
+  ></ion-tab>
+  <ion-tab
+    [root]="bcd4Root"
+    tabTitle="{{'Shop'|translate}}"
     tabIcon="custom-shop"
   ></ion-tab>
   <ion-tab
