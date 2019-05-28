@@ -82,7 +82,12 @@ export class DisclaimerPage {
   confirm() {
     this.persistenceProvider.setEmailLawCompliance('accepted');
     this.persistenceProvider.setDisclaimerAccepted();
-    this.navCtrl.setRoot(TabsPage);
-    this.navCtrl.popToRoot({ animate: false });
+    this.navCtrl
+      .setRoot(TabsPage)
+      .then(() =>
+        this.navCtrl
+          .popToRoot({ animate: false })
+          .then(this.navCtrl.getActiveChildNav().select(1))
+      );
   }
 }

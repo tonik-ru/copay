@@ -43,7 +43,7 @@ export class TabNews {
   private showLoadMore: boolean = false;
   private isLoading: boolean = false;
   private category_id: number = 0;
-  private cat_name_title: string = '';
+  public cat_name_title: string = '';
   private sort: string = '0';
   searchQuery: string = '';
   fabToHide;

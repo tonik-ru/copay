@@ -7,6 +7,7 @@ export class Profile {
   public checked;
   public checkedUA?;
   public dirty: boolean;
+  public defaultWalletCreated: boolean;
 
   constructor() {
     this.version = '1.0.0';
@@ -32,6 +33,7 @@ export class Profile {
     x.onboardingCompleted = obj.onboardingCompleted;
     x.checked = obj.checked || {};
     x.checkedUA = obj.checkedUA || {};
+    x.defaultWalletCreated = obj.defaultWalletCreated;
 
     if (x.credentials[0] && typeof x.credentials[0] != 'object')
       throw new Error('credentials should be an object');

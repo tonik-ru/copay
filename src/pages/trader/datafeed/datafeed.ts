@@ -115,7 +115,7 @@ export class DatafeedPage {
   // private connectedPair = {};
 
   public showmmmoretimeblock: boolean = false;
-  public showChart: boolean = false;
+  public showChart: boolean = true;
   public showmmmoretimeblockfeb: boolean = false;
   public isTop20: boolean = false;
 
@@ -137,10 +137,7 @@ export class DatafeedPage {
     /*this.showlook = '0';*/
     this.myPair = {};
     this.initKnownIntervals();
-    this.selectedInterval = _.find(
-      this.knownIntervals,
-      x => x.Caption == '0.4'
-    );
+    this.selectedInterval = _.find(this.knownIntervals, x => x.Caption == '-2');
   }
 
   public onClickCancel() {
@@ -303,6 +300,7 @@ export class DatafeedPage {
 
     var data = tickData;
 
+    if (!data.ResistanceTick) return;
     var resLevelsTouchDates =
       data.ResistanceTick && data.ResistanceTick.LevelTouchTimes;
     // if (resLevelsTouchDates)
@@ -407,12 +405,13 @@ export class DatafeedPage {
 
       rdi.Data[ks].IsPriceInRange =
         sign == 1
-          ? lastTradePrice <= rdi.Data[ks].FullValue &&
+          ? (lastTradePrice <= rdi.Data[ks].FullValue || k >= 7) &&
             rdi.Data[ks].FullValue > 0
-          : lastTradePrice >= rdi.Data[ks].FullValue &&
+          : (lastTradePrice >= rdi.Data[ks].FullValue || k >= 7) &&
             rdi.Data[ks].FullValue > 0;
 
       rdi.Data[ks].IsCurrent = false;
+      lastTradePrice <= (rdi.Data[ks].FullValue || k >= 7);
       if (
         rdi.PositionPercent &&
         (rdi.Data[ks].IsPriceInRange || k == 7) &&
@@ -545,7 +544,7 @@ export class DatafeedPage {
 
     var values = data.Values;
     var hits = data.Hits;
-    var lastTradePrice = this.priceTick.lastTradePrice;
+    // var lastTradePrice = this.priceTick.lastTradePrice;
 
     for (var i = 0; i < this.knownIntervals.length; i++) {
       var rdi = rd[i];
@@ -571,14 +570,14 @@ export class DatafeedPage {
 
         rdi.Data[k.toString()] = {
           Value: FormatUtils.formatPrice(values[keyPositive], this.decimals),
-          FullValue: values[keyPositive],
-          IsPriceInRange: lastTradePrice <= values[keyPositive] || k == 7
+          FullValue: values[keyPositive]
+          // IsPriceInRange: lastTradePrice <= values[keyPositive] || k == 7
         };
 
         rdi.Data[(-k).toString()] = {
           Value: FormatUtils.formatPrice(values[keyNegative], this.decimals),
-          FullValue: values[keyNegative],
-          IsPriceInRange: lastTradePrice >= values[keyNegative] || k == 7
+          FullValue: values[keyNegative]
+          // IsPriceInRange: lastTradePrice >= values[keyNegative] || k == 7
         };
 
         if (k > 1) {

@@ -457,9 +457,7 @@
         
       </div>
 
-
-    <div class="topblocknew" [ngClass]="{'topblocknew-opened': showmmmoretimeblock }">
-      <ul *ngIf="showChart" class="linksnew">
+    <ul *ngIf="showChart" class="linksnew toprows">
         <ng-container *ngFor="let d of topRowIntervals">
           <li
             *ngIf=" d.isVisible"
@@ -469,6 +467,9 @@
           </li></ng-container
         >
       </ul> 
+
+    <div class="topblocknew" [ngClass]="{'topblocknew-opened': showmmmoretimeblock }">
+      
       <ul class="linksnew">
           <ng-container *ngFor="let d of buttomRowIntervals">
             <li
@@ -520,7 +521,7 @@
              
             </tr>
             <ng-container *ngFor="let k of positiveKeys">
-             <tr *ngIf="!d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+              <tr *ngIf="!d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
                 <td>x{{ d.Data[k].Hits }}</td>
                 <td><p>${{ d.Data[k].Value }}</p></td>
                 <td><span></span></td>

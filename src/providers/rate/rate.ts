@@ -71,7 +71,7 @@ export class RateProvider {
         .then(dataBCD => {
           for (var code in this.rates) {
             this.ratesBCD[code] = this.rates[code] * dataBCD.rate;
-          };
+          }
           this.ratesBCD['bcd'] = 1;
           this.ratesBcdAvailable = true;
           resolve();
@@ -128,6 +128,14 @@ export class RateProvider {
     if (chain == 'bch') return this.ratesBCH[code];
     if (chain == 'bcd') return this.ratesBCD[code];
     else return this.rates[code];
+  }
+
+  public getUsdRate(code: string): number {
+    if (!this.isBtcAvailable()) return 0;
+    let btcToCodeRate = this.rates[code];
+    let btcUsdRate = this.rates['USD'];
+    if (btcToCodeRate == 0 || btcUsdRate == 0) return 0;
+    return btcToCodeRate / btcUsdRate;
   }
 
   public getAlternatives() {

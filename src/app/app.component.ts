@@ -154,8 +154,8 @@ export class CopayApp {
       .then(() => {
         this.app.viewDidEnter.subscribe(view => {
           let title = view._nav.tabTitle;
-          if (view._ionCntRef)
-            title = view._ionCntRef.nativeElement.offsetParent.localName;
+          if (view._ionCntRef && view._ionCntRef.nativeElement.parentNode)
+            title = view._ionCntRef.nativeElement.parentNode.localName;
           this.logger.log('app viewDidEnter ' + title);
           this.ga.trackView(title);
         });
@@ -228,6 +228,7 @@ export class CopayApp {
     this.registerIntegrations();
     this.incomingDataRedirEvent();
     this.scanFromWalletEvent();
+    this.events.subscribe('InitWallets', () => this.initWallets());
     this.events.subscribe('OpenWallet', wallet => this.openWallet(wallet));
     // Check Profile
     this.profile
@@ -237,10 +238,10 @@ export class CopayApp {
       })
       .catch((err: Error) => {
         this.logger.warn('LoadAndBindProfile', err.message);
-        this.rootPage =
-          err.message == 'ONBOARDINGNONCOMPLETED: Onboarding non completed'
-            ? OnboardingPage
-            : DisclaimerPage;
+        this.rootPage = TabsPage;
+        // err.message == 'ONBOARDINGNONCOMPLETED: Onboarding non completed'
+        //   ? OnboardingPage
+        //   : DisclaimerPage;
       });
   }
 
@@ -251,7 +252,7 @@ export class CopayApp {
     if (profile) {
       this.logger.info('Profile exists.');
 
-      this.rootPage = TabsPage;
+      if (!this.rootPage) this.rootPage = TabsPage;
 
       if (this.platform.is('cordova')) {
         this.handleDeepLinks();
@@ -263,8 +264,24 @@ export class CopayApp {
     } else {
       this.logger.info('No profile exists.');
       this.profile.createProfile();
-      this.rootPage = OnboardingPage;
+      // this.rootPage = OnboardingPage;
+      this.rootPage = TabsPage;
     }
+  }
+
+  public validateIfOnboardingCompleted() {
+    this.profile
+      .loadAndBindProfile()
+      .then(profile => {
+        this.onProfileLoad(profile);
+      })
+      .catch((err: Error) => {
+        this.logger.warn('LoadAndBindProfile', err.message);
+        this.rootPage = DisclaimerPage;
+        // err.message == 'ONBOARDINGNONCOMPLETED: Onboarding non completed'
+        //   ? OnboardingPage
+        //   : DisclaimerPage;
+      });
   }
 
   private openLockModal(): void {
@@ -478,5 +495,9 @@ export class CopayApp {
 
   private getGlobalTabs() {
     return this.nav.getActiveChildNavs()[0].viewCtrl.instance.tabs;
+  }
+
+  private initWallets() {
+    this.validateIfOnboardingCompleted();
   }
 }

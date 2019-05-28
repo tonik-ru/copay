@@ -27,11 +27,17 @@ import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { HomeIntegrationsProvider } from '../../providers/home-integrations/home-integrations';
 import { IncomingDataProvider } from '../../providers/incoming-data/incoming-data';
 import { Logger } from '../../providers/logger/logger';
+import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
 import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { PopupProvider } from '../../providers/popup/popup';
 import { ProfileProvider } from '../../providers/profile/profile';
-import { Coin, WalletProvider } from '../../providers/wallet/wallet';
+import { PushNotificationsProvider } from '../../providers/push-notifications/push-notifications';
+import {
+  Coin,
+  WalletOptions,
+  WalletProvider
+} from '../../providers/wallet/wallet';
 import { SettingsPage } from '../settings/settings';
 
 import { TopcoinsPage } from '../trader/topcoins/topcoins';
@@ -107,7 +113,9 @@ export class HomePage {
     private clipboardProvider: ClipboardProvider,
     private incomingDataProvider: IncomingDataProvider,
     private bwcProvider: BwcProvider,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private onGoingProcessProvider: OnGoingProcessProvider,
+    private pushNotificationsProvider: PushNotificationsProvider
   ) {
     this.status = this.navParams.data.status;
     this.slideDown = false;
@@ -137,6 +145,7 @@ export class HomePage {
   }
 
   private _willEnter() {
+    this.events.publish('InitWallets');
     // Update list of wallets, status and TXPs
     this.setWallets();
 
@@ -147,38 +156,50 @@ export class HomePage {
   }
 
   private _didEnter() {
-    this.checkClipboard();
+    this.profileProvider
+      .isDisclaimerAccepted()
+      .then(() => {
+        if (!this.profileProvider.profile.defaultWalletCreated) {
+          this.createWallets();
+        }
 
-    // Show integrations
-    const integrations = _.filter(this.homeIntegrationsProvider.get(), {
-      show: true
-    }).filter(i => i.name !== 'giftcards' && i.name !== 'debitcard');
+        this.checkClipboard();
 
-    this.showGiftCards = this.homeIntegrationsProvider.shouldShowInHome(
-      'giftcards'
-    );
+        // Show integrations
+        const integrations = _.filter(this.homeIntegrationsProvider.get(), {
+          show: true
+        }).filter(i => i.name !== 'giftcards' && i.name !== 'debitcard');
 
-    this.showBitpayCardGetStarted = this.homeIntegrationsProvider.shouldShowInHome(
-      'debitcard'
-    );
+        this.showGiftCards = this.homeIntegrationsProvider.shouldShowInHome(
+          'giftcards'
+        );
 
-    // Hide BitPay if linked
-    setTimeout(() => {
-      this.homeIntegrations = _.remove(_.clone(integrations), x => {
-        if (x.name == 'debitcard' && x.linked) return;
-        else return x;
+        this.showBitpayCardGetStarted = this.homeIntegrationsProvider.shouldShowInHome(
+          'debitcard'
+        );
+
+        // Hide BitPay if linked
+        setTimeout(() => {
+          this.homeIntegrations = _.remove(_.clone(integrations), x => {
+            if (x.name == 'debitcard' && x.linked) return;
+            else return x;
+          });
+        }, 200);
+
+        // Only BitPay Wallet
+        this.bitPayCardProvider.get({}, (_, cards) => {
+          this.zone.run(() => {
+            this.showBitPayCard = this.appProvider.info._enabledExtensions
+              .debitcard
+              ? true
+              : false;
+            this.bitpayCardItems = cards;
+          });
+        });
+      })
+      .catch(() => {
+        this.logger.log('terms not accepted yet');
       });
-    }, 200);
-
-    // Only BitPay Wallet
-    this.bitPayCardProvider.get({}, (_, cards) => {
-      this.zone.run(() => {
-        this.showBitPayCard = this.appProvider.info._enabledExtensions.debitcard
-          ? true
-          : false;
-        this.bitpayCardItems = cards;
-      });
-    });
   }
 
   ionViewDidLoad() {
@@ -818,5 +839,69 @@ export class HomePage {
     } else {
       return 'no balance';
     }
+  }
+
+  private createWallets() {
+    let promise: Promise<boolean> = Promise.resolve(true);
+    if (this.profileProvider.getWallets({ coin: Coin.BCD }).length == 0)
+      promise = promise.then(() => {
+        const optsBCD: Partial<WalletOptions> = {
+          coin: Coin.BCD,
+          m: 1,
+          n: 1,
+          networkName: 'livenet',
+          singleAddress: false,
+          silent: true
+        };
+        return this.create(optsBCD);
+      });
+    if (this.profileProvider.getWallets({ coin: Coin.BTC }).length == 0)
+      promise = promise.then(() => {
+        const optsBTC: Partial<WalletOptions> = {
+          coin: Coin.BTC,
+          m: 1,
+          n: 1,
+          networkName: 'livenet',
+          singleAddress: false,
+          silent: true
+        };
+        return this.create(optsBTC);
+      });
+    promise.then(() => {
+      if (this.profileProvider.getWallets().length > 0)
+        this.profileProvider.setDefaultWalletCreated();
+    });
+  }
+
+  private create(opts): Promise<any> {
+    this.onGoingProcessProvider.set('creatingWallet');
+    const promise = this.profileProvider.createNewSeedWallet(opts);
+    let ret = promise
+      .then(wallet => {
+        this.onGoingProcessProvider.clear();
+        this.events.publish('status:updated');
+        this.walletProvider.updateRemotePreferences(wallet);
+        this.pushNotificationsProvider.updateSubscription(wallet);
+        // this.setBackupFlagIfNeeded(wallet.credentials.walletId);
+        // this.setFingerprintIfNeeded(wallet.credentials.walletId);
+        // this.navCtrl.popToRoot();
+        // this.events.publish('OpenWallet', wallet);
+        return true;
+      })
+      .catch(err => {
+        this.onGoingProcessProvider.clear();
+        if (
+          err &&
+          err.message != 'FINGERPRINT_CANCELLED' &&
+          err.message != 'PASSWORD_CANCELLED'
+        ) {
+          this.logger.error('Create: could not create wallet', err);
+          const title = this.translate.instant('Error');
+          err = this.bwcErrorProvider.msg(err);
+          this.popupProvider.ionicAlert(title, err);
+        }
+        return false;
+      });
+    return ret;
   }
 }

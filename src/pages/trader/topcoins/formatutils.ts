@@ -9,7 +9,7 @@ export class FormatUtils {
 
   static formatPrice(val: number, decimals: number = 2) {
     var v2 = val;
-    if (val > 100000) {
+    if (val > 100000000) {
       v2 = val / 1000000;
       decimals = 0;
     }

@@ -278,6 +278,22 @@ export class PersistenceProvider {
     return this.storage.get(Keys.LAST_CURRENCY_USED);
   }
 
+  setLastTopCoinsCurrencyUsed(lastCurrencyUsed) {
+    return this.storage.set('topCoinsCurrency', lastCurrencyUsed);
+  }
+
+  getLastTopCoinsCurrencyUsed() {
+    return this.storage.get('topCoinsCurrency');
+  }
+
+  setLastTopCoinsCurrencyList(lastCurrencyUsed) {
+    return this.storage.set('topCoinsCurrencyList', lastCurrencyUsed);
+  }
+
+  getLastTopCoinsCurrencyList() {
+    return this.storage.get('topCoinsCurrencyList');
+  }
+
   checkQuota() {
     let block = '';
     // 50MB
@@ -552,7 +568,7 @@ export class PersistenceProvider {
     return this.storage.get('ga:clientId');
   }
 
-  getNewsLastDate(){
+  getNewsLastDate() {
     return this.storage.get('newsLastDate');
   }
   setNewsLastDate(value: Date) {

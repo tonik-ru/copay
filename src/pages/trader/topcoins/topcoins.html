@@ -33,7 +33,7 @@
   </ion-refresher>
   
       <ion-row>
-        <ion-col col-7 class="searchbtn1">
+        <ion-col col-5 class="searchbtn1">
           <ion-searchbar
             [(ngModel)]="filter"
             (ionInput)="getTopics($event)"
@@ -43,8 +43,16 @@
           >
           </ion-searchbar
         ></ion-col>
-
+        
         <ion-col col-5 class="searchbtn1">
+            <ion-item>
+              <ion-select [(ngModel)]="selectedCurrency" (ionChange)="selectCurrency(1)" placeholder="Currency" title="Currency">
+                <ion-option *ngFor="let cur of altCurrencyList" [value]="cur">{{ cur.name }}</ion-option>
+              </ion-select></ion-item
+            >
+          </ion-col>
+
+        <ion-col col-2 class="searchbtn1">
           <ion-item>
             <ion-label class="labelexchange" style="display:none"
               >{{'Select Exchange' | translate}}</ion-label
@@ -83,12 +91,12 @@
               <span>{{ p.Symbol }}</span>
             </li>
             <li>
-              <span class="market-coinprice" *ngIf="p.PriceUSD > 100000">
+              <span class="market-coinprice" *ngIf="p.Symbol == 'TOP20'">
                 ${{ p.PriceUSDFormatted }}B
               </span>
 
-              <span class="market-coinprice" *ngIf="p.PriceUSD < 100000">
-                ${{ p.PriceUSDFormatted }}</span
+              <span class="market-coinprice" *ngIf="p.Symbol != 'TOP20'">
+                {{ currencySymbol }}{{ p.PriceFormatted }}</span
               >
             </li>
             <li>

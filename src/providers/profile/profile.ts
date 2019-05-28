@@ -606,7 +606,7 @@ export class ProfileProvider {
 
   private askToEncryptWallets(walletsArray: any[]): Promise<any> {
     return new Promise(resolve => {
-      const canSign = this.checkIfCanSign(walletsArray);
+      let canSign = this.checkIfCanSign(walletsArray);
       if (!canSign) return resolve();
 
       const title = this.translate.instant(
@@ -688,7 +688,11 @@ export class ProfileProvider {
   private addAndBindNewSeedWalletClient(wallet, opts): Promise<any> {
     // Encrypt wallet
     this.onGoingProcessProvider.pause();
-    return this.askToEncryptWallets([].concat(wallet)).then(() => {
+    let p =
+      opts && opts.silent == true
+        ? Promise.resolve(true)
+        : this.askToEncryptWallets([].concat(wallet));
+    return p.then(() => {
       this.onGoingProcessProvider.resume();
       return this.addAndBindWalletClient(wallet, opts);
     });
@@ -1192,7 +1196,12 @@ export class ProfileProvider {
       setTimeout(() => {
         this.seedWallet(opts)
           .then(walletClient => {
-            const coin = opts.coin == 'btc' ? '[BTC]' : '[BCH]';
+            const coin =
+              opts.coin == 'bcd'
+                ? '[BCD]'
+                : opts.coin == 'btc'
+                ? '[BTC]'
+                : '[BCH]';
             const name =
               opts.name ||
               `${this.translate.instant('Personal Wallet')} ${coin}`;
@@ -1382,7 +1391,8 @@ export class ProfileProvider {
   public createNewSeedWallet(opts): Promise<any> {
     return this.createWallet(opts).then(walletClient => {
       return this.addAndBindNewSeedWalletClient(walletClient, {
-        bwsurl: opts.bwsurl
+        bwsurl: opts.bwsurl,
+        silent: opts.silent
       });
     });
   }
@@ -1424,6 +1434,20 @@ export class ProfileProvider {
   public setOnboardingCompleted(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.profile.onboardingCompleted = true;
+      this.persistenceProvider
+        .storeProfile(this.profile)
+        .then(() => {
+          return resolve();
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    });
+  }
+
+  public setDefaultWalletCreated(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.profile.defaultWalletCreated = true;
       this.persistenceProvider
         .storeProfile(this.profile)
         .then(() => {
