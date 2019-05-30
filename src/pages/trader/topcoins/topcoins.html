@@ -33,18 +33,18 @@
   </ion-refresher>
   
       <ion-row>
-        <ion-col col-5 class="searchbtn1">
+        <ion-col col-4 class="searchbtn1">
           <ion-searchbar
             [(ngModel)]="filter"
             (ionInput)="getTopics($event)"
             [showCancelButton]="false"
-            placeholder="{{'Search Symbol' | translate }}"
+            placeholder="{{'Symbol' | translate }}"
             id="stay-cancel"
           >
           </ion-searchbar
         ></ion-col>
         
-        <ion-col col-5 class="searchbtn1">
+        <ion-col col-4 class="searchbtn1">
             <ion-item>
               <ion-select [(ngModel)]="selectedCurrency" (ionChange)="selectCurrency(1)" placeholder="Currency" title="Currency">
                 <ion-option *ngFor="let cur of altCurrencyList" [value]="cur">{{ cur.name }}</ion-option>
@@ -52,7 +52,7 @@
             >
           </ion-col>
 
-        <ion-col col-2 class="searchbtn1">
+        <ion-col col-4 class="searchbtn1">
           <ion-item>
             <ion-label class="labelexchange" style="display:none"
               >{{'Select Exchange' | translate}}</ion-label

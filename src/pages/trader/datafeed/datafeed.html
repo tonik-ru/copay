@@ -521,64 +521,53 @@
              
             </tr>
             <ng-container *ngFor="let k of positiveKeys">
+              <tr class="recent" *ngIf="d.Data[k].IsPriceInRange && d.Data[k].IsCurrent">
+                <td>x{{ d.Data[k].Hits }}</td>
+                <td><p>${{ d.Data[k].Value }}</p></td>
+                <td><span></span></td>
+                <td><span ></span></td>
+                <td>{{ d.Data[k].Age }}</td>
+              </tr>
+              <tr class="currentfib" *ngIf="d.Data[k].IsCurrent">
+                <td></td>
+                <td><p id="febcur">${{priceTick.lastTradePriceFormatted}}<i id="febcurar" class="fas fa-arrow-up"  style="transition: 0.5s ease"></i></p></td>
+                <td><span id="swing">{{ d.AvgIntData.Current | number: '1.2-2' }}</span></td>
+                <td><p id="febcurproc">{{ d.PositionPercent | number: '1.0-0' }}% </p></td>
+                <td></td>
+              </tr>
               <tr *ngIf="!d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
                 <td>x{{ d.Data[k].Hits }}</td>
                 <td><p>${{ d.Data[k].Value }}</p></td>
                 <td><span></span></td>
                 <td><span ></span></td>
                 <td>{{ d.Data[k].Age }}</td>
-             </tr>
-            
-            
-              
-              <tr class="recent" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+              </tr>  
+            </ng-container>
+
+
+            <ng-container *ngFor="let k of negativeKeys">
+              <tr *ngIf="!d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
                   <td>x{{ d.Data[k].Hits }}</td>
                   <td><p>${{ d.Data[k].Value }}</p></td>
                   <td><span></span></td>
                   <td><span ></span></td>
                   <td>{{ d.Data[k].Age }}</td>
-              </tr>
-              <tr class="currentfib" *ngIf="d.Data[k].IsCurrent">
+                </tr>
+                <tr class="currentfib" *ngIf="d.Data[k].IsCurrent">
                   <td></td>
                   <td><p id="febcur">${{priceTick.lastTradePriceFormatted}}<i id="febcurar" class="fas fa-arrow-up"  style="transition: 0.5s ease"></i></p></td>
                   <td><span id="swing">{{ d.AvgIntData.Current | number: '1.2-2' }}</span></td>
                   <td><p id="febcurproc">{{ d.PositionPercent | number: '1.0-0' }}% </p></td>
                   <td></td>
                 </tr> 
-            </ng-container>
-            
-            
-          
-               
-                  <ng-container
-                  *ngFor="let k of negativeKeys"
-                 
-                >
-                <tr *ngIf="!d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
+                <tr class="recent" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
                     <td>x{{ d.Data[k].Hits }}</td>
                     <td><p>${{ d.Data[k].Value }}</p></td>
                     <td><span></span></td>
                     <td><span ></span></td>
                     <td>{{ d.Data[k].Age }}</td>
-                 </tr>
-                
-                
-                 <tr class="currentfib" *ngIf="d.Data[k].IsCurrent">
-                    <td></td>
-                    <td><p id="febcur">${{priceTick.lastTradePriceFormatted}}<i id="febcurar" class="fas fa-arrow-up"  style="transition: 0.5s ease"></i></p></td>
-                    <td><span id="swing">{{ d.AvgIntData.Current | number: '1.2-2' }}</span></td>
-                    <td><p id="febcurproc">{{ d.PositionPercent | number: '1.0-0' }}% </p></td>
-                    <td></td>
-                  </tr> 
-                  <tr class="recent" *ngIf="d.Data[k].IsCurrent && d.Data[k].IsPriceInRange">
-                      <td>x{{ d.Data[k].Hits }}</td>
-                      <td><p>${{ d.Data[k].Value }}</p></td>
-                      <td><span></span></td>
-                      <td><span ></span></td>
-                      <td>{{ d.Data[k].Age }}</td>
-                  </tr>
-                   
-                </ng-container>
+                </tr>
+              </ng-container>
           </tbody>
         </table>
       </div>
