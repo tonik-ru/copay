@@ -123,6 +123,7 @@ import { UserstatsPage } from '../pages/trader/userstats/userstats';
 import { FullpostPage } from './news/fullpost/fullpost';
 import { NewsmenuPage } from './news/newsmenu/newsmenu';
 import { NewssearchPage } from './news/newssearch/newssearch';
+import { LiveChatPage } from './settings/live-chat/live-chat';
 
 export const PAGES = [
   AddPage,
@@ -219,5 +220,6 @@ export const PAGES = [
   NewsmenuPage,
   NewssearchPage,
   TabNews,
-  TabBcdbazaar
+  TabBcdbazaar,
+  LiveChatPage
 ];

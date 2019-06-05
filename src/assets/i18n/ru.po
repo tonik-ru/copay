@@ -2750,3 +2750,9 @@ msgstr "Биткон комиссия"
 
 msgid  "Need backup"
 msgstr "Нуждается в резервном копировании"
+
+msgid "Help"
+msgstr "Помощь"
+
+msgid "Live Chat"
+msgstr "Онлайн Чат"

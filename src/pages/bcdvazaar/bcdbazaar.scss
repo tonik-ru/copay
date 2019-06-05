@@ -1,5 +1,5 @@
 page-bcdbazaar {
-  .scroll-content{overflow: hidden!important;}
+  .scroll-content{overflow-y: auto!important; -webkit-overflow-scrolling:touch}
   ion-header.header.header-ios,
   ion-header.header.header-md {
     background: -webkit-gradient(

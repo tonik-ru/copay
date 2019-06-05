@@ -58,6 +58,9 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { ApiProvider } from '../providers/api/api';
 import { LanguageLoader } from '../providers/language-loader/language-loader';
 import { ProvidersModule } from '../providers/providers.module';
+
+import { IonicStorageModule } from '@ionic/storage';
+
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
 }
@@ -127,7 +130,8 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         useClass: LanguageLoader
       }
     }),
-    ZXingScannerModule.forRoot()
+    ZXingScannerModule.forRoot(),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -2668,4 +2668,8 @@ msgstr "選擇Exchange"
 msgid  "no balance"
 msgstr "沒有平衡”
 
+msgid "Help"
+msgstr "幫助"
 
+msgid "Live Chat"
+msgstr "在線聊天"

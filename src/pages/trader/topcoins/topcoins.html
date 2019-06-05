@@ -8,8 +8,8 @@
   <ion-navbar>
     <ion-title
       ><img
-        src="assets/sell-title.svg"
-        style="margin-right: 10px; margin-bottom: -3px;width:19px"
+        src="assets/tab-icons/trade-title.svg"
+        style="margin-right: 10px; margin-bottom: -3px;width:19px; "
       />{{ 'Trade' | translate }}</ion-title
     >
   </ion-navbar>
@@ -79,10 +79,10 @@
           <span class="num-market">{{ p.Position }}.</span>
           <div class="market-coinlogoblock">
             <span class="market-coinlogo">
-              <img
+              <img 
                 class="clogo-market"
-                src="assets/logoscoinss/{{p.Symbol}}.png"
-              />
+                [src]="'assets/logoscoinss/'+p.Symbol+'.png'"  onError="this.src=''"
+                />
             </span>
           </div>
 

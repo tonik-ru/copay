@@ -9,7 +9,7 @@
     -->
     <ion-title
       ><img
-        src="assets/invest-title.svg"
+        src="assets/tab-icons/news-title.svg"
         style="margin-right: 10px; margin-bottom: -3px"
       />{{ cat_name_title }}</ion-title
     >
@@ -124,9 +124,10 @@
     >
     <img src="assets/img/coming-soon1.png" class="commingsoonimg" />
   -->
+  <ion-fab id="scan-button" right bottom #fab>
+    <button ion-fab color="primary" (click)="pageScroller()">
+      <ion-icon name="arrow-up"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>
-<ion-fab id="scan-button" right bottom #fab>
-  <button ion-fab color="primary" (click)="pageScroller()">
-    <ion-icon name="arrow-up"></ion-icon>
-  </button>
-</ion-fab>
+

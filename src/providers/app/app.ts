@@ -10,6 +10,8 @@ import { Logger } from '../../providers/logger/logger';
 import { PersistenceProvider } from '../../providers/persistence/persistence';
 import { PlatformProvider } from '../platform/platform';
 
+import { Storage } from '@ionic/storage';
+
 /* TODO: implement interface properly
 interface App {
   packageName: string;
@@ -50,6 +52,7 @@ export class AppProvider {
   public isLockModalOpen: boolean;
   private jsonPathApp: string = 'assets/appConfig.json';
   private jsonPathServices: string = 'assets/externalServices.json';
+  public activeTheme: string = 'theme-dark';
 
   constructor(
     public http: HttpClient,
@@ -58,9 +61,13 @@ export class AppProvider {
     public config: ConfigProvider,
     private persistence: PersistenceProvider,
     private file: File,
-    private platformProvider: PlatformProvider
+    private platformProvider: PlatformProvider,
+    private storage: Storage
   ) {
     this.logger.debug('AppProvider initialized');
+   this.storage.get('activeTheme').then(val => {
+      this.activeTheme = val;
+     });
   }
 
   public async load() {
@@ -104,5 +111,8 @@ export class AppProvider {
     } else {
       return this.http.get(this.jsonPathServices).toPromise();
     }
+  }
+  saveStting() {
+    this.storage.set('activeTheme', this.activeTheme);
   }
 }

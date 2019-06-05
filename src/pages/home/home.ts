@@ -763,6 +763,11 @@ export class HomePage {
     }, 2000);
   }
 
+  public doRefreshButton(): void {
+    this.debounceSetWallets();
+   
+  }
+
   public scan(): void {
     this.navCtrl.push(ScanPage);
   }
@@ -829,15 +834,15 @@ export class HomePage {
         });
 
         if (!isocode) {
-          return 'no balance';
+          return 'none';
         } else {
           return profit.toFixed(2) + ' ' + isocode;
         }
       } else {
-        return 'no balance';
+        return 'none';
       }
     } else {
-      return 'no balance';
+      return 'none';
     }
   }
 

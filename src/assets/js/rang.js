@@ -481,20 +481,20 @@ function startgraph(e) {
       if ((znachenie3 >= -1000) & (znachenie3 <= -60)) {
         iconchimp.setAttribute('fill', 'url(#angry)');
 
-        rangecol1.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol5.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol2.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol6.style.fill = 'rgba(255,255,255,0.2)';
+        rangecol1.style.fill = '#CCC';
+        rangecol5.style.fill = '#CCC';
+        rangecol2.style.fill = '#CCC';
+        rangecol6.style.fill = '#CCC';
         rangecol3.style.fill = '#e2446a';
         position.innerHTML = 'VERY BEARISH';
         position.style.color = '#e2446a';
       } else if ((znachenie3 >= -59) & (znachenie3 <= -12)) {
         iconchimp.setAttribute('fill', 'url(#angry)');
 
-        rangecol1.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol3.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol6.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol2.style.fill = 'rgba(255,255,255,0.2)';
+        rangecol1.style.fill = '#CCC';
+        rangecol3.style.fill = '#CCC';
+        rangecol6.style.fill = '#CCC';
+        rangecol2.style.fill = '#CCC';
         rangecol5.style.fill = '#e8a2b3';
         position.innerHTML = 'BEARISH';
         position.style.color = '#e8a2b3';
@@ -502,38 +502,38 @@ function startgraph(e) {
         iconchimp.setAttribute('fill', 'url(#cute');
 
         rangecol1.style.fill = '#FFF';
-        rangecol3.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol5.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol2.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol6.style.fill = 'rgba(255,255,255,0.2)';
+        rangecol3.style.fill = '#CCC';
+        rangecol5.style.fill = '#CCC';
+        rangecol2.style.fill = '#CCC';
+        rangecol6.style.fill = '#CCC';
         position.innerHTML = 'STABLE';
         position.style.color = '#FFF';
       } else if ((znachenie3 >= 11) & (znachenie3 <= 59)) {
         iconchimp.setAttribute('fill', 'url(#surprised)');
 
-        rangecol1.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol3.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol5.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol2.style.fill = 'rgba(255,255,255,0.2)';
+        rangecol1.style.fill = '#CCC';
+        rangecol3.style.fill = '#CCC';
+        rangecol5.style.fill = '#CCC';
+        rangecol2.style.fill = '#CCC';
         rangecol6.style.fill = '#8acf20';
         position.innerHTML = 'BULLISH';
         position.style.color = '#8acf20';
       } else if ((znachenie3 >= 60) & (znachenie3 <= 100)) {
         iconchimp.setAttribute('fill', 'url(#surprised)');
 
-        rangecol1.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol6.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol5.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol3.style.fill = 'rgba(255,255,255,0.2)';
+        rangecol1.style.fill = '#CCC';
+        rangecol6.style.fill = '#CCC';
+        rangecol5.style.fill = '#CCC';
+        rangecol3.style.fill = '#CCC';
         rangecol2.style.fill = '#16ac0c';
         position.innerHTML = 'VERY BULLISH';
         position.style.color = '#16ac0c';
       } else {
         iconchimp.setAttribute('fill', 'url(#pattern0)');
-        rangecol1.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol2.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol5.style.fill = 'rgba(255,255,255,0.2)';
-        rangecol6.style.fill = 'rgba(255,255,255,0.2)';
+        rangecol1.style.fill = '#CCC';
+        rangecol2.style.fill = '#CCC';
+        rangecol5.style.fill = '#CCC';
+        rangecol6.style.fill = '#CCC';
         rangecol2.style.fill = '#16ac0c';
         position.innerHTML = 'VERY BULLISH';
         position.style.color = '#16ac0c';

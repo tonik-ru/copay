@@ -16,6 +16,10 @@ import { RateProvider } from '../../../providers/rate/rate';
 import { PersistenceProvider } from '../../../providers/persistence/persistence';
 
 import * as _ from 'lodash';
+
+
+
+
 /**
  * Generated class for the TopcoinsPage page.
  *
@@ -27,6 +31,8 @@ import * as _ from 'lodash';
   selector: 'page-topcoins',
   templateUrl: 'topcoins.html'
 })
+
+
 export class TopcoinsPage {
   public items = [];
 
@@ -237,4 +243,6 @@ export class TopcoinsPage {
       event.complete();
     });
   }
+
+
 }

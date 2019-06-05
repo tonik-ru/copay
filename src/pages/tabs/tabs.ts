@@ -10,10 +10,12 @@ import { TabBcdbazaar } from '../bcdvazaar/bcdbazaar';
 import { HomePage } from '../home/home';
 import { TabNews } from '../news/news';
 import { ScanPage } from '../scan/scan';
-import { SettingsPage } from '../settings/settings';
+// import { SettingsPage } from '../settings/settings';
 import { DatafeedPage } from '../trader/datafeed/datafeed';
 /*import { Tab4Page } from '../tab4/tab4';*/
 import { TopcoinsPage } from '../trader/topcoins/topcoins';
+
+import { LiveChatPage } from '../settings/live-chat/live-chat';
 
 // import { timer } from 'rxjs/observable/timer';
 
@@ -49,7 +51,7 @@ export class TabsPage {
   homeRoot = HomePage;
   scanRoot = ScanPage;
   tab2Root = TopcoinsPage;
-  tab3Root = SettingsPage;
+  tab3Root = LiveChatPage;
   tab4Root = TabNews;
   datafeed = DatafeedPage;
   bcd4Root = TabBcdbazaar;

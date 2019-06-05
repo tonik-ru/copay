@@ -12,6 +12,7 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
 @font-face {
   font-family: 'Montserrat';
   src: url(../assets/fonts/Montserrat-Regular.ttf) format('truetype');
@@ -571,7 +572,7 @@ ion-icon {
     mask-image: url(../assets/market-icon.svg);
   }
   &[class*='custom-invest'] {
-    mask-image: url(../assets/invest-icon.svg);
+    mask-image: url(../assets/tab-icons/news.svg);
   }
   &[class*='custom-apps'] {
     mask-image: url(../assets/apps-icon.svg);
@@ -580,10 +581,13 @@ ion-icon {
     mask-image: url(../assets/settings-icon.svg);
   }
   &[class*='custom-trade'] {
-    mask-image: url(../assets/sell.svg);
+    mask-image: url(../assets/tab-icons/trade.svg);
   }
   &[class*='custom-shop'] {
-    mask-image: url(../assets/shop.svg);
+    mask-image: url(../assets/tab-icons/shop.svg);
+  }
+  &[class*='custom-help'] {
+    mask-image: url(../assets/tab-icons/help.svg);
   }
 }
 .header-ios .toolbar-ios:last-child .toolbar-background-ios {
@@ -620,4 +624,13 @@ ion-header.header.header-md {
   .alert-ios .alert-radio-group, .alert-ios .alert-checkbox-group{overflow-x: hidden; overflow-y:auto;}
   .alert-ios .alert-message {
     max-height: 300px;
+}
+
+
+
+.theme-dark{
+  .alert-ios .alert-wrapper{
+    background-color: #161b26!important;
+  }
+  .alert-ios .alert-title, .alert-ios .alert-radio-label{color:#FFF;}
 }
