@@ -2756,3 +2756,77 @@ msgstr "Помощь"
 
 msgid "Live Chat"
 msgstr "Онлайн Чат"
+
+msgid "Category"
+msgstr "Категория"
+
+msgid "Shopping Directory"
+msgstr "Каталог Магазинов"
+
+msgid "Automotive"
+msgstr "Автомобили"
+
+msgid "Electronics"
+msgstr "Электроника"
+
+msgid "Grocery"
+msgstr "Бакалея"
+
+msgid "Home Decor"
+msgstr "Декор"
+
+msgid "Jewelry"
+msgstr "Ювелирные изделия"
+
+msgid "Lighting"
+msgstr "Освещение"
+
+msgid "Sports"
+msgstr "Спорт"
+
+msgid "Performance Parts for Japanese Cars"
+msgstr "Автозапчасти для японских автомобилей"
+
+msgid "Performance Parts for Muscle Cars"
+msgstr "Автозапчасти  для Muscle Cars"
+
+msgid "Performance Exhausts for Cars and Bikes"
+msgstr "Автозапчасти для автомобилей и мотоциклов"
+
+msgid "Automotive Safety Lighting"
+msgstr "Аварийное авоомобильное освещение"
+
+msgid "Automotive Car Remotes"
+msgstr "Автомобильные пульты ДУ"
+
+msgid "ATV Replacement Parts"
+msgstr "Запасные части ATV"
+
+msgid "Top Sellers from Amazon"
+msgstr "Лучшие продукция из Amazon"
+
+msgid "Protective Cases for Electronics"
+msgstr "Защитные чехлы для электроники"
+
+msgid "Specialty Coffee"
+msgstr "Магазин кофе"
+
+msgid "Custom Decor for your Home"
+msgstr "Декор на заказ для вашего дома"
+
+msgid "Designer Wallpapers for your Home"
+msgstr "Дизайнерские обои для вашего дома"
+
+msgid "Diamond Engagement Rings"
+msgstr "Кольца с бриллиантами"
+
+msgid "Custom Charm Bracelets "
+msgstr "Браслеты с подвесками на закза"
+
+msgid "Replacement Lights for your Home"
+msgstr "Сменные фонари для вашего дома"
+
+msgid "Re-engineered Baseball Bats"
+msgstr "Модернизированные бейсбольные биты"
+
+

@@ -180,14 +180,21 @@
       <span item-label translate>Memo</span>
     </editable-item>
 
+
+ 
+
   </ion-list>
 
+  <page-slide-to-accept #slideButton *ngIf="isCordova" [ngClass]="{'slide-confirm-fast slide-confirm-down': hideSlideButton, 'slide-confirm-slow': !hideSlideButton}" [disabled]="!wallet || !tx?.txp[wallet.id]" [buttonText]="buttonText" (slideDone)="approve(tx, wallet)" style="margin-top: 20px;"></page-slide-to-accept>
+  <ng-container *ngIf="!isCordova" style="margin-top: 20px;">
+    <button ion-button full class="button-footer" (click)="approve(tx, wallet)" [disabled]="!wallet || !tx.txp[wallet.id]">{{buttonText}}</button>
+  </ng-container>
+  
 
 </ion-content>
-
-<ion-footer>
+<!-- <ion-footer>
   <page-slide-to-accept #slideButton *ngIf="isCordova" [ngClass]="{'slide-confirm-fast slide-confirm-down': hideSlideButton, 'slide-confirm-slow': !hideSlideButton}" [disabled]="!wallet || !tx?.txp[wallet.id]" [buttonText]="buttonText" (slideDone)="approve(tx, wallet)"></page-slide-to-accept>
   <ion-toolbar *ngIf="!isCordova">
     <button ion-button full class="button-footer" (click)="approve(tx, wallet)" [disabled]="!wallet || !tx.txp[wallet.id]">{{buttonText}}</button>
   </ion-toolbar>
-</ion-footer>
+</ion-footer> -->

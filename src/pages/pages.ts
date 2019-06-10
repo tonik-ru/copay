@@ -125,6 +125,8 @@ import { NewsmenuPage } from './news/newsmenu/newsmenu';
 import { NewssearchPage } from './news/newssearch/newssearch';
 import { LiveChatPage } from './settings/live-chat/live-chat';
 
+import { ShopTargetPage } from './bcdvazaar/shop-target/shop-target';
+
 export const PAGES = [
   AddPage,
   AmountPage,
@@ -221,5 +223,6 @@ export const PAGES = [
   NewssearchPage,
   TabNews,
   TabBcdbazaar,
-  LiveChatPage
+  LiveChatPage,
+  ShopTargetPage
 ];
