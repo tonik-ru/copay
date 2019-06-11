@@ -65,10 +65,10 @@ page-topcoins {
 
     transition: 0.5s ease;
     line-height: 18px;
-    width: 35px;
+    width: 40x;
   }
   .market-link:first-of-type .num-market {
-    opacity: 0;
+    opacity: 0; display:none;
   }
   .num-market span,
   ul.market-table li {
