@@ -566,28 +566,28 @@ ion-icon {
   }
 
   &[class*='custom-wallet'] {
-    mask-image: url('/assets/wallet-icon.svg');
+    mask-image: url('../assets/wallet-icon.svg');
   }
   &[class*='custom-market'] {
-    mask-image: ur('/assets/market-icon.svg');
+    mask-image: ur('../assets/market-icon.svg');
   }
   &[class*='custom-invest'] {
-    mask-image: url('/assets/tab-icons/news.svg');
+    mask-image: url('../assets/tab-icons/news.svg');
   }
   &[class*='custom-apps'] {
-    mask-image: url('/assets/apps-icon.svg');
+    mask-image: url('../assets/apps-icon.svg');
   }
   &[class*='custom-settings'] {
-    mask-image: url('/assets/settings-icon.svg');
+    mask-image: url('../assets/settings-icon.svg');
   }
   &[class*='custom-trade'] {
-    mask-image: url('/assets/tab-icons/trade.svg');
+    mask-image: url('../assets/tab-icons/trade.svg');
   }
   &[class*='custom-shop'] {
-    mask-image: url('/assets/tab-icons/shop.svg');
+    mask-image: url('../assets/tab-icons/shop.svg');
   }
   &[class*='custom-help'] {
-    mask-image: url('/assets/tab-icons/help.svg');
+    mask-image: url('../assets/tab-icons/help.svg');
   }
 }
 .header-ios .toolbar-ios:last-child .toolbar-background-ios {

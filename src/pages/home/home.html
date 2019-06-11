@@ -22,7 +22,8 @@
     </ion-title>
     <ion-buttons right class="settings-button" *ngIf="wallets && wallets[0]">
       <button class="modal-close-button" (click)="settings()" ion-button>
-        <ion-icon name="custom-settings"></ion-icon>
+        <ion-icon>
+        <img src="/assets/settings-title.svg"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -89,7 +90,7 @@
       </button>
     -->
 
-    <div class="card clipboard-card" *ngIf="validDataFromClipboard">
+    <!-- <div class="card clipboard-card" *ngIf="validDataFromClipboard">
       <ion-item-divider>
         <div class="title" item-start>
           <img
@@ -120,7 +121,7 @@
         [validDataFromClipboard]="validDataFromClipboard"
         (click)="processClipboardData(validDataFromClipboard.data)"
       ></page-clipboard-card>
-    </div>
+    </div> -->
 
     <div
       [ngClass]="{

@@ -66,7 +66,9 @@ page-home {
     font-weight: 600;
     font-family: Montserrat;
   }
-
+@media screen and (max-width:768px){
+  .balance-block h3, .balance-block h2  { font-size:19px;}
+}
   .header-extend {
     background: #f79421;
     height: 200px;
