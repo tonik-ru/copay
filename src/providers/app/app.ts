@@ -65,12 +65,17 @@ export class AppProvider {
     private storage: Storage
   ) {
     this.logger.debug('AppProvider initialized');
-   this.storage.get('activeTheme').then(val => {
-      this.activeTheme = val;
-     });
+    this.storage.get('activeTheme').then(val => {
+      if (val !== null) {
+        this.activeTheme = val;
+      }
+      
+      this.logger.log('theme - >'+this.activeTheme);
+    });
   }
 
   public async load() {
+    
     await Promise.all([this.getInfo(), this.loadProviders()]);
   }
 
