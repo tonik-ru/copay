@@ -76,8 +76,8 @@
         </button>
   
         <button ion-item *ngIf="isCordova" (click)="openLockPage()">
-          <ion-icon class="custom-icon item-img" *ngIf="lockMethod != 'disabled'" name="ios-lock-outline" item-start></ion-icon>
-          <ion-icon class="custom-icon item-img" *ngIf="lockMethod == 'disabled'" name="ios-unlock-outline" item-start></ion-icon>
+          <ion-icon class="fas fa-fingerprint" *ngIf="lockMethod != 'disabled'" name="ios-lock-outline" item-start></ion-icon>
+          <ion-icon class="fas fa-fingerprint" *ngIf="lockMethod == 'disabled'" name="ios-unlock-outline" item-start></ion-icon>
           <ion-label>
             {{'Lock' | translate}}
           </ion-label>
@@ -191,7 +191,7 @@
           </ion-icon>
           <span translate>About</span> {{appName}}
         </button>
-        <button ion-item (click)="openHelpExternalLink()">
+        <button ion-item (click)="openLiveChat()">
             <ion-icon class="item-img" item-start>
               <img src="assets/img/settings-icons/icon-help-support.svg" width="22">
             </ion-icon>

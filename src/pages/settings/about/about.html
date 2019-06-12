@@ -9,7 +9,7 @@
     <ion-item-divider>{{ 'Release information' | translate }}</ion-item-divider>
     <ion-item>
       <ion-icon
-        class="custom-icon"
+        class="fas fa-code-branch"
         name="ios-download-outline"
         item-start
       ></ion-icon>
@@ -17,12 +17,12 @@
       <ion-note item-end> v{{ version }} </ion-note>
     </ion-item>
     <ion-item class="commit-hash" (click)="openExternalLink()">
-      <ion-icon class="custom-icon" name="logo-github" item-start></ion-icon>
+      <ion-icon class=""  name="logo-github" item-start></ion-icon>
       Commit hash
       <ion-note item-end> #{{ commitHash }} </ion-note>
     </ion-item>
-    <ion-item-divider class="item-without-title"></ion-item-divider>
-    <!--
+   <!-- <ion-item-divider class="item-without-title"></ion-item-divider>
+    
       -<button ion-item (click)="openSendFeedbackPage()">
         <ion-icon class="item-img" item-start>
           <img src="assets/img/settings-icons/icon-send-feedback.svg" width="22">
@@ -33,7 +33,7 @@
     <ion-item-divider class="item-without-title"></ion-item-divider>
     <button ion-item (click)="openPrivacyPolicy()">
       <ion-icon
-        class="custom-icon"
+        class="fas fa-unlock-alt"
         name="ios-lock-outline"
         item-start
       ></ion-icon>
@@ -41,7 +41,7 @@
     </button>
     <button ion-item (click)="openTermsOfUse()">
       <ion-icon
-        class="custom-icon"
+        class="far fa-file-alt"
         name="ios-list-box-outline"
         item-start
       ></ion-icon>
@@ -50,7 +50,7 @@
     <ion-item-divider class="item-without-title"></ion-item-divider>
     <button ion-item (click)="openSessionLog()">
       <ion-icon
-        class="custom-icon"
+        class="fas fa-terminal"
         name="ios-copy-outline"
         item-start
       ></ion-icon>
