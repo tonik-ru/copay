@@ -438,6 +438,7 @@ export class HomePage {
   }
 
   public checkClipboard() {
+/*
     return this.clipboardProvider
       .getData()
       .then(async data => {
@@ -448,6 +449,7 @@ export class HomePage {
         const dataToIgnore = [
           'BitcoinAddress',
           'BitcoinCashAddress',
+          'BitcoinDiamondAddress',
           'PlainUrl'
         ];
         if (dataToIgnore.indexOf(this.validDataFromClipboard.type) > -1) {
@@ -480,6 +482,7 @@ export class HomePage {
       .catch(() => {
         this.logger.warn('Paste from clipboard err');
       });
+      */
   }
 
   public hideClipboardCard() {
@@ -497,6 +500,7 @@ export class HomePage {
     if (this.countDown) clearInterval(this.countDown);
   }
 
+  /*
   private paymentTimeControl(expirationTime): void {
     const setExpirationTime = (): void => {
       const now = Math.floor(Date.now() / 1000);
@@ -517,7 +521,7 @@ export class HomePage {
       setExpirationTime();
     }, 1000);
   }
-
+*/
   private initFeedBackInfo() {
     this.persistenceProvider.setFeedbackInfo({
       time: moment().unix(),
