@@ -556,7 +556,7 @@ label-tip.warn.no-arrowhead:before {
 }
 
 ion-icon {
-  &[class*='custom-'] {
+  &[class*='mycustom-'] {
     mask-size: contain;
     mask-position: 50% 50%;
     mask-repeat: no-repeat;
@@ -565,31 +565,232 @@ ion-icon {
     height: 1em;
   }
 
-  &[class*='custom-wallet'] {
-    mask-image: url('../assets/wallet-icon.svg');
-  }
-  &[class*='custom-market'] {
+  &[class*="seccustom-"] {
+    margin: 0 5px 0 0;
+    vertical-align: middle;
+    $sz: 20px;
+    width: $sz;
+    height: $sz;
+}
+&[class*='seccustom-wallet'][ng-reflect-is-active="false"] {
+
+  background: url('../assets/wallet-icon.svg') no-repeat 50% 50%;
+  background-size: contain;
+}
+&[class*='seccustom-wallet'][ng-reflect-is-active="true"] {
+
+  background: url('../assets/wallet-active.svg') no-repeat 50% 50%;
+  background-size: contain;
+}
+
+
+&[class*='seccustom-trade'][ng-reflect-is-active="false"] {
+
+  background: url('../assets/tab-icons/trade.svg') no-repeat 50% 50%;
+  background-size: contain;
+}
+&[class*='seccustom-trade'][ng-reflect-is-active="true"] {
+
+  background: url('../assets/tab-icons/trade-active.svg') no-repeat 50% 50%;
+  background-size: contain;
+}
+
+
+&[class*='seccustom-invest'][ng-reflect-is-active="false"] {
+
+  background: url('../assets/tab-icons/news.svg') no-repeat 50% 50%;
+  background-size: contain;
+}
+&[class*='seccustom-invest'][ng-reflect-is-active="true"] {
+
+  background: url('../assets/tab-icons/news-active.svg') no-repeat 50% 50%;
+  background-size: contain;
+}
+
+
+
+&[class*='seccustom-shop'][ng-reflect-is-active="false"] {
+
+  background: url('../assets/tab-icons/shop.svg') no-repeat 50% 50%;
+  background-size: contain;
+}
+&[class*='seccustom-shop'][ng-reflect-is-active="true"] {
+
+  background: url('../assets/tab-icons/shop-active.svg') no-repeat 50% 50%;
+  background-size: contain;
+}
+
+
+&[class*='seccustom-help'][ng-reflect-is-active="false"] {
+
+  background: url('../assets/tab-icons/help.svg') no-repeat 50% 50%;
+  background-size: contain;
+}
+&[class*='seccustom-help'][ng-reflect-is-active="true"] {
+
+  background: url('../assets/tab-icons/help-active.svg') no-repeat 50% 50%;
+  background-size: contain;
+}
+
+
+
+  &[class*='mycustom-wallet'] {
+
+   mask-image: url('../assets/wallet-icon.svg');
+     }
+  &[class*='mycustom-market'] {
     mask-image: ur('../assets/market-icon.svg');
   }
-  &[class*='custom-invest'] {
+  &[class*="mycustom-invest"] {
     mask-image: url('../assets/tab-icons/news.svg');
+
   }
-  &[class*='custom-apps'] {
+  &[class*='mycustom-apps'] {
     mask-image: url('../assets/apps-icon.svg');
   }
-  &[class*='custom-settings'] {
+  &[class*='mycustom-settings'] {
     mask-image: url('../assets/settings-icon.svg');
   }
-  &[class*='custom-trade'] {
+  &[class*='mycustom-trade'] {
     mask-image: url('../assets/tab-icons/trade.svg');
+
   }
-  &[class*='custom-shop'] {
+  &[class*='mycustom-shop'] {
     mask-image: url('../assets/tab-icons/shop.svg');
   }
-  &[class*='custom-help'] {
+  &[class*='mycustom-help'] {
     mask-image: url('../assets/tab-icons/help.svg');
   }
 }
+
+.theme-dark{
+  ion-icon {
+    &[class*='seccustom-wallet'][ng-reflect-is-active="false"] {
+
+      background: url('../assets/wallet-title.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    &[class*='seccustom-wallet'][ng-reflect-is-active="true"] {
+    
+      background: url('../assets/wallet-active.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    
+    
+    &[class*='seccustom-trade'][ng-reflect-is-active="false"] {
+    
+      background: url('../assets/tab-icons/trade-title.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    &[class*='seccustom-trade'][ng-reflect-is-active="true"] {
+    
+      background: url('../assets/tab-icons/trade-active.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    
+    
+    &[class*='seccustom-invest'][ng-reflect-is-active="false"] {
+    
+      background: url('../assets/tab-icons/news-title.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    &[class*='seccustom-invest'][ng-reflect-is-active="true"] {
+    
+      background: url('../assets/tab-icons/news-active.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    
+    
+    
+    &[class*='seccustom-shop'][ng-reflect-is-active="false"] {
+    
+      background: url('../assets/tab-icons/shop-title.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    &[class*='seccustom-shop'][ng-reflect-is-active="true"] {
+    
+      background: url('../assets/tab-icons/shop-active.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    
+    
+    &[class*='seccustom-help'][ng-reflect-is-active="false"] {
+    
+      background: url('../assets/tab-icons/help-title.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    &[class*='seccustom-help'][ng-reflect-is-active="true"] {
+    
+      background: url('../assets/tab-icons/help-active.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+}
+}
+
+.theme-light{
+  ion-icon {
+    &[class*='seccustom-wallet'][ng-reflect-is-active="false"] {
+
+      background: url('../assets/wallet-icon.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    &[class*='seccustom-wallet'][ng-reflect-is-active="true"] {
+    
+      background: url('../assets/wallet-active.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    
+    
+    &[class*='seccustom-trade'][ng-reflect-is-active="false"] {
+    
+      background: url('../assets/tab-icons/trade.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    &[class*='seccustom-trade'][ng-reflect-is-active="true"] {
+    
+      background: url('../assets/tab-icons/trade-active.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    
+    
+    &[class*='seccustom-invest'][ng-reflect-is-active="false"] {
+    
+      background: url('../assets/tab-icons/news.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    &[class*='seccustom-invest'][ng-reflect-is-active="true"] {
+    
+      background: url('../assets/tab-icons/news-active.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    
+    
+    
+    &[class*='seccustom-shop'][ng-reflect-is-active="false"] {
+    
+      background: url('../assets/tab-icons/shop.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    &[class*='seccustom-shop'][ng-reflect-is-active="true"] {
+    
+      background: url('../assets/tab-icons/shop-active.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    
+    
+    &[class*='seccustom-help'][ng-reflect-is-active="false"] {
+    
+      background: url('../assets/tab-icons/help.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+    &[class*='seccustom-help'][ng-reflect-is-active="true"] {
+    
+      background: url('../assets/tab-icons/help-active.svg') no-repeat 50% 50%;
+      background-size: contain;
+    }
+}
+}
+
 .header-ios .toolbar-ios:last-child .toolbar-background-ios {
   background: transparent;
 }

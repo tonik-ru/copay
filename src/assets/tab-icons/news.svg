@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="13.298" height="20.01" viewBox="0 0 13.298 20.01">
   <g id="Group_181" data-name="Group 181" transform="translate(-988.646 -1345)">
-    <path id="Path_215" data-name="Path 215" d="M993.02,1345.5c2.221,2.929,2.337,7.775,0,10.356a5.432,5.432,0,0,1-1.24-2.5c-4.874,3.492-2.305,11.158,3.719,11.158C1004.56,1364.51,1002.869,1349.372,993.02,1345.5Z" transform="translate(0)" fill="none" stroke="#2d3340" stroke-linejoin="round" stroke-width="1"/>
-    <path id="Path_216" data-name="Path 216" d="M996.8,1359.5c.819,1.457-1.249,3.549-2.48,3.26a2.062,2.062,0,0,0,2.029,1.7,2.09,2.09,0,0,0,2.066-2.066C998.45,1361.153,998.036,1359.5,996.8,1359.5Z" transform="translate(-0.883 -2.428)" fill="none" stroke="#2d3340" stroke-linejoin="round" stroke-width="1"/>
+    <path id="Path_215" data-name="Path 215" d="M993.02,1345.5c2.221,2.929,2.337,7.775,0,10.356a5.432,5.432,0,0,1-1.24-2.5c-4.874,3.492-2.305,11.158,3.719,11.158C1004.56,1364.51,1002.869,1349.372,993.02,1345.5Z" transform="translate(0)" fill="none" stroke="#8c8c8c" stroke-linejoin="round" stroke-width="1"/>
+    <path id="Path_216" data-name="Path 216" d="M996.8,1359.5c.819,1.457-1.249,3.549-2.48,3.26a2.062,2.062,0,0,0,2.029,1.7,2.09,2.09,0,0,0,2.066-2.066C998.45,1361.153,998.036,1359.5,996.8,1359.5Z" transform="translate(-0.883 -2.428)" fill="none" stroke="#8c8c8c" stroke-linejoin="round" stroke-width="1"/>
   </g>
 </svg>

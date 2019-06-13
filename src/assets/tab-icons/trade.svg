@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="18.728" height="17.956" viewBox="0 0 18.728 17.956">
   <g id="Group_185" data-name="Group 185" transform="translate(-937 -2882)">
     <g id="Group_182" data-name="Group 182" transform="translate(937.5 2882.5)">
-      <path id="Path_217" data-name="Path 217" d="M953,2882.5l2.312,2.312L953,2887.125" transform="translate(-941.053 -2882.5)" fill="none" stroke="#2d3340" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
-      <line id="Line_106" data-name="Line 106" x1="14.259" transform="translate(0 2.312)" fill="none" stroke="#2d3340" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path id="Path_217" data-name="Path 217" d="M953,2882.5l2.312,2.312L953,2887.125" transform="translate(-941.053 -2882.5)" fill="none" stroke="#8c8c8c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line id="Line_106" data-name="Line 106" x1="14.259" transform="translate(0 2.312)" fill="none" stroke="#8c8c8c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
     </g>
     <g id="Group_183" data-name="Group 183" transform="translate(937.5 2894.832)">
-      <path id="Path_218" data-name="Path 218" d="M953,2898.5l2.312,2.312L953,2903.124" transform="translate(-941.053 -2898.5)" fill="none" stroke="#2d3340" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
-      <line id="Line_107" data-name="Line 107" x1="14.259" transform="translate(0 2.312)" fill="none" stroke="#2d3340" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path id="Path_218" data-name="Path 218" d="M953,2898.5l2.312,2.312L953,2903.124" transform="translate(-941.053 -2898.5)" fill="none" stroke="#8c8c8c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line id="Line_107" data-name="Line 107" x1="14.259" transform="translate(0 2.312)" fill="none" stroke="#8c8c8c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
     </g>
     <g id="Group_184" data-name="Group 184" transform="translate(940.968 2888.666)">
-      <path id="Path_219" data-name="Path 219" d="M944.312,2890.5,942,2892.812l2.312,2.312" transform="translate(-942 -2890.5)" fill="none" stroke="#2d3340" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
-      <line id="Line_108" data-name="Line 108" x2="14.259" transform="translate(0 2.312)" fill="none" stroke="#2d3340" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <path id="Path_219" data-name="Path 219" d="M944.312,2890.5,942,2892.812l2.312,2.312" transform="translate(-942 -2890.5)" fill="none" stroke="#8c8c8c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
+      <line id="Line_108" data-name="Line 108" x2="14.259" transform="translate(0 2.312)" fill="none" stroke="#8c8c8c" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"/>
     </g>
   </g>
 </svg>
