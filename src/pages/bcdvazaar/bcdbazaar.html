@@ -37,7 +37,7 @@
               >{{'Category' | translate}}</ion-label
             >
             <ion-select placeholder="Category" title="{{'Category'| translate}}" [(ngModel)]="selectedCat"
-                        (ionChange)="selectCat($event)">
+                        (ionChange)="selectCat($event)" interface="popover">
               <ion-option value="all" selected>{{'All' | translate}}</ion-option>
               <ion-option *ngFor="let p of cats" value="{{p.cat}}"> {{p.cat | translate}}</ion-option>
             </ion-select></ion-item
@@ -55,7 +55,7 @@
     <ion-thumbnail item-left ><img [src]="p.logo"></ion-thumbnail>
     <ion-row no-padding>
       <ion-col col-7>
-    <h2>{{p.company  | translate}}</h2>
+    <!-- <h2>{{p.company  | translate}}</h2> -->
     <p>{{p.desc  | translate}}</p>
   </ion-col> 
   <ion-col col-5 style="display: flex;

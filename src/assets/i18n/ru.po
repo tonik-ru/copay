@@ -2772,8 +2772,8 @@ msgstr "Электроника"
 msgid "Grocery"
 msgstr "Бакалея"
 
-msgid "Home Decor"
-msgstr "Декор"
+msgid "Home"
+msgstr "Все для дома"
 
 msgid "Jewelry"
 msgstr "Ювелирные изделия"
@@ -2790,43 +2790,43 @@ msgstr "Автозапчасти для японских автомобилей"
 msgid "Performance Parts for Muscle Cars"
 msgstr "Автозапчасти  для Muscle Cars"
 
-msgid "Performance Exhausts for Cars and Bikes"
-msgstr "Автозапчасти для автомобилей и мотоциклов"
+msgid "Performance Exhausts"
+msgstr "Производитель выхлопных труб"
 
-msgid "Automotive Safety Lighting"
-msgstr "Аварийное авоомобильное освещение"
+msgid "Safety Lighting"
+msgstr "Аварийное освещение"
 
-msgid "Automotive Car Remotes"
-msgstr "Автомобильные пульты ДУ"
+msgid "Car Remotes"
+msgstr "Пульты ДУ"
 
 msgid "ATV Replacement Parts"
 msgstr "Запасные части ATV"
 
 msgid "Top Sellers from Amazon"
-msgstr "Лучшие продукция из Amazon"
+msgstr "Топ продукция Amazon"
 
-msgid "Protective Cases for Electronics"
-msgstr "Защитные чехлы для электроники"
+msgid "Protective Cases"
+msgstr "Защитные чехлы"
 
 msgid "Specialty Coffee"
 msgstr "Магазин кофе"
 
-msgid "Custom Decor for your Home"
-msgstr "Декор на заказ для вашего дома"
+msgid "Custom Home Decor"
+msgstr "Декор для дома"
 
-msgid "Designer Wallpapers for your Home"
-msgstr "Дизайнерские обои для вашего дома"
+msgid "Designer Wallpapers"
+msgstr "Дизайнерские обои"
 
-msgid "Diamond Engagement Rings"
+msgid "Diamond Rings"
 msgstr "Кольца с бриллиантами"
 
-msgid "Custom Charm Bracelets "
-msgstr "Браслеты с подвесками на закза"
+msgid "Charm Bracelets "
+msgstr "Браслеты и подвески"
 
-msgid "Replacement Lights for your Home"
-msgstr "Сменные фонари для вашего дома"
+msgid "Lights for Home "
+msgstr "Свет для дома"
 
-msgid "Re-engineered Baseball Bats"
-msgstr "Модернизированные бейсбольные биты"
+msgid "Baseball Bats"
+msgstr "Бейсбольные биты"
 
 

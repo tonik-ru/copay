@@ -573,7 +573,7 @@
         </table>
       </div>
    <ion-row text-center *ngIf="!isTop20"> <ion-icon style="    margin: 0 auto;
-    font-size: 4rem;" (click)="showChartClick()" name="arrow-up"></ion-icon> </ion-row>
+    font-size: 4rem;" (click)="showChartClick()" name="arrow-up"></ion-icon> </ion-row> 
     </div>
   <!-- you can use positiveKeys and negativeKeys -->
   <!--
@@ -582,7 +582,7 @@
   <!--
     d.Data[k].IsPriceInRange -- is this false, hide price. this means that this level was already passed
   -->
-  <div *ngIf="myPair != undefined">
+  <div *ngIf="myPair != undefined" style="height: 10px; display: none;">
     <div *ngIf="!isTop20">
       <div *ngIf="d && d.AvgIntData && d.Breakout">
         <p id="speedometr" style="opacity:0">{{ d.Speedometer.Score }}</p>
