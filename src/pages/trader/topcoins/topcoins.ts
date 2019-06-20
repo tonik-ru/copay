@@ -17,9 +17,6 @@ import { PersistenceProvider } from '../../../providers/persistence/persistence'
 
 import * as _ from 'lodash';
 
-
-
-
 /**
  * Generated class for the TopcoinsPage page.
  *
@@ -31,8 +28,6 @@ import * as _ from 'lodash';
   selector: 'page-topcoins',
   templateUrl: 'topcoins.html'
 })
-
-
 export class TopcoinsPage {
   public items = [];
 
@@ -58,7 +53,7 @@ export class TopcoinsPage {
     private rate: RateProvider,
     private persistenceProvider: PersistenceProvider
   ) {
-    this.loadTopCoins();
+    // this.loadTopCoins();
     // this.showlook = '0';
     this.loadPairs();
     this.toggled = false;
@@ -140,6 +135,7 @@ export class TopcoinsPage {
           if (cur) this.selectedCurrency = cur;
 
           this.resolveSelectedCurrency(cur);
+          this.loadTopCoins();
         });
       })
       .catch(err => {
@@ -153,6 +149,8 @@ export class TopcoinsPage {
 
   private resolveSelectedCurrency(cur) {
     let code = cur ? cur.isoCode : 'USD';
+    if (this.altCurrencyList.length == 0)
+      this.selectedCurrency = { isoCode: code };
     this.selectedCurrency = _.find(
       this.altCurrencyList,
       x => x.isoCode == code
@@ -183,8 +181,7 @@ export class TopcoinsPage {
         this.selectedCurrency
       );
     let res = this.topCoins;
-    this.currencySymbol =
-      this.selectedCurrency.isoCode == 'USD' ? (this.currencySymbol = '$') : '';
+    this.currencySymbol = this.selectedCurrency.isoCode == 'USD' ? '$' : '';
 
     let curRate = this.rate.getUsdRate(this.selectedCurrency.isoCode);
     for (let i = 0; i < res.length; i++) {
@@ -243,6 +240,4 @@ export class TopcoinsPage {
       event.complete();
     });
   }
-
-
 }

@@ -447,6 +447,7 @@ export class CopayApp {
 
   private handleDeepLinksElectron() {
     const electron = (window as any).require('electron');
+    electron.ipcRenderer.removeAllListeners('open-url-event');
     electron.ipcRenderer.on('open-url-event', (_, url) => {
       this.processUrl(url);
     });

@@ -351,24 +351,14 @@ export class DatafeedPage {
 
     rdi.Speedometer.Score = curVal.Score;
     rdi.Speedometer.FutureScore = curVal.FutureScore.toFixed();
-    var str = '';
-    curVal.Details.forEach(item => {
-      str += item.Param + '=' + item.Value + ' Score=' + item.Score + '\n';
-    });
-    rdi.Speedometer.DetailsString = str;
 
     if (
       speedometers.PrevPeriodSpeedometers &&
       Object.keys(speedometers.PrevPeriodSpeedometers).length > 0
     ) {
       var val = speedometers.PrevPeriodSpeedometers[spKey];
-      str = '';
-      curVal.Details.forEach(item => {
-        str += item.Param + '=' + item.Value + ' Score=' + item.Score + '\n';
-      });
 
       rdi.Speedometer.PrevData.Score = val.Score;
-      rdi.Speedometer.PrevData.DetailsString = str;
     } else if (rdi.Speedometer.PrevData.Score == 0) {
       rdi.Speedometer.PrevData.Score = rdi.Speedometer.Score;
     }
