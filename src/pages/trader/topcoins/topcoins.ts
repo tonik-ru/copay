@@ -29,7 +29,6 @@ import * as _ from 'lodash';
   templateUrl: 'topcoins.html'
 })
 export class TopcoinsPage {
-
   @ViewChild('tabletitle') tabletitleId: ElementRef;
   fabToHide;
   oldScrollTop: number = 0;
@@ -47,7 +46,7 @@ export class TopcoinsPage {
 
   private refreshTimer;
 
-  public SearchOpened: boolean =false;
+  public SearchOpened: boolean = false;
 
   // @ViewChild('slider') slider: Slides;
   // showlook = '0';
@@ -70,22 +69,24 @@ export class TopcoinsPage {
   //   this.slider.slideTo(index);
   // }
 
-
   onContentScroll(e) {
     if (e.scrollTop - this.oldScrollTop > 10) {
-          this.logger.log('DOWN');
-          
-          this.renderer.setElementStyle(this.tabletitleId.nativeElement, 'display', 'flex');
-       
-          
-        } else if (e.scrollTop  < 10) {
-          this.renderer.setElementStyle(this.tabletitleId.nativeElement, 'display', 'none');
-        
-        }
-        this.oldScrollTop = e.scrollTop;
-       }
+      this.logger.log('DOWN');
 
-
+      this.renderer.setElementStyle(
+        this.tabletitleId.nativeElement,
+        'display',
+        'flex'
+      );
+    } else if (e.scrollTop < 10) {
+      this.renderer.setElementStyle(
+        this.tabletitleId.nativeElement,
+        'display',
+        'none'
+      );
+    }
+    this.oldScrollTop = e.scrollTop;
+  }
 
   public toggled: boolean = false;
 
@@ -96,7 +97,7 @@ export class TopcoinsPage {
   initializeItems() {
     // this.items = this.topCoins;
   }
-  goToSearch(){
+  goToSearch() {
     this.logger.log('OpenSearch');
     this.SearchOpened = !this.SearchOpened;
   }
