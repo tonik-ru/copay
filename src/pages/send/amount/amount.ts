@@ -84,8 +84,10 @@ export class AmountPage extends WalletTabsChild {
 
   public cardName: string;
   public cardConfig: CardConfig;
+  
 
   constructor(
+
     private actionSheetProvider: ActionSheetProvider,
     private configProvider: ConfigProvider,
     private filterProvider: FilterProvider,
@@ -162,6 +164,7 @@ export class AmountPage extends WalletTabsChild {
   }
 
   ionViewWillEnter() {
+    
     this.disableHardwareKeyboard = false;
     this.expression = '';
     this.useSendMax = false;

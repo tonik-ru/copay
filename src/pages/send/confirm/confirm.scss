@@ -6,6 +6,9 @@ confirm-card-purchase {
       font-size: 16px;
     }
   }
+
+  
+
   ion-content {
     .fixed-content,
     .scroll-content {
@@ -156,4 +159,7 @@ confirm-card-purchase {
   .last-item {
     margin-left: auto !important;
   }
+  .tabbar.show-tabbar {
+    display: none!important;
+}
 }

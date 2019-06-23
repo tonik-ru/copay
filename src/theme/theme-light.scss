@@ -79,5 +79,45 @@
     page-home .scroll-content {
       
       margin-bottom: 47px !important;}
+
+      page-topcoins{
+       
+        .searchbar-ios .searchbar-input {
+          color: #FFF;
+          background-color: transparent;
+          border: 1px solid #FFF;
+        }
+      
+        .searchbar-ios .searchbar-search-icon {
+          left: 9px;
+          top: 9px;
+          background-image:url("data:image/svg+xml;charset=utf-8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2013%2013'><path%20fill='rgba(255,%20255,%20255,%200.5)'%20d='M5,1c2.2,0,4,1.8,4,4S7.2,9,5,9S1,7.2,1,5S2.8,1,5,1%20M5,0C2.2,0,0,2.2,0,5s2.2,5,5,5s5-2.2,5-5S7.8,0,5,0%20L5,0z'/><line%20stroke='rgba(255,%20255,%20255,%200.5)'%20stroke-miterlimit='10'%20x1='12.6'%20y1='12.6'%20x2='8.2'%20y2='8.2'/></svg>");
+        }
+      
+        .searchbar-ios {
+          padding: 0px 8px;
+          min-height: 20px;
+          border-top: 0.55px solid transparent;
+          /*border-bottom: 0.55px solid rgba(0, 0, 0, 0.05);*/
+          background: transparent
+      }
+          .searchbar-ios .searchbar-clear-icon {
+   
+            background-image: url("data:image/svg+xml;charset=utf-8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'><path%20fill='rgba(255,%20255,%20255,%200.5)'%20d='M403.1,108.9c-81.2-81.2-212.9-81.2-294.2,0s-81.2,212.9,0,294.2c81.2,81.2,212.9,81.2,294.2,0S484.3,190.1,403.1,108.9z%20M352,340.2L340.2,352l-84.4-84.2l-84,83.8L160,339.8l84-83.8l-84-83.8l11.8-11.8l84,83.8l84.4-84.2l11.8,11.8L267.6,256L352,340.2z'/></svg>");
+          }
+          ::-webkit-input-placeholder {
+            color: #FFF !important;
+            }
+            *:-moz-placeholder {
+            color: #FFF!important;
+            }
+            *:-ms-input-placeholder {
+            color: #FFF!important;
+            }
+            
+            input::-webkit-input-placeholder {
+            color:#FFF;
+            }
+      }
       
 }

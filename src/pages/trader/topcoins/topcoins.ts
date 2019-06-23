@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer, ViewChild } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
 // import { ProfileProvider } from '../../../providers';
@@ -17,9 +17,6 @@ import { PersistenceProvider } from '../../../providers/persistence/persistence'
 
 import * as _ from 'lodash';
 
-
-
-
 /**
  * Generated class for the TopcoinsPage page.
  *
@@ -31,9 +28,12 @@ import * as _ from 'lodash';
   selector: 'page-topcoins',
   templateUrl: 'topcoins.html'
 })
-
-
 export class TopcoinsPage {
+
+  @ViewChild('tabletitle') tabletitleId: ElementRef;
+  fabToHide;
+  oldScrollTop: number = 0;
+
   public items = [];
 
   public topCoins = [];
@@ -47,6 +47,8 @@ export class TopcoinsPage {
 
   private refreshTimer;
 
+  public SearchOpened: boolean =false;
+
   // @ViewChild('slider') slider: Slides;
   // showlook = '0';
 
@@ -56,9 +58,10 @@ export class TopcoinsPage {
     private logger: Logger,
     private traderProvider: TraderProvider,
     private rate: RateProvider,
-    private persistenceProvider: PersistenceProvider
+    private persistenceProvider: PersistenceProvider,
+    private renderer: Renderer
   ) {
-    this.loadTopCoins();
+    // this.loadTopCoins();
     // this.showlook = '0';
     this.loadPairs();
     this.toggled = false;
@@ -66,6 +69,23 @@ export class TopcoinsPage {
   // selectedTab(index) {
   //   this.slider.slideTo(index);
   // }
+
+
+  onContentScroll(e) {
+    if (e.scrollTop - this.oldScrollTop > 10) {
+          this.logger.log('DOWN');
+          
+          this.renderer.setElementStyle(this.tabletitleId.nativeElement, 'display', 'flex');
+       
+          
+        } else if (e.scrollTop  < 10) {
+          this.renderer.setElementStyle(this.tabletitleId.nativeElement, 'display', 'none');
+        
+        }
+        this.oldScrollTop = e.scrollTop;
+       }
+
+
 
   public toggled: boolean = false;
 
@@ -75,6 +95,10 @@ export class TopcoinsPage {
 
   initializeItems() {
     // this.items = this.topCoins;
+  }
+  goToSearch(){
+    this.logger.log('OpenSearch');
+    this.SearchOpened = !this.SearchOpened;
   }
 
   getTopics() {
@@ -140,6 +164,7 @@ export class TopcoinsPage {
           if (cur) this.selectedCurrency = cur;
 
           this.resolveSelectedCurrency(cur);
+          this.loadTopCoins();
         });
       })
       .catch(err => {
@@ -153,6 +178,8 @@ export class TopcoinsPage {
 
   private resolveSelectedCurrency(cur) {
     let code = cur ? cur.isoCode : 'USD';
+    if (this.altCurrencyList.length == 0)
+      this.selectedCurrency = { isoCode: code };
     this.selectedCurrency = _.find(
       this.altCurrencyList,
       x => x.isoCode == code
@@ -183,8 +210,7 @@ export class TopcoinsPage {
         this.selectedCurrency
       );
     let res = this.topCoins;
-    this.currencySymbol =
-      this.selectedCurrency.isoCode == 'USD' ? (this.currencySymbol = '$') : '';
+    this.currencySymbol = this.selectedCurrency.isoCode == 'USD' ? '$' : '';
 
     let curRate = this.rate.getUsdRate(this.selectedCurrency.isoCode);
     for (let i = 0; i < res.length; i++) {
@@ -243,6 +269,4 @@ export class TopcoinsPage {
       event.complete();
     });
   }
-
-
 }

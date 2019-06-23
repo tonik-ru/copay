@@ -11,10 +11,13 @@ import { WalletDetailsPage } from '../wallet-details/wallet-details';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { WalletTabsProvider } from './wallet-tabs.provider';
 
+import { AppProvider } from '../../providers';
+
 @Component({
   selector: 'page-wallet-tabs',
   template: `
-    <ion-tabs selectedIndex="1" #tabs>
+  <div [class]="appProvider.activeTheme" #tabs >
+    <ion-tabs selectedIndex="1"  >
       <ion-tab
         [root]="receiveRoot"
         tabTitle="{{'Receive'|translate}}"
@@ -31,6 +34,7 @@ import { WalletTabsProvider } from './wallet-tabs.provider';
         tabIcon="tab-send"
       ></ion-tab>
     </ion-tabs>
+    </div>
   `
 })
 export class WalletTabsPage {
@@ -51,7 +55,8 @@ export class WalletTabsPage {
     private walletTabsProvider: WalletTabsProvider,
     private events: Events,
     private platformProvider: PlatformProvider,
-    private platform: Platform
+    private platform: Platform,
+    public appProvider: AppProvider
   ) {
     this.isElectron = this.platformProvider.isElectron;
   }

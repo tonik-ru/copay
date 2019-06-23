@@ -53,6 +53,7 @@ import {
   ScanProvider,
   ScreenOrientation,
   ShapeshiftProvider,
+  ShopsProvider,
   SocialSharing,
   SplashScreen,
   StatusBar,
@@ -135,7 +136,8 @@ import {
     WalletTabsProvider,
     TraderProvider,
     FeedProvider,
-    GAnalyticsProvider
+    GAnalyticsProvider,
+    ShopsProvider
   ]
 })
 export class ProvidersModule {}

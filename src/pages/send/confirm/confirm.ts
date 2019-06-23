@@ -144,8 +144,12 @@ export class ConfirmPage extends WalletTabsChild {
   ionViewWillEnter() {
     this.navCtrl.swipeBackEnabled = false;
     this.isOpenSelector = false;
-    const B = this.navParams.data.coin == 'bcd' ? this.bitcoreDiamond :
-          (this.navParams.data.coin == 'bch' ? this.bitcoreCash : this.bitcore);
+    const B =
+      this.navParams.data.coin == 'bcd'
+        ? this.bitcoreDiamond
+        : this.navParams.data.coin == 'bch'
+        ? this.bitcoreCash
+        : this.bitcore;
     let networkName;
     let amount;
     if (this.fromMultiSend) {
@@ -750,9 +754,11 @@ export class ConfirmPage extends WalletTabsChild {
     insufficientFundsInfoSheet.present();
     insufficientFundsInfoSheet.onDidDismiss(option => {
       if (option || typeof option === 'undefined') {
-        this.isWithinWalletTabs()
-          ? this.navCtrl.pop()
-          : this.app.getRootNavs()[0].setRoot(TabsPage);
+        if (this.isWithinWalletTabs() || this.isOnShopPage()) {
+          this.navCtrl.pop();
+        } else {
+          this.app.getRootNavs()[0].setRoot(TabsPage);
+        }
       } else {
         this.tx.sendMax = true;
         this.setWallet(this.wallet);
@@ -785,7 +791,9 @@ export class ConfirmPage extends WalletTabsChild {
     errorInfoSheet.onDidDismiss(() => {
       this.hideSlideButton = false;
       if (exit) {
-        this.isWithinWalletTabs()
+        this.isOnShopPage()
+          ? this.navCtrl.pop()
+          : this.isWithinWalletTabs()
           ? this.navCtrl.popToRoot()
           : this.navCtrl.last().name == 'ConfirmCardPurchasePage'
           ? this.navCtrl.pop()

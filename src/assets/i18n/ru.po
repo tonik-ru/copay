@@ -2760,8 +2760,8 @@ msgstr "Онлайн Чат"
 msgid "Category"
 msgstr "Категория"
 
-msgid "Shopping Directory"
-msgstr "Каталог Магазинов"
+msgid "Shopping"
+msgstr "Магазины"
 
 msgid "Automotive"
 msgstr "Автомобили"
@@ -2830,3 +2830,20 @@ msgid "Baseball Bats"
 msgstr "Бейсбольные биты"
 
 
+msgid "COIN"
+msgstr "Монета"
+
+msgid "PRICE"
+msgstr "Цена"
+
+msgid "< 24H"
+msgstr "< 24ч"
+
+msgid "4H"
+msgstr "4ч"
+
+msgid "1D"
+msgstr "1д"
+
+msgid "3D"
+msgstr "3д"

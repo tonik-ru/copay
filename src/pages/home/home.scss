@@ -7,8 +7,10 @@ page-home {
     .scroll-content{ overflow-x: auto;}
 
   .item-title {
-    width: 50%;
+    width: 75%;
     float: left;
+    padding-top: 5px;
+    font-size: 1.4rem; font-weight: 900;
   }
   .item-subtitle {
     text-align: right;
@@ -52,26 +54,37 @@ page-home {
     color: #667;
     width: 85%;
     border-radius: 15px !important;
-    margin-top: 110px;
+    margin-top: 15px;
     text-align: center;
     box-shadow: 0 0px 11px rgba(0, 0, 0, 0.2);
     z-index: 999999999;
     margin-bottom: -10px;
+    padding-top:27px;
   }
   .balance-block h2 {
     font-size: 1rem;
   }
   .balance-block h3 {
-    font-size: 25px;
+    font-size: 3.2rem;
     font-weight: 600;
     font-family: Montserrat;
   }
 @media screen and (max-width:768px){
-  .balance-block h3, .balance-block h2  { font-size:19px;}
+  .balance-block h3, .balance-block h2  { font-size:3.2rem;}
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+  /*.scroll-content{ margin-top:47px!important;}*/
+}
+span.altbalance {
+  display: block;
+  font-size: 1rem;
 }
   .header-extend {
     background: #f79421;
-    height: 200px;
+    height: 100px;
+   top: 40px;
+
   }
 
   .toolbar-title-ios {
@@ -246,11 +259,11 @@ page-home {
   }
 
   ion-refresher {
-    height: 120px;
+   height: 85px;
     background: #fac239;
 
     &-content {
-      margin-top: -25px;
+      margin-top: 25px;
     }
   }
 

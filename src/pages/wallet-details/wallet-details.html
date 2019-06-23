@@ -18,7 +18,7 @@
   no-bounce
   #scrollArea
   [fixed-scroll-bg-color]="wallet.color"
-  [ngClass]="{ 'zero-state': shouldShowZeroState() }"
+  [ngClass]="{ 'zero-state': shouldShowZeroState() }" 
 >
   <ion-refresher
     (ionRefresh)="doRefresh($event)"
@@ -35,7 +35,7 @@
       [ngStyle]="{ background: wallet.color }"
     >
       <expandable-header-primary class="balance-header">
-        <div (click)="toggleBalance()">
+        <div >
           <div
             (tap)="updateAll(true)"
             *ngIf="
@@ -64,7 +64,7 @@
             "
           >
             <div class="balance-str">
-              *.** {{ wallet.coin }} <ion-icon name="eye"></ion-icon>
+              *.** {{ wallet.coin }} <ion-icon name="eye" (click)="toggleBalance()"></ion-icon>
             </div>
             <div class="balance-alt-str">
               *.**{{ wallet.status.alternativeIsoCode }}

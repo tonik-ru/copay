@@ -1,4 +1,4 @@
-<ion-header no-border>
+<ion-header no-border translucent="true">
   <ion-navbar class="home-header">
     <ion-buttons left class="add-button">
       <button
@@ -8,11 +8,8 @@
         (click)="goToAddView()"
         *ngIf="wallets && wallets[0]"
       >
-        <ion-icon name="add"></ion-icon>
+        <ion-icon name="md-add"></ion-icon>
       </button>
-
-      
-      
     </ion-buttons>
 
     <ion-title>
@@ -21,80 +18,123 @@
         src="assets/wallet-title.svg"
         style="margin-bottom:-3px; margin-right: 5px"
       />
-      {{'Wallet' | translate}}
+      {{ 'Wallet' | translate }}
     </ion-title>
     <ion-buttons right class="settings-button" *ngIf="wallets && wallets[0]">
-     
-        
+      <button
+        class="modal-close-button"
+        (click)="toggleBalanceNew()"
+        ion-button
+      >
+        <!--
+          <ion-icon>
 
-      <button  class="modal-close-button" (click)="toggleBalanceNew()" ion-button>
-        <ion-icon>
-       
-        <img *ngIf="checkHiddenBalance() && totalb() !== 'none'"  src="assets/img/top-hide-title.svg"  style="margin-right: 0px; width:23px;">
-        <img *ngIf="!checkHiddenBalance()  && totalb() !== 'none'" src="assets/img/top-show-title.svg" style="margin-right: 0px;width:23px; margin-bottom: 4px;">
-      </ion-icon>
+            <img *ngIf="checkHiddenBalance() && totalb() !== 'none'"  src="assets/img/top-hide-title.svg"  style="margin-right: 0px; width:23px;">
+            <img *ngIf="!checkHiddenBalance()  && totalb() !== 'none'" src="assets/img/top-show-title.svg" style="margin-right: 0px;width:23px; margin-bottom: 4px;">
+          </ion-icon>
+        -->
+
+        <ion-icon
+          *ngIf="checkHiddenBalance() && totalb() !== 'none'"
+          name="eye-off"
+        ></ion-icon>
+        <ion-icon
+          *ngIf="!checkHiddenBalance() && totalb() !== 'none'"
+          name="eye"
+        ></ion-icon>
       </button>
 
       <button class="modal-close-button" (click)="settings()" ion-button>
-          <ion-icon>
-          <img src="assets/settings-title.svg"></ion-icon>
-        </button>
+        <ion-icon name="settings"></ion-icon>
+        <!-- <img src="assets/settings-title.svg"> -->
+      </button>
 
-        <button ion-button class="modal-close-button"  (click)="scan()" *ngIf="wallets && wallets[0] && totalb() == 'none'">
-            <img src="assets/img/scan-new.svg" style="width:28px;">
-          
-        </button>
-        
+      <button
+        ion-button
+        class="modal-close-button"
+        (click)="scan()"
+        *ngIf="wallets && wallets[0] && totalb() == 'none'"
+      >
+        <!-- <img src="assets/img/scan-new.svg" style="width:28px;"> -->
+      </button>
     </ion-buttons>
   </ion-navbar>
+
+  <div
+    class="header-extend"
+    #userNameId
+    *ngIf="wallets?.length !== 0 && totalb() !== 'none'"
+  >
+    <div class="balance-block"  #balance>
+      <ion-row>
+        <ion-col col-2 text-right> </ion-col>
+
+        <ion-col col-8 text-center no-padding>
+          <h3
+           
+            *ngIf="checkHiddenBalance()"
+            style="    margin-top: 0px;"
+          >
+            <ng-container *ngIf="totalb() !== 'none'">
+              {{ totalb() }}
+            </ng-container>
+
+            <!--
+              <ng-container *ngIf="totalb() == 'none'">
+
+              </ng-container>
+            -->
+          </h3>
+          <h3
+            
+            *ngIf="!checkHiddenBalance()"
+            style="    margin-top: 0px;"
+          >
+            ***
+          </h3>
+
+          <!--
+            <h2 *ngIf="checkHiddenBalance()" color="grey" translate>
+              Total Balance
+            </h2>
+        --></ion-col>
+        <ion-col col-2 text-right
+          ><img
+            #scan
+            (click)="scan()"
+            src="assets/img/scan-new-top.svg"
+            style="  margin-top: 0px; margin-right: 15px;margin-bottom: -5px"
+          />
+        </ion-col>
+        <!--
+          <ion-col col-6 text-right>
+             <img  *ngIf="checkHiddenBalance() && totalb() !== 'none'" src="assets/img/top-hide.svg"  (click)="toggleBalanceNew()" style="margin-right: 10px;">
+            <img *ngIf="!checkHiddenBalance()  && totalb() !== 'none'" src="assets/img/top-show.svg"  (click)="toggleBalanceNew()" style="margin-right: 10px;margin-bottom: 4px;">
+            <img src="assets/img/top-refresh.svg"  (click)="doRefreshButton()" style="margin-right: 10px;">
+              <img  (click)="scan()" src="assets/img/scan-new-top.svg" style="    margin-top: 30px;margin-right: 10px;">
+
+          </ion-col>
+        -->
+      </ion-row>
+    </div>
+  </div>
 </ion-header>
 
-<ion-content class="fullscreen-tab">
-  <ion-refresher
-    (ionRefresh)="doRefresh($event)"
-    *ngIf="!showReorderBtc && !showReorderBch && !showReorderVaultWallets"
-    pullMin="90"
-    pullMax="180"
-    class="refresherclass"
-  >
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+<ion-content
+  class="fullscreen-tab"
+  #pageTop
+  (ionScroll)="onContentScroll($event)"
+>
   <div class="wrapper">
-    <div class="header-extend" *ngIf="wallets?.length !== 0 && totalb() !== 'none'">
-      <div class="balance-block">
-        <ion-row>
-           
-          <ion-col col-6>
-        <h3 *ngIf="checkHiddenBalance()" style="    margin-top: 33px;" >
-         <ng-container *ngIf="totalb() !== 'none'">
-          {{ totalb() }}
-        </ng-container>
-
-        <!-- <ng-container *ngIf="totalb() == 'none'">
-          
-          </ng-container> -->
-       
-
-        </h3>
-        <h3 *ngIf="!checkHiddenBalance()" style="    margin-top: 30px;">
-          ***  
-        </h3>
-
-        <!--
-          <h2 *ngIf="checkHiddenBalance()" color="grey" translate>
-            Total Balance
-          </h2>
-        --></ion-col>
-        <ion-col col-6 text-right> 
-            <!-- <img  *ngIf="checkHiddenBalance() && totalb() !== 'none'" src="assets/img/top-hide.svg"  (click)="toggleBalanceNew()" style="margin-right: 10px;">
-            <img *ngIf="!checkHiddenBalance()  && totalb() !== 'none'" src="assets/img/top-show.svg"  (click)="toggleBalanceNew()" style="margin-right: 10px;margin-bottom: 4px;">
-            <img src="assets/img/top-refresh.svg"  (click)="doRefreshButton()" style="margin-right: 10px;"> -->
-              <img  (click)="scan()" src="assets/img/scan-new-top.svg" style="    margin-top: 30px;margin-right: 10px;">
-            
-          </ion-col>
-      </ion-row>
-      </div>
-    </div>
+    <ion-refresher
+      (ionRefresh)="doRefresh($event)"
+      *ngIf="!showReorderBtc && !showReorderBch && !showReorderVaultWallets"
+      pullMin="30"
+      pullMax="90"
+      class="refresherclass"
+    >
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
     <!--
       --<button ion-item (click)="goToUserStats()">
@@ -110,38 +150,40 @@
       </button>
     -->
 
-    <!-- <div class="card clipboard-card" *ngIf="validDataFromClipboard">
-      <ion-item-divider>
-        <div class="title" item-start>
-          <img
-            src="assets/img/paste-clipboard.svg"
-            alt="Clipboard"
-            width="20"
-          />
-          <span
-            >{{ 'Copied' | translate }}
-            {{ validDataFromClipboard?.title }}</span
-          >
-        </div>
-        <div item-end>
-          <button
-            ion-button
-            clear
-            icon-only
-            color="grey"
-            (click)="hideClipboardCard()"
-          >
-            <ion-icon name="close"></ion-icon>
-          </button>
-        </div>
-      </ion-item-divider>
-      <page-clipboard-card
-        [remainingTimeStr]="remainingTimeStr"
-        [payProDetailsData]="payProDetailsData"
-        [validDataFromClipboard]="validDataFromClipboard"
-        (click)="processClipboardData(validDataFromClipboard.data)"
-      ></page-clipboard-card>
-    </div> -->
+    <!--
+      <div class="card clipboard-card" *ngIf="validDataFromClipboard">
+        <ion-item-divider>
+          <div class="title" item-start>
+            <img
+              src="assets/img/paste-clipboard.svg"
+              alt="Clipboard"
+              width="20"
+            />
+            <span
+              >{{ 'Copied' | translate }}
+              {{ validDataFromClipboard?.title }}</span
+            >
+          </div>
+          <div item-end>
+            <button
+              ion-button
+              clear
+              icon-only
+              color="grey"
+              (click)="hideClipboardCard()"
+            >
+              <ion-icon name="close"></ion-icon>
+            </button>
+          </div>
+        </ion-item-divider>
+        <page-clipboard-card
+          [remainingTimeStr]="remainingTimeStr"
+          [payProDetailsData]="payProDetailsData"
+          [validDataFromClipboard]="validDataFromClipboard"
+          (click)="processClipboardData(validDataFromClipboard.data)"
+        ></page-clipboard-card>
+      </div>
+    -->
 
     <div
       [ngClass]="{
@@ -237,7 +279,11 @@
       </ion-card>
 
       <!-- TODO Optimize code to list wallets -->
-      <div class="card" [style.margin-top]="totalb()=='none'?'0':'125px'" *ngIf="vaultWallets && vaultWallets[0]">
+      <div
+        class="card"
+        [style.margin-top]="totalb() == 'none' ? '0' : '125px'"
+        *ngIf="vaultWallets && vaultWallets[0]"
+      >
         <ion-item-divider>
           <div class="title wallets-list-title" item-start>
             <span>Vault</span>
@@ -352,7 +398,11 @@
 
       <!-- ALL IN ONE -->
 
-      <div class="card" *ngIf="wallets?.length !== 0" [style.margin-top]="totalb()=='none'?'0':'125px'" >
+      <div
+        class="card"
+        *ngIf="wallets?.length !== 0"
+        [style.margin-top]="totalb() == 'none' ? '0' : '125px'"
+      >
         <div *ngIf="walletsBch && walletsBcd[0]">
           <ion-list
             reorder="{{showReorderBcd}}"
@@ -406,6 +456,13 @@
                             : '')
                         : ''
                     }}
+                  </span>
+                  <span
+                    *ngIf="!wallet.balanceHidden && !wallet.scanning"
+                    class="altbalance"
+                  >
+                    {{ wallet.status.totalBalanceAlternative }}
+                    {{ wallet.status.alternativeIsoCode }}
                   </span>
                   <span *ngIf="wallet.scanning" translate>Scanning funds</span>
                   <span *ngIf="wallet.balanceHidden && !wallet.scanning"
@@ -489,6 +546,13 @@
                         : ''
                     }}
                   </span>
+                  <span
+                    *ngIf="!wallet.balanceHidden && !wallet.scanning"
+                    class="altbalance"
+                  >
+                    {{ wallet.status.totalBalanceAlternative }}
+                    {{ wallet.status.alternativeIsoCode }}
+                  </span>
                   <span *ngIf="wallet.scanning" translate>Scanning funds</span>
                   <span *ngIf="wallet.balanceHidden && !wallet.scanning"
                     >[ <span translate>Balance Hidden</span>]</span
@@ -570,6 +634,13 @@
                             : '')
                         : ''
                     }}
+                  </span>
+                  <span
+                    *ngIf="!wallet.balanceHidden && !wallet.scanning"
+                    class="altbalance"
+                  >
+                    {{ wallet.status.totalBalanceAlternative }}
+                    {{ wallet.status.alternativeIsoCode }}
                   </span>
                   <span *ngIf="wallet.scanning" translate>Scanning funds</span>
                   <span *ngIf="wallet.balanceHidden && !wallet.scanning"
@@ -687,11 +758,11 @@
     </div>
   </div>
 
-  
-    <!-- <ion-fab *ngIf="wallets && wallets[0]" id="scan-button" right bottom>
+  <!--
+    <ion-fab *ngIf="wallets && wallets[0]" id="scan-button" right bottom>
       <button ion-fab color="primary" (click)="scan()">
         <ion-icon name="tab-scan"></ion-icon>
       </button>
-    </ion-fab> -->
- 
+    </ion-fab>
+  -->
 </ion-content>

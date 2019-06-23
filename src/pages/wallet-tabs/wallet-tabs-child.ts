@@ -4,6 +4,8 @@ import { ProfileProvider } from '../../providers/profile/profile';
 import { WalletTabsPage } from './wallet-tabs';
 import { WalletTabsProvider } from './wallet-tabs.provider';
 
+import { TabsPage } from '../tabs/tabs';
+
 @Component({ template: '' })
 export class WalletTabsChild {
   wallets;
@@ -39,5 +41,16 @@ export class WalletTabsChild {
     const tabs = this.getParentTabs();
     const tabsInstance = tabs && (tabs.instance as WalletTabsPage);
     return tabsInstance && tabsInstance.walletTabs ? true : false;
+  }
+
+  public isOnShopPage(): boolean {
+    const tabs = this.getParentTabs();
+    const tabsInstance = tabs && (tabs.instance as TabsPage);
+    var curTab =
+      tabsInstance &&
+      tabsInstance.tabs &&
+      tabsInstance.tabs.getSelected() &&
+      tabsInstance.tabs.getSelected().tabTitle;
+    return curTab == 'Shop';
   }
 }

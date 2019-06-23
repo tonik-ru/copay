@@ -81,3 +81,4 @@ export { WalletTabsProvider } from '../pages/wallet-tabs/wallet-tabs.provider';
 export { TraderProvider } from '../providers/trader/trader';
 export { FeedProvider } from '../providers/trader/feed';
 export { GAnalyticsProvider } from '../providers/ganalytics/ganalytics'
+export { ShopsProvider } from '../providers/shops/shops';

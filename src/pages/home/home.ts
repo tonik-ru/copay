@@ -1,6 +1,23 @@
-import { Component, NgZone, ViewChild } from '@angular/core';
+import {
+  animate,
+  Component,
+  ElementRef,
+  NgZone,
+  Renderer,
+  state,
+  style,
+  transition,
+  trigger,
+  ViewChild
+} from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Events, NavController, NavParams, Platform } from 'ionic-angular';
+import {
+  Content,
+  Events,
+  NavController,
+  NavParams,
+  Platform
+} from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Observable, Subscription } from 'rxjs';
@@ -48,11 +65,28 @@ import { ScanPage } from '../scan/scan';
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
+
+  animations: [
+    trigger('fadeInUp', [
+      state('void', style({ opacity: '0' })),
+      state('*', style({ opacity: '1' })),
+      transition('void <=> *', animate('150ms ease-in'))
+    ])
+  ]
 })
 export class HomePage {
-  @ViewChild('showCard')
-  showCard;
+  @ViewChild('pageTop') pageTop: Content;
+  @ViewChild('showCard') showCard;
+  @ViewChild('userNameId') userNameId: ElementRef;
+  @ViewChild('scan') scanId: ElementRef;
+  @ViewChild('balance') balanceId: ElementRef;
+  
+  
+
+  fabToHide;
+  oldScrollTop: number = 0;
+
   public vault;
   public vaultWallets;
   public wallets: any[];
@@ -115,7 +149,8 @@ export class HomePage {
     private bwcProvider: BwcProvider,
     private navParams: NavParams,
     private onGoingProcessProvider: OnGoingProcessProvider,
-    private pushNotificationsProvider: PushNotificationsProvider
+    private pushNotificationsProvider: PushNotificationsProvider,
+    private renderer: Renderer
   ) {
     this.status = this.navParams.data.status;
     this.slideDown = false;
@@ -136,6 +171,51 @@ export class HomePage {
       this.bwcProvider.getBitcoreDiamond() == undefined ? false : true;
   }
 
+  expandBalance() {
+    // this.userNameId = this.element.nativeElement.getElementbyClassName(
+    //   'header-extend'
+    // )[0];
+    setTimeout(() => {
+      if ( this.wallets.length !== 0 && this.totalb() !== 'none') {
+        this.renderer.setElementStyle(
+          this.userNameId.nativeElement,  'webkitTransition', 'ease 0.5s' );
+          this.renderer.setElementStyle(
+            this.scanId.nativeElement,  'webkitTransition', 'ease 0.5s' );
+          this.renderer.setElementStyle(
+              this.balanceId.nativeElement,  'webkitTransition', 'ease 0.5s' );
+
+        this.renderer.setElementStyle(this.userNameId.nativeElement, 'opacity', '1');
+        }
+    }, 500);
+    
+   
+  }
+
+  onContentScroll(e) {
+    if ( this.wallets.length !== 0 && this.totalb() !== 'none') {
+    if (e.scrollTop - this.oldScrollTop > 10) {
+      this.logger.log('DOWN');
+      
+      this.renderer.setElementStyle(this.userNameId.nativeElement, 'height', '60px');
+      this.renderer.setElementStyle(this.userNameId.nativeElement, 'padding-bottom', '15px');
+  
+      this.renderer.setElementStyle(this.scanId.nativeElement, 'margin-top', '5px');
+      this.renderer.setElementStyle(this.scanId.nativeElement, 'width', '20px');
+      this.renderer.setElementStyle(this.balanceId.nativeElement, 'padding-top', '0px');
+      
+    } else if (e.scrollTop - this.oldScrollTop < 0) {
+      this.renderer.setElementStyle(this.userNameId.nativeElement, 'height', '100px');
+      this.renderer.setElementStyle(this.userNameId.nativeElement, 'padding-bottom', '0px');
+     this.renderer.setElementStyle(this.scanId.nativeElement, 'margin-top', '0px');
+     this.renderer.setElementStyle(this.scanId.nativeElement, 'width', '28.5px')
+      this.renderer.setElementStyle(this.balanceId.nativeElement, 'padding-top', '27px');
+      
+      this.logger.log('UP');
+    }
+    this.oldScrollTop = e.scrollTop;
+  }
+  }
+
   ionViewWillEnter() {
     this._willEnter();
   }
@@ -153,6 +233,7 @@ export class HomePage {
     if (this.isElectron) {
       this.updateDesktopOnFocus();
     }
+    this.expandBalance()
   }
 
   private _didEnter() {
@@ -438,7 +519,7 @@ export class HomePage {
   }
 
   public checkClipboard() {
-/*
+    /*
     return this.clipboardProvider
       .getData()
       .then(async data => {
@@ -769,7 +850,6 @@ export class HomePage {
 
   public doRefreshButton(): void {
     this.debounceSetWallets();
-   
   }
 
   public scan(): void {

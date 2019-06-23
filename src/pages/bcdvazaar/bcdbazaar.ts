@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 
 import { Logger } from '../../providers/logger/logger';
 import { ShopTargetPage } from './shop-target/shop-target';
 
 import * as _ from 'lodash';
+import { ShopsProvider } from '../../providers/shops/shops';
 
 /**
  * Generated class for the Tab4Page page.
@@ -18,101 +19,85 @@ import * as _ from 'lodash';
   templateUrl: 'bcdbazaar.html'
 })
 export class TabBcdbazaar {
-  
-  private shopDirectory = [
-    {company: 'Acumotors', url: 'https://www.acumotors.com/', cat: 'Automotive', logo:'https://www.acumotors.com/Portals/3593/title-3.png', desc: 'Performance Parts for Japanese Cars' },
-    {company: 'RPM Outlet', url: 'https://www.shoprpmoutlet.com/', cat: 'Automotive', logo:'https://www.shoprpmoutlet.com/Portals/6664/title-3.png', desc: 'Performance Parts for Japanese Cars' },
-    {company: 'Poor Man Motorsports', url: 'https://www.poormanmotorsports.com/', cat: 'Automotive', logo:'https://www.poormanmotorsports.com/Portals/1504/title-8.png', desc: 'Performance Parts for Muscle Cars' },
-    {company: 'Remus Exhaust Shop', url: 'https://www.remusexhaustshop.com/', cat: 'Automotive', logo:'https://www.remusexhaustshop.com/Portals/1372/title-8.png', desc: 'Performance Exhausts' },
-    {company: 'Ecco Warning Lights', url: 'https://www.eccowarninglights.com/', cat: 'Automotive', logo:'https://www.eccowarninglights.com/Portals/2750/title-6.png', desc: 'Safety Lighting' },
-    {company: 'Remotes and Keys', url: 'https://www.remotesandkeys.com/', cat: 'Automotive', logo:'https://www.remotesandkeys.com/Portals/2757/title-14.png', desc: 'Car Remotes' },
-    {company: 'Motorcity ATV', url: 'https://www.motorcityatv.com/', cat: 'Automotive', logo:'https://www.motorcityatv.com/Portals/9170/title-5.png', desc: 'ATV Replacement Parts' },
-    {company: 'Vito\'s Performance', url: 'https://www.vitosperformance.com/', cat: 'Automotive', logo:'https://www.vitosperformance.com/Portals/9170/title-8.png', desc: 'ATV Replacement Parts' },
-    {company: 'BCD Bazaar', url: 'https://www.bcdbazaar.com/', cat: 'Electronics', logo:'https://www.bcdbazaar.com/Portals/10730/title-4.png', desc: 'Amazon Top Sellers' },
-    {company: 'Pelican Cases', url: 'https://www.pelicancases.com/', cat: 'Electronics', logo:'https://www.pelicancases.com/files//feeds/2.png', desc: 'Protective Cases' },
-    {company: 'Rosetta Coffee', url: 'https://www.rosetta.coffee/', cat: 'Grocery', logo:'https://www.rosetta.coffee/Portals/5826/title.png', desc: 'Specialty Coffee' },
-    {company: 'Exclusive X', url: 'https://www.exclusivex.com/', cat: 'Home', logo:'https://www.exclusivex.com/Portals/10570/title-8.png', desc: 'Custom Home Decor' },
-    {company: 'Mahones Wallpaper', url: 'https:/www.mahoneswallpapershop.com/', cat: 'Home', logo:'https://www.mahoneswallpapershop.com/files//themecontent/logo.gif', desc: 'Designer Wallpapers' },
-    {company: 'Marks Jewelers', url: 'https://www.marks-jewelers.com/', cat: 'Jewelry', logo:'https://www.marks-jewelers.com/Portals/6404/title-4.png', desc: 'Diamond Rings' },
-    {company: 'Cool Charm Bracelets', url: 'https://www.coolcharmbracelets.com/', cat: 'Jewelry', logo:'https://www.coolcharmbracelets.com/Portals/10384/title-3.png', desc: 'Charm Bracelets ' },
-    {company: 'H&M Lighting', url: 'https://www.hmlighting.com/', cat: 'Lighting', logo:'https://www.hmlighting.com/Portals/10253/title-4.png', desc: 'Lights for Home ' },
-    {company: 'Semperlite', url: 'https://www.semperlite.com/', cat: 'Lighting', logo:'https://www.semperlite.com/Portals/6637/title-3.png', desc: 'Lights for Home ' },
-    {company: 'Worlds Hottest Bats', url: 'https://www.worldshottestbats.com/', cat: 'Sports', logo:'https://www.worldshottestbats.com/Portals/10725/title-4.png', desc: 'Baseball Bats' },
-    
-    
-    
-    ];
-    private cats:any = [];
-    private items:any = [];
+  private shopDirectory = [];
+  public cats: any = [];
+  public items: any = [];
 
   public selectedCat: string;
   public filter: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public logger: Logger,
-    
-
-    public viewCtrl: ViewController) {
-      this.cats;
-      this.items;
+  constructor(
+    private navCtrl: NavController,
+    private logger: Logger,
+    private shopsProvider: ShopsProvider
+  ) {
+    this.cats;
+    this.items;
   }
 
-  public selectShop(e, lg){
-   
+  public selectShop(e, lg) {
     this.navCtrl.push(ShopTargetPage, { shop: e, logo: lg });
   }
 
   ionViewWillEnter() {
-    
-    this.shopDirectory;
-    this.cats =_.uniqBy(this.shopDirectory, 'cat');
-    this.items = this.shopDirectory;
-    
-    this.selectedCat= 'all';
+    this.shopDirectory = this.shopsProvider.shopDirectory;
+    this.populateData();
+
+    this.selectedCat = 'all';
+
+    this.shopsProvider
+      .getDirectory()
+      .then(data => {
+        if (!data) return;
+        this.shopDirectory = data;
+        this.populateData();
+      })
+      .catch(ex => {
+        this.logger.error(ex);
+      });
   }
 
-  public applyFilterCat(){
+  private populateData() {
+    this.cats = _.uniqBy(this.shopDirectory, 'cat');
+    this.items = this.shopDirectory;
+    this.applyFilter();
+  }
+
+  public applyFilterCat() {
     let val = this.selectedCat; // v.target.value;
-    
+
     if (val && val.trim() != 'all') {
       this.items = this.shopDirectory.filter(item => {
         return item.cat.toLowerCase().indexOf(val.toLowerCase()) > -1;
       });
     } else this.items = this.shopDirectory;
-
-    
-
   }
 
   public selectCat() {
     this.logger.log(this.selectedCat);
     this.filter = '';
     this.applyFilterCat();
-  
   }
-  public getStroes(){
-   
+  public getStroes() {
     this.applyFilter();
-   
   }
 
-  public searhclick(){
-    this.selectedCat= 'all';
+  public searhclick() {
+    this.selectedCat = 'all';
   }
 
   applyFilter() {
     let val = this.filter; // v.target.value;
-   
-   
+
     if (val && val.trim() != '') {
       this.items = this.shopDirectory.filter(item => {
         return item.company.toLowerCase().indexOf(val.toLowerCase()) > -1;
       });
-       } else this.items = this.shopDirectory;
-       
+    } else this.items = this.shopDirectory;
   }
 
   ionViewDidLoad() {}
   clearSearch() {
-    this.selectedCat= 'all';
+    this.selectedCat = 'all';
   }
 }
