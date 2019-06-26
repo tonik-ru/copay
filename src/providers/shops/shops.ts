@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 */
 @Injectable()
 export class ShopsProvider {
-  public shopDirectory: any[];
+  public shopDirectory = [];
   private updatedOn: number;
 
   constructor(public http: HttpClient) {}
