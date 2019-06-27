@@ -17,13 +17,8 @@ import { PersistenceProvider } from '../../../providers/persistence/persistence'
 
 import * as _ from 'lodash';
 
-import { IonicSelectableComponent } from 'ionic-selectable';
-
-
-
 import { AppProvider } from '../../../providers/app/app';
 import { FavoritesPage } from '../favorites/favorites';
-
 
 /**
  * Generated class for the TopcoinsPage page.
@@ -57,7 +52,6 @@ export class TopcoinsPage {
   public SearchOpened: boolean = false;
   public fav: any = [];
   public favorite: boolean = false;
-  
 
   // @ViewChild('slider') slider: Slides;
   // showlook = '0';
@@ -70,14 +64,12 @@ export class TopcoinsPage {
     private rate: RateProvider,
     private persistenceProvider: PersistenceProvider,
     private renderer: Renderer,
-  
     public app: AppProvider
   ) {
     // this.loadTopCoins();
     // this.showlook = '0';
     this.loadPairs();
     this.toggled = false;
-   
   }
   // selectedTab(index) {
   //   this.slider.slideTo(index);
@@ -128,22 +120,18 @@ export class TopcoinsPage {
         return item.Symbol.toLowerCase().indexOf(val.toLowerCase()) > -1;
       });
     } else this.items = this.topCoins;
-
-    
-   
   }
 
-  addToFavorite(id:number){
-  /*this.favoriteservice.addtoFavorite(id);
+  addToFavorite(id: number) {
+    /*this.favoriteservice.addtoFavorite(id);
   this.fav.push({'id': id, 'IsFav': true});*/
 
-  this.app.favlist.push({'id': id});
-  this.app.addTofavlist();
- 
+    this.app.favlist.push({ id });
+    this.app.addTofavlist();
   }
 
-  removeFavorite(id:number){
-/*
+  removeFavorite(id: number) {
+    /*
     const index: number = this.app.favlist.indexOf(id);
     this.logger.log('remove', this.app.favlist.indexOf(id));
     if (index !== -1) {
@@ -152,25 +140,21 @@ export class TopcoinsPage {
 
     this.app.favlist.delete({'id': id, 'IsFav': true});*/
 
-   
-
     if (this.app.favlist.find(x => x.id == id)) {
       this.app.favlist.splice(this.app.favlist.findIndex(x => x.id == id), 1);
-   }
-   if (id==76){
-     this.app.bcdremove=true;
-   }
+    }
+    if (id == 76) {
+      this.app.bcdremove = true;
+    }
 
     this.app.addTofavlist();
   }
 
-
-
-  isFav(id: number):boolean{
-    return this.app.favlist.find(x => x.id === id );
+  isFav(id: number): boolean {
+    return this.app.favlist.find(x => x.id === id);
   }
-  
-  goToFavariites(){
+
+  goToFavariites() {
     this.navCtrl.push(FavoritesPage);
   }
 
@@ -289,41 +273,6 @@ export class TopcoinsPage {
         decimals
       );
     }
-  }
-
-  selectCurrencyNew(
-    save: boolean = false,
-    event: {
-      component: IonicSelectableComponent;
-      value: any;
-    }
-  ) {
-    if (save)
-      this.persistenceProvider.setLastTopCoinsCurrencyUsed(
-        this.selectedCurrency
-      );
-    let res = this.topCoins;
-    this.currencySymbol = this.selectedCurrency.isoCode == 'USD' ? '$' : '';
-
-    let curRate = this.rate.getUsdRate(this.selectedCurrency.isoCode);
-    for (let i = 0; i < res.length; i++) {
-      res[i].PriceAlternative = res[i].PriceUSD * curRate;
-      let decimals = 2;
-
-      if (res[i].PriceAlternative < 0.000001) decimals = 8;
-      else if (res[i].PriceAlternative < 0.0001) decimals = 6;
-      else if (res[i].PriceAlternative < 1) decimals = 4;
-
-      res[i].PriceFormatted = FormatUtils.formatPrice(
-        res[i].PriceAlternative,
-        decimals
-      );
-      res[i].PriceUSDFormatted = FormatUtils.formatPrice(
-        res[i].PriceUSD,
-        decimals
-      );
-    }
-    this.logger.log(event.value);
   }
 
   public settings(): void {

@@ -9,7 +9,7 @@ import { TraderProvider } from '../../../providers/trader/trader';
 import { SettingsPage } from '../../settings/settings';
 
 import { DatafeedPage } from '../datafeed/datafeed';
-import { FormatUtils } from './formatutils';
+import { FormatUtils } from '../topcoins/formatutils';
 
 import { RateProvider } from '../../../providers/rate/rate';
 
@@ -19,11 +19,7 @@ import * as _ from 'lodash';
 
 import { IonicSelectableComponent } from 'ionic-selectable';
 
-
-
 import { AppProvider } from '../../../providers/app/app';
-
-
 
 /**
  * Generated class for the FavoritesPage page.
@@ -57,7 +53,6 @@ export class FavoritesPage {
   public SearchOpened: boolean = false;
   public fav: any = [];
   public favorite: boolean = false;
-  
 
   // @ViewChild('slider') slider: Slides;
   // showlook = '0';
@@ -70,14 +65,12 @@ export class FavoritesPage {
     private rate: RateProvider,
     private persistenceProvider: PersistenceProvider,
     private renderer: Renderer,
-  
     public app: AppProvider
   ) {
     // this.loadTopCoins();
     // this.showlook = '0';
     this.loadPairs();
     this.toggled = false;
-   
   }
   // selectedTab(index) {
   //   this.slider.slideTo(index);
@@ -128,22 +121,18 @@ export class FavoritesPage {
         return item.Symbol.toLowerCase().indexOf(val.toLowerCase()) > -1;
       });
     } else this.items = this.topCoins;
-
-    
-   
   }
 
-  addToFavorite(id:number){
-  /*this.favoriteservice.addtoFavorite(id);
+  addToFavorite(id: number) {
+    /*this.favoriteservice.addtoFavorite(id);
   this.fav.push({'id': id, 'IsFav': true});*/
 
-  this.app.favlist.push({'id': id});
-  this.app.addTofavlist();
- 
+    this.app.favlist.push({ id });
+    this.app.addTofavlist();
   }
 
-  removeFavorite(id:number){
-/*
+  removeFavorite(id: number) {
+    /*
     const index: number = this.app.favlist.indexOf(id);
     this.logger.log('remove', this.app.favlist.indexOf(id));
     if (index !== -1) {
@@ -152,26 +141,19 @@ export class FavoritesPage {
 
     this.app.favlist.delete({'id': id, 'IsFav': true});*/
 
-   
-
     if (this.app.favlist.find(x => x.id == id)) {
       this.app.favlist.splice(this.app.favlist.findIndex(x => x.id == id), 1);
-   }
-   if (id==76){
-    this.app.bcdremove=true;
-  }
-
+    }
+    if (id == 76) {
+      this.app.bcdremove = true;
+    }
 
     this.app.addTofavlist();
   }
 
-
-
-  isFav(id: number):boolean{
-    return this.app.favlist.find(x => x.id === id );
+  isFav(id: number): boolean {
+    return this.app.favlist.find(x => x.id === id);
   }
-  
-  
 
   ionViewDidLoad() {}
   ionViewDidEnter() {

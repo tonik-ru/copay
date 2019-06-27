@@ -36,7 +36,7 @@
             >
               <ionic-selectable item-content 
           
-              [(ngModel)]="selectedCurrency" (ionChange)="selectCurrencyNew($event, 1)"
+              [(ngModel)]="selectedCurrency" (onChange)="selectCurrency(1)"
               
               [items]="altCurrencyList"
               itemValueField="name"
