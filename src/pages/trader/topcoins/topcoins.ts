@@ -17,8 +17,8 @@ import { PersistenceProvider } from '../../../providers/persistence/persistence'
 
 import * as _ from 'lodash';
 
-import { AppProvider } from '../../../providers/app/app';
-import { FavoritesPage } from '../favorites/favorites';
+import { Storage } from '@ionic/storage';
+
 
 /**
  * Generated class for the TopcoinsPage page.
@@ -52,6 +52,7 @@ export class TopcoinsPage {
   public SearchOpened: boolean = false;
   public fav: any = [];
   public favorite: boolean = false;
+  public showfavriteslist: boolean = false;
 
   // @ViewChild('slider') slider: Slides;
   // showlook = '0';
@@ -64,12 +65,31 @@ export class TopcoinsPage {
     private rate: RateProvider,
     private persistenceProvider: PersistenceProvider,
     private renderer: Renderer,
-    public app: AppProvider
+
+    public storage: Storage
   ) {
     // this.loadTopCoins();
     // this.showlook = '0';
     this.loadPairs();
     this.toggled = false;
+
+    this.storage.get('bcdremove').then(val => {
+      if (val !== null) {
+        this.favorite = val;
+      }
+    });
+
+    if (!this.favorite) {
+      this.storage.set('favList', [{ id: 76 }]);
+    }
+
+    //  this.storage.remove('favList');
+    this.storage.get('favList').then(val => {
+      if (val !== null) {
+        this.fav = val;
+      }
+
+    });
   }
   // selectedTab(index) {
   //   this.slider.slideTo(index);
@@ -126,39 +146,35 @@ export class TopcoinsPage {
     /*this.favoriteservice.addtoFavorite(id);
   this.fav.push({'id': id, 'IsFav': true});*/
 
-    this.app.favlist.push({ id });
-    this.app.addTofavlist();
+    this.fav.push({ id });
+    this.storage.set('favList', this.fav);
+
   }
 
   removeFavorite(id: number) {
-    /*
-    const index: number = this.app.favlist.indexOf(id);
-    this.logger.log('remove', this.app.favlist.indexOf(id));
-    if (index !== -1) {
-        this.app.favlist.splice(index, 1);
-    }     
 
-    this.app.favlist.delete({'id': id, 'IsFav': true});*/
-
-    if (this.app.favlist.find(x => x.id == id)) {
-      this.app.favlist.splice(this.app.favlist.findIndex(x => x.id == id), 1);
+    if (this.fav.find(x => x.id == id)) {
+      this.fav.splice(this.fav.findIndex(x => x.id == id), 1);
     }
     if (id == 76) {
-      this.app.bcdremove = true;
+      this.favorite = true;
     }
 
-    this.app.addTofavlist();
+    this.storage.set('favList', this.fav);
+    this.storage.set('bcdremove', this.favorite);
+
   }
 
   isFav(id: number): boolean {
-    return this.app.favlist.find(x => x.id === id);
+    return this.fav.find(x => x.id === id);
   }
 
   goToFavariites() {
-    this.navCtrl.push(FavoritesPage);
+
+    this.showfavriteslist = !this.showfavriteslist;
   }
 
-  ionViewDidLoad() {}
+  ionViewDidLoad() { }
   ionViewDidEnter() {
     // this.slider.onlyExternal = true;
     this.logger.log('topcoins will enter');
