@@ -10,70 +10,71 @@
       ><img
         src="assets/tab-icons/shop-title.svg"
         style="margin-right: 10px; margin-bottom: -3px; width: 19px;"
-      />{{'Shopping'| translate}}</ion-title
+      />{{ 'Shopping' | translate }}</ion-title
     >
   </ion-navbar>
 </ion-header>
 
 <ion-content no-padding>
-    <ion-row>
-        <ion-col col-6 class="searchbtn1">
-          <ion-searchbar
-            [(ngModel)]="filter"
-            (ionInput)="getStroes($event)"
-            [showCancelButton]="false"
-            placeholder="{{'Store' | translate }}"
-            id="stay-cancel"
-            (click)="searhclick()"
-          >
-          </ion-searchbar
-        ></ion-col>
-        
-       
+  <ion-row>
+    <ion-col col-6 class="searchbtn1">
+      <ion-searchbar
+        [(ngModel)]="filter"
+        (ionInput)="applyFilter()"
+        [showCancelButton]="false"
+        placeholder="{{'Store' | translate }}"
+        id="stay-cancel"
+      >
+      </ion-searchbar
+    ></ion-col>
 
-        <ion-col col-6 class="searchbtn1">
-          <ion-item>
-            <ion-label class="labelexchange" style="display:none"
-              >{{'Category' | translate}}</ion-label
-            >
-            <ion-select placeholder="Category" title="{{'Category'| translate}}" [(ngModel)]="selectedCat"
-                        (ionChange)="selectCat($event)" interface="popover">
-              <ion-option value="all" selected>{{'All' | translate}}</ion-option>
-              <ion-option *ngFor="let p of cats" value="{{p.cat}}"> {{p.cat | translate}}</ion-option>
-            </ion-select></ion-item
+    <ion-col col-6 class="searchbtn1">
+      <ion-item>
+        <ion-label class="labelexchange" style="display:none">{{
+          'Category' | translate
+        }}</ion-label>
+        <ion-select
+          placeholder="Category"
+          title="{{'Category'| translate}}"
+          [(ngModel)]="selectedCat"
+          (ionChange)="selectCat()"
+          interface="popover"
+        >
+          <ion-option value="all" selected>{{ 'All' | translate }}</ion-option>
+          <ion-option *ngFor="let p of cats" value="{{p.cat}}">
+            {{ p.cat | translate }}</ion-option
           >
-        </ion-col>
-      </ion-row>
+        </ion-select></ion-item
+      >
+    </ion-col>
+  </ion-row>
 
-      
   <ion-list>
     <ion-item
       *ngFor="let p of items"
       (click)="selectShop(p.url, p.logo)"
       class="market-link item item-block item-ios {{p.company}}"
     >
-    <ion-thumbnail item-left ><img [src]="p.logo"></ion-thumbnail>
-    <ion-row no-padding>
-      <ion-col col-7>
-    <!-- <h2>{{p.company  | translate}}</h2> -->
-    <p>{{p.desc  | translate}}</p>
-  </ion-col> 
-  <ion-col col-5 style="display: flex;
-  align-items: center;justify-content: flex-end;"> 
-      <p class="bullish-btn">
-          {{p.cat | translate}}
-      
-      
-    </p>
-  </ion-col>
+      <ion-thumbnail item-left><img [src]="p.logo"/></ion-thumbnail>
+      <ion-row no-padding>
+        <ion-col col-7>
+          <!-- <h2>{{p.company  | translate}}</h2> -->
+          <p>{{ p.desc | translate }}</p>
+        </ion-col>
+        <ion-col
+          col-5
+          style="display: flex;
+  align-items: center;justify-content: flex-end;"
+        >
+          <p class="bullish-btn">{{ p.cat | translate }}</p>
+        </ion-col>
+      </ion-row>
+    </ion-item></ion-list
+  >
 
-   </ion-row>
+  <!--
+    <iframe name="framebcdbazaar" src="https://www.bcdbazaar.com/" width="100%" height="100%" style="outline: none; border: none;">
 
-       
-    </ion-item></ion-list>
-
-  <!-- <iframe name="framebcdbazaar" src="https://www.bcdbazaar.com/" width="100%" height="100%" style="outline: none; border: none;">
-   
-  </iframe> -->
-  
+    </iframe>
+  -->
 </ion-content>

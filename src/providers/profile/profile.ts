@@ -998,7 +998,10 @@ export class ProfileProvider {
   }
 
   public isDisclaimerAccepted(): Promise<any> {
-    return new Promise((resolve, reject) => {
+    return Promise.resolve(true);
+    /*
+    return
+     new Promise((resolve, reject) => {
       const disclaimerAccepted =
         this.profile && this.profile.disclaimerAccepted;
       if (disclaimerAccepted) return resolve();
@@ -1013,6 +1016,7 @@ export class ProfileProvider {
         }
       });
     });
+    */
   }
 
   public isOnboardingCompleted(): Promise<any> {
@@ -1198,13 +1202,11 @@ export class ProfileProvider {
           .then(walletClient => {
             const coin =
               opts.coin == 'bcd'
-                ? '[BCD]'
+                ? 'Bitcoin Diamond'
                 : opts.coin == 'btc'
-                ? '[BTC]'
-                : '[BCH]';
-            const name =
-              opts.name ||
-              `${this.translate.instant('Personal Wallet')} ${coin}`;
+                ? 'Bitcoin'
+                : 'Bitcoin Cash';
+            const name = opts.name || coin;
             const myName = opts.myName || this.translate.instant('me');
 
             walletClient.createWallet(

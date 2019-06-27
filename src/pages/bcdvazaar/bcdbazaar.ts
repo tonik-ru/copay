@@ -19,11 +19,11 @@ import { ShopsProvider } from '../../providers/shops/shops';
   templateUrl: 'bcdbazaar.html'
 })
 export class TabBcdbazaar {
-  private shopDirectory = [];
-  public cats: any = [];
-  public items: any = [];
+  private shopDirectory: any[];
+  public cats = [];
+  public items = [];
 
-  public selectedCat: string;
+  public selectedCat: string = 'all';
   public filter: string;
 
   constructor(
@@ -75,25 +75,28 @@ export class TabBcdbazaar {
 
   public selectCat() {
     this.logger.log(this.selectedCat);
-    this.filter = '';
-    this.applyFilterCat();
-  }
-  public getStroes() {
+    // this.filter = '';
+    // this.applyFilterCat();
     this.applyFilter();
   }
 
   public searhclick() {
-    this.selectedCat = 'all';
+    // this.selectedCat = 'all';
   }
 
-  applyFilter() {
-    let val = this.filter; // v.target.value;
+  public applyFilter() {
+    var searchCategory = (this.selectedCat || '').toLowerCase();
+    var searchStr = (this.filter || '').toLowerCase();
 
-    if (val && val.trim() != '') {
-      this.items = this.shopDirectory.filter(item => {
-        return item.company.toLowerCase().indexOf(val.toLowerCase()) > -1;
-      });
-    } else this.items = this.shopDirectory;
+    this.items = this.shopDirectory.filter(item => {
+      return (
+        (item.company.toLowerCase().indexOf(searchStr) > -1 ||
+          item.desc.toLowerCase().indexOf(searchStr) > -1 ||
+          searchStr == '') &&
+        (item.cat.toLowerCase().indexOf(searchCategory) > -1 ||
+          searchCategory == 'all')
+      );
+    });
   }
 
   ionViewDidLoad() {}
