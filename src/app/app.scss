@@ -835,3 +835,46 @@ ion-header.header.header-md {
   }
   .alert-ios .alert-title, .alert-ios .alert-radio-label{color:#FFF;}
 }
+
+ion-modal{
+  .searchbar-ios .searchbar-input {
+    padding: 0 28px;
+    border-radius: 5px;
+    height: 3rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: #FFF;
+    background-color: #fff;
+    border: 1px solid #fff;
+    border-radius: 4px;
+}
+.searchbar-ios .searchbar-search-icon {
+  left: 9px;
+  top: 9px;
+  background-image:url("data:image/svg+xml;charset=utf-8,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2013%2013'><path%20fill='rgba(255,%20255,%20255,%200.5)'%20d='M5,1c2.2,0,4,1.8,4,4S7.2,9,5,9S1,7.2,1,5S2.8,1,5,1%20M5,0C2.2,0,0,2.2,0,5s2.2,5,5,5s5-2.2,5-5S7.8,0,5,0%20L5,0z'/><line%20stroke='rgba(255,%20255,%20255,%200.5)'%20stroke-miterlimit='10'%20x1='12.6'%20y1='12.6'%20x2='8.2'%20y2='8.2'/></svg>");
+}
+
+.searchbar-ios {
+  padding: 16px 8px;
+  min-height: 44px;
+  
+  background: transparent;
+}
+.toolbar .searchbar-ios .searchbar-input{
+  background: transparent;
+}
+
+::-webkit-input-placeholder {
+  color: #FFF !important;
+  }
+  *:-moz-placeholder {
+  color: #FFF!important;
+  }
+  *:-ms-input-placeholder {
+  color: #FFF!important;
+  }
+  
+  input::-webkit-input-placeholder {
+  color:#FFF;
+  }
+}

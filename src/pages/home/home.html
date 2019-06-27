@@ -20,11 +20,11 @@
       />
       {{ 'Wallet' | translate }}
     </ion-title>
-    <ion-buttons right class="settings-button" *ngIf="wallets && wallets[0]">
+    <ion-buttons right class="settings-button">
       <button
         class="modal-close-button"
         (click)="toggleBalanceNew()"
-        ion-button
+        ion-button  *ngIf="wallets && wallets[0]"
       >
         <!--
           <ion-icon>
@@ -52,7 +52,7 @@
       <button
         ion-button
         class="modal-close-button"
-        (click)="scan()"
+        (click)="goscan()"
         *ngIf="wallets && wallets[0] && totalb() == 'none'"
       >
         <!-- <img src="assets/img/scan-new.svg" style="width:28px;"> -->
@@ -101,7 +101,7 @@
         <ion-col col-2 text-right
           ><img
             #scan
-            (click)="scan()"
+            (click)="goscan()"
             src="assets/img/scan-new-top.svg"
             style="  margin-top: 0px; margin-right: 15px;margin-bottom: -5px"
           />
@@ -370,7 +370,7 @@
                 </span>
                 <span *ngIf="wallet.scanning" translate>Scanning funds</span>
                 <span *ngIf="wallet.balanceHidden && !wallet.scanning"
-                  >[ <span translate>Balance Hidden</span>]</span
+                  > <span translate>***</span></span
                 >
                 <span class="text-gray" *ngIf="wallet.credentials.m > 1"
                   >{{ wallet.credentials.m }}-of-{{
@@ -466,7 +466,7 @@
                   </span>
                   <span *ngIf="wallet.scanning" translate>Scanning funds</span>
                   <span *ngIf="wallet.balanceHidden && !wallet.scanning"
-                    >[ <span translate>Balance Hidden</span>]</span
+                    ><span translate>***</span></span
                   >
                   <span *ngIf="wallet.credentials.m > 1"
                     >{{ wallet.credentials.m }}-of-{{
@@ -555,7 +555,7 @@
                   </span>
                   <span *ngIf="wallet.scanning" translate>Scanning funds</span>
                   <span *ngIf="wallet.balanceHidden && !wallet.scanning"
-                    >[ <span translate>Balance Hidden</span>]</span
+                    ><span translate>***</span></span
                   >
                   <span *ngIf="wallet.credentials.m > 1"
                     >{{ wallet.credentials.m }}-of-{{
@@ -644,7 +644,7 @@
                   </span>
                   <span *ngIf="wallet.scanning" translate>Scanning funds</span>
                   <span *ngIf="wallet.balanceHidden && !wallet.scanning"
-                    >[ <span translate>Balance Hidden</span>]</span
+                    ><span translate>***</span></span
                   >
                   <span class="text-gray" *ngIf="wallet.credentials.m > 1"
                     >{{ wallet.credentials.m }}-of-{{

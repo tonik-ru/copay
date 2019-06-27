@@ -22,21 +22,21 @@ import { IonicSelectableComponent } from 'ionic-selectable';
 
 
 import { AppProvider } from '../../../providers/app/app';
-import { FavoritesPage } from '../favorites/favorites';
+
 
 
 /**
- * Generated class for the TopcoinsPage page.
+ * Generated class for the FavoritesPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
 
 @Component({
-  selector: 'page-topcoins',
-  templateUrl: 'topcoins.html'
+  selector: 'page-favorites',
+  templateUrl: 'favorites.html'
 })
-export class TopcoinsPage {
+export class FavoritesPage {
   @ViewChild('tabletitle') tabletitleId: ElementRef;
   fabToHide;
   oldScrollTop: number = 0;
@@ -158,8 +158,9 @@ export class TopcoinsPage {
       this.app.favlist.splice(this.app.favlist.findIndex(x => x.id == id), 1);
    }
    if (id==76){
-     this.app.bcdremove=true;
-   }
+    this.app.bcdremove=true;
+  }
+
 
     this.app.addTofavlist();
   }
@@ -170,9 +171,7 @@ export class TopcoinsPage {
     return this.app.favlist.find(x => x.id === id );
   }
   
-  goToFavariites(){
-    this.navCtrl.push(FavoritesPage);
-  }
+  
 
   ionViewDidLoad() {}
   ionViewDidEnter() {

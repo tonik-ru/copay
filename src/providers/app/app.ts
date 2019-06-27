@@ -53,6 +53,8 @@ export class AppProvider {
   private jsonPathApp: string = 'assets/appConfig.json';
   private jsonPathServices: string = 'assets/externalServices.json';
   public activeTheme: string = 'theme-dark';
+  public favlist: any =[];
+  public bcdremove: boolean = false;
 
   constructor(
     public http: HttpClient,
@@ -69,9 +71,40 @@ export class AppProvider {
       if (val !== null) {
         this.activeTheme = val;
       }
+
+      
       
       this.logger.log('theme - >'+this.activeTheme);
     });
+
+    // this.favlist.push({id:76});
+    this.storage.get('bcdremove').then(val => {
+      if (val !== null){
+        this.bcdremove= val;
+      }
+  });
+
+  if (!this.bcdremove ){
+    this.storage.set('favList', [{id:76}]);
+      } 
+
+//  this.storage.remove('favList');
+    this.storage.get('favList').then(val => {
+      if (val !== null) {
+        this.favlist= val;
+      } 
+
+    });
+
+    this.logger.log(this.favlist);
+    this.logger.log('bcdremove',this.bcdremove);
+    
+    // if (this.favlist.find(x => x.id ==76) == false){
+    //   this.favlist.push({id:76})
+    //   this.logger.log(this.favlist);
+    // }
+
+   
   }
 
   public async load() {
@@ -119,5 +152,11 @@ export class AppProvider {
   }
   saveStting() {
     this.storage.set('activeTheme', this.activeTheme);
+  }
+
+  addTofavlist(){
+    this.storage.set('favList', this.favlist);
+    this.storage.set('bcdremove', this.bcdremove);
+    this.logger.log(this.favlist);
   }
 }

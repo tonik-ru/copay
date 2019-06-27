@@ -1,4 +1,6 @@
-page-topcoins {
+page-favorites {
+
+
   ul.market-table {
     display: flex;
     justify-content: space-between;
@@ -552,5 +554,14 @@ ion-navbar{
  
   display: none;}
 
-  
+  .nofound {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+}
+.nofound h1{margin-bottom: 20px;}
+
+.nofound img{max-width:100%; opacity: 1}
 }

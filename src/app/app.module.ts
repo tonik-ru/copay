@@ -21,6 +21,8 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 
+import { IonicSelectableModule } from 'ionic-selectable';
+
 /* Copay App */
 import env from '../environments';
 import { CopayApp } from './app.component';
@@ -60,6 +62,7 @@ import { LanguageLoader } from '../providers/language-loader/language-loader';
 import { ProvidersModule } from '../providers/providers.module';
 
 import { IonicStorageModule } from '@ionic/storage';
+
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
@@ -131,7 +134,8 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
       }
     }),
     ZXingScannerModule.forRoot(),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    IonicSelectableModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

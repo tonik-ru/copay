@@ -2847,3 +2847,12 @@ msgstr "1д"
 
 msgid "3D"
 msgstr "3д"
+
+msgid "Favorites Coins"
+msgstr "Избранные монеты"
+
+msgid "No Favorites"
+msgstr "Нет Избранных"
+
+msgid "Swipe to add to favorites"
+msgstr "Проведите что бы добавить в Избранное"

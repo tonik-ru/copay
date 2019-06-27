@@ -1,0 +1,142 @@
+<!--
+  Generated template for the FavoritesPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title><ion-icon name="star-outline"></ion-icon> {{'Favorites Coins'| translate}}</ion-title>
+  </ion-navbar>
+  <ul class="trader-title ontop" #tabletitle style="display:none; transition: esae 0.5s">
+      <li>{{'COIN' | translate}}</li>
+      <li>{{'PRICE' | translate}}</li>
+      <li>{{'< 24H' | translate}}</li>  
+      <li>{{'4H' | translate}}</li>
+      <li>{{'1D' | translate}}</li>
+      <li>{{'3D' | translate}}</li>
+     
+   </ul>
+</ion-header>
+
+
+
+<ion-content no-padding (ionScroll)="onContentScroll($event)">
+
+ 
+
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content> </ion-refresher-content>
+    </ion-refresher>
+    
+        <ion-row *ngIf="app.favlist.length !== 0">
+          <!-- <ion-col col-4 class="searchbtn1">
+            <ion-searchbar
+              [(ngModel)]="filter"
+              (ionInput)="getTopics($event)"
+              [showCancelButton]="false"
+              placeholder="{{'Symbol' | translate }}"
+              id="stay-cancel"
+            >
+            </ion-searchbar
+          ></ion-col>
+          
+          <ion-col col-4 class="searchbtn1">
+              <ion-item>
+                <ion-select [(ngModel)]="selectedCurrency" (ionChange)="selectCurrency(1)" placeholder="Currency" title="Currency">
+                  <ion-option *ngFor="let cur of altCurrencyList" [value]="cur">{{ cur.name }}</ion-option>
+                </ion-select></ion-item
+              >
+            </ion-col> -->
+  
+          <ion-col col-12 class="searchbtn1s" text-center >
+            <ion-item>
+              <ion-label class="labelexchange" style="display:none"
+                >{{'Select Exchange' | translate}}</ion-label
+              >
+              <ion-select placeholder="Exchange" title="Exchange">
+                <ion-option value="binance" selected>Binance</ion-option>
+              </ion-select></ion-item
+            >
+          </ion-col>
+        </ion-row>
+  
+        <ion-spinner
+          name="crescent"
+          *ngIf="topCoins.length <= 2"
+          class="loaderblock"
+        ></ion-spinner>
+  
+        <ion-list *ngIf="topCoins && app.favlist.length !== 0">
+          <ul class="trader-title first">
+              <li>{{'COIN' | translate}}</li>
+        <li>{{'PRICE' | translate}}</li>
+        <li>{{'< 24H' | translate}}</li>  
+        <li>{{'4H' | translate}}</li>
+        <li>{{'1D' | translate}}</li>
+        <li>{{'3D' | translate}}</li>
+       
+          </ul>
+          <ng-container  *ngFor="let p of items">
+
+              <ion-item-sliding ion-list *ngIf="isFav(p.CurrencyId)" >
+                  <ion-item>
+                      <ul class="trader-title"  (click)="selectCoin(p)">
+                          <li><div class="market-coinlogoblock">
+                              <span class="market-coinlogo">
+                                <img 
+                                  class="clogo-market"
+                                  [src]="'assets/logoscoinss/'+p.Symbol+'.png'"  onError="this.src=''"
+                                  />
+                              </span>
+                            </div>
+                            <span>{{ p.Symbol }}</span></li>
+                            <li><span class="market-coinprice" *ngIf="p.Symbol == 'TOP20'">
+                                {{ currencySymbol }}{{ p.PriceUSDFormatted }}B
+                            </span>
+                            <span class="market-coinprice" *ngIf="p.Symbol != 'TOP20'">
+                                {{ currencySymbol }}{{ p.PriceFormatted }}
+                            </span></li>
+                            <li>
+                                <p
+                                  class=""
+                                  [ngClass]="{
+                                    'bullish-btn': p.IsIncreasing,
+                                    'bearish-btn': !p.IsIncreasing
+                                  }"
+                                >
+                                  {{ p.PercentChange24h | number: '1.2-2' }}%
+                                 
+                                </p>
+                              </li>
+                            <li> <i [ngClass]="{'fas fa-arrow-up': p.Score1IsRising}" style="color: #8acf20"></i><i [ngClass]="{'fas fa-arrow-down': !p.Score1IsRising}" style="color: #e8a2b3"></i></li>
+                            <li> <i [ngClass]="{'fas fa-arrow-up': p.Score2IsRising}" style="color: #8acf20"></i><i [ngClass]="{'fas fa-arrow-down': !p.Score2IsRising}" style="color: #e8a2b3"></i></li>
+                             <li> <i [ngClass]="{'fas fa-arrow-up': p.Score3IsRising}" style="color: #8acf20"></i><i [ngClass]="{'fas fa-arrow-down': !p.Score3IsRising}" style="color: #e8a2b3"></i></li>
+                            
+                            </ul>
+                  </ion-item>
+                  <ion-item-options side="right" >
+                    <button  *ngIf="!isFav(p.CurrencyId)" ion-button expandable (click)="addToFavorite(p.CurrencyId)">
+               
+                    <ion-icon name="star-outline"></ion-icon>
+                   
+                    </button>
+                    <button  *ngIf="isFav(p.CurrencyId)" ion-button expandable (click)="removeFavorite(p.CurrencyId)">
+                    <ion-icon  name="md-star"></ion-icon>
+                    </button>
+                  </ion-item-options>
+                </ion-item-sliding>
+            
+          
+        </ng-container>
+
+        
+        </ion-list>
+        <div *ngIf="app.favlist.length == 0" class="nofound"><h1>{{'No Favorites' | translate}}</h1>
+          <p>{{'Swipe to add to favorites' | translate}}</p>
+          <img src="../assets/img/no-fav.gif"></div>
+     
+     
+  </ion-content>

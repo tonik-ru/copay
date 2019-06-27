@@ -1,6 +1,12 @@
 .theme-dark{
-  ion-content{
+   ion-content{
     background:#161b26;
+  }
+
+  ionic-selectable-modal{
+    ion-content{
+      background:#161b26;
+    }
   }
  
   .scroll-content{
@@ -92,7 +98,7 @@ $alert-ios--background:#161b26;
   .settings-list .item {
     border-bottom: 0.55px solid #000;}
   
-    .item-ios{background: transparent; color: #fff}
+    .list-ios ion-item-sliding, .item-ios{background: transparent; color: #fff}
     .label-ios{ color:#FFF}
     .item-ios ion-icon[item-left], .item-ios ion-icon[item-right], .item-ios ion-icon[item-start], .item-ios ion-icon[item-end]{color:#fff}
 

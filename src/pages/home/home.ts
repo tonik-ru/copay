@@ -852,7 +852,7 @@ export class HomePage {
     this.debounceSetWallets();
   }
 
-  public scan(): void {
+  public goscan(): void {
     this.navCtrl.push(ScanPage);
   }
 
