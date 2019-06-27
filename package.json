@@ -2,7 +2,7 @@
   "name": "bcdpay",
   "description": "A Secure Bitcoin Wallet",
   "author": "Chimpion",
-  "version": "5.7.16",
+  "version": "5.7.23",
   "keywords": [
     "bitcoin",
     "wallet",
@@ -240,6 +240,8 @@
     "im.ltdev.cordova.UserAgent": "https://github.com/danielsogl/cordova-plugin-useragent.git",
     "ionic-angular": "3.9.2",
     "ionic-image-loader": "6.3.2",
+    "ionic-select-searchable": "^2.10.0",
+    "ionic-selectable": "^3.4.0",
     "ionicons": "3.0.0",
     "jquery": "^3.4.0",
     "lodash": "4.17.11",
