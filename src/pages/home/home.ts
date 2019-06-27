@@ -169,6 +169,7 @@ export class HomePage {
 
     this.bcdExists =
       this.bwcProvider.getBitcoreDiamond() == undefined ? false : true;
+      this.logger.debug('BCD Exists = ' + this.bcdExists);
   }
 
   expandBalance() {

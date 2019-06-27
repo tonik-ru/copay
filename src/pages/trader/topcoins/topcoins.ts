@@ -19,7 +19,6 @@ import * as _ from 'lodash';
 
 import { Storage } from '@ionic/storage';
 
-
 /**
  * Generated class for the TopcoinsPage page.
  *
@@ -65,7 +64,6 @@ export class TopcoinsPage {
     private rate: RateProvider,
     private persistenceProvider: PersistenceProvider,
     private renderer: Renderer,
-
     public storage: Storage
   ) {
     // this.loadTopCoins();
@@ -88,7 +86,6 @@ export class TopcoinsPage {
       if (val !== null) {
         this.fav = val;
       }
-
     });
   }
   // selectedTab(index) {
@@ -148,11 +145,9 @@ export class TopcoinsPage {
 
     this.fav.push({ id });
     this.storage.set('favList', this.fav);
-
   }
 
   removeFavorite(id: number) {
-
     if (this.fav.find(x => x.id == id)) {
       this.fav.splice(this.fav.findIndex(x => x.id == id), 1);
     }
@@ -162,7 +157,6 @@ export class TopcoinsPage {
 
     this.storage.set('favList', this.fav);
     this.storage.set('bcdremove', this.favorite);
-
   }
 
   isFav(id: number): boolean {
@@ -170,11 +164,10 @@ export class TopcoinsPage {
   }
 
   goToFavariites() {
-
     this.showfavriteslist = !this.showfavriteslist;
   }
 
-  ionViewDidLoad() { }
+  ionViewDidLoad() {}
   ionViewDidEnter() {
     // this.slider.onlyExternal = true;
     this.logger.log('topcoins will enter');
