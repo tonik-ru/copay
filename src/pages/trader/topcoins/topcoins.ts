@@ -53,9 +53,6 @@ export class TopcoinsPage {
   public favorite: boolean = false;
   public showfavriteslist: boolean = false;
 
-  // @ViewChild('slider') slider: Slides;
-  // showlook = '0';
-
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -66,8 +63,6 @@ export class TopcoinsPage {
     private renderer: Renderer,
     public storage: Storage
   ) {
-    // this.loadTopCoins();
-    // this.showlook = '0';
     this.loadPairs();
     this.toggled = false;
 
@@ -81,16 +76,12 @@ export class TopcoinsPage {
       this.storage.set('favList', [{ id: 76 }]);
     }
 
-    //  this.storage.remove('favList');
     this.storage.get('favList').then(val => {
       if (val !== null) {
         this.fav = val;
       }
     });
   }
-  // selectedTab(index) {
-  //   this.slider.slideTo(index);
-  // }
 
   onContentScroll(e) {
     if (e.scrollTop - this.oldScrollTop > 10) {
@@ -117,9 +108,6 @@ export class TopcoinsPage {
     this.toggled = !this.toggled;
   }
 
-  initializeItems() {
-    // this.items = this.topCoins;
-  }
   goToSearch() {
     this.logger.log('OpenSearch');
     this.SearchOpened = !this.SearchOpened;
@@ -130,7 +118,7 @@ export class TopcoinsPage {
   }
 
   applyFilter() {
-    let val = this.filter; // v.target.value;
+    let val = this.filter;
 
     if (val && val.trim() != '') {
       this.items = this.topCoins.filter(item => {
@@ -186,16 +174,6 @@ export class TopcoinsPage {
           x => (x.isoCode == 'USD' || x.isoCode == 'BTC' ? 0 : 1),
           x => x.IsoCode
         ]);
-        // let idx = _.keyBy(this.unusedCurrencyList, 'isoCode');
-        // let idx2 = _.keyBy(this.lastUsedAltCurrencyList, 'isoCode');
-
-        // this.completeAlternativeList = _.reject(
-        //   this.completeAlternativeList,
-        //   c => {
-        //     return idx[c.isoCode] || idx2[c.isoCode];
-        //   }
-        // );
-        // this.altCurrencyList = this.completeAlternativeList.slice(0, 20);
 
         // we need this dummy field, othervise ngModel failes to bind correctly on second view show
         this.altCurrencyList.forEach(x => (x.dummy = Math.random()));
@@ -222,10 +200,6 @@ export class TopcoinsPage {
       .catch(err => {
         this.logger.error(err);
       });
-
-    // this.refreshTimer = timer(5000, 5000).subscribe(() =>
-    //   this.initializeItems()
-    // );
   }
 
   private resolveSelectedCurrency(cur) {

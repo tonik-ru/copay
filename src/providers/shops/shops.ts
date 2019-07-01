@@ -17,7 +17,8 @@ export class ShopsProvider {
     let now = Math.floor(Date.now() / 1000);
     if (this.updatedOn + 600 > now) return Promise.resolve();
 
-    var url = 'https://websocket.rekdeck.com/bcdpay/storedata.json';
+    var url =
+      'https://websocket.rekdeck.com/bcdpay/storedata.json?ts=' + Date.now();
     return this.http
       .get<any[]>(url)
       .toPromise()
