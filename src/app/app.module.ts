@@ -56,13 +56,10 @@ import { COMPONENTS } from '../components/components';
 /* Providers */
 /*import { from } from 'rxjs/observable/from';*/
 
-import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { ApiProvider } from '../providers/api/api';
 import { LanguageLoader } from '../providers/language-loader/language-loader';
 import { ProvidersModule } from '../providers/providers.module';
 
 import { IonicStorageModule } from '@ionic/storage';
-
 
 export function translateParserFactory() {
   return new InterpolatedTranslateParser();
@@ -138,18 +135,12 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
     IonicSelectableModule
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
-    CopayApp,
-    ...PAGES,
-    ...COMPONENTS
-  ],
+  entryComponents: [CopayApp, ...PAGES, ...COMPONENTS],
   providers: [
     {
       provide: ErrorHandler,
       useClass: IonicErrorHandler
-    },
-    ApiProvider,
-    InAppBrowser
+    }
   ]
 })
 export class AppModule {}

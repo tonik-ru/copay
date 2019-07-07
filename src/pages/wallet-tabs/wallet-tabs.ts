@@ -16,24 +16,24 @@ import { AppProvider } from '../../providers';
 @Component({
   selector: 'page-wallet-tabs',
   template: `
-  <div [class]="appProvider.activeTheme" #tabs >
-    <ion-tabs selectedIndex="1"  >
-      <ion-tab
-        [root]="receiveRoot"
-        tabTitle="{{'Receive'|translate}}"
-        tabIcon="tab-receive"
-      ></ion-tab>
-      <ion-tab
-        [root]="activityRoot"
-        tabTitle="{{'Activity'|translate}}"
-        tabIcon="tab-activity"
-      ></ion-tab>
-      <ion-tab
-        [root]="sendRoot"
-        tabTitle="{{'Send'|translate}}"
-        tabIcon="tab-send"
-      ></ion-tab>
-    </ion-tabs>
+    <div [class]="appProvider.activeTheme">
+      <ion-tabs selectedIndex="1" #tabs>
+        <ion-tab
+          [root]="receiveRoot"
+          tabTitle="{{'Receive'|translate}}"
+          tabIcon="tab-receive"
+        ></ion-tab>
+        <ion-tab
+          [root]="activityRoot"
+          tabTitle="{{'Activity'|translate}}"
+          tabIcon="tab-activity"
+        ></ion-tab>
+        <ion-tab
+          [root]="sendRoot"
+          tabTitle="{{'Send'|translate}}"
+          tabIcon="tab-send"
+        ></ion-tab>
+      </ion-tabs>
     </div>
   `
 })

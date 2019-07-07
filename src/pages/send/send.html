@@ -9,17 +9,20 @@
       (wallet && wallet.name) || ('Amount' | translate)
     }}</ion-title>
 
-    <ion-buttons *ngIf="wallet" right>
-      <button class="modal-close-button" (click)="goToMultiSendPage()" ion-button>
-        <ion-icon name="person-add"></ion-icon>
-      </button>
-    </ion-buttons>
-   
-
+    <!--
+      <ion-buttons *ngIf="wallet" right>
+        <button
+          class="modal-close-button"
+          (click)="goToMultiSendPage()"
+          ion-button
+        >
+          <ion-icon name="person-add"></ion-icon>
+        </button>
+      </ion-buttons>
+    -->
   </ion-navbar>
 
   <ion-toolbar *ngIf="wallet" [navbar-bg]="wallet.color">
-    
     <div
       *ngIf="!wallet.balanceHidden && !wallet.scanning && wallet.status"
       class="wallet-details-header__balance"
@@ -37,12 +40,10 @@
     >
       <span class="title" translate>[Balance Hidden]</span>
     </div>
-    
   </ion-toolbar>
-  
 </ion-header>
 
-<ion-content no-bounce >
+<ion-content no-bounce>
   <div class="prompt-user-fullscreen-container" *ngIf="shouldShowZeroState()">
     <div class="prompt-user">
       <div class="title-icon larger-icon">
@@ -80,25 +81,30 @@
             name="backspace"
             (click)="cleanSearch()"
           ></ion-icon>
-          <ion-icon item-end class="scan-icon" (click)="openScanner()">
-            <img src="assets/img/scan-ico.svg" />
-          </ion-icon>
+          <!--
+            <ion-icon item-end class="scan-icon" (click)="openScanner()">
+              <img src="assets/img/scan-ico.svg" />
+            </ion-icon>
+          -->
         </ion-item>
+        <div class="qr-container" (click)="openScanner()">
+          <img src="assets/img/scan-new-top.svg" />
+        </div>
       </div>
 
-      <!-- <div class="card">
+      <div class="card">
         <ion-item-divider class="title">
           <span translate>Transfer to Multiple Recipients</span>
         </ion-item-divider>
         <ion-list>
           <button ion-item (click)="goToMultiSendPage()">
-            <ion-icon class="item-img" item-start (click)="goToMultiSendPage()" >
+            <ion-icon class="item-img" item-start (click)="goToMultiSendPage()">
               <img src="assets/img/address-book-add.svg" />
             </ion-icon>
             <div class="item-title">Add recipient</div>
           </button>
         </ion-list>
-      </div> -->
+      </div>
 
       <page-transfer-to
         [wallet]="wallet"

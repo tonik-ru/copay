@@ -14,64 +14,73 @@
       <button ion-button class="modal-close-button" (click)="goToFavariites()">
         <ion-icon name="list" *ngIf="showfavriteslist"></ion-icon>
         <ion-icon name="star-outline" *ngIf="!showfavriteslist"></ion-icon>
-        <ion-badge color="danger" *ngIf="fav.length !== 0 && !showfavriteslist">{{ fav.length }}
+        <ion-badge color="danger" *ngIf="fav.length !== 0 && !showfavriteslist"
+          >{{ fav.length }}
         </ion-badge>
       </button>
-
     </ion-buttons>
     <ion-title>
-      <img src="assets/img/MoonCatcherLogo1.png" class="mooncather">
-      <!-- <img
-        src="assets/tab-icons/trade-title.svg"
-        style="margin-right: 10px; margin-bottom: -3px;width:19px; "
-      />{{ 'Trade' | translate }} -->
-
+      <img src="assets/img/MoonCatcherLogo1.png" class="mooncather" />
+      <!--
+        <img
+          src="assets/tab-icons/trade-title.svg"
+          style="margin-right: 10px; margin-bottom: -3px;width:19px; "
+        />{{ 'Trade' | translate }}
+      -->
     </ion-title>
     <ion-buttons right class="settings-button">
-
-      <!-- <ion-select [(ngModel)]="selectedCurrency" (ionChange)="selectCurrency(1)" placeholder="Currency" title="Currency">
-            <ion-option *ngFor="let cur of altCurrencyList" [value]="cur">{{ cur.name }}</ion-option>
-          </ion-select> -->
+      <!--
+        <ion-select [(ngModel)]="selectedCurrency" (ionChange)="selectCurrency(1)" placeholder="Currency" title="Currency">
+          <ion-option *ngFor="let cur of altCurrencyList" [value]="cur">{{ cur.name }}</ion-option>
+        </ion-select>
+      -->
       <ion-item>
-        <ion-label class="labelexchange" style="display:none">{{'Select Currency' | translate}}</ion-label>
-        <ionic-selectable item-content [(ngModel)]="selectedCurrency" (onChange)="selectCurrency(1)"
-          [items]="altCurrencyList" itemValueField="name" itemTextField="name" [canSearch]="true">
-
+        <ion-label class="labelexchange" style="display:none">{{
+          'Select Currency' | translate
+        }}</ion-label>
+        <ionic-selectable
+          item-content
+          [(ngModel)]="selectedCurrency"
+          (onChange)="selectCurrency(1)"
+          [items]="altCurrencyList"
+          itemValueField="name"
+          itemTextField="name"
+          [canSearch]="true"
+        >
         </ionic-selectable>
       </ion-item>
-
-
     </ion-buttons>
   </ion-navbar>
 
   <ion-navbar *ngIf="SearchOpened">
-
-
-    <ion-searchbar animated [(ngModel)]="filter" (ionInput)="getTopics($event)" [showCancelButton]="false"
-      placeholder="{{'Symbol' | translate }}" id="stay-cancel" (ionCancel)="goToSearch()">
+    <ion-searchbar
+      animated
+      [(ngModel)]="filter"
+      (ionInput)="getTopics($event)"
+      [showCancelButton]="false"
+      placeholder="{{'Symbol' | translate }}"
+      id="stay-cancel"
+      (ionCancel)="goToSearch()"
+    >
     </ion-searchbar>
-
-
 
     <ion-buttons right class="settings-button">
       <button class="modal-close-button" ion-button (click)="goToSearch()">
-        <ion-icon name="md-close"></ion-icon>
-      </button></ion-buttons>
-
-
-
-
+        <ion-icon name="md-close"></ion-icon></button
+    ></ion-buttons>
   </ion-navbar>
-  <ul class="trader-title ontop" #tabletitle style="display:none; transition: esae 0.5s">
-    <li>{{'COIN' | translate}}</li>
-    <li>{{'PRICE' | translate}}</li>
-    <li>{{'< 24H' | translate}}</li>
-    <li>{{'4H' | translate}}</li>
-    <li>{{'1D' | translate}}</li>
-    <li>{{'3D' | translate}}</li>
-
+  <ul
+    class="trader-title ontop"
+    #tabletitle
+    style="display:none; transition: esae 0.5s"
+  >
+    <li>{{ 'COIN' | translate }}</li>
+    <li>{{ 'PRICE' | translate }}</li>
+    <li>{{ '< 24H' | translate }}</li>
+    <li>{{ '4H' | translate }}</li>
+    <li>{{ '1D' | translate }}</li>
+    <li>{{ '7D' | translate }}</li>
   </ul>
-
 
   <!--
     <ion-toolbar>
@@ -88,37 +97,37 @@
 </ion-header>
 
 <ion-content no-padding (ionScroll)="onContentScroll($event)">
-
-
-
-
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content> </ion-refresher-content>
   </ion-refresher>
 
   <ion-row>
-    <!-- <ion-col col-4 class="searchbtn1">
-          <ion-searchbar
-            [(ngModel)]="filter"
-            (ionInput)="getTopics($event)"
-            [showCancelButton]="false"
-            placeholder="{{'Symbol' | translate }}"
-            id="stay-cancel"
+    <!--
+      <ion-col col-4 class="searchbtn1">
+        <ion-searchbar
+          [(ngModel)]="filter"
+          (ionInput)="getTopics($event)"
+          [showCancelButton]="false"
+          placeholder="{{'Symbol' | translate }}"
+          id="stay-cancel"
+        >
+        </ion-searchbar
+      ></ion-col>
+
+      <ion-col col-4 class="searchbtn1">
+          <ion-item>
+            <ion-select [(ngModel)]="selectedCurrency" (ionChange)="selectCurrency(1)" placeholder="Currency" title="Currency">
+              <ion-option *ngFor="let cur of altCurrencyList" [value]="cur">{{ cur.name }}</ion-option>
+            </ion-select></ion-item
           >
-          </ion-searchbar
-        ></ion-col>
-        
-        <ion-col col-4 class="searchbtn1">
-            <ion-item>
-              <ion-select [(ngModel)]="selectedCurrency" (ionChange)="selectCurrency(1)" placeholder="Currency" title="Currency">
-                <ion-option *ngFor="let cur of altCurrencyList" [value]="cur">{{ cur.name }}</ion-option>
-              </ion-select></ion-item
-            >
-          </ion-col> -->
+        </ion-col>
+    -->
 
     <ion-col col-12 class="searchbtn1s" text-center>
       <ion-item>
-        <ion-label class="labelexchange" style="display:none">{{'Select Exchange' | translate}}</ion-label>
+        <ion-label class="labelexchange" style="display:none">{{
+          'Select Exchange' | translate
+        }}</ion-label>
         <ion-select placeholder="Exchange" title="Exchange">
           <ion-option value="binance" selected>Binance</ion-option>
         </ion-select>
@@ -126,77 +135,121 @@
     </ion-col>
   </ion-row>
 
-  <ion-spinner name="crescent" *ngIf="topCoins.length <= 2" class="loaderblock"></ion-spinner>
+  <ion-spinner
+    name="crescent"
+    *ngIf="topCoins.length <= 2"
+    class="loaderblock"
+  ></ion-spinner>
 
   <div *ngIf="fav.length == 0 && showfavriteslist" class="nofound">
-    <h1>{{'No Favorites' | translate}}</h1>
-    <p>{{'Swipe to add to favorites' | translate}}</p>
-    <img src="../assets/img/no-fav.gif">
+    <h1>{{ 'No Favorites' | translate }}</h1>
+    <p>{{ 'Swipe to add to favorites' | translate }}</p>
+    <img src="../assets/img/no-fav.gif" />
   </div>
 
   <ion-list *ngIf="topCoins">
-    <ul *ngIf="!showfavriteslist || (fav.length !== 0 && showfavriteslist)" class="trader-title first">
-      <li>{{'COIN' | translate}}</li>
-      <li>{{'PRICE' | translate}}</li>
-      <li>{{'< 24H' | translate}}</li>
-      <li>{{'4H' | translate}}</li>
-      <li>{{'1D' | translate}}</li>
-      <li>{{'3D' | translate}}</li>
-
+    <ul
+      *ngIf="!showfavriteslist || (fav.length !== 0 && showfavriteslist)"
+      class="trader-title first"
+    >
+      <li>{{ 'COIN' | translate }}</li>
+      <li>{{ 'PRICE' | translate }}</li>
+      <li>{{ '< 24H' | translate }}</li>
+      <li>{{ '4H' | translate }}</li>
+      <li>{{ '1D' | translate }}</li>
+      <li>{{ '7D' | translate }}</li>
     </ul>
 
     <ion-item-sliding ion-list *ngFor="let p of items">
-
-      <ion-item *ngIf="!showfavriteslist || (isFav(p.CurrencyId) && showfavriteslist)">
-
-
+      <ion-item
+        *ngIf="!showfavriteslist || (isFav(p.CurrencyId) && showfavriteslist)"
+      >
         <ul class="trader-title" (click)="selectCoin(p)">
           <li>
             <div class="market-coinlogoblock">
               <span class="market-coinlogo">
-                <img class="clogo-market" [src]="'assets/logoscoinss/'+p.Symbol+'.png'" onError="this.src=''" />
+                <img
+                  class="clogo-market"
+                  [src]="
+                    'https://chimpion.io/bcdpay/logoscoinss/' +
+                    p.Symbol +
+                    '.png'
+                  "
+                  onError="this.src=''"
+                />
               </span>
             </div>
             <span>{{ p.Symbol }}</span>
           </li>
-          <li><span class="market-coinprice" *ngIf="p.Symbol == 'TOP20'">
+          <li>
+            <span class="market-coinprice" *ngIf="p.Symbol == 'TOP20'">
               {{ currencySymbol }}{{ p.PriceUSDFormatted }}B
             </span>
             <span class="market-coinprice" *ngIf="p.Symbol != 'TOP20'">
               {{ currencySymbol }}{{ p.PriceFormatted }}
-            </span></li>
+            </span>
+          </li>
           <li>
-            <p class="" [ngClass]="{
-                              'bullish-btn': p.IsIncreasing,
-                              'bearish-btn': !p.IsIncreasing
-                            }">
+            <p
+              class=""
+              [ngClass]="{
+                'bullish-btn': p.IsIncreasing,
+                'bearish-btn': !p.IsIncreasing
+              }"
+            >
               {{ p.PercentChange24h | number: '1.2-2' }}%
-
             </p>
           </li>
-          <li> <i [ngClass]="{'fas fa-arrow-up': p.Score1IsRising}" style="color: #8acf20"></i><i
-              [ngClass]="{'fas fa-arrow-down': !p.Score1IsRising}" style="color: #e8a2b3"></i></li>
-          <li> <i [ngClass]="{'fas fa-arrow-up': p.Score2IsRising}" style="color: #8acf20"></i><i
-              [ngClass]="{'fas fa-arrow-down': !p.Score2IsRising}" style="color: #e8a2b3"></i></li>
-          <li> <i [ngClass]="{'fas fa-arrow-up': p.Score3IsRising}" style="color: #8acf20"></i><i
-              [ngClass]="{'fas fa-arrow-down': !p.Score3IsRising}" style="color: #e8a2b3"></i></li>
-
+          <li>
+            <i
+              [ngClass]="{ 'fas fa-arrow-up': p.Score1IsRising }"
+              style="color: #8acf20"
+            ></i
+            ><i
+              [ngClass]="{ 'fas fa-arrow-down': !p.Score1IsRising }"
+              style="color: #e8a2b3"
+            ></i>
+          </li>
+          <li>
+            <i
+              [ngClass]="{ 'fas fa-arrow-up': p.Score2IsRising }"
+              style="color: #8acf20"
+            ></i
+            ><i
+              [ngClass]="{ 'fas fa-arrow-down': !p.Score2IsRising }"
+              style="color: #e8a2b3"
+            ></i>
+          </li>
+          <li>
+            <i
+              [ngClass]="{ 'fas fa-arrow-up': p.Score3IsRising }"
+              style="color: #8acf20"
+            ></i
+            ><i
+              [ngClass]="{ 'fas fa-arrow-down': !p.Score3IsRising }"
+              style="color: #e8a2b3"
+            ></i>
+          </li>
         </ul>
       </ion-item>
       <ion-item-options side="right">
-        <button *ngIf="!isFav(p.CurrencyId)" ion-button expandable (click)="addToFavorite(p.CurrencyId)">
-
+        <button
+          *ngIf="!isFav(p.CurrencyId)"
+          ion-button
+          expandable
+          (click)="addToFavorite(p.CurrencyId)"
+        >
           <ion-icon name="star-outline"></ion-icon>
-
         </button>
-        <button *ngIf="isFav(p.CurrencyId)" ion-button expandable (click)="removeFavorite(p.CurrencyId)">
+        <button
+          *ngIf="isFav(p.CurrencyId)"
+          ion-button
+          expandable
+          (click)="removeFavorite(p.CurrencyId)"
+        >
           <ion-icon name="md-star"></ion-icon>
         </button>
       </ion-item-options>
     </ion-item-sliding>
-
-
-
   </ion-list>
-
 </ion-content>

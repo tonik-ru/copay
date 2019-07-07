@@ -1,5 +1,5 @@
 import { Component, ElementRef, Renderer, ViewChild } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { ModalController, NavController, NavParams } from 'ionic-angular';
 
 // import { ProfileProvider } from '../../../providers';
 import { timer } from 'rxjs/observable/timer';
@@ -64,7 +64,8 @@ export class TopcoinsPage {
     private rate: RateProvider,
     private persistenceProvider: PersistenceProvider,
     private renderer: Renderer,
-    public storage: Storage
+    public storage: Storage,
+    public modal: ModalController
   ) {
     // this.loadTopCoins();
     // this.showlook = '0';
@@ -170,7 +171,13 @@ export class TopcoinsPage {
   ionViewDidLoad() {}
   ionViewDidEnter() {
     // this.slider.onlyExternal = true;
+
     this.logger.log('topcoins will enter');
+  }
+
+  openModal() {
+    // const modalInst = this.modal.create('InstructionsPage');
+    // modalInst.present();
   }
 
   ionViewWillEnter() {

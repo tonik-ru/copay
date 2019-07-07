@@ -57,4 +57,21 @@ page-send {
     color: color($colors, error);
     background-color: #fff6f7;
   }
+
+  .qr-container {
+    width: 255px;
+    height: 255px;
+    background: #fff !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 50px auto;
+    border-radius: 5px;
+    border: 1px solid #444;
+    padding: 10px;
+  }
+
+  .qr-container img {
+    width: 100%;
+  }
 }

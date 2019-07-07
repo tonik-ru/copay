@@ -2,15 +2,18 @@ page-home {
   background: $toolbar-background;
 
   .scroll-content .wrapper {
- 
-    min-height: auto;}
-    .scroll-content{ overflow-x: auto;}
+    min-height: auto;
+  }
+  .scroll-content {
+    overflow-x: auto;
+  }
 
   .item-title {
     width: 75%;
     float: left;
     padding-top: 5px;
-    font-size: 1.4rem; font-weight: 900;
+    font-size: 1.4rem;
+    font-weight: 900;
   }
   .item-subtitle {
     text-align: right;
@@ -38,11 +41,9 @@ page-home {
   /*header background*/
   .scroll-content {
     /*background: #fff !important;*/
-    margin-bottom:46px!important;
-    margin-top: 43px!important;
+    margin-bottom: 46px !important;
+    margin-top: 43px !important;
   }
-  
-  
 
   .action-card__header .icon-wallet {
     background: #fac239 !important;
@@ -59,7 +60,7 @@ page-home {
     box-shadow: 0 0px 11px rgba(0, 0, 0, 0.2);
     z-index: 999999999;
     margin-bottom: -10px;
-    padding-top:27px;
+    padding-top: 27px;
   }
   .balance-block h2 {
     font-size: 1rem;
@@ -69,22 +70,35 @@ page-home {
     font-weight: 600;
     font-family: Montserrat;
   }
-@media screen and (max-width:768px){
-  .balance-block h3, .balance-block h2  { font-size:3.2rem;}
-}
+  @media screen and (max-width: 768px) {
+    .balance-block h3,
+    .balance-block h2 {
+      font-size: 3.2rem;
+      white-space: nowrap;
+    }
+  }
 
-@supports (-webkit-overflow-scrolling: touch) {
-  /*.scroll-content{ margin-top:47px!important;}*/
-}
-span.altbalance {
-  display: block;
-  font-size: 1rem;
-}
+  @media screen and (max-width: 330px) {
+    .balance-block h3,
+    .balance-block h2 {
+      font-size: 2.2rem;
+      white-space: nowrap;
+      line-height: 4.3rem;
+    }
+  }
+
+  @supports (-webkit-overflow-scrolling: touch) {
+    /*.scroll-content{ margin-top:47px!important;}*/
+  }
+  span.altbalance {
+    display: block;
+    font-size: 1rem;
+  }
   .header-extend {
-    background: #f79421;
+    background: #f9b432;
     height: 100px;
-   top: 40px;
-
+    margin-top: 0px;
+    position: static;
   }
 
   .toolbar-title-ios {
@@ -259,7 +273,7 @@ span.altbalance {
   }
 
   ion-refresher {
-   height: 85px;
+    height: 85px;
     background: #fac239;
 
     &-content {
@@ -506,28 +520,41 @@ span.altbalance {
       transform: translateY(0);
     }
   }
-  .wrapper{background:transparent!important;
+  .wrapper {
+    background: transparent !important;
   }
-  .item-ios{color:#fff!important;}
-  .item-block{ border-color: #000!important }
-  .card{background: transparent!important;}
-  .scroll-content{
-    background: #161b26!important;
+  .item-ios {
     color: #fff !important;
   }
-  .item-ios{background: transparent}
-  .item-ios p{color:#fff!important;}
+  .item-block {
+    border-color: #000 !important;
+  }
+  .card {
+    background: transparent !important;
+  }
+  .scroll-content {
+    background: #161b26 !important;
+    color: #fff !important;
+  }
+  .item-ios {
+    background: transparent;
+  }
+  .item-ios p {
+    color: #fff !important;
+  }
   .list-ios .item-block .item-inner {
     border-bottom: 0.55px solid #000;
   }
-  .refbalance{
+  .refbalance {
     background: #fac239;
     padding: 0 10px;
     border-radius: 10px;
-    color: #FFF;
+    color: #fff;
   }
-  
-  .nowalletbalance{margin-top:0!important}
+
+  .nowalletbalance {
+    margin-top: 0 !important;
+  }
 }
 .tabs-md[tabsLayout='icon-top'] .has-icon .tab-button-text {
   font-family: Montserrat !important;
@@ -543,4 +570,3 @@ img.commingsoonimg {
   position: absolute;
   opacity: 0.6;
 }
-

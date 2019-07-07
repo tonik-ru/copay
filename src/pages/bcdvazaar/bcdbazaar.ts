@@ -7,6 +7,11 @@ import { ShopTargetPage } from './shop-target/shop-target';
 import * as _ from 'lodash';
 import { ShopsProvider } from '../../providers/shops/shops';
 
+import {
+  InAppBrowser,
+  InAppBrowserOptions
+} from '@ionic-native/in-app-browser';
+
 /**
  * Generated class for the Tab4Page page.
  *
@@ -29,7 +34,8 @@ export class TabBcdbazaar {
   constructor(
     private navCtrl: NavController,
     private logger: Logger,
-    private shopsProvider: ShopsProvider
+    private shopsProvider: ShopsProvider,
+    private iab: InAppBrowser
   ) {
     this.cats;
     this.items;
@@ -102,5 +108,14 @@ export class TabBcdbazaar {
   ionViewDidLoad() {}
   clearSearch() {
     this.selectedCat = 'all';
+  }
+
+  openBrowser(url: string) {
+    const options: InAppBrowserOptions = {
+      zoom: 'no',
+      location: 'no',
+      toolbar: 'no'
+    };
+    this.iab.create(url, '_self', options);
   }
 }

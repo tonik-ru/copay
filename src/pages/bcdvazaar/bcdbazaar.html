@@ -17,7 +17,7 @@
 
 <ion-content no-padding>
   <ion-row>
-    <ion-col col-6 class="searchbtn1">
+    <ion-col col-12 class="searchbtn1">
       <ion-searchbar
         [(ngModel)]="filter"
         (ionInput)="applyFilter()"
@@ -28,31 +28,33 @@
       </ion-searchbar
     ></ion-col>
 
-    <ion-col col-6 class="searchbtn1">
-      <ion-item>
-        <ion-label class="labelexchange" style="display:none">{{
-          'Category' | translate
-        }}</ion-label>
-        <ion-select
-          placeholder="Category"
-          title="{{'Category'| translate}}"
-          [(ngModel)]="selectedCat"
-          (ionChange)="selectCat()"
-          interface="popover"
-        >
-          <ion-option value="all" selected>{{ 'All' | translate }}</ion-option>
-          <ion-option *ngFor="let p of cats" value="{{p.cat}}">
-            {{ p.cat | translate }}</ion-option
+    <!--
+      <ion-col col-6 class="searchbtn1">
+        <ion-item>
+          <ion-label class="labelexchange" style="display:none">{{
+            'Category' | translate
+          }}</ion-label>
+          <ion-select
+            placeholder="Category"
+            title="{{'Category'| translate}}"
+            [(ngModel)]="selectedCat"
+            (ionChange)="selectCat()"
+            interface="popover"
           >
-        </ion-select></ion-item
-      >
-    </ion-col>
+            <ion-option value="all" selected>{{ 'All' | translate }}</ion-option>
+            <ion-option *ngFor="let p of cats" value="{{p.cat}}">
+              {{ p.cat | translate }}</ion-option
+            >
+          </ion-select></ion-item
+        >
+      </ion-col>
+    -->
   </ion-row>
 
   <ion-list>
     <ion-item
       *ngFor="let p of items"
-      (click)="selectShop(p.url, p.logo)"
+      (click)="openBrowser(p.url)"
       class="market-link item item-block item-ios {{p.company}}"
     >
       <ion-thumbnail item-left><img [src]="p.logo"/></ion-thumbnail>
@@ -66,11 +68,10 @@
           style="display: flex;
   align-items: center;justify-content: flex-end;"
         >
-          <p class="bullish-btn">{{ p.cat | translate }}</p>
+          <!-- <p class="bullish-btn">{{ p.cat | translate }}</p> -->
         </ion-col>
-      </ion-row>
-    </ion-item></ion-list
-  >
+      </ion-row> </ion-item
+  ></ion-list>
 
   <!--
     <iframe name="framebcdbazaar" src="https://www.bcdbazaar.com/" width="100%" height="100%" style="outline: none; border: none;">

@@ -7,6 +7,7 @@ import {
   AddressBookProvider,
   AddressProvider,
   AndroidFingerprintAuth,
+  ApiProvider,
   AppIdentityProvider,
   AppProvider,
   BackupProvider,
@@ -35,6 +36,7 @@ import {
   GAnalyticsProvider,
   GiftCardProvider,
   HomeIntegrationsProvider,
+  InAppBrowser,
   IncomingDataProvider,
   LanguageLoader,
   LanguageProvider,
@@ -57,6 +59,7 @@ import {
   SocialSharing,
   SplashScreen,
   StatusBar,
+  ThemeableBrowser,
   TimeProvider,
   Toast,
   TouchID,
@@ -137,7 +140,10 @@ import {
     TraderProvider,
     FeedProvider,
     GAnalyticsProvider,
-    ShopsProvider
+    ShopsProvider,
+    InAppBrowser,
+    ThemeableBrowser,
+    ApiProvider
   ]
 })
 export class ProvidersModule {}

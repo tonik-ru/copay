@@ -90,7 +90,7 @@
         <h1 *ngIf="myPair != undefined">
             <img
             *ngIf="myPair != undefined"
-            [src]="'assets/logoscoinss/'+ myPair.BaseAsset+'.png'" onError="this.src=''"
+            [src]="'https://chimpion.io/bcdpay/logoscoinss/'+ myPair.BaseAsset+'.png'" onError="this.src=''"
             
             class="coinlogo2"
           />
@@ -512,13 +512,13 @@
         <table class="table table-hover table-striped">
           <tbody>
             <tr>
-              <td><img src="assets/img/fibonacci/hits.svg" style="width:50px;"></td>
+              <td><img src="assets/img/fibonacci/hits.svg" style="width:50px;"  class="coinlogo2"></td>
               <td><img *ngIf="myPair != undefined"
-                [src]="'assets/logoscoinss/'+ myPair.BaseAsset+'.png'" onError="this.src=''"
+                [src]="'https://chimpion.io/bcdpay/logoscoinss/'+ myPair.BaseAsset+'.png'" onError="this.src=''"
                 class="coinlogo2"></td>
-              <td><img src="assets/img/fibonacci/swing1.svg"  style="width:40px;" (click)="showInfoCurrentSwingRatio()"></td>
-              <td><img src="assets/img/fibonacci/position1.svg"  style="width:30px;" (click)="showInfoCurrentPrizeZone()"></td>
-              <td><img src="assets/img/fibonacci/age.svg"  style="width:30px;"></td>
+              <td><img src="assets/img/fibonacci/swing1.svg"   class="coinlogo2" style="width:40px;" (click)="showInfoCurrentSwingRatio()"></td>
+              <td><img src="assets/img/fibonacci/position1.svg"   class="coinlogo2" style="width:30px;" (click)="showInfoCurrentPrizeZone()"></td>
+              <td><img src="assets/img/fibonacci/age.svg"  class="coinlogo2"  style="width:30px;"></td>
              
             </tr>
             <ng-container *ngFor="let k of positiveKeys">
