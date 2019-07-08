@@ -430,11 +430,10 @@ export class WalletProvider {
   public getAddressView(
     coin: string,
     network: string,
-    address: string
+    address: string,
+    useFullAddress: boolean = false
   ): string {
-    if (coin == 'btc' || this.useLegacyAddress()) return address;
-    if (coin != 'bch') return this.getProtoAddress(coin, network, address);
-
+    if (useFullAddress == false || this.useLegacyAddress()) return address;
     const protoAddr = this.getProtoAddress(
       coin,
       network,
