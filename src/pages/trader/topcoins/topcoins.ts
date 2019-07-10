@@ -112,6 +112,8 @@ export class TopcoinsPage {
   goToSearch() {
     this.logger.log('OpenSearch');
     this.SearchOpened = !this.SearchOpened;
+    this.filter = '';
+    this.applyFilter();
   }
 
   getTopics() {

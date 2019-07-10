@@ -88,7 +88,7 @@ page-home {
   }
 
   @supports (-webkit-overflow-scrolling: touch) {
-    /*.scroll-content{ margin-top:47px!important;}*/
+   .header-extend{margin-top: 20px!important}
   }
   span.altbalance {
     display: block;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 
 /**
  * Generated class for the LiveChatPage page.
@@ -10,15 +10,14 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @Component({
   selector: 'page-live-chat',
-  templateUrl: 'live-chat.html',
+  templateUrl: 'live-chat.html'
 })
 export class LiveChatPage {
+  public innerHeight: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  ionViewDidLoad() {}
+  ngOnInit() {
+    this.innerHeight = window.innerHeight - 100 + 'px';
   }
-
-  ionViewDidLoad() {
-    
-  }
-
 }

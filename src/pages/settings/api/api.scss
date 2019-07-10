@@ -1,0 +1,26 @@
+page-api {
+  ion-input  {
+    
+    border: 1px solid #cccc;
+    border-radius: 5px; 
+}
+.text-input-ios{text-align: center;}
+.item-input ion-label {
+  max-width: 100%;
+  width: 100%;
+  text-align: center;
+}
+.scantext{ font-size:1rem; span{display:block}}
+.scanapi.button-ios{box-shadow:0 12px 16px rgba(75, 79, 84,0.18); background: linear-gradient(217deg, #F79421, #FAC239 ); }
+}
+.theme-light{
+  page-api{
+    ion-toolbar {
+          .toolbar-background-ios{
+      background: #EFEFEF;}
+      .toolbar-title-ios{ color: #2D3340; font-weight: 500}
+    }
+  }
+    
+  
+}

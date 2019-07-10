@@ -34,8 +34,8 @@ page-multi-send {
   }
   .send-header-wrapper {
     padding: 10px;
-    background-color: white;
-    box-shadow: 0px 5px 10px 0px #cccccc;
+    background-color: transparent;
+    // box-shadow: 0px 5px 10px 0px #cccccc;
     .recipient-buttons {
       display: flex;
       justify-content: space-between;
