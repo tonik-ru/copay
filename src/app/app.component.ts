@@ -435,7 +435,7 @@ export class CopayApp {
       setTimeout(() => {
         this.logger.info('App was opened by custom url scheme');
         this.handleOpenUrl(lastUrl);
-      }, 0);
+      }, 1000);
     }
   }
 
