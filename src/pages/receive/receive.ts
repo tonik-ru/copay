@@ -115,11 +115,18 @@ export class ReceivePage extends WalletTabsChild {
       this.wallet.network,
       addr
     );
+
     if (this.address && this.address != address) {
       this.playAnimation = true;
     }
     this.updateQrAddress(addr, newAddr);
-    this.qrAddress = address;
+
+    this.qrAddress = this.walletProvider.getAddressView(
+      this.wallet.coin,
+      this.wallet.network,
+      addr,
+      true
+    );
   }
 
   private async updateQrAddress(address, newAddr?: boolean): Promise<void> {

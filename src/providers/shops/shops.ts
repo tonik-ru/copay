@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 */
 @Injectable()
 export class ShopsProvider {
-  public shopDirectory = [];
+  public shopDirectory: any = { Stores: [], Categories: [] };
   private updatedOn: number;
 
   constructor(public http: HttpClient) {}
@@ -18,7 +18,7 @@ export class ShopsProvider {
     if (this.updatedOn + 600 > now) return Promise.resolve();
 
     var url =
-      'https://websocket.rekdeck.com/bcdpay/storedata.json?ts=' + Date.now();
+      'https://websocket.rekdeck.com/bcdpay/storedatav2.json?ts=' + Date.now();
     return this.http
       .get<any[]>(url)
       .toPromise()

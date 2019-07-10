@@ -4,7 +4,7 @@ import { NavController } from 'ionic-angular';
 import { Logger } from '../../providers/logger/logger';
 import { ShopTargetPage } from './shop-target/shop-target';
 
-import * as _ from 'lodash';
+// import * as _ from 'lodash';
 import { ShopsProvider } from '../../providers/shops/shops';
 
 import {
@@ -24,7 +24,7 @@ import {
   templateUrl: 'bcdbazaar.html'
 })
 export class TabBcdbazaar {
-  private shopDirectory: any[];
+  private shopDirectory: any;
   public cats = [];
   public items = [];
 
@@ -64,8 +64,9 @@ export class TabBcdbazaar {
   }
 
   private populateData() {
-    this.cats = _.uniqBy(this.shopDirectory, 'cat');
-    this.items = this.shopDirectory;
+    this.cats = this.shopDirectory.Categories;
+    this.items = this.shopDirectory.Stores;
+
     this.applyFilter();
   }
 
@@ -73,8 +74,8 @@ export class TabBcdbazaar {
     let val = this.selectedCat; // v.target.value;
 
     if (val && val.trim() != 'all') {
-      this.items = this.shopDirectory.filter(item => {
-        return item.cat.toLowerCase().indexOf(val.toLowerCase()) > -1;
+      this.items = this.shopDirectory.Stores.filter(item => {
+        return item.categoryId == val;
       });
     } else this.items = this.shopDirectory;
   }
@@ -94,12 +95,12 @@ export class TabBcdbazaar {
     var searchCategory = (this.selectedCat || '').toLowerCase();
     var searchStr = (this.filter || '').toLowerCase();
 
-    this.items = this.shopDirectory.filter(item => {
+    this.items = this.shopDirectory.Stores.filter(item => {
       return (
         (item.company.toLowerCase().indexOf(searchStr) > -1 ||
           item.desc.toLowerCase().indexOf(searchStr) > -1 ||
           searchStr == '') &&
-        (item.cat.toLowerCase().indexOf(searchCategory) > -1 ||
+        (item.categoryId.toLowerCase == searchCategory ||
           searchCategory == 'all')
       );
     });
