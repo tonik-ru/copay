@@ -433,7 +433,11 @@ export class WalletProvider {
     address: string,
     useFullAddress: boolean = false
   ): string {
-    if (useFullAddress == false || this.useLegacyAddress()) return address;
+    if ((useFullAddress == false && coin != 'bch') || this.useLegacyAddress())
+      return address;
+
+    if (coin != 'bch') return this.getProtoAddress(coin, network, address);
+
     const protoAddr = this.getProtoAddress(
       coin,
       network,
