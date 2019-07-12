@@ -22,7 +22,11 @@ import { RateProvider } from '../../../providers/rate/rate';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 
 // Pages
-import { ActionSheetProvider, GiftCardProvider } from '../../../providers';
+import {
+  ActionSheetProvider,
+  AppProvider,
+  GiftCardProvider
+} from '../../../providers';
 import { CardConfig } from '../../../providers/gift-card/gift-card.types';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { Coin } from '../../../providers/wallet/wallet';
@@ -84,10 +88,8 @@ export class AmountPage extends WalletTabsChild {
 
   public cardName: string;
   public cardConfig: CardConfig;
-  
 
   constructor(
-
     private actionSheetProvider: ActionSheetProvider,
     private configProvider: ConfigProvider,
     private filterProvider: FilterProvider,
@@ -103,7 +105,8 @@ export class AmountPage extends WalletTabsChild {
     private changeDetectorRef: ChangeDetectorRef,
     walletTabsProvider: WalletTabsProvider,
     private events: Events,
-    private viewCtrl: ViewController
+    private viewCtrl: ViewController,
+    public appProvider: AppProvider
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -164,7 +167,6 @@ export class AmountPage extends WalletTabsChild {
   }
 
   ionViewWillEnter() {
-    
     this.disableHardwareKeyboard = false;
     this.expression = '';
     this.useSendMax = false;

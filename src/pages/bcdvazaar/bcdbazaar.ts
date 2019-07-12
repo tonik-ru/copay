@@ -7,11 +7,6 @@ import { ShopTargetPage } from './shop-target/shop-target';
 // import * as _ from 'lodash';
 import { ShopsProvider } from '../../providers/shops/shops';
 
-import {
-  InAppBrowser,
-  InAppBrowserOptions
-} from '@ionic-native/in-app-browser';
-
 /**
  * Generated class for the Tab4Page page.
  *
@@ -28,14 +23,10 @@ export class TabBcdbazaar {
   public cats = [];
   public items = [];
 
-  public selectedCat: string = 'all';
-  public filter: string;
-
   constructor(
     private navCtrl: NavController,
     private logger: Logger,
-    private shopsProvider: ShopsProvider,
-    private iab: InAppBrowser
+    private shopsProvider: ShopsProvider
   ) {
     this.cats;
     this.items;
@@ -48,8 +39,6 @@ export class TabBcdbazaar {
   ionViewWillEnter() {
     this.shopDirectory = this.shopsProvider.shopDirectory;
     this.populateData();
-
-    this.selectedCat = 'all';
 
     this.shopsProvider
       .getDirectory()
@@ -66,57 +55,11 @@ export class TabBcdbazaar {
   private populateData() {
     this.cats = this.shopDirectory.Categories;
     this.items = this.shopDirectory.Stores;
-
-    this.applyFilter();
-  }
-
-  public applyFilterCat() {
-    let val = this.selectedCat; // v.target.value;
-
-    if (val && val.trim() != 'all') {
-      this.items = this.shopDirectory.Stores.filter(item => {
-        return item.categoryId == val;
-      });
-    } else this.items = this.shopDirectory;
-  }
-
-  public selectCat() {
-    this.logger.log(this.selectedCat);
-    // this.filter = '';
-    // this.applyFilterCat();
-    this.applyFilter();
-  }
-
-  public searhclick() {
-    // this.selectedCat = 'all';
-  }
-
-  public applyFilter() {
-    var searchCategory = (this.selectedCat || '').toLowerCase();
-    var searchStr = (this.filter || '').toLowerCase();
-
-    this.items = this.shopDirectory.Stores.filter(item => {
-      return (
-        (item.company.toLowerCase().indexOf(searchStr) > -1 ||
-          item.desc.toLowerCase().indexOf(searchStr) > -1 ||
-          searchStr == '') &&
-        (item.categoryId.toLowerCase == searchCategory ||
-          searchCategory == 'all')
-      );
-    });
   }
 
   ionViewDidLoad() {}
-  clearSearch() {
-    this.selectedCat = 'all';
-  }
 
-  openBrowser(url: string) {
-    const options: InAppBrowserOptions = {
-      zoom: 'no',
-      location: 'no',
-      toolbar: 'no'
-    };
-    this.iab.create(url, '_self', options);
+  openCategory(id: string, title: string) {
+    this.navCtrl.push(ShopTargetPage, { shop: id, logo: title });
   }
 }

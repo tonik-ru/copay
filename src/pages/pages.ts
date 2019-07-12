@@ -128,6 +128,8 @@ import { LiveChatPage } from './settings/live-chat/live-chat';
 import { ShopTargetPage } from './bcdvazaar/shop-target/shop-target';
 import { InstructionsPage } from './trader/instructions/instructions';
 
+import { ApiPage } from './settings/api/api';
+
 export const PAGES = [
   AddPage,
   AmountPage,
@@ -226,5 +228,6 @@ export const PAGES = [
   TabBcdbazaar,
   LiveChatPage,
   ShopTargetPage,
-  InstructionsPage
+  InstructionsPage,
+  ApiPage
 ];

@@ -121,7 +121,7 @@ page-bcdbazaar {
   .item-ios ion-thumbnail ion-img, .item-ios ion-thumbnail img {
     width: 130px;
     height: 56px;
-    background: #b1b0af;
+    background: #FFF;
     border-radius: 5px;
     padding: 10px;
 
@@ -166,7 +166,7 @@ page-bcdbazaar {
   .item-ios ion-thumbnail ion-img, .item-ios ion-thumbnail img {
     width: 80px;
     height: 40px;
-    background: #b1b0af;
+    background: #FFF;
     border-radius: 5px;
     padding: 10px;
 
@@ -192,5 +192,11 @@ page-bcdbazaar {
   line-height: 13px;
   margin-top:0px;
 }
+}
+
+.categoriesblock{text-align: center;
+img{ filter: invert(1); }
+.imgblock{background: linear-gradient(9deg, #f7eb5a, #ffaf03); padding:10px;border-radius:10px;}
+
 }
 }

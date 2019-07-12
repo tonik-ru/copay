@@ -23,7 +23,7 @@
     border-top: 1px solid #000!important;
 }
 
-page-custom-amount, page-wallet-tabs, page-wallet-details, page-send, page-receive, page-amount{
+page-transfer-to-modal, page-transfer-to, page-custom-amount, page-wallet-tabs, page-wallet-details, page-send, page-receive, page-amount{
   .history-wrapper,  
   .content-ios, ion-content, .scroll-content, .receive-content, .qr-container,  .qr-container .lines-background, .scroll-content .wrapper, .send-header-wrapper{
     background:#161b26;
@@ -42,7 +42,7 @@ page-custom-amount, page-wallet-tabs, page-wallet-details, page-send, page-recei
  }
 }
 
-page-send{
+page-multi-send, page-send{
   .card{background-color: transparent;
     border: 1px solid #000;
     border-radius: 5px;}
@@ -139,4 +139,6 @@ $alert-ios--background:#161b26;
     }
   }
   .select-ios .select-icon .select-icon-inner{color: #FFF;}
+
+  img.darkinvert{filter: invert(1);}
 }

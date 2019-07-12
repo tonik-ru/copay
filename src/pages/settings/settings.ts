@@ -40,12 +40,13 @@ import { WalletSettingsPage } from './wallet-settings/wallet-settings';
 
 import { LiveChatPage } from './live-chat/live-chat';
 
+import { ApiPage } from './api/api';
+
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html'
 })
 export class SettingsPage {
-
   nightMode: boolean = true;
   public appName: string;
   public currentLanguageName: string;
@@ -84,19 +85,17 @@ export class SettingsPage {
     private walletProvider: WalletProvider,
     private actionSheetProvider: ActionSheetProvider,
     private touchIdProvider: TouchIdProvider
-    
   ) {
     this.appName = this.app.info.nameCase;
     this.walletsBch = [];
     this.walletsBtc = [];
     this.isCordova = this.platformProvider.isCordova;
-    setTimeout(()=>{
+    setTimeout(() => {
       this.nightMode = app.activeTheme === 'theme-dark';
     }, 500);
-    
   }
 
-  changeMode(){
+  changeMode() {
     this.app.activeTheme = this.nightMode ? 'theme-dark' : 'theme-light';
     this.app.saveStting();
     this.logger.log(this.app.activeTheme);
@@ -225,7 +224,7 @@ export class SettingsPage {
     this.navCtrl.push(AltCurrencyPage);
   }
 
-  public openLiveChat(): void{
+  public openLiveChat(): void {
     this.navCtrl.push(LiveChatPage);
   }
 
@@ -368,5 +367,9 @@ export class SettingsPage {
       okText,
       cancelText
     );
+  }
+
+  public openApiPage() {
+    this.navCtrl.push(ApiPage);
   }
 }
