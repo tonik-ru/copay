@@ -287,7 +287,8 @@ export class TopcoinsPage {
         .getTopCoins()
         .then(res => {
           this.logger.log('Loaded ' + res.length + ' top coins');
-          this.topCoins = res;
+          // this.topCoins = res;
+          this.updateTopCoinsFromList(res);
           this.selectCurrency();
           return resolve();
         })
@@ -296,6 +297,18 @@ export class TopcoinsPage {
           this.logger.error(error);
           // reject(error);
         });
+    });
+  }
+
+  private updateTopCoinsFromList(data: any[]) {
+    _.forEach(data, x => {
+      var match = _.find(this.topCoins, y => y.Symbol == x.Symbol);
+      if (match) {
+        for (var p in x) match[p] = x[p];
+      } else {
+        var index = _.indexOf(data, x);
+        this.topCoins.splice(index, 0, x);
+      }
     });
   }
 
