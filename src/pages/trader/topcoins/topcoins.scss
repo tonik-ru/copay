@@ -541,11 +541,13 @@ ion-navbar{
        max-width: 100%;
     border: 1px solid #fff;
     border-radius: 5px; font-size:1rem;
+    line-height: 2rem;
+    
 }
 .settings-button.bar-buttons.bar-buttons-ios .item-inner{border: none!important}
 
 .item:not(.item-label-stacked):not(.item-label-floating) .ionic-selectable-ios .ionic-selectable-value {
-  padding-left: 5px!important;
+  padding-left: 5px!important;padding-right: 5px!important;
 }
 .ionic-selectable-value{padding-left: 5px!important;}
 .ionic-selectable-icon {

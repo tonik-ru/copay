@@ -144,7 +144,7 @@
   <div *ngIf="fav.length == 0 && showfavriteslist" class="nofound">
     <h1>{{ 'No Favorites' | translate }}</h1>
     <p>{{ 'Swipe to add to favorites' | translate }}</p>
-    <img src="../assets/img/no-fav.gif" />
+    <img src="assets/img/no-fav.gif" />
   </div>
 
   <ion-list *ngIf="topCoins">
@@ -160,7 +160,7 @@
       <li>{{ '7D' | translate }}</li>
     </ul>
 
-    <ion-item-sliding ion-list *ngFor="let p of items">
+    <ion-item-sliding ion-list #SlideId *ngFor="let p of items">
       <ion-item
         *ngIf="!showfavriteslist || (isFav(p.CurrencyId) && showfavriteslist)"
       >
@@ -237,7 +237,7 @@
           *ngIf="!isFav(p.CurrencyId)"
           ion-button
           expandable
-          (click)="addToFavorite(p.CurrencyId)"
+          (click)="addToFavorite(p.CurrencyId, SlideId)"
         >
           <ion-icon name="star-outline"></ion-icon>
         </button>
@@ -245,7 +245,7 @@
           *ngIf="isFav(p.CurrencyId)"
           ion-button
           expandable
-          (click)="removeFavorite(p.CurrencyId)"
+          (click)="removeFavorite(p.CurrencyId, SlideId)"
         >
           <ion-icon name="md-star"></ion-icon>
         </button>

@@ -3,6 +3,7 @@ import {
   AlertController,
   NavController,
   NavParams,
+  ToastController,
   ViewController
 } from 'ionic-angular';
 
@@ -19,10 +20,14 @@ import { FeedProvider } from '../../../providers/trader/feed';
 /*import { pairs } from 'rxjs/observable/pairs';*/
 
 import '../../../assets/js/rang';
+import { UserstatsPage } from '../userstats/userstats';
 /*import { TabsPage } from '../../tabs/tabs';
 import { TopcoinsPage } from '../topcoins/topcoins';*/
 declare var startgraph: any;
 declare var topstart: any;
+
+import { Storage } from '@ionic/storage';
+
 /*declare var starttest: any;*/
 
 // import { TraderProvider } from '../../../providers/trader/trader';
@@ -121,23 +126,66 @@ export class DatafeedPage {
 
   public myPair: any;
 
+  public fav: any = [];
+  public favorite: boolean = false;
+  public showfavriteslist: boolean = false;
+  public coinId;
   /*@ViewChild('slider') slider: Slides;*/
 
-  /* showlook = '0';*/
+  showlook = '0';
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private logger: Logger, // private traderProvider: TraderProvider
     private feedProvider: FeedProvider,
     public alertController: AlertController,
-    public viewCtrl: ViewController
+    public viewCtrl: ViewController,
+    public storage: Storage,
+    public toastCtrl: ToastController
   ) {
     this.feedProvider.on('ProcessMarketTick', x => this.processMarketTick(x));
     this.feedProvider.on('ProcessResistance', x => this.onProcessResistance(x));
-    /*this.showlook = '0';*/
+    this.showlook = '0';
     this.myPair = {};
     this.initKnownIntervals();
     this.selectedInterval = _.find(this.knownIntervals, x => x.Caption == '-2');
+  }
+
+  showToast(msg: string) {
+    const toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000
+    });
+    toast.present();
+  }
+
+  addToFavorite(id: number) {
+    this.showToast('Coin was added to favorites');
+    /*this.favoriteservice.addtoFavorite(id);
+  this.fav.push({'id': id, 'IsFav': true});*/
+
+    this.fav.push({ id });
+    this.storage.set('favList', this.fav);
+  }
+
+  removeFavorite(id: number) {
+    this.showToast('Coin was removed from favorites');
+
+    if (this.fav.find(x => x.id == id)) {
+      this.fav.splice(this.fav.findIndex(x => x.id == id), 1);
+    }
+    if (id == 76) {
+      this.favorite = true;
+    }
+
+    this.storage.set('favList', this.fav);
+    this.storage.set('bcdremove', this.favorite);
+  }
+
+  isFav(): boolean {
+    return this.fav.find(
+      x => x.id === this.navParams.data.validPairs[0].BaseAssetCurrencyId
+    );
   }
 
   public onClickCancel() {
@@ -190,6 +238,14 @@ export class DatafeedPage {
     this.logger.log('Starting feed');
     var pairs = [];
     pairs = this.navParams.data.validPairs;
+    this.coinId = this.navParams.data.validPairs[0].BaseAssetCurrencyId;
+
+    this.storage.get('favList').then(val => {
+      if (val !== null) {
+        this.fav = val;
+      }
+    });
+
     this.pairs = pairs.sort(this.compareByUSDT);
     this.selectedPair = this.pairs[0];
     this.startConnection();
@@ -197,9 +253,17 @@ export class DatafeedPage {
       this.showChart = true;
     }
   }
-  /*selectedTab(index) {
-    this.slider.slideTo(index);
-  }*/
+
+  selectedTab(index) {
+    // this.slider.slideTo(index);
+    if (index !== '0') {
+      new startgraph(2);
+      new topstart(2);
+    } else {
+      this.startConnection();
+    }
+  }
+
   private showMoreTimeImp() {
     for (let ki of this.buttomRowIntervals) {
       let dki = _.find(
@@ -658,5 +722,9 @@ function compareByDisplayName(a, b) {
     if (b.Symbol.indexOf('USD') > -1) return 1;
 
     return a.Symbol.localeCompare(b.Symbol);
+  }
+
+  openStats() {
+    this.navCtrl.push(UserstatsPage);
   }
 }

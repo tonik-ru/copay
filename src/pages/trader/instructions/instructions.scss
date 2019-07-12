@@ -1,3 +1,17 @@
 page-instructions {
-
+  .button-full.button-outline{
+    border-right-width: 1px;
+    border-left-width: 1px;
+  }
+  .scroll-content{opacity:0.9;}
+  .centralize {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    img{
+      margin: 50px auto;
+    }
+}
 }

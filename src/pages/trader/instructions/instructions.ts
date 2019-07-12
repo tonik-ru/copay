@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { AppProvider, Logger } from '../../../providers';
+
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the InstructionsPage page.
@@ -13,7 +16,18 @@ import { NavController, NavParams } from 'ionic-angular';
   templateUrl: 'instructions.html'
 })
 export class InstructionsPage {
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public viewCtrl: ViewController,
+    public appProvider: AppProvider,
+    public storage: Storage,
+    public logger: Logger
+  ) {}
 
   ionViewDidLoad() {}
+  closeModal() {
+    this.storage.set('instruction', false);
+    this.viewCtrl.dismiss({ inst: false });
+  }
 }

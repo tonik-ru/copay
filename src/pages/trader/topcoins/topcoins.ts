@@ -1,5 +1,11 @@
 import { Component, ElementRef, Renderer, ViewChild } from '@angular/core';
-import { ModalController, NavController, NavParams } from 'ionic-angular';
+import {
+  ItemSliding,
+  ModalController,
+  NavController,
+  NavParams,
+  ToastController
+} from 'ionic-angular';
 
 // import { ProfileProvider } from '../../../providers';
 import { timer } from 'rxjs/observable/timer';
@@ -18,6 +24,8 @@ import { PersistenceProvider } from '../../../providers/persistence/persistence'
 import * as _ from 'lodash';
 
 import { Storage } from '@ionic/storage';
+
+import { InstructionsPage } from '../instructions/instructions';
 
 /**
  * Generated class for the TopcoinsPage page.
@@ -52,6 +60,7 @@ export class TopcoinsPage {
   public fav: any = [];
   public favorite: boolean = false;
   public showfavriteslist: boolean = false;
+  public showInstruction: boolean = true;
 
   constructor(
     public navCtrl: NavController,
@@ -62,7 +71,8 @@ export class TopcoinsPage {
     private persistenceProvider: PersistenceProvider,
     private renderer: Renderer,
     public storage: Storage,
-    public modal: ModalController
+    public modal: ModalController,
+    public toastCtrl: ToastController
   ) {
     this.loadPairs();
     this.toggled = false;
@@ -130,15 +140,26 @@ export class TopcoinsPage {
     } else this.items = this.topCoins;
   }
 
-  addToFavorite(id: number) {
-    /*this.favoriteservice.addtoFavorite(id);
-  this.fav.push({'id': id, 'IsFav': true});*/
-
-    this.fav.push({ id });
-    this.storage.set('favList', this.fav);
+  showToast(msg: string) {
+    const toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000
+    });
+    toast.present();
   }
 
-  removeFavorite(id: number) {
+  addToFavorite(id: number, slideId: ItemSliding) {
+    this.showToast('Coin was added to favorites');
+    /*this.favoriteservice.addtoFavorite(id);
+  this.fav.push({'id': id, 'IsFav': true});*/
+    this.logger.log('id', id);
+    this.fav.push({ id });
+    this.storage.set('favList', this.fav);
+    slideId.close();
+  }
+
+  removeFavorite(id: number, slideId: ItemSliding) {
+    this.showToast('Coin was removed from favorites');
     if (this.fav.find(x => x.id == id)) {
       this.fav.splice(this.fav.findIndex(x => x.id == id), 1);
     }
@@ -148,6 +169,7 @@ export class TopcoinsPage {
 
     this.storage.set('favList', this.fav);
     this.storage.set('bcdremove', this.favorite);
+    slideId.close();
   }
 
   isFav(id: number): boolean {
@@ -156,6 +178,13 @@ export class TopcoinsPage {
 
   goToFavariites() {
     this.showfavriteslist = !this.showfavriteslist;
+    if (this.showfavriteslist == true) {
+      setTimeout(() => {
+        if (this.showInstruction == true) {
+          this.openModal();
+        }
+      }, 300);
+    }
   }
 
   ionViewDidLoad() {}
@@ -166,11 +195,25 @@ export class TopcoinsPage {
   }
 
   openModal() {
-    // const modalInst = this.modal.create('InstructionsPage');
-    // modalInst.present();
+    const modalInst = this.modal.create(InstructionsPage);
+    modalInst.present();
+
+    modalInst.onDidDismiss(data => {
+      this.storage.set('instruction', data.inst);
+      this.showInstruction = data.inst;
+      this.logger.log(data.inst);
+    });
   }
 
   ionViewWillEnter() {
+    this.storage.get('instruction').then(val => {
+      if (val !== null) {
+        this.showInstruction = val;
+      }
+    });
+
+    this.logger.log('Show Instuctions:', this.showInstruction);
+
     this.refreshTimer = timer(15000, 15000).subscribe(() =>
       this.loadTopCoins()
     );
@@ -209,6 +252,23 @@ export class TopcoinsPage {
       .catch(err => {
         this.logger.error(err);
       });
+
+    this.logger.log('added to fav from datafeed');
+    this.storage.get('bcdremove').then(val => {
+      if (val !== null) {
+        this.favorite = val;
+      }
+    });
+
+    if (!this.favorite) {
+      this.storage.set('favList', [{ id: 76 }]);
+    }
+
+    this.storage.get('favList').then(val => {
+      if (val !== null) {
+        this.fav = val;
+      }
+    });
   }
 
   private resolveSelectedCurrency(cur) {

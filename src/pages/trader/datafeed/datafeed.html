@@ -12,47 +12,71 @@
         <ion-icon name="back"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>
+   <ion-title>
       <img src="assets/img/MoonCatcherLogo1.png" class="mooncather" />
-      <!--
-        <div class="coinnameblock">
+    
+        <!-- <div class="coinnameblock">
           <div class="coinlogo">
             <img
               *ngIf="myPair != undefined"
               src="assets/logoscoinss/{{ myPair.BaseAsset }}.PNG"
             />
           </div>
-          -- COMMENTED OUT THIS
+        ---- COMMENTED OUT THIS
             <h3 class="coinname" *ngFor="let p of pairs">{{ p.BaseAsset }}</h3>
-          --
+        
           <h3 class="coinname" *ngIf="myPair != undefined">
             {{ myPair.BaseAsset }}
           </h3>
           <p class="coinnamesub">Market Outlook</p>
         </div>
       -->
-    </ion-title>
-  </ion-navbar>
+      </ion-title>
+  
 
-  <!--<ion-toolbar *ngIf="myPair != undefined">
-    <ion-segment
+  
+    <!-- <ion-segment
       *ngIf="myPair.BaseAsset !== 'TOP20'"
-      (ionChange)="slider.slideTo(showlook)"
+      (ionChange)="selectedTab(showlook)"
       [(ngModel)]="showlook"
     >
       <ion-segment-button value="0">
-        <ion-label>Outlook</ion-label>
+        <ion-label>PRICE</ion-label>
       </ion-segment-button>
 
       <ion-segment-button value="1">
-        <ion-label>Fibonacci</ion-label>
+        <ion-label>TRADE</ion-label>
       </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>-->
+
+      <ion-segment-button value="2">
+          <ion-label>FUNDS</ion-label>
+       </ion-segment-button>
+    </ion-segment> -->
+    <ion-buttons right class="settings-button">
+    <button
+          *ngIf="!isFav()"
+          ion-button
+          expandable
+          (click)="addToFavorite(coinId)"
+        >
+          <ion-icon name="star-outline"></ion-icon>
+        </button>
+        <button
+          *ngIf="isFav()"
+          ion-button
+          expandable
+          (click)="removeFavorite(coinId)"
+        >
+          <ion-icon name="md-star"></ion-icon>
+        </button>
+        </ion-buttons>
+
+</ion-navbar>
 </ion-header>
 
 <ion-content no-padding>
-  
+  <div [ngSwitch]="showlook">
+    <div *ngSwitchCase='0'>
   <div class="topbar">
     <div class="topblock">
         <ion-row>
@@ -572,6 +596,7 @@
           </tbody>
         </table>
       </div>
+
    <ion-row text-center *ngIf="!isTop20"> <ion-icon style="    margin: 0 auto;
     font-size: 4rem;" (click)="showChartClick()" name="arrow-up"></ion-icon> </ion-row> 
     </div>
@@ -582,6 +607,11 @@
   <!--
     d.Data[k].IsPriceInRange -- is this false, hide price. this means that this level was already passed
   -->
+  </div>
+  <div *ngSwitchCase='1'><button (click)="openStats()">OPEN STATS</button> </div>
+  <div *ngSwitchCase='2'> FUNDS </div>
+</div>
+
   <div *ngIf="myPair != undefined" style="height: 10px; display: none;">
     <div *ngIf="!isTop20">
       <div *ngIf="d && d.AvgIntData && d.Breakout">
