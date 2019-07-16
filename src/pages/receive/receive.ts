@@ -119,21 +119,27 @@ export class ReceivePage extends WalletTabsChild {
     if (this.address && this.address != address) {
       this.playAnimation = true;
     }
-    this.updateQrAddress(addr, newAddr);
 
-    this.qrAddress = this.walletProvider.getAddressView(
+    const qrAddress = this.walletProvider.getAddressView(
       this.wallet.coin,
       this.wallet.network,
       addr,
       true
     );
+
+    this.updateQrAddress(addr, qrAddress, newAddr);
   }
 
-  private async updateQrAddress(address, newAddr?: boolean): Promise<void> {
+  private async updateQrAddress(
+    address,
+    qrAddress,
+    newAddr?: boolean
+  ): Promise<void> {
     if (newAddr) {
       await Observable.timer(400).toPromise();
     }
     this.address = address;
+    this.qrAddress = qrAddress;
     await Observable.timer(200).toPromise();
     this.playAnimation = false;
   }
