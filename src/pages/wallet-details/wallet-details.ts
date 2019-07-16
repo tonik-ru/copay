@@ -99,7 +99,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     if (this.navParams.data.clearCache) {
       this.clearHistoryCache();
     } else {
-      this.wallet.status = this.wallet.cachedStatus;
+      this.wallet.status = this.wallet.cachedStatus || {};
       if (this.wallet.completeHistory) this.showHistory();
     }
 
@@ -329,7 +329,7 @@ export class WalletDetailsPage extends WalletTabsChild {
             this.translate.instant('Could not update wallet')
           );
         }
-        this.wallet.status = null;
+        this.wallet.status = {};
       });
   }
 

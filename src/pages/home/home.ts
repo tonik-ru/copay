@@ -633,6 +633,7 @@ export class HomePage {
         this.stopUpdatingWalletId(opts.walletId);
       })
       .catch(err => {
+        wallet.status = {};
         this.logger.error(err);
         this.stopUpdatingWalletId(opts.walletId);
       });

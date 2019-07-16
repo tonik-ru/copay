@@ -75,7 +75,16 @@ export class PushNotificationsProvider {
         this.logger.debug(
           'New Event Push onNotification: ' + JSON.stringify(data)
         );
-        if (data.wasTapped) {
+
+        if (data.notification_type == 'CustomMessage') {
+          const wallet = this.findWallet(data.walletId);
+          if (wallet)
+            wallet.emit('notification', {
+              type: data.notification_type,
+              id: data.id,
+              data: { subject: data.title, message: data.body }
+            });
+        } else if (data.wasTapped) {
           // Notification was received on device tray and tapped by the user.
           const walletIdHashed = data.walletId;
           if (!walletIdHashed) return;

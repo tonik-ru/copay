@@ -35,6 +35,7 @@ export class ProfileProvider {
   private validationLock: boolean = false;
   private errors = this.bwcProvider.getErrors();
   private availableCoins: Array<{ coin: Coin; derivationPath: string }>;
+  private knownMessages: string[] = [];
 
   constructor(
     private logger: Logger,
@@ -204,7 +205,7 @@ export class ProfileProvider {
       ) {
         this.logger.debug('BWC Notification:', JSON.stringify(n));
       }
-
+      this.logger.debug('BWC Notification:', JSON.stringify(n));
       if (this.platformProvider.isElectron) {
         this.showDesktopNotifications(n, wallet);
       }
@@ -264,6 +265,7 @@ export class ProfileProvider {
     let title: string;
     let body: string;
     let translatedMsg: string;
+    let dismiss = true;
 
     switch (n.type) {
       case 'NewCopayer':
@@ -329,16 +331,25 @@ export class ProfileProvider {
           walletName
         });
         break;
+      case 'CustomMessage':
+        title = n.data.subject;
+        body = n.data.message;
+        dismiss = false;
+        break;
     }
 
     if (!body) return;
 
     const OS = this.platformProvider.getOS();
     if (OS && OS.OSName === 'MacOS') this.showOsNotifications(title, body);
-    else this.showInAppNotification(title, body);
+    else this.showInAppNotification(title, body, dismiss);
   }
 
-  private async showInAppNotification(title: string, body: string) {
+  private async showInAppNotification(
+    title: string,
+    body: string,
+    dismiss: boolean = true
+  ) {
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'in-app-notification',
       {
@@ -347,8 +358,10 @@ export class ProfileProvider {
       }
     );
     await infoSheet.present();
-    await Observable.timer(7000).toPromise();
-    infoSheet.dismiss();
+    if (dismiss) {
+      await Observable.timer(7000).toPromise();
+      infoSheet.dismiss();
+    }
   }
 
   private showOsNotifications(title: string, body: string): void {
@@ -368,7 +381,13 @@ export class ProfileProvider {
 
     if (wallet.cachedTxps) wallet.cachedTxps.isValid = false;
 
-    this.events.publish('bwsEvent', wallet.id, n.type, n);
+    if (n.type == 'CustomMessage') {
+      if (n.id && this.knownMessages.indexOf(n.id) > -1) return;
+      if (n.id) this.knownMessages.push(n.id);
+      let title = n.data.subject;
+      let body = n.data.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
+      if (body) this.showInAppNotification(title, body, false);
+    } else this.events.publish('bwsEvent', wallet.id, n.type, n);
   }
 
   public updateCredentials(credentials): void {

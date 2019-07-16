@@ -202,7 +202,7 @@
 
     <info-sheet-template *ngSwitchCase="'in-app-notification'" type="success">
       <span sheet-title-text>{{params.title}}</span>
-      <span sheet-text>{{params.body}}</span>
+      <div sheet-text [innerHTML]='params.body'></div>
       <span sheet-button-text translate>OK</span>
     </info-sheet-template>
 
