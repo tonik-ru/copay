@@ -167,6 +167,8 @@ export class ProfileProvider {
   private async bindWalletClient(wallet, opts?): Promise<boolean> {
     opts = opts ? opts : {};
     const walletId = wallet.credentials.walletId;
+    let config = this.configProvider.get();
+
     if (this.wallet[walletId] && this.wallet[walletId].started && !opts.force) {
       this.logger.info('This wallet has been initialized. Skip. ' + walletId);
       return false;
@@ -198,12 +200,13 @@ export class ProfileProvider {
     });
 
     wallet.on('notification', n => {
+      this.saveLastNotificationId(wallet, n.id);
+
       // TODO: Only development purpose
       if (
         !this.platformProvider.isElectron &&
         !this.platformProvider.isCordova
       ) {
-        this.logger.debug('BWC Notification:', JSON.stringify(n));
       }
       this.logger.debug('BWC Notification:', JSON.stringify(n));
       if (this.platformProvider.isElectron) {
@@ -223,19 +226,23 @@ export class ProfileProvider {
       this.events.publish('status:updated');
     });
 
-    wallet.initialize(
-      {
-        notificationIncludeOwn: true
-      },
-      err => {
-        if (err) {
-          this.logger.error('Could not init notifications err:', err);
-          return;
-        }
-        wallet.setNotificationsInterval(this.UPDATE_PERIOD);
-        wallet.openWallet(() => {});
+    let bwcOpts: any = {
+      notificationIncludeOwn: true
+    };
+
+    if (config.lastNotificationsFor && config.lastNotificationsFor[wallet.id])
+      bwcOpts.lastNotificationId = config.lastNotificationsFor[wallet.id];
+
+    wallet.initialize(bwcOpts, err => {
+      if (err) {
+        this.logger.error('Could not init notifications err:', err);
+        return;
       }
-    );
+      if (bwcOpts.lastNotificationId)
+        wallet.lastNotificationId = bwcOpts.lastNotificationId;
+      wallet.setNotificationsInterval(this.UPDATE_PERIOD);
+      wallet.openWallet(() => {});
+    });
     this.events.subscribe('wallet:updated', (walletId: string) => {
       if (walletId && walletId == wallet.id) {
         this.logger.debug('Updating settings for wallet:' + wallet.id);
@@ -254,6 +261,15 @@ export class ProfileProvider {
     );
 
     return true;
+  }
+
+  private saveLastNotificationId(wallet, lastNotificationId) {
+    let opts = {
+      lastNotificationsFor: {}
+    };
+    opts.lastNotificationsFor[wallet.id] = lastNotificationId;
+
+    this.configProvider.set(opts);
   }
 
   private showDesktopNotifications(n, wallet): void {
@@ -332,8 +348,11 @@ export class ProfileProvider {
         });
         break;
       case 'CustomMessage':
+        if (n.id && this.knownMessages.indexOf(n.id) > -1) return;
+        if (n.id) this.knownMessages.push(n.id);
+
         title = n.data.subject;
-        body = n.data.message;
+        body = n.data.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
         dismiss = false;
         break;
     }
@@ -381,12 +400,8 @@ export class ProfileProvider {
 
     if (wallet.cachedTxps) wallet.cachedTxps.isValid = false;
 
-    if (n.type == 'CustomMessage') {
-      if (n.id && this.knownMessages.indexOf(n.id) > -1) return;
-      if (n.id) this.knownMessages.push(n.id);
-      let title = n.data.subject;
-      let body = n.data.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
-      if (body) this.showInAppNotification(title, body, false);
+    if (n.type == 'CustomMessage' && !this.platformProvider.isElectron) {
+      this.showDesktopNotifications(n, wallet);
     } else this.events.publish('bwsEvent', wallet.id, n.type, n);
   }
 

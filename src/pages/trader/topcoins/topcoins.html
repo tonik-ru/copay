@@ -147,7 +147,7 @@
     <img src="assets/img/no-fav.gif" />
   </div>
 
-  <ion-list *ngIf="topCoins">
+  <ion-list #coinsList *ngIf="topCoins">
     <ul
       *ngIf="!showfavriteslist || (fav.length !== 0 && showfavriteslist)"
       class="trader-title first"

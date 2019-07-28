@@ -1,6 +1,7 @@
 import { Component, ElementRef, Renderer, ViewChild } from '@angular/core';
 import {
   ItemSliding,
+  List,
   ModalController,
   NavController,
   NavParams,
@@ -40,6 +41,7 @@ import { InstructionsPage } from '../instructions/instructions';
 })
 export class TopcoinsPage {
   @ViewChild('tabletitle') tabletitleId: ElementRef;
+  @ViewChild(List) coinsList: List;
   fabToHide;
   oldScrollTop: number = 0;
 
@@ -159,6 +161,7 @@ export class TopcoinsPage {
   }
 
   removeFavorite(id: number, slideId: ItemSliding) {
+    this.coinsList.closeSlidingItems();
     this.showToast('Coin was removed from favorites');
     if (this.fav.find(x => x.id == id)) {
       this.fav.splice(this.fav.findIndex(x => x.id == id), 1);
