@@ -26,6 +26,12 @@ export enum Coin {
   BCD = 'bcd'
 }
 
+export enum CoinNames {
+  btc = 'Bitcoin (BTC)',
+  bcd = 'Bitcoin Diamond (BCD)',
+  bch = 'Bitcoin Cash (BCH)'
+}
+
 export interface WalletOptions {
   name: any;
   m: any;

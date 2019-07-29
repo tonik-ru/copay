@@ -33,7 +33,7 @@ import { ReplaceParametersProvider } from '../../../providers/replace-parameters
 import { TxConfirmNotificationProvider } from '../../../providers/tx-confirm-notification/tx-confirm-notification';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 import {
-  Coin,
+  CoinNames,
   TransactionProposal,
   WalletProvider
 } from '../../../providers/wallet/wallet';
@@ -621,8 +621,7 @@ export class ConfirmPage extends WalletTabsChild {
 
     const warningMsg = this.verifyExcludedUtxos(wallet, sendMaxInfo);
 
-    const coinName =
-      this.wallet.coin === Coin.BTC ? 'Bitcoin (BTC)' : 'Bitcoin Cash (BCH)';
+    const coinName = CoinNames[this.wallet.coin];
 
     const minerFeeNoticeInfoSheet = this.actionSheetProvider.createInfoSheet(
       'miner-fee-notice',
