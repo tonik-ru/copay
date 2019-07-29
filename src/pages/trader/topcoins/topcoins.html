@@ -39,14 +39,21 @@
           'Select Currency' | translate
         }}</ion-label>
         <ionic-selectable
+          *ngIf="altCurrencyList !== undefined"
           item-content
           [(ngModel)]="selectedCurrency"
           (onChange)="selectCurrency(1)"
           [items]="altCurrencyList"
           itemValueField="name"
-          itemTextField="name"
+          itemTextField="isoCode"
           [canSearch]="true"
         >
+          <ng-template
+            ionicSelectableItemTemplate
+            let-port="item"
+            let-isPortSelected="isItemSelected"
+            >{{ port.name }} ({{ port.isoCode }})
+          </ng-template>
         </ionic-selectable>
       </ion-item>
     </ion-buttons>
@@ -135,11 +142,17 @@
     </ion-col>
   </ion-row>
 
-  <ion-spinner
-    name="crescent"
-    *ngIf="topCoins.length <= 2"
-    class="loaderblock"
-  ></ion-spinner>
+  <!--
+    <ion-spinner
+      name="crescent"
+      *ngIf="topCoins.length <= 2"
+      class="loaderblock"
+    ></ion-spinner>
+  -->
+
+  <div *ngIf="topCoins.length <= 2" class="loaderblock">
+    <img src="assets/img/loader-bcd.svg" />
+  </div>
 
   <div *ngIf="fav.length == 0 && showfavriteslist" class="nofound">
     <h1>{{ 'No Favorites' | translate }}</h1>
@@ -183,10 +196,12 @@
           </li>
           <li>
             <span class="market-coinprice" *ngIf="p.Symbol == 'TOP20'">
-              {{ currencySymbol }}{{ p.PriceUSDFormatted }}B
+              <span class="altcurr">{{ currencySymbol }}</span>
+              {{ p.PriceUSDFormatted }}B
             </span>
             <span class="market-coinprice" *ngIf="p.Symbol != 'TOP20'">
-              {{ currencySymbol }}{{ p.PriceFormatted }}
+              <span class="altcurr">{{ currencySymbol }}</span>
+              {{ p.PriceFormatted }}
             </span>
           </li>
           <li>

@@ -365,7 +365,7 @@ export class AmountPage extends WalletTabsChild {
     if (digit === 'delete') {
       return this.removeDigit();
     }
-    if (this.isSendMaxButtonShown() && digit === '0' && !isHardwareKeyboard) {
+    if (this.isSendMaxButtonShown() && digit === '.' && !isHardwareKeyboard) {
       return this.sendMax();
     }
     if (

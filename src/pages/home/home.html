@@ -151,7 +151,7 @@
       </button>
     -->
 
-    <!--
+<!--     
       <div class="card clipboard-card" *ngIf="validDataFromClipboard">
         <ion-item-divider>
           <div class="title" item-start>
@@ -398,7 +398,7 @@
       </div>
 
       <!-- ALL IN ONE -->
-
+      
       <div
         class="card"
         *ngIf="wallets?.length !== 0"
@@ -409,9 +409,11 @@
             reorder="{{showReorderBcd}}"
             (ionItemReorder)="reorderWalletsBcd($event)"
           >
+          <ion-item-sliding #slidingItem *ngFor="let wallet of walletsBcd">
+              
             <button
               ion-item
-              *ngFor="let wallet of walletsBcd"
+              
               (click)="goToWalletDetails(wallet)"
             >
               <ion-icon class="item-img" item-start>
@@ -490,6 +492,19 @@
                 </span>
               </div>
             </button>
+
+              <ion-item-options side="right">
+                  <button class="action action--send" ion-button (click)="onWalletAction(wallet, 'send', slidingItem)">
+                      <div class="action__icon"><img src="assets/img/send.svg" /></div>
+                      <div class="action__text">Send</div>
+                    </button>
+                <button class="action action--receive" ion-button (click)="onWalletAction(wallet, 'receive', slidingItem)">
+                  <div class="action__icon"><img src="assets/img/receive.svg" /></div>
+                  <div class="action__text">Receive</div>
+                </button>
+              </ion-item-options>
+            </ion-item-sliding>
+
           </ion-list>
         </div>
 
@@ -498,9 +513,10 @@
             reorder="{{showReorderBch}}"
             (ionItemReorder)="reorderWalletsBch($event)"
           >
+          <ion-item-sliding #slidingItem *ngFor="let wallet of walletsBch"> 
             <button
               ion-item
-              *ngFor="let wallet of walletsBch"
+              
               (click)="goToWalletDetails(wallet)"
             >
               <ion-icon class="item-img" item-start>
@@ -579,6 +595,17 @@
                 </span>
               </div>
             </button>
+            <ion-item-options side="right">
+                <button class="action action--send" ion-button (click)="onWalletAction(wallet, 'send', slidingItem)">
+                    <div class="action__icon"><img src="assets/img/send.svg" /></div>
+                    <div class="action__text">Send</div>
+                  </button>
+              <button class="action action--receive" ion-button (click)="onWalletAction(wallet, 'receive', slidingItem)">
+                <div class="action__icon"><img src="assets/img/receive.svg" /></div>
+                <div class="action__text">Receive</div>
+              </button>
+            </ion-item-options>
+          </ion-item-sliding>
           </ion-list>
         </div>
 
@@ -587,9 +614,10 @@
             reorder="{{showReorderBtc}}"
             (ionItemReorder)="reorderWalletsBtc($event)"
           >
+          <ion-item-sliding #slidingItem *ngFor="let wallet of walletsBtc">
             <button
               ion-item
-              *ngFor="let wallet of walletsBtc"
+             
               (click)="goToWalletDetails(wallet)"
             >
               <ion-icon class="item-img" item-start>
@@ -668,6 +696,18 @@
                 </span>
               </div>
             </button>
+            <ion-item-options side="right">
+                <button class="action action--send" ion-button (click)="onWalletAction(wallet, 'send', slidingItem)">
+                    <div class="action__icon"><img src="assets/img/send.svg" /></div>
+                    <div class="action__text">Send</div>
+                  </button>
+              <button class="action action--receive" ion-button (click)="onWalletAction(wallet, 'receive', slidingItem)">
+                <div class="action__icon"><img src="assets/img/receive.svg" /></div>
+                <div class="action__text">Receive</div>
+              </button>
+            </ion-item-options>
+          </ion-item-sliding>
+          
           </ion-list>
         </div>
       </div>

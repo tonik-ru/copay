@@ -137,4 +137,33 @@ ion-label p:first-of-type{
 .list-ios .item-block .item-inner {
   border-bottom: 0.55px solid #000;
 }
+.loaderblock {
+  display: block;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: example linear 1s infinite alternate;
+  .spinner-ios-crescent circle{stroke: #fac239}
+
+}
+
+
+
+@-webkit-keyframes example {
+  from {width: 150px ; opacity: 0.8}
+  to {width: 250px; opacity: 1;}
+}
+
+/* Standard syntax */
+@keyframes example {
+  from {width: 150px; opacity: 0.8}
+  to {width: 250px; opacity: 1}
+}
+
+
+
 }

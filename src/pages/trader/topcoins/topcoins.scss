@@ -327,6 +327,7 @@ animation: load 2s infinite;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    animation: example linear 1s infinite alternate;
   }
   .searchbtn {
     padding: 0;
@@ -541,7 +542,10 @@ ion-navbar{
        max-width: 100%;
     border: 1px solid #fff;
     border-radius: 5px; font-size:1rem;
-    line-height: 2rem;
+    line-height: 1rem;
+  
+    height: 32px;
+    padding-top: 5px;    margin-top: 8px
     
 }
 .settings-button.bar-buttons.bar-buttons-ios .item-inner{border: none!important}
@@ -549,7 +553,7 @@ ion-navbar{
 .item:not(.item-label-stacked):not(.item-label-floating) .ionic-selectable-ios .ionic-selectable-value {
   padding-left: 5px!important;padding-right: 5px!important;
 }
-.ionic-selectable-value{padding-left: 5px!important;}
+.ionic-selectable-value{padding: 5px!important; }
 .ionic-selectable-icon {
  
   display: none;}
@@ -569,6 +573,20 @@ ion-navbar{
 ul.trader-title.ontop li, ul.trader-title.first li {
   white-space: nowrap;
 }
+.altcurr {
+  font-size: 1rem;
+}
 
+
+@-webkit-keyframes example {
+  from {width: 150px ; opacity: 0.8}
+  to {width: 250px; opacity: 1;}
+}
+
+/* Standard syntax */
+@keyframes example {
+  from {width: 150px; opacity: 0.8}
+  to {width: 250px; opacity: 1}
+}
 
 }

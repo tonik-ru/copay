@@ -8,7 +8,7 @@ import {
   Platform
 } from 'ionic-angular';
 import * as _ from 'lodash';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 // providers
 import { AddressBookProvider } from '../../providers/address-book/address-book';
@@ -67,6 +67,9 @@ export class WalletDetailsPage extends WalletTabsChild {
   public txpsPending: any[];
   public lowUtxosWarning: boolean;
 
+  public qrAddress: string;
+  public address: string;
+
   public supportedCards: Promise<CardConfigMap>;
 
   constructor(
@@ -118,10 +121,93 @@ export class WalletDetailsPage extends WalletTabsChild {
       });
   }
 
+  private async updateQrAddress(address, newAddr?: boolean): Promise<void> {
+    if (newAddr) {
+      await Observable.timer(400).toPromise();
+    }
+    this.address = address;
+    await Observable.timer(200).toPromise();
+    // this.playAnimation = false;
+  }
+  public async setAddress(newAddr?: boolean, failed?: boolean): Promise<void> {
+    // this.loading = newAddr || _.isEmpty(this.address) ? true : false;
+
+    const addr: string = (await this.walletProvider
+      .getAddress(this.wallet, newAddr)
+      .catch(err => {
+        // this.loading = false;
+        if (err == 'INVALID_ADDRESS') {
+          // Generate a new address if the first one is invalid
+          if (!failed) {
+            this.setAddress(newAddr, true);
+          }
+          return;
+        }
+        this.logger.warn(this.bwcError.msg(err, 'Receive'));
+      })) as string;
+    // this.loading = false;
+    if (!addr) return;
+    const address = this.walletProvider.getAddressView(
+      this.wallet.coin,
+      this.wallet.network,
+      addr
+    );
+
+    if (this.address && this.address != address) {
+      // this.playAnimation = true;
+    }
+    this.updateQrAddress(addr, newAddr);
+
+    this.qrAddress = this.walletProvider.getAddressView(
+      this.wallet.coin,
+      this.wallet.network,
+      addr,
+      true
+    );
+  }
+
+  private walletSetAddressHandler: any = (newAddr?: boolean) => {
+    this.setAddress(newAddr);
+  };
+
+  public openWikiBackupNeeded(): void {
+    const url =
+      'https://support.bitpay.com/hc/en-us/articles/115002989283-Why-don-t-I-have-an-online-account-for-my-BitPay-wallet-';
+    const optIn = true;
+    const title = null;
+    const message = this.translate.instant('Read more in our Wiki');
+    const okText = this.translate.instant('Open');
+    const cancelText = this.translate.instant('Go Back');
+    this.externalLinkProvider.open(
+      url,
+      optIn,
+      title,
+      message,
+      okText,
+      cancelText
+    );
+  }
+
+  public showFullAddr(): void {
+    // let data = document
+    //  .getElementsByTagName('ngx-qrcode')[0]
+    //  .children[0].children[0].getAttribute('src');
+    // let p1 = data.indexOf(',');
+    // let binData = atob(data.substr(p1 + 1));
+
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'address-copied',
+      { address: this.address, coin: this.wallet.coin }
+    );
+    infoSheet.present();
+  }
+
   ionViewWillEnter() {
     this.onResumeSubscription = this.platform.resume.subscribe(() => {
       this.updateAll();
+      this.setAddress();
       this.events.subscribe('Wallet/updateAll', this.walletUpdateAllHandler);
+      this.events.subscribe('Wallet/setAddress', this.walletSetAddressHandler);
     });
 
     this.logger.log(this.wallet.coin);
@@ -129,6 +215,7 @@ export class WalletDetailsPage extends WalletTabsChild {
 
   ionViewDidEnter() {
     this.updateAll();
+    this.setAddress();
   }
 
   ionViewWillLeave() {

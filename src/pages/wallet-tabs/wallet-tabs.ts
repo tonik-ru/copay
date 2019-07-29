@@ -17,7 +17,7 @@ import { AppProvider } from '../../providers';
   selector: 'page-wallet-tabs',
   template: `
     <div [class]="appProvider.activeTheme">
-      <ion-tabs selectedIndex="1" #tabs>
+      <ion-tabs [selectedIndex]="selectedTabIndex" #tabs>
         <ion-tab
           [root]="receiveRoot"
           tabTitle="{{'Receive'|translate}}"
@@ -45,6 +45,8 @@ export class WalletTabsPage {
   activityRoot = WalletDetailsPage;
   sendRoot = SendPage;
 
+  selectedTabIndex: number = 1;
+
   walletId: string;
 
   private isElectron: boolean;
@@ -59,6 +61,9 @@ export class WalletTabsPage {
     public appProvider: AppProvider
   ) {
     this.isElectron = this.platformProvider.isElectron;
+    if (typeof this.navParams.get('selectedTabIndex') !== 'undefined') {
+      this.selectedTabIndex = this.navParams.get('selectedTabIndex');
+    }
   }
 
   ionViewDidLoad() {

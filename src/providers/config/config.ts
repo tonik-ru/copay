@@ -149,25 +149,24 @@ export class ConfigProvider {
 
       download: {
         bitpay: {
-          url: 'https://bitpay.com/wallet'
+          url: 'https://www.bitcoindiamond.org/bcd-pay/'
         },
         copay: {
-          url: 'https://copay.io/#download'
+          url: 'https://www.bitcoindiamond.org/bcd-pay/'
         }
       },
 
       rateApp: {
         bitpay: {
-          ios:
-            'https://itunes.apple.com/app/bitpay-secure-bitcoin-wallet/id1149581638',
+          ios: 'https://apps.apple.com/us/app/bcd-pay/id1464896069?l=ru&ls=1',
           android:
-            'https://play.google.com/store/apps/details?id=com.bitpay.wallet',
+            'https://play.google.com/store/apps/details?id=com.chimpion.bcdpay',
           wp: ''
         },
         copay: {
-          ios: 'https://itunes.apple.com/app/copay-bitcoin-wallet/id951330296',
+          ios: 'https://apps.apple.com/us/app/bcd-pay/id1464896069?l=ru&ls=1',
           android:
-            'https://play.google.com/store/apps/details?id=com.bitpay.copay',
+            'https://play.google.com/store/apps/details?id=com.chimpion.bcdpay',
           wp: ''
         }
       },

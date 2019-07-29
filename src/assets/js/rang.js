@@ -105,11 +105,9 @@ function startgraph(e) {
 
   if (e == 1) {
     console.log(e);
-   
 
     intervalId = setInterval(function() {
-      if(document.querySelector('#speedometr') == undefined)
-        return;
+      if (document.querySelector('#speedometr') == undefined) return;
       position = document.querySelector('#BULLISH');
       positiond = document.querySelector('#BULLISHd');
       textscore = document.querySelector('#BULLISH1');
@@ -117,7 +115,7 @@ function startgraph(e) {
 
       futurearrow = document.querySelector('#future');
       futuretext = document.querySelector('#futurecolor');
-      futureval = document.querySelector('#futureval').innerHTML;;
+      futureval = document.querySelector('#futureval').innerHTML;
 
       var znachenie = document.querySelector('#speedometr').innerHTML;
       var znachenie3 = document.querySelector('#speedometr').innerHTML;
@@ -486,8 +484,16 @@ function startgraph(e) {
         rangecol2.style.fill = '#CCC';
         rangecol6.style.fill = '#CCC';
         rangecol3.style.fill = '#e2446a';
+        rangecol3.classList.add('vbear');
         position.innerHTML = 'VERY BEARISH';
         position.style.color = '#e2446a';
+
+        rangecol1.classList.remove('stab');
+        rangecol2.classList.remove('vbull');
+        //rangecol3.classList.remove('vbear');
+        rangecol5.classList.remove('bear');
+        rangecol6.classList.remove('bull');
+
       } else if ((znachenie3 >= -59) & (znachenie3 <= -12)) {
         iconchimp.setAttribute('fill', 'url(#angry)');
 
@@ -496,18 +502,34 @@ function startgraph(e) {
         rangecol6.style.fill = '#CCC';
         rangecol2.style.fill = '#CCC';
         rangecol5.style.fill = '#e8a2b3';
+        rangecol5.classList.add('bear');
         position.innerHTML = 'BEARISH';
         position.style.color = '#e8a2b3';
+
+        rangecol1.classList.remove('stab');
+        rangecol2.classList.remove('vbull');
+        rangecol3.classList.remove('vbear');
+        //rangecol5.classList.remove('bear');
+        rangecol6.classList.remove('bull');
+
       } else if ((znachenie3 >= -11) & (znachenie3 <= 11)) {
         iconchimp.setAttribute('fill', 'url(#cute');
 
-        rangecol1.style.fill = '#FFF';
+        rangecol1.style.fill = '#fac239';
+        rangecol1.classList.add('stab');
         rangecol3.style.fill = '#CCC';
         rangecol5.style.fill = '#CCC';
         rangecol2.style.fill = '#CCC';
         rangecol6.style.fill = '#CCC';
         position.innerHTML = 'STABLE';
         position.style.color = '#FFF';
+
+        //rangecol1.classList.remove('stab');
+        rangecol2.classList.remove('vbull');
+        rangecol3.classList.remove('vbear');
+        rangecol5.classList.remove('bear');
+        rangecol6.classList.remove('bull');
+
       } else if ((znachenie3 >= 11) & (znachenie3 <= 59)) {
         iconchimp.setAttribute('fill', 'url(#surprised)');
 
@@ -516,8 +538,16 @@ function startgraph(e) {
         rangecol5.style.fill = '#CCC';
         rangecol2.style.fill = '#CCC';
         rangecol6.style.fill = '#8acf20';
+        rangecol6.classList.add('bull');
         position.innerHTML = 'BULLISH';
         position.style.color = '#8acf20';
+
+        rangecol1.classList.remove('stab');
+        rangecol2.classList.remove('vbull');
+        rangecol3.classList.remove('vbear');
+        rangecol5.classList.remove('bear');
+        //rangecol6.classList.remove('bull');
+
       } else if ((znachenie3 >= 60) & (znachenie3 <= 100)) {
         iconchimp.setAttribute('fill', 'url(#surprised)');
 
@@ -526,8 +556,15 @@ function startgraph(e) {
         rangecol5.style.fill = '#CCC';
         rangecol3.style.fill = '#CCC';
         rangecol2.style.fill = '#16ac0c';
+        rangecol2.classList.add('vbull');
         position.innerHTML = 'VERY BULLISH';
-        position.style.color = '#16ac0c';
+        position.style.color = '#16ac0c'; 
+        
+        rangecol1.classList.remove('stab');
+        //rangecol2.classList.remove('vbull');
+        rangecol3.classList.remove('vbear');
+        rangecol5.classList.remove('bear');
+        rangecol6.classList.remove('bull');
       } else {
         iconchimp.setAttribute('fill', 'url(#pattern0)');
         rangecol1.style.fill = '#CCC';
@@ -546,87 +583,77 @@ function startgraph(e) {
     intervalId = null;
     e = 2;
     return false;
-
   }
 }
 
-
-
 function topstart(e) {
   if (e == 1) {
-    
     intervalId = setInterval(function() {
-      if(document.querySelector('#prevprice') == undefined)
-        return;
-    var prevprice = document.querySelector('#prevprice');
-    var curprice = document.querySelector('#curprice');
-    var arrowprice = document.querySelector('#arrowprice');
+      if (document.querySelector('#prevprice') == undefined) return;
+      var prevprice = document.querySelector('#prevprice');
+      var curprice = document.querySelector('#curprice');
+      var arrowprice = document.querySelector('#arrowprice');
 
-    var swing = document.querySelector('#swing');
-    var swing2 = document.querySelector('#swing2');
-    var prevswing = document.querySelector('#prevswing').innerHTML;
+      var swing = document.querySelector('#swing');
+      var swing2 = document.querySelector('#swing2');
+      var prevswing = document.querySelector('#prevswing').innerHTML;
 
-    var pricezoneproc = document.querySelector('#pricezoneproc');
-    var pricezonefeb = document.querySelector('#febcurproc');
-    var pricezoneproctext = document.querySelector('#pricezoneproctext');
-    var pricezoneprocprev = document.querySelector('#prevpricezoneproc').innerHTML;
-    
-    /* Current price arrows */
-    if (curprice.innerHTML <= prevprice.innerHTML) {
-      arrowprice.style.color = '#e2446a';
-      arrowprice.style.opacity = '1';
-      arrowprice.style.transform = 'rotate(180deg)';
+      var pricezoneproc = document.querySelector('#pricezoneproc');
+      var pricezonefeb = document.querySelector('#febcurproc');
+      var pricezoneproctext = document.querySelector('#pricezoneproctext');
+      var pricezoneprocprev = document.querySelector('#prevpricezoneproc')
+        .innerHTML;
 
-      febcurar.style.color = '#e2446a';
-      febcur.style.color = '#e2446a';
-      febcurar.style.opacity = '1';
-      febcurar.style.transform = 'rotate(180deg)';
-    } else {
-      arrowprice.style.color = 'rgb(138, 207, 32)';
-      arrowprice.style.opacity = '1';
-      arrowprice.style.transform = 'rotate(0deg)';
+      /* Current price arrows */
+      if (curprice.innerHTML <= prevprice.innerHTML) {
+        arrowprice.style.color = '#e2446a';
+        arrowprice.style.opacity = '1';
+        arrowprice.style.transform = 'rotate(180deg)';
 
-      febcurar.style.color = 'rgb(138, 207, 32)';
-      febcur.style.color = 'rgb(138, 207, 32)';
-      febcurar.style.opacity = '1';
-      febcurar.style.transform = 'rotate(0deg)';
-    }
+        febcurar.style.color = '#e2446a';
+        febcur.style.color = '#e2446a';
+        febcurar.style.opacity = '1';
+        febcurar.style.transform = 'rotate(180deg)';
+      } else {
+        arrowprice.style.color = 'rgb(138, 207, 32)';
+        arrowprice.style.opacity = '1';
+        arrowprice.style.transform = 'rotate(0deg)';
 
-    /* SWING ARORWS  */
-    if (parseFloat(swing.innerHTML) > parseFloat(prevswing)) {
-      swing.style.color = 'rgb(138, 207, 32)';
-      swing2.style.color = 'rgb(138, 207, 32)';
-    } else if (parseFloat(swing.innerHTML) == parseFloat(prevswing)) {
-      swing.style.color = '#FFF';
-      swing2.style.color = '#FFF';
-    } else {
-      swing.style.color = '#e2446a';
-      swing2.style.color = '#e2446a';
-    }
+        febcurar.style.color = 'rgb(138, 207, 32)';
+        febcur.style.color = 'rgb(138, 207, 32)';
+        febcurar.style.opacity = '1';
+        febcurar.style.transform = 'rotate(0deg)';
+      }
 
+      /* SWING ARORWS  */
+      if (parseFloat(swing.innerHTML) > parseFloat(prevswing)) {
+        swing.style.color = 'rgb(138, 207, 32)';
+        swing2.style.color = 'rgb(138, 207, 32)';
+      } else if (parseFloat(swing.innerHTML) == parseFloat(prevswing)) {
+        swing.style.color = '#FFF';
+        swing2.style.color = '#FFF';
+      } else {
+        swing.style.color = '#e2446a';
+        swing2.style.color = '#e2446a';
+      }
 
-    /*Price Zone colors */
+      /*Price Zone colors */
 
-    if (parseFloat(pricezoneproc.innerHTML) > parseFloat(pricezoneprocprev)) {
-    
-      pricezonefeb.style.color = 'rgb(138, 207, 32)';
-    } else if (
-      parseFloat(pricezoneproc.innerHTML) == parseFloat(pricezoneprocprev)
-    ) {
-     
-      pricezonefeb.style.color = '#FFF';
-    } else {
-      
-      pricezonefeb.style.color = '#e2446a';
-    }
-
-  }, 1000);
-} else {
-  console.log(e + 'should stop interval');
-  clearInterval(intervalId);
-  intervalId = null;
-  e = 2;
-  return false;
-
-}
+      if (parseFloat(pricezoneproc.innerHTML) > parseFloat(pricezoneprocprev)) {
+        pricezonefeb.style.color = 'rgb(138, 207, 32)';
+      } else if (
+        parseFloat(pricezoneproc.innerHTML) == parseFloat(pricezoneprocprev)
+      ) {
+        pricezonefeb.style.color = '#FFF';
+      } else {
+        pricezonefeb.style.color = '#e2446a';
+      }
+    }, 1000);
+  } else {
+    console.log(e + 'should stop interval');
+    clearInterval(intervalId);
+    intervalId = null;
+    e = 2;
+    return false;
+  }
 }

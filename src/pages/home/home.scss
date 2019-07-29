@@ -91,6 +91,13 @@ page-home {
    .header-extend{margin-top: 15px!important}
    .card:first-of-type{margin-top: 140px!important}
   }
+
+  @media screen and (max-width:415px){
+    @supports (-webkit-overflow-scrolling: touch) {
+      .header-extend{margin-top: 5px!important}
+      .card:first-of-type{margin-top: 145px!important}
+     }
+  }
   span.altbalance {
     display: block;
     font-size: 1rem;
@@ -375,12 +382,59 @@ page-home {
 
   ion-item-sliding.item-wrapper {
     $gift-card-item-side-padding: 4%;
-    $gift-card-item-height: 73px;
+    $gift-card-item-height: 50px;
 
     background: none;
-    height: $gift-card-item-height + 14px;
-    padding-left: $gift-card-item-side-padding;
-    padding-right: $gift-card-item-side-padding;
+    // height: $gift-card-item-height + 14px;
+    // padding-left: $gift-card-item-side-padding;
+    // padding-right: $gift-card-item-side-padding;
+
+    .action {
+      &.button.button-default {
+        padding: 0;
+      }
+
+      &--receive {
+        background-color: #3963fa;
+
+        &.activated,
+        &:hover:not(.disable-hover) {
+          background-color: #e8f4f7;
+        }
+      }
+
+      &--send {
+        background-color: #fac239;;
+
+        &.activated,
+        &:hover:not(.disable-hover) {
+          background-color: #e9ebf9;
+        }
+      }
+
+      &__icon {
+        img {
+          height: 25px;
+        }
+      }
+
+      &__text {
+        color: #FFF;
+        font-size: 12px;
+        font-weight: 500;
+        margin-top: 3px;
+      }
+    }
+
+    &.wallets {
+      button.item.item-block {
+        border-left: 8px solid;
+        div.item-inner {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
 
     ion-item-options {
       border-bottom: 0;
@@ -391,6 +445,8 @@ page-home {
         border-radius: 5px;
         font-weight: 400;
         padding: 15px;
+        width: 60px;
+    margin-left: 5px;
 
         .archive {
           &__icon {
@@ -406,21 +462,21 @@ page-home {
     }
 
     button.item.item-block {
-      font-size: 16px;
-      border-radius: 5px;
-      box-shadow: 0 7px 11px 0 rgba(0, 0, 0, 0.06);
+      // font-size: 16px;
+      // border-radius: 5px;
+      // box-shadow: 0 7px 11px 0 rgba(0, 0, 0, 0.06);
 
       .item-inner {
-        border: 0;
-        height: $gift-card-item-height;
+        // border: 0;
+        // height: $gift-card-item-height;
 
         ion-label {
           &.label-ios,
           &.label-md {
-            display: flex;
-            height: $gift-card-item-height;
-            align-items: center;
-            margin: 0;
+            // display: flex;
+            // height: $gift-card-item-height;
+            // align-items: center;
+            // margin: 0;
           }
         }
       }

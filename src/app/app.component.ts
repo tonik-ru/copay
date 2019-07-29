@@ -229,7 +229,9 @@ export class CopayApp {
     this.incomingDataRedirEvent();
     this.scanFromWalletEvent();
     this.events.subscribe('InitWallets', () => this.initWallets());
-    this.events.subscribe('OpenWallet', wallet => this.openWallet(wallet));
+    this.events.subscribe('OpenWallet', (wallet, params) =>
+      this.openWallet(wallet, params)
+    );
     // Check Profile
     this.profile
       .loadAndBindProfile()
@@ -362,7 +364,7 @@ export class CopayApp {
     });
   }
 
-  private openWallet(wallet) {
+  private openWallet(wallet, params) {
     // check if modal is already open
     if (this.isWalletModalOpen) {
       this.walletModal.dismiss();
@@ -372,6 +374,7 @@ export class CopayApp {
     this.walletModal = this.modalCtrl.create(
       page,
       {
+        ...params,
         walletId: wallet.credentials.walletId
       },
       {

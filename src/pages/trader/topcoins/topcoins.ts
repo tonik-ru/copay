@@ -63,7 +63,7 @@ export class TopcoinsPage {
   public favorite: boolean = false;
   public showfavriteslist: boolean = false;
   public showInstruction: boolean = true;
-
+  safeSvg;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -79,21 +79,21 @@ export class TopcoinsPage {
     this.loadPairs();
     this.toggled = false;
 
-    this.storage.get('bcdremove').then(val => {
-      if (val !== null) {
-        this.favorite = val;
-      }
-    });
+    // this.storage.get('bcdremove').then(val => {
+    //   if (val !== null) {
+    //     this.favorite = val;
+    //   }
+    // });
 
-    if (!this.favorite) {
-      this.storage.set('favList', [{ id: 76 }]);
-    }
+    // if (!this.favorite) {
+    //   this.storage.set('favList', [{ id: 76 }]);
+    // }
 
-    this.storage.get('favList').then(val => {
-      if (val !== null) {
-        this.fav = val;
-      }
-    });
+    // this.storage.get('favList').then(val => {
+    //   if (val !== null) {
+    //     this.fav = val;
+    //   }
+    // });
   }
 
   onContentScroll(e) {
@@ -105,7 +105,7 @@ export class TopcoinsPage {
         'display',
         'flex'
       );
-    } else if (e.scrollTop < 10) {
+    } else if (e.scrollTop - this.oldScrollTop <= 10) {
       this.renderer.setElementStyle(
         this.tabletitleId.nativeElement,
         'display',
@@ -168,6 +168,12 @@ export class TopcoinsPage {
     }
     if (id == 76) {
       this.favorite = true;
+    } else if (id == 3) {
+      this.favorite = true;
+    } else if (id == 1) {
+      this.favorite = true;
+    } else if (id == 1653) {
+      this.favorite = true;
     }
 
     this.storage.set('favList', this.fav);
@@ -193,7 +199,7 @@ export class TopcoinsPage {
   ionViewDidLoad() {}
   ionViewDidEnter() {
     // this.slider.onlyExternal = true;
-
+    this.logger.log('1fav', this.favorite);
     this.logger.log('topcoins will enter');
   }
 
@@ -260,12 +266,28 @@ export class TopcoinsPage {
     this.storage.get('bcdremove').then(val => {
       if (val !== null) {
         this.favorite = val;
+        this.logger.log('2fav', this.favorite);
+        if (this.favorite == false) {
+          this.storage.set('favList', [
+            { id: 76 },
+            { id: 1 },
+            { id: 3 },
+            { id: 1653 }
+          ]);
+        }
+      } else {
+        this.storage.set('bcdremove', false);
+
+        this.logger.log('BCDREMOVE null');
+        this.storage.set('favList', [
+          { id: 76 },
+          { id: 1 },
+          { id: 3 },
+          { id: 1653 }
+        ]);
+        this.fav = [{ id: 76 }, { id: 1 }, { id: 3 }, { id: 1653 }];
       }
     });
-
-    if (!this.favorite) {
-      this.storage.set('favList', [{ id: 76 }]);
-    }
 
     this.storage.get('favList').then(val => {
       if (val !== null) {
@@ -321,7 +343,10 @@ export class TopcoinsPage {
         this.selectedCurrency
       );
     let res = this.topCoins;
-    this.currencySymbol = this.selectedCurrency.isoCode == 'USD' ? '$' : '';
+    this.currencySymbol =
+      this.selectedCurrency.isoCode == 'USD'
+        ? '$'
+        : this.selectedCurrency.isoCode;
 
     let curRate = this.rate.getUsdRate(this.selectedCurrency.isoCode);
     for (let i = 0; i < res.length; i++) {

@@ -14,10 +14,12 @@ import { NavController, NavParams } from 'ionic-angular';
 })
 export class LiveChatPage {
   public innerHeight: any;
+  public elemHeight: any;
   constructor(public navCtrl: NavController, public navParams: NavParams) {}
 
   ionViewDidLoad() {}
   ngOnInit() {
-    this.innerHeight = window.innerHeight - 100 + 'px';
+    this.elemHeight = 59 + 44;
+    this.innerHeight = window.innerHeight - this.elemHeight + 'px';
   }
 }

@@ -24,6 +24,8 @@ import { FullpostPage } from './fullpost/fullpost';
 import { NewsmenuPage } from './newsmenu/newsmenu';
 import { NewssearchPage } from './newssearch/newssearch';
 
+import { timer } from 'rxjs/observable/timer';
+
 @Component({
   selector: 'page-news',
   templateUrl: 'news.html',
@@ -47,6 +49,7 @@ export class TabNews {
   private sort: string = '0';
   searchQuery: string = '';
   fabToHide;
+  private refreshTimer;
 
   oldScrollTop: number = 0;
 
@@ -169,7 +172,7 @@ export class TabNews {
   ionViewDidLoad() {}
 
   ionViewWillEnter() {
-    this.loadData();
+    this.refreshTimer = timer(1000, 30000).subscribe(() => this.loadData());
   }
 
   ngOnInit() {
@@ -193,5 +196,14 @@ export class TabNews {
       this.logger.log('UP');
     }
     this.oldScrollTop = e.scrollTop;
+  }
+  ionViewWillLeave() {
+    this.refreshTimer.unsubscribe();
+  }
+  ionViewDidLeave() {
+    this.refreshTimer.unsubscribe();
+  }
+  ngOnDestroy() {
+    this.refreshTimer.unsubscribe();
   }
 }

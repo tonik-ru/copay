@@ -81,8 +81,6 @@ export class HomePage {
   @ViewChild('userNameId') userNameId: ElementRef;
   @ViewChild('scan') scanId: ElementRef;
   @ViewChild('balance') balanceId: ElementRef;
-  
-  
 
   fabToHide;
   oldScrollTop: number = 0;
@@ -169,7 +167,7 @@ export class HomePage {
 
     this.bcdExists =
       this.bwcProvider.getBitcoreDiamond() == undefined ? false : true;
-      this.logger.debug('BCD Exists = ' + this.bcdExists);
+    this.logger.debug('BCD Exists = ' + this.bcdExists);
   }
 
   expandBalance() {
@@ -177,44 +175,94 @@ export class HomePage {
     //   'header-extend'
     // )[0];
     setTimeout(() => {
-      if ( this.wallets.length !== 0 && this.totalb() !== 'none') {
+      if (this.wallets.length !== 0 && this.totalb() !== 'none') {
         this.renderer.setElementStyle(
-          this.userNameId.nativeElement,  'webkitTransition', 'ease 0.5s' );
-          this.renderer.setElementStyle(
-            this.scanId.nativeElement,  'webkitTransition', 'ease 0.5s' );
-          this.renderer.setElementStyle(
-              this.balanceId.nativeElement,  'webkitTransition', 'ease 0.5s' );
+          this.userNameId.nativeElement,
+          'webkitTransition',
+          'ease 0.5s'
+        );
+        this.renderer.setElementStyle(
+          this.scanId.nativeElement,
+          'webkitTransition',
+          'ease 0.5s'
+        );
+        this.renderer.setElementStyle(
+          this.balanceId.nativeElement,
+          'webkitTransition',
+          'ease 0.5s'
+        );
 
-        this.renderer.setElementStyle(this.userNameId.nativeElement, 'opacity', '1');
-        }
+        this.renderer.setElementStyle(
+          this.userNameId.nativeElement,
+          'opacity',
+          '1'
+        );
+      }
     }, 500);
-    
-   
   }
 
   onContentScroll(e) {
-    if ( this.wallets.length !== 0 && this.totalb() !== 'none') {
-    if (e.scrollTop - this.oldScrollTop > 10) {
-      this.logger.log('DOWN');
-      
-      this.renderer.setElementStyle(this.userNameId.nativeElement, 'height', '60px');
-      this.renderer.setElementStyle(this.userNameId.nativeElement, 'padding-bottom', '15px');
-  
-      this.renderer.setElementStyle(this.scanId.nativeElement, 'margin-top', '5px');
-      this.renderer.setElementStyle(this.scanId.nativeElement, 'width', '20px');
-      this.renderer.setElementStyle(this.balanceId.nativeElement, 'padding-top', '0px');
-      
-    } else if (e.scrollTop - this.oldScrollTop < 0) {
-      this.renderer.setElementStyle(this.userNameId.nativeElement, 'height', '100px');
-      this.renderer.setElementStyle(this.userNameId.nativeElement, 'padding-bottom', '0px');
-     this.renderer.setElementStyle(this.scanId.nativeElement, 'margin-top', '0px');
-     this.renderer.setElementStyle(this.scanId.nativeElement, 'width', '28.5px')
-      this.renderer.setElementStyle(this.balanceId.nativeElement, 'padding-top', '27px');
-      
-      this.logger.log('UP');
+    if (this.wallets.length !== 0 && this.totalb() !== 'none') {
+      if (e.scrollTop - this.oldScrollTop > 10) {
+        this.logger.log('DOWN');
+
+        this.renderer.setElementStyle(
+          this.userNameId.nativeElement,
+          'height',
+          '60px'
+        );
+        this.renderer.setElementStyle(
+          this.userNameId.nativeElement,
+          'padding-bottom',
+          '15px'
+        );
+
+        this.renderer.setElementStyle(
+          this.scanId.nativeElement,
+          'margin-top',
+          '5px'
+        );
+        this.renderer.setElementStyle(
+          this.scanId.nativeElement,
+          'width',
+          '20px'
+        );
+        this.renderer.setElementStyle(
+          this.balanceId.nativeElement,
+          'padding-top',
+          '0px'
+        );
+      } else if (e.scrollTop - this.oldScrollTop < 0) {
+        this.renderer.setElementStyle(
+          this.userNameId.nativeElement,
+          'height',
+          '100px'
+        );
+        this.renderer.setElementStyle(
+          this.userNameId.nativeElement,
+          'padding-bottom',
+          '0px'
+        );
+        this.renderer.setElementStyle(
+          this.scanId.nativeElement,
+          'margin-top',
+          '0px'
+        );
+        this.renderer.setElementStyle(
+          this.scanId.nativeElement,
+          'width',
+          '28.5px'
+        );
+        this.renderer.setElementStyle(
+          this.balanceId.nativeElement,
+          'padding-top',
+          '27px'
+        );
+
+        this.logger.log('UP');
+      }
+      this.oldScrollTop = e.scrollTop;
     }
-    this.oldScrollTop = e.scrollTop;
-  }
   }
 
   ionViewWillEnter() {
@@ -234,7 +282,7 @@ export class HomePage {
     if (this.isElectron) {
       this.updateDesktopOnFocus();
     }
-    this.expandBalance()
+    this.expandBalance();
   }
 
   private _didEnter() {
@@ -762,18 +810,32 @@ export class HomePage {
     this.navCtrl.push(AddPage);
   }
 
-  public goToWalletDetails(wallet): void {
-    if (
-      this.showReorderBtc ||
-      this.showReorderBch ||
-      this.showReorderBcd ||
-      this.showReorderVaultWallets
-    )
-      return;
+  // public goToWalletDetails(wallet): void {
+  //   if (
+  //     this.showReorderBtc ||
+  //     this.showReorderBch ||
+  //     this.showReorderBcd ||
+  //     this.showReorderVaultWallets
+  //   )
+  //     return;
 
-    this.events.publish('OpenWallet', wallet);
+  //   this.events.publish('OpenWallet', wallet);
+  // }
+
+  public goToWalletDetails(wallet, params): void {
+    this.events.publish('OpenWallet', wallet, params);
   }
 
+  public onWalletAction(wallet, action, slidingItem) {
+    const tabMap = {
+      receive: 0,
+      view: 1,
+      send: 2
+    };
+    const selectedTabIndex = tabMap[action];
+    this.goToWalletDetails(wallet, { selectedTabIndex });
+    slidingItem.close();
+  }
   public reorderBtc(): void {
     this.showReorderBtc = !this.showReorderBtc;
   }

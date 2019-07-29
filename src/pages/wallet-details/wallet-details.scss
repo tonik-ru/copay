@@ -1,4 +1,43 @@
 page-wallet-details {
+  .address-container {
+    bottom: 0;
+    color: rgb(80, 80, 80);
+    width: 100%;
+    padding: 0 15px 15px;
+    text-align: center;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    .text-address {
+      color: #FFF;
+    padding: 1.5rem 1rem;
+    border-radius: 3px;
+    width: 100%;
+    border: 1px solid #fff;
+      &.ellipsis img {
+        vertical-align: middle;
+      }
+      .address-text {
+        width: 80%;
+        max-width: 100%;
+        vertical-align: middle;
+        display: inline-block;
+        opacity: 1;
+        transition: opacity 500ms ease;
+      }
+      .new-address-btn {
+        width: 25px;
+        height: 25px;
+        padding: 0px;
+        vertical-align: middle;
+        padding-bottom: 3px;
+        margin-left: 5px;
+        background-color: transparent;
+      }
+    }
+  }
+
   .tabs-ios .tabbar {
     width: 90%;
 

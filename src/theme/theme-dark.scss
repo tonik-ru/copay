@@ -8,7 +8,7 @@
       background:#161b26;
     }
   }
- 
+  .loaderblock .spinner-ios-crescent circle{stroke: #fac239!important;}
   .scroll-content{
     background:#161b26!important;
     color: #FFF!important;
@@ -141,4 +141,18 @@ $alert-ios--background:#161b26;
   .select-ios .select-icon .select-icon-inner{color: #FFF;}
 
   img.darkinvert{filter: invert(1);}
+  page-amount {.amount-header .switcher__icon {
+    filter: invert(1);
+}
+.amount-header .switcher__label {
+  color: #FAC245;}
+   .next-button.show {
+  
+    filter: invert(1);
+    border: 1px solid #000;
+    border-radius: 30px;}
+    .amount-content .result{color:#FFF}
+    .amount-content .expression-container .unit{color:#fac245}
+
+}
 }

@@ -24,27 +24,29 @@
 </ion-header>
 
 <ion-content (ionScroll)="onContentScroll($event)" no-padding #pageTop>
-  <!--<ion-row>
-    <ion-col col-8 class="searchbtn1">
-      <ion-searchbar
-        [(ngModel)]="searchQuery"
-        (ionInput)="onSearch()"
-        [showCancelButton]="false"
-        placeholder="Search Post"
-        id="stay-cancel"
-      >
-      </ion-searchbar
-    ></ion-col>
-    <ion-col col-4 class="searchbtn1">
-      <ion-label>Sort</ion-label>
-      <ion-select [(ngModel)]="sort" (ionChange)="changeSort()">
-        <ion-option value="0">New to old</ion-option>
-        <ion-option value="1">Old to new</ion-option>
-        <ion-option value="2">A to Z</ion-option>
-        <ion-option value="3">Z to A</ion-option>
-      </ion-select>
-    </ion-col>
-  </ion-row>-->
+  <!--
+    <ion-row>
+      <ion-col col-8 class="searchbtn1">
+        <ion-searchbar
+          [(ngModel)]="searchQuery"
+          (ionInput)="onSearch()"
+          [showCancelButton]="false"
+          placeholder="Search Post"
+          id="stay-cancel"
+        >
+        </ion-searchbar
+      ></ion-col>
+      <ion-col col-4 class="searchbtn1">
+        <ion-label>Sort</ion-label>
+        <ion-select [(ngModel)]="sort" (ionChange)="changeSort()">
+          <ion-option value="0">New to old</ion-option>
+          <ion-option value="1">Old to new</ion-option>
+          <ion-option value="2">A to Z</ion-option>
+          <ion-option value="3">Z to A</ion-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+  -->
 
   <ion-refresher slot="fixed" (ionRefresh)="loadData($event)">
     <ion-refresher-content
@@ -55,52 +57,62 @@
     >
     </ion-refresher-content>
   </ion-refresher>
-
+  <!--
+    <ion-spinner
+      name="crescent"
+      *ngIf="items.length <= 2"
+      class="loaderblock"
+    ></ion-spinner>
+  -->
+  <div *ngIf="items.length <= 2" class="loaderblock">
+    <img src="assets/img/loader-bcd.svg" />
+  </div>
   <ion-list>
-    <ion-item *ngFor="let item of items " (click)="openFullPost(item)">
-      <ion-thumbnail item-right >
+    <ion-item *ngFor="let item of items" (click)="openFullPost(item)">
+      <ion-thumbnail item-right>
         <img
-        *ngIf="item.better_featured_image !== null"
+          *ngIf="item.better_featured_image !== null"
           [src]="
-        item.better_featured_image.media_details.sizes.medium.source_url
-      "
-        >
-        <img *ngIf="item.better_featured_image == null"
-          
-        src="assets/img/noimage.png"
-      >
-        
+            item.better_featured_image.media_details.sizes.medium.source_url
+          "
+        />
+        <img
+          *ngIf="item.better_featured_image == null"
+          src="assets/img/noimage.png"
+        />
       </ion-thumbnail>
-     
 
-      <ion-label item-content >
-          <p>{{ item.title.rendered }}</p>
-        
-         <!--<p>
-                <ion-badge color="light" position="bottom">
-                    
-                    {{ item.date | amTimeAgo }}</ion-badge
-                  >
-                </p> -->
-        </ion-label>
+      <ion-label item-content>
+        <p>{{ item.title.rendered }}</p>
 
-          <!---<ion-row class="bottominfo">
-            <ion-col col-6 text-left>
-              <ion-badge
-                color="second"
-                *ngIf="api.getCatName(item.categories[0])"
-              >
-                {{ api.getCatName(item.categories[0]) }}
-              </ion-badge>
-            </ion-col>
-            <ion-col col-6 text-right>
-              <ion-badge color="light" right>
-                <ion-icon name="time"></ion-icon>
-                {{ item.date | date: 'MMMM dd, yyyy ' }}</ion-badge
-              ></ion-col
+        <!--
+          <p>
+             <ion-badge color="light" position="bottom">
+
+                 {{ item.date | amTimeAgo }}</ion-badge
+               >
+             </p>
+        -->
+      </ion-label>
+
+      <!--
+        -<ion-row class="bottominfo">
+          <ion-col col-6 text-left>
+            <ion-badge
+              color="second"
+              *ngIf="api.getCatName(item.categories[0])"
             >
-          </ion-row>-->
-          
+              {{ api.getCatName(item.categories[0]) }}
+            </ion-badge>
+          </ion-col>
+          <ion-col col-6 text-right>
+            <ion-badge color="light" right>
+              <ion-icon name="time"></ion-icon>
+              {{ item.date | date: 'MMMM dd, yyyy ' }}</ion-badge
+            ></ion-col
+          >
+        </ion-row>
+      -->
     </ion-item>
   </ion-list>
   <!--
@@ -130,4 +142,3 @@
     </button>
   </ion-fab>
 </ion-content>
-

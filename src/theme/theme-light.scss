@@ -1,9 +1,17 @@
 .theme-light {
   ion-content {
-    background: #fff;
+    background: #f8f8f9;
   }
+  .cls-1,  { transition: 1s ease;
+    fill: rgba(0, 0, 0, 0.2)!important;
+}
+.vbear{fill:#e2446a!important; }
+.bear{fill:#e8a2b3!important; }
+.stab{fill: #fac239!important;}
+.bull{fill:#8acf20!important;}
+.vbull{fill: #16ac0c!important;}
   .scroll-content {
-    background: #fff !important;
+    background: #f8f8f9!important;
     color: #444 !important;
   }
 
@@ -146,5 +154,16 @@
   page-custom-amount .qr-container .qr-card .qr-card-amount{color:#000}
   .ionic-selectable-value-item.ng-star-inserted {
     color: #FFF;
+}
+page-topcoins{ .item-ios{background: #f8f8f9!important;}
+.ionic-selectable-value-item{color:#FFF!important;}
+ion-buttons.settings-button.bar-buttons.bar-buttons-ios .item-ios{background: transparent!important}}
+
+page-datafeed{ .recent {
+  background: #a9abaf !important;
+}
+tr.currentfib {
+  background: #f7da95 !important;
+}
 }
 }
