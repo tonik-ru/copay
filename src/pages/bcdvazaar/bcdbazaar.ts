@@ -34,6 +34,25 @@ export class TabBcdbazaar {
 
   public Title: string = 'Shopping';
 
+  options : InAppBrowserOptions = {
+    location : 'yes',
+    hidden : 'no', 
+    clearcache : 'yes',
+    clearsessioncache : 'yes',
+    zoom : 'yes',
+    hardwareback : 'yes',
+    mediaPlaybackRequiresUserAction : 'no',
+    shouldPauseOnSuspend : 'no', 
+    closebuttoncaption : 'Close', 
+    disallowoverscroll : 'no',
+    toolbar : 'yes', 
+    enableViewportScale : 'no', 
+    allowInlineMediaPlayback : 'no',
+    presentationstyle : 'pagesheet',
+    hidenavigationbuttons: 'no',
+    fullscreen: 'yes'  
+};
+
   constructor(
     private navCtrl: NavController,
     private logger: Logger,
@@ -115,12 +134,14 @@ export class TabBcdbazaar {
   }
 
   openBrowser(url: string) {
-    const options: InAppBrowserOptions = {
-      zoom: 'no',
-      location: 'no',
-      toolbar: 'no'
-    };
-    this.iab.create(url, '_self', options);
+    // const options: InAppBrowserOptions = {
+    //   zoom: 'no',
+    //   location: 'no',
+    //   toolbar: 'yes'
+    // };
+    // this.iab.create(url, '_self', options);
+    let target = "_blank";
+    this.iab.create(url,target,this.options);
   }
 
   openCategory(id: string, title: string) {

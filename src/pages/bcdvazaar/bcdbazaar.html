@@ -14,7 +14,7 @@
         (click)="openCategory('', 'exit')"
         *ngIf="categorySelected"
       >
-        <ion-icon name="list"></ion-icon>
+        <ion-icon name="arrow-round-back"></ion-icon>
       </button>
     </ion-buttons>
 
@@ -56,7 +56,7 @@
     <ion-list>
       <ng-container *ngFor="let p of items">
         <ion-item
-          (click)="selectShop(p.url, p.logo)"
+          (click)="openBrowser(p.url)"
           class="market-link item item-block item-ios {{p.company}}"
           *ngIf="p.categoryId == catid"
         >

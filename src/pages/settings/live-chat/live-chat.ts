@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Renderer } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
 /**
@@ -15,11 +15,25 @@ import { NavController, NavParams } from 'ionic-angular';
 export class LiveChatPage {
   public innerHeight: any;
   public elemHeight: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public renderer: Renderer
+  ) {}
 
   ionViewDidLoad() {}
   ngOnInit() {
-    this.elemHeight = 59 + 44;
-    this.innerHeight = window.innerHeight - this.elemHeight + 'px';
+    setTimeout(() => {
+      const element = this.renderer.selectRootElement(
+        'page-live-chat .fixed-content'
+      ).offsetHeight;
+      this.innerHeight = element + 'px';
+    }, 500);
+
+    this.elemHeight =
+      document.querySelector('page-tabs .toolbar').clientHeight +
+      document.querySelector('page-live-chat .toolbar').clientHeight +
+      5;
   }
 }

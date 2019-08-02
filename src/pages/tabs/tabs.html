@@ -44,11 +44,22 @@
     tabIcon="ios-card"
   ></ion-tab>
 
+  <!--
+    <ion-tab
+      [root]="tab4Root"
+      tabTitle="{{'News'|translate}}"
+      tabIcon="ios-globe"
+    ></ion-tab>
+  -->
+
   <ion-tab
     [root]="tab4Root"
     tabTitle="{{'News'|translate}}"
     tabIcon="ios-globe"
+    tabBadge="{{ newsApi.counetNews}}"
+    tabBadgeStyle="danger"
   ></ion-tab>
+
   <ion-tab
     [root]="bcd4Root"
     tabTitle="{{'Shop'|translate}}"

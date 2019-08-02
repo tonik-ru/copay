@@ -2,7 +2,7 @@ page-slide-to-accept {
   &[ng-reflect-disabled='true'] {
     opacity: 0.4;
   }
-  position: fixed;
+  position: relative;
   bottom: 0;
   height: 90px;
   width: 100%;

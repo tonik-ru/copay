@@ -18,6 +18,11 @@ export class ApiProvider {
   public Categories: any = [];
   public unreadNewsCount = 0;
   public items = [];
+
+  tempNews: any = [];
+  lastNewsId;
+  counetNews;
+
   constructor(
     public http: HttpClient,
     private logger: Logger,

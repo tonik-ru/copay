@@ -97,7 +97,7 @@ export class TopcoinsPage {
   }
 
   onContentScroll(e) {
-    if (e.scrollTop - this.oldScrollTop > 10) {
+    if (e.scrollTop > 75) {
       this.logger.log('DOWN');
 
       this.renderer.setElementStyle(
@@ -105,7 +105,7 @@ export class TopcoinsPage {
         'display',
         'flex'
       );
-    } else if (e.scrollTop - this.oldScrollTop <= 10) {
+    } else if (e.scrollTop <= 75) {
       this.renderer.setElementStyle(
         this.tabletitleId.nativeElement,
         'display',

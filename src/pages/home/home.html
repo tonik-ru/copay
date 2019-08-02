@@ -357,7 +357,16 @@
               </span>
               <span *ngIf="wallet.isComplete() && !wallet.needsBackup">
                 <span *ngIf="!wallet.balanceHidden && !wallet.scanning">
-                  {{
+                    <ion-icon
+                    *ngIf="
+                      !wallet.balanceHidden &&
+                      wallet.status &&
+                      wallet.status.totalBalanceSat !=
+                        wallet.status.spendableAmount
+                    "
+                    ios="ios-timer-outline"
+                    md="md-timer"
+                  ></ion-icon> {{
                     wallet.status && wallet.status.totalBalanceStr
                       ? wallet.status.totalBalanceStr
                       : wallet.cachedBalance
@@ -378,16 +387,7 @@
                     wallet.credentials.n
                   }}</span
                 >
-                <ion-icon
-                  *ngIf="
-                    !wallet.balanceHidden &&
-                    wallet.status &&
-                    wallet.status.totalBalanceSat !=
-                      wallet.status.spendableAmount
-                  "
-                  ios="ios-timer-outline"
-                  md="md-timer"
-                ></ion-icon>
+                
                 <div *ngIf="wallet.error" class="wallet-warning">
                   {{ wallet.error }}
                 </div>
@@ -463,7 +463,16 @@
                   <span
                     *ngIf="!wallet.balanceHidden && !wallet.scanning"
                     class="altbalance"
-                  >
+                  >  <ion-icon
+                  *ngIf="
+                    !wallet.balanceHidden &&
+                    wallet.status &&
+                    wallet.status.totalBalanceSat !=
+                      wallet.status.spendableAmount
+                  "
+                  ios="ios-timer-outline"
+                  md="md-timer"
+                ></ion-icon> 
                     {{ wallet.status.totalBalanceAlternative }}
                     {{ wallet.status.alternativeIsoCode }}
                   </span>
@@ -476,16 +485,7 @@
                       wallet.credentials.n
                     }}</span
                   >
-                  <ion-icon
-                    *ngIf="
-                      !wallet.balanceHidden &&
-                      wallet.status &&
-                      wallet.status.totalBalanceSat !=
-                        wallet.status.spendableAmount
-                    "
-                    ios="ios-timer-outline"
-                    md="md-timer"
-                  ></ion-icon>
+                
                   <div *ngIf="wallet.error" class="wallet-warning">
                     {{ wallet.error }}
                   </div>
@@ -566,7 +566,16 @@
                   <span
                     *ngIf="!wallet.balanceHidden && !wallet.scanning"
                     class="altbalance"
-                  >
+                  > <ion-icon
+                  *ngIf="
+                    !wallet.balanceHidden &&
+                    wallet.status &&
+                    wallet.status.totalBalanceSat !=
+                      wallet.status.spendableAmount
+                  "
+                  ios="ios-timer-outline"
+                  md="md-timer"
+                ></ion-icon> 
                     {{ wallet.status.totalBalanceAlternative }}
                     {{ wallet.status.alternativeIsoCode }}
                   </span>
@@ -579,16 +588,7 @@
                       wallet.credentials.n
                     }}</span
                   >
-                  <ion-icon
-                    *ngIf="
-                      !wallet.balanceHidden &&
-                      wallet.status &&
-                      wallet.status.totalBalanceSat !=
-                        wallet.status.spendableAmount
-                    "
-                    ios="ios-timer-outline"
-                    md="md-timer"
-                  ></ion-icon>
+                 
                   <div *ngIf="wallet.error" class="wallet-warning">
                     {{ wallet.error }}
                   </div>
@@ -667,7 +667,16 @@
                   <span
                     *ngIf="!wallet.balanceHidden && !wallet.scanning"
                     class="altbalance"
-                  >
+                  >  <ion-icon
+                  *ngIf="
+                    !wallet.balanceHidden &&
+                    wallet.status &&
+                    wallet.status.totalBalanceSat !=
+                      wallet.status.spendableAmount
+                  "
+                  ios="ios-timer-outline"
+                  md="md-timer"
+                ></ion-icon> 
                     {{ wallet.status.totalBalanceAlternative }}
                     {{ wallet.status.alternativeIsoCode }}
                   </span>
@@ -680,16 +689,7 @@
                       wallet.credentials.n
                     }}</span
                   >
-                  <ion-icon
-                    *ngIf="
-                      !wallet.balanceHidden &&
-                      wallet.status &&
-                      wallet.status.totalBalanceSat !=
-                        wallet.status.spendableAmount
-                    "
-                    ios="ios-timer-outline"
-                    md="md-timer"
-                  ></ion-icon>
+                
                   <div *ngIf="wallet.error" class="wallet-warning">
                     {{ wallet.error }}
                   </div>

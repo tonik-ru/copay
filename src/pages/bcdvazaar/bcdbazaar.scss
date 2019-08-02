@@ -202,4 +202,12 @@ img{ filter: invert(1); }
 .transitionef{
   transition: 0.5s ease;
 }
+
+@media screen and (max-width:410px){
+ .categoriesblock p {
+    font-size: 1rem!important;
+}}
+.categoriesblock p {
+  font-size: 1.3rem;
+}
 }

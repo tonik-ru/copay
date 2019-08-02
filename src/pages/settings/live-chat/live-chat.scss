@@ -1,3 +1,11 @@
 page-live-chat {
-
-}
+ 
+  .scroll-content {
+      overflow: hidden;
+  }
+  .chat{top:0px; left:0; position: absolute;}
+  @media screen and (-webkit-min-device-pixel-ratio:0){
+      .chat{top:0px; left:0; position: absolute;}
+  }
+  }
+  

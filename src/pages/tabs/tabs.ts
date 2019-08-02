@@ -1,10 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import {
-  InAppBrowser,
-  InAppBrowserOptions
-} from '@ionic-native/in-app-browser';
+
 import { TranslateService } from '@ngx-translate/core';
-import { ExternalLinkProvider } from '../../providers/external-link/external-link';
+
 import { Logger } from '../../providers/logger/logger';
 import { TabBcdbazaar } from '../bcdvazaar/bcdbazaar';
 import { HomePage } from '../home/home';
@@ -17,9 +14,11 @@ import { TopcoinsPage } from '../trader/topcoins/topcoins';
 
 import { LiveChatPage } from '../settings/live-chat/live-chat';
 
-// import { timer } from 'rxjs/observable/timer';
+import { timer } from 'rxjs/observable/timer';
 
-// import { ApiProvider } from '../../providers/api/api';
+import { ApiProvider } from '../../providers/api/api';
+
+import { Storage } from '@ionic/storage';
 
 // import { UserstatsPage } from '../trader/userstats/userstats';
 
@@ -30,23 +29,6 @@ import { LiveChatPage } from '../settings/live-chat/live-chat';
 export class TabsPage {
   @ViewChild('tabs')
   tabs;
-  options: InAppBrowserOptions = {
-    location: 'yes', // Or 'no'
-    hidden: 'no', // Or  'yes'
-    clearcache: 'yes',
-    clearsessioncache: 'yes',
-    zoom: 'yes', // Android only ,shows browser zoom controls
-    hardwareback: 'yes',
-    mediaPlaybackRequiresUserAction: 'no',
-    shouldPauseOnSuspend: 'no', // Android only
-    closebuttoncaption: 'Close', // iOS only
-    disallowoverscroll: 'no', // iOS only
-    toolbar: 'yes', // iOS only
-    enableViewportScale: 'no', // iOS only
-    allowInlineMediaPlayback: 'no', // iOS only
-    presentationstyle: 'pagesheet', // iOS only
-    fullscreen: 'yes' // Windows only
-  };
 
   homeRoot = HomePage;
   scanRoot = ScanPage;
@@ -56,61 +38,63 @@ export class TabsPage {
   datafeed = DatafeedPage;
   bcd4Root = TabBcdbazaar;
 
-  // private refreshTimer;
-  private unreadNewsCount = 0;
+  private refreshTimer;
+  public unreadNewsCount: any = '';
 
   /*tab5Root = Tab4Page;*/
   constructor(
-    private externalLinkProvider: ExternalLinkProvider,
-    private translate: TranslateService,
+    public translate: TranslateService,
     private logger: Logger,
-    private iab: InAppBrowser
+    public newsApi: ApiProvider,
+    public storage: Storage
   ) {
     // this.refreshTimer = timer(15000, 15000).subscribe(() =>
     //   this.updateNewsCount()
     // );
-    // this.refreshTimer = this.refreshTimer;
+    this.refreshTimer = timer(1, 15000).subscribe(() => this.loadTempNews());
+
+    this.refreshTimer = this.refreshTimer;
   }
 
-  public setUnreadItemsCount(itemsCount) {
-    this.unreadNewsCount = itemsCount;
-  }
+  // public setUnreadItemsCount(itemsCount) {
+  //   this.unreadNewsCount = itemsCount;
+  // }
 
-  /*
-  private updateNewsCount() {
-    this.newsApi.getUnreadNewsCount().then(val => {
-      this.unreadNewsCount = val;
+  // private updateNewsCount() {
+  //   this.newsApi.getUnreadNewsCount().then(val => {
+  //     this.unreadNewsCount >= 0
+  //       ? (this.unreadNewsCount = val)
+  //       : (this.unreadNewsCount = '');
+  //   });
+  // }
+
+  // public getUnreadNewsCount() {
+  //   return this.unreadNewsCount > 0 ? this.unreadNewsCount.toString() : '';
+  // }
+
+  loadTempNews() {
+    let url: string = 'posts?_embed&per_page=100';
+    this.newsApi.get(url).subscribe((result: any[]) => {
+      this.newsApi.tempNews = result;
+      // this.logger.log(this.newsApi.tempNews);
+      this.newsApi.lastNewsId = this.newsApi.tempNews[0].id;
+      // this.logger.log('ID -->', this.newsApi.tempNews[0].id);
+
+      this.storage.get('lastNewsId').then(val => {
+        if (val !== null) {
+          this.newsApi.lastNewsId = val;
+        } else {
+          this.storage.set('lastNewsId', this.newsApi.lastNewsId);
+          // this.logger.log('SAVE TO STORAGE -->', this.newsApi.lastNewsId);
+        }
+        // this.logger.log('SAVE TO STORAGE -->', this.newsApi.lastNewsId);
+        let index = this.newsApi.tempNews.findIndex(
+          record => record.id === this.newsApi.lastNewsId
+        );
+        // this.logger.log('Index', index);
+        this.newsApi.counetNews = index == 0 ? '' : index;
+        this.logger.log('counter', this.newsApi.counetNews);
+      });
     });
-  }
-*/
-
-  public getUnreadNewsCount() {
-    return this.unreadNewsCount > 0 ? this.unreadNewsCount.toString() : '';
-  }
-
-  public openBcdBazaar1() {
-    this.logger.log('open bcdbazaar');
-    const url = 'https://www.bcdbazaar.com';
-    const optIn = true;
-    const title = null;
-    const message = this.translate.instant('BCZBazaar');
-    const okText = this.translate.instant('Open');
-    const cancelText = this.translate.instant('Go Back');
-    this.externalLinkProvider.open(
-      url,
-      optIn,
-      title,
-      message,
-      okText,
-      cancelText
-    );
-  }
-  public openBcdBazaar() {
-    let target = '_self';
-    let url = 'https://www.bcdbazaar.com';
-    this.iab.create(url, target, this.options);
-
-    /*const browser = this.iab.create('https://www.bcdbazaar.com');
-    browser.show();*/
   }
 }

@@ -24,7 +24,9 @@ import { FullpostPage } from './fullpost/fullpost';
 import { NewsmenuPage } from './newsmenu/newsmenu';
 import { NewssearchPage } from './newssearch/newssearch';
 
-import { timer } from 'rxjs/observable/timer';
+// import { timer } from 'rxjs/observable/timer';
+
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'page-news',
@@ -49,9 +51,10 @@ export class TabNews {
   private sort: string = '0';
   searchQuery: string = '';
   fabToHide;
-  private refreshTimer;
+  // private refreshTimer;
 
   oldScrollTop: number = 0;
+  lastNewsId;
 
   constructor(
     private renderer: Renderer,
@@ -62,7 +65,8 @@ export class TabNews {
     public logger: Logger,
     public api: ApiProvider,
     public menuCtrl: MenuController,
-    private persistenceProvider: PersistenceProvider
+    private persistenceProvider: PersistenceProvider,
+    public storage: Storage
   ) {
     this.cat_name_title;
 
@@ -78,7 +82,7 @@ export class TabNews {
     // this.loadData();
   }
 
-  loadData(infiniteScroll = null) {
+  loadData(infiniteScroll = null, manualRef) {
     if (!this.isLoading) {
       this.isLoading = true;
 
@@ -87,6 +91,10 @@ export class TabNews {
       if (infiniteScroll != null && infiniteScroll.ionRefresh) {
         this.page = 1;
       }
+      if (manualRef == true) {
+        this.page = 1;
+      }
+
       let url: string =
         'posts?_embed&per_page=' + this.per_page + '&page=' + this.page;
       url += this.category_id != 0 ? '&categories=' + this.category_id : '';
@@ -104,10 +112,19 @@ export class TabNews {
       this.api.get(url).subscribe(
         (result: any[]) => {
           this.isLoading = false;
-          this.items =
-            infiniteScroll != null && infiniteScroll.ionRefresh
-              ? result
-              : this.items.concat(result);
+          if (manualRef == true) {
+            this.items = result;
+          } else if (infiniteScroll != null && infiniteScroll.ionRefresh) {
+            this.items = result;
+          } else {
+            this.items = this.items.concat(result);
+          }
+          // this.items =
+          // infiniteScroll != null && infiniteScroll.ionRefresh
+          //  ? result
+          //  : this.items.concat(result);
+          this.lastNewsId = this.items[0].id;
+
           if (result.length === this.per_page) {
             this.page++;
             this.showLoadMore = true;
@@ -133,7 +150,7 @@ export class TabNews {
 
   onSearch() {
     this.items = [];
-    this.loadData();
+    this.loadData(null, false);
   }
 
   openFullPost(item) {
@@ -162,7 +179,7 @@ export class TabNews {
     this.logger.log(this.sort);
     this.items = [];
     this.showLoadMore = false;
-    this.loadData();
+    this.loadData(null, false);
   }
   public pageScroller() {
     // scroll to page top
@@ -172,10 +189,20 @@ export class TabNews {
   ionViewDidLoad() {}
 
   ionViewWillEnter() {
-    this.refreshTimer = timer(1000, 30000).subscribe(() => this.loadData());
+    if (this.api.counetNews >= 1) {
+      this.loadData(null, true);
+    }
+    // this.api.counetNews = '';
+
+    this.logger.log('LAST ID0,', this.lastNewsId);
   }
 
   ngOnInit() {
+    // this.refreshTimer = timer(1000, 15000).subscribe(() =>
+    //   this.loadData(null, true)
+    // );
+    this.loadData(null, true);
+
     this.fabToHide = this.element.nativeElement.getElementsByClassName(
       'fab'
     )[0];
@@ -195,15 +222,20 @@ export class TabNews {
       this.renderer.setElementStyle(this.fabToHide, 'opacity', '0');
       this.logger.log('UP');
     }
+    if (e.scrollTop >= 50) {
+      this.api.counetNews = '';
+      this.storage.set('lastNewsId', this.lastNewsId);
+    }
+
     this.oldScrollTop = e.scrollTop;
   }
   ionViewWillLeave() {
-    this.refreshTimer.unsubscribe();
+    // this.refreshTimer.unsubscribe();
   }
   ionViewDidLeave() {
-    this.refreshTimer.unsubscribe();
+    // this.refreshTimer.unsubscribe();
   }
   ngOnDestroy() {
-    this.refreshTimer.unsubscribe();
+    // this.refreshTimer.unsubscribe();
   }
 }
