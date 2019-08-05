@@ -17,8 +17,6 @@ import { ApiProvider } from '../../providers/api/api';
 
 import { Storage } from '@ionic/storage';
 
-import * as _ from 'lodash';
-
 @Component({
   selector: 'page-tabs',
   templateUrl: 'tabs.html'
