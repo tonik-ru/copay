@@ -7,20 +7,17 @@ import { TabBcdbazaar } from '../bcdvazaar/bcdbazaar';
 import { HomePage } from '../home/home';
 import { TabNews } from '../news/news';
 import { ScanPage } from '../scan/scan';
-// import { SettingsPage } from '../settings/settings';
-import { DatafeedPage } from '../trader/datafeed/datafeed';
-/*import { Tab4Page } from '../tab4/tab4';*/
-import { TopcoinsPage } from '../trader/topcoins/topcoins';
 
 import { LiveChatPage } from '../settings/live-chat/live-chat';
+import { DatafeedPage } from '../trader/datafeed/datafeed';
+import { TopcoinsPage } from '../trader/topcoins/topcoins';
 
 import { timer } from 'rxjs/observable/timer';
-
 import { ApiProvider } from '../../providers/api/api';
 
 import { Storage } from '@ionic/storage';
 
-// import { UserstatsPage } from '../trader/userstats/userstats';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'page-tabs',
@@ -48,10 +45,7 @@ export class TabsPage {
     public newsApi: ApiProvider,
     public storage: Storage
   ) {
-    // this.refreshTimer = timer(15000, 15000).subscribe(() =>
-    //   this.updateNewsCount()
-    // );
-    this.refreshTimer = timer(1, 15000).subscribe(() => this.loadTempNews());
+    this.refreshTimer = timer(1, 300000).subscribe(() => this.loadTempNews());
 
     this.refreshTimer = this.refreshTimer;
   }
@@ -87,13 +81,12 @@ export class TabsPage {
           this.storage.set('lastNewsId', this.newsApi.lastNewsId);
           // this.logger.log('SAVE TO STORAGE -->', this.newsApi.lastNewsId);
         }
-        // this.logger.log('SAVE TO STORAGE -->', this.newsApi.lastNewsId);
-        let index = this.newsApi.tempNews.findIndex(
-          record => record.id === this.newsApi.lastNewsId
-        );
-        // this.logger.log('Index', index);
-        this.newsApi.counetNews = index == 0 ? '' : index;
-        this.logger.log('counter', this.newsApi.counetNews);
+        let newNewsCount = _.filter(
+          this.newsApi.tempNews,
+          x => x.id > this.newsApi.lastNewsId
+        ).length;
+        this.newsApi.newsCount = newNewsCount > 0 ? newNewsCount : '';
+        this.logger.log('counter', this.newsApi.newsCount);
       });
     });
   }

@@ -189,10 +189,9 @@ export class TabNews {
   ionViewDidLoad() {}
 
   ionViewWillEnter() {
-    if (this.api.counetNews >= 1) {
+    if (this.api.newsCount >= 1) {
       this.loadData(null, true);
     }
-    // this.api.counetNews = '';
 
     this.logger.log('LAST ID0,', this.lastNewsId);
   }
@@ -223,7 +222,7 @@ export class TabNews {
       this.logger.log('UP');
     }
     if (e.scrollTop >= 50) {
-      this.api.counetNews = '';
+      this.api.newsCount = '';
       this.storage.set('lastNewsId', this.lastNewsId);
     }
 

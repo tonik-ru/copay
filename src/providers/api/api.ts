@@ -21,7 +21,7 @@ export class ApiProvider {
 
   tempNews: any = [];
   lastNewsId;
-  counetNews;
+  newsCount;
 
   constructor(
     public http: HttpClient,
