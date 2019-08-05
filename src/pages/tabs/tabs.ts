@@ -81,11 +81,11 @@ export class TabsPage {
           this.storage.set('lastNewsId', this.newsApi.lastNewsId);
           // this.logger.log('SAVE TO STORAGE -->', this.newsApi.lastNewsId);
         }
-        let newNewsCount = _.filter(
-          this.newsApi.tempNews,
-          x => x.id > this.newsApi.lastNewsId
-        ).length;
-        this.newsApi.newsCount = newNewsCount > 0 ? newNewsCount : '';
+        let index = this.newsApi.tempNews.findIndex(
+          record => record.id === this.newsApi.lastNewsId
+        );
+        // this.logger.log('Index', index);
+        this.newsApi.newsCount = index == 0 ? '' : index;
         this.logger.log('counter', this.newsApi.newsCount);
       });
     });
