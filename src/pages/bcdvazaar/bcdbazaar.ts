@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 
 import { Logger } from '../../providers/logger/logger';
 import { ShopTargetPage } from './shop-target/shop-target';
@@ -34,30 +34,31 @@ export class TabBcdbazaar {
 
   public Title: string = 'Shopping';
 
-  options : InAppBrowserOptions = {
-    location : 'yes',
-    hidden : 'no', 
-    clearcache : 'yes',
-    clearsessioncache : 'yes',
-    zoom : 'yes',
-    hardwareback : 'yes',
-    mediaPlaybackRequiresUserAction : 'no',
-    shouldPauseOnSuspend : 'no', 
-    closebuttoncaption : 'Close', 
-    disallowoverscroll : 'no',
-    toolbar : 'yes', 
-    enableViewportScale : 'no', 
-    allowInlineMediaPlayback : 'no',
-    presentationstyle : 'pagesheet',
+  options: InAppBrowserOptions = {
+    location: 'yes',
+    hidden: 'no',
+    clearcache: 'yes',
+    clearsessioncache: 'yes',
+    zoom: 'yes',
+    hardwareback: 'yes',
+    mediaPlaybackRequiresUserAction: 'no',
+    shouldPauseOnSuspend: 'no',
+    closebuttoncaption: 'Close',
+    disallowoverscroll: 'no',
+    toolbar: 'yes',
+    enableViewportScale: 'no',
+    allowInlineMediaPlayback: 'no',
+    presentationstyle: 'pagesheet',
     hidenavigationbuttons: 'no',
-    fullscreen: 'yes'  
-};
+    fullscreen: 'yes'
+  };
 
   constructor(
     private navCtrl: NavController,
     private logger: Logger,
     private shopsProvider: ShopsProvider,
-    private iab: InAppBrowser
+    private iab: InAppBrowser,
+    public plt: Platform
   ) {
     this.cats;
     this.items;
@@ -140,8 +141,20 @@ export class TabBcdbazaar {
     //   toolbar: 'yes'
     // };
     // this.iab.create(url, '_self', options);
-    let target = "_blank";
-    this.iab.create(url,target,this.options);
+    if (this.plt.is('ios')) {
+      let target = '_system';
+      this.iab.create(url, target, this.options);
+      this.logger.log('ios');
+    }
+    // else   if (this.plt.is('windows')) {
+    //   let target = "_system";
+    //   this.iab.create(url, target, this.options);
+    //   this.logger.log('windows');
+    // }
+    else {
+      this.selectShop(url, '');
+      this.logger.log('android or windows');
+    }
   }
 
   openCategory(id: string, title: string) {

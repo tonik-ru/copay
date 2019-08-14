@@ -83,7 +83,14 @@ export class TabsPage {
           record => record.id === this.newsApi.lastNewsId
         );
         // this.logger.log('Index', index);
-        this.newsApi.newsCount = index == 0 ? '' : index;
+        /* this.newsApi.counetNews = index == 0 ? '' : index; */
+
+        this.newsApi.newsCount =
+          index == 0
+            ? ''
+            : index == -1
+            ? this.newsApi.tempNews.length.toString() + '+'
+            : index;
         this.logger.log('counter', this.newsApi.newsCount);
       });
     });

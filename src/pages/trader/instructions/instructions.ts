@@ -30,4 +30,7 @@ export class InstructionsPage {
     this.storage.set('instruction', false);
     this.viewCtrl.dismiss({ inst: false });
   }
+  ionViewWillLeave() {
+    this.storage.set('instruction', false);
+  }
 }

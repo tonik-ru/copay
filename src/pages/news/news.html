@@ -48,7 +48,7 @@
     </ion-row>
   -->
 
-  <ion-refresher slot="fixed" (ionRefresh)="loadData($event)">
+  <ion-refresher slot="fixed" (ionRefresh)="loadData($event, false)">
     <ion-refresher-content
       pullingIcon="arrow-dropdown"
       pullingText="Pull to refresh"
@@ -68,7 +68,11 @@
     <img src="assets/img/loader-bcd.svg" />
   </div>
   <ion-list>
-    <ion-item *ngFor="let item of items" (click)="openFullPost(item)">
+    <ion-item
+      *ngFor="let item of items"
+      (click)="openFullPost(item)"
+      id="{{item.id}}"
+    >
       <ion-thumbnail item-right>
         <img
           *ngIf="item.better_featured_image !== null"
@@ -80,6 +84,13 @@
           *ngIf="item.better_featured_image == null"
           src="assets/img/noimage.png"
         />
+        <!--
+          <img
+            class="newpost"
+            *ngIf="api.counetNews !== '' && item.id > this.api.lastNewsId"
+            src="assets/img/new-post.png"
+          />
+        -->
       </ion-thumbnail>
 
       <ion-label item-content>

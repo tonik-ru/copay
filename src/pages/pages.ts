@@ -116,6 +116,7 @@ import { TabNews } from './news/news';
 
 /* Trader */
 import { DatafeedPage } from '../pages/trader/datafeed/datafeed';
+import { DatafeednewPage } from '../pages/trader/datafeednew/datafeednew';
 import { TopcoinsPage } from '../pages/trader/topcoins/topcoins';
 import { UserstatsPage } from '../pages/trader/userstats/userstats';
 
@@ -229,5 +230,6 @@ export const PAGES = [
   LiveChatPage,
   ShopTargetPage,
   InstructionsPage,
-  ApiPage
+  ApiPage,
+  DatafeednewPage
 ];

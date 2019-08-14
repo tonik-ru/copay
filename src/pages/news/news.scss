@@ -163,7 +163,10 @@ ion-label p:first-of-type{
   from {width: 150px; opacity: 0.8}
   to {width: 250px; opacity: 1}
 }
-
+ion-refresher{height: 100px!important}
+ion-thumbnail{position: relative;}
+.newpost{position: absolute; top:0;z-index: 2222;
+  }
 
 
 }

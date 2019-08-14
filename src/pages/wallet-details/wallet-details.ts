@@ -71,6 +71,7 @@ export class WalletDetailsPage extends WalletTabsChild {
   public address: string;
 
   public supportedCards: Promise<CardConfigMap>;
+  public loading: boolean;
 
   constructor(
     navCtrl: NavController,
@@ -130,12 +131,12 @@ export class WalletDetailsPage extends WalletTabsChild {
     // this.playAnimation = false;
   }
   public async setAddress(newAddr?: boolean, failed?: boolean): Promise<void> {
-    // this.loading = newAddr || _.isEmpty(this.address) ? true : false;
+    this.loading = newAddr || _.isEmpty(this.address) ? true : false;
 
     const addr: string = (await this.walletProvider
       .getAddress(this.wallet, newAddr)
       .catch(err => {
-        // this.loading = false;
+        this.loading = false;
         if (err == 'INVALID_ADDRESS') {
           // Generate a new address if the first one is invalid
           if (!failed) {
@@ -145,7 +146,7 @@ export class WalletDetailsPage extends WalletTabsChild {
         }
         this.logger.warn(this.bwcError.msg(err, 'Receive'));
       })) as string;
-    // this.loading = false;
+    this.loading = false;
     if (!addr) return;
     const address = this.walletProvider.getAddressView(
       this.wallet.coin,
@@ -154,7 +155,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     );
 
     if (this.address && this.address != address) {
-      // this.playAnimation = true;
+      //  this.playAnimation = true;
     }
     this.updateQrAddress(addr, newAddr);
 

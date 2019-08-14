@@ -24,7 +24,7 @@ import { FullpostPage } from './fullpost/fullpost';
 import { NewsmenuPage } from './newsmenu/newsmenu';
 import { NewssearchPage } from './newssearch/newssearch';
 
-// import { timer } from 'rxjs/observable/timer';
+import { timer } from 'rxjs/observable/timer';
 
 import { Storage } from '@ionic/storage';
 
@@ -51,7 +51,7 @@ export class TabNews {
   private sort: string = '0';
   searchQuery: string = '';
   fabToHide;
-  // private refreshTimer;
+  private refreshTimer;
 
   oldScrollTop: number = 0;
   lastNewsId;
@@ -88,8 +88,13 @@ export class TabNews {
 
       this.logger.log('Loading news');
 
-      if (infiniteScroll != null && infiniteScroll.ionRefresh) {
+      if (
+        infiniteScroll !== null &&
+        infiniteScroll.ionRefresh &&
+        manualRef == false
+      ) {
         this.page = 1;
+        this.api.newsCount = '';
       }
       if (manualRef == true) {
         this.page = 1;
@@ -197,10 +202,10 @@ export class TabNews {
   }
 
   ngOnInit() {
-    // this.refreshTimer = timer(1000, 15000).subscribe(() =>
-    //   this.loadData(null, true)
-    // );
-    this.loadData(null, true);
+    this.refreshTimer = timer(1000, 15000).subscribe(() =>
+      this.loadData(null, true)
+    );
+    // this.loadData(null, true);
 
     this.fabToHide = this.element.nativeElement.getElementsByClassName(
       'fab'
@@ -221,20 +226,22 @@ export class TabNews {
       this.renderer.setElementStyle(this.fabToHide, 'opacity', '0');
       this.logger.log('UP');
     }
-    if (e.scrollTop >= 50) {
+
+    if (e.scrollTop > 70) {
       this.api.newsCount = '';
+      this.logger.log('Counter = ', this.api.newsCount);
       this.storage.set('lastNewsId', this.lastNewsId);
     }
 
     this.oldScrollTop = e.scrollTop;
   }
   ionViewWillLeave() {
-    // this.refreshTimer.unsubscribe();
+    this.refreshTimer.unsubscribe();
   }
   ionViewDidLeave() {
-    // this.refreshTimer.unsubscribe();
+    this.refreshTimer.unsubscribe();
   }
   ngOnDestroy() {
-    // this.refreshTimer.unsubscribe();
+    this.refreshTimer.unsubscribe();
   }
 }

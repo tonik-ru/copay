@@ -166,4 +166,51 @@ tr.currentfib {
   background: #f7da95 !important;
 }
 }
+
+page-datafeednew{ .recent {
+  background: #a9abaf !important;
+}
+tr.currentfib {
+  background: #f7da95 !important;
+}
+}
+
+page-datafeednew{
+  .list-ios > .item-block:first-child {
+    border-top: none;
+}
+  .lineblockTips{    box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);}
+   .lineblockTips p::after{background: #f8f8f9}
+   .apiinput ion-input.input.input-ios input{border-color:#CCC}
+    .connectsegment .segment-ios .segment-button{
+     color: #000;
+     border-left: 1px solid #CCC;
+     border-bottom: 0.5px solid #ccc;
+   }
+   .connectsegment .segment-ios .segment-button.segment-activated {border-bottom: none;}
+
+   .buycont .segment-ios .segment-button.segment-activated {color: #FFF; background: #FAC239;}
+   .buycont .segment-ios .segment-button {
+    color: #000;
+    border-color: #ccc;}
+    .leftsideH, .rightsideH {
+      text-align: center;
+      color: #000;
+      background: -webkit-gradient(linear, left bottom, left top, from(#171D2A), to(#2A3141));
+      background: linear-gradient(to top, #eff2f5, #b3b0a9);}
+} 
+.leftsideH, .rightsideH {
+  border: 1px solid #ccc;}
+  .range-ios .range-knob {
+    background: #f8f8f9 !important;}
+    .blockStop{
+      background: linear-gradient(to top, #eff2f5, #e2e0e2);
+      }
+      .footerbtns {
+        background: #e2e0e3;}
+        .limcont .toggle-ios.toggle-checked .toggle-icon,
+         .limcont .toggle-ios .toggle-icon {
+          background: #dde1e8;
+      }
+
 }

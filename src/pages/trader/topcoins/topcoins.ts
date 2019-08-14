@@ -15,6 +15,7 @@ import { TraderProvider } from '../../../providers/trader/trader';
 
 import { SettingsPage } from '../../settings/settings';
 
+// import { DatafeednewPage } from '../datafeednew/datafeednew';
 import { DatafeedPage } from '../datafeed/datafeed';
 import { FormatUtils } from './formatutils';
 
@@ -390,6 +391,7 @@ export class TopcoinsPage {
     );
 
     this.navCtrl.push(DatafeedPage, { coin, validPairs });
+    // this.navCtrl.push(DatafeedNewPage, { coin, validPairs }); for version with TRADER and API
   }
 
   ionViewWillLeave() {

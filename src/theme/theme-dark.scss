@@ -3,6 +3,9 @@
     background:#161b26;
   }
 
+  .refresher-pulling-text, .refresher-refreshing-text{
+    color:#Fff;
+  }
   ionic-selectable-modal{
     ion-content{
       background:#161b26;
@@ -155,4 +158,10 @@ $alert-ios--background:#161b26;
     .amount-content .expression-container .unit{color:#fac245}
 
 }
+
+.exchangeicon{filter: invert(1)}
+page-datafeednew{
+  .list-ios > .item-block:first-child {
+    border-top: none;
+}}
 }
