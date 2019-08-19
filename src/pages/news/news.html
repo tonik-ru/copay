@@ -133,7 +133,10 @@
     </button>
   -->
 
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+  <ion-infinite-scroll
+    threshold="250px"
+    (ionInfinite)="loadData($event, false)"
+  >
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
       loadingText="Loading more news..."

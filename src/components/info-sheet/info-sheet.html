@@ -1,4 +1,4 @@
-<action-sheet>
+<action-sheet [class]="appProvider.activeTheme">
   <div class="info-container" [ngSwitch]="sheetType">
     <info-sheet-template *ngSwitchCase="'address-copied'" type="success">
       <span sheet-title-text>{{'Copied {coin} address' | translate: {coin: params.coin | uppercase } }}</span>

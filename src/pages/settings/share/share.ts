@@ -104,7 +104,7 @@ export class SharePage {
       this.shareFacebookVia,
       'Everything you need in a single app. Download BCD Pay Wallet Now',
       null,
-      'https://www.bitcoindiamond.org/wp-content/uploads/2019/05/bcd-app1-1.png',
+      null,
       this.downloadUrl
     );
   }
@@ -118,7 +118,7 @@ export class SharePage {
       this.shareTwitterVia,
       'Everything you need in a single app. Download BCD Pay Wallet Now',
       null,
-      'https://www.bitcoindiamond.org/wp-content/uploads/2019/05/bcd-app1-1.png',
+      null,
       this.downloadUrl
     );
   }

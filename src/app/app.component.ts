@@ -100,7 +100,7 @@ export class CopayApp {
     private splashScreen: SplashScreen,
     private events: Events,
     private logger: Logger,
-    private appProvider: AppProvider,
+    public appProvider: AppProvider,
     private profile: ProfileProvider,
     private configProvider: ConfigProvider,
     private giftCardProvider: GiftCardProvider,

@@ -24,7 +24,7 @@ import { FullpostPage } from './fullpost/fullpost';
 import { NewsmenuPage } from './newsmenu/newsmenu';
 import { NewssearchPage } from './newssearch/newssearch';
 
-import { timer } from 'rxjs/observable/timer';
+// import { timer } from 'rxjs/observable/timer';
 
 import { Storage } from '@ionic/storage';
 
@@ -51,7 +51,8 @@ export class TabNews {
   private sort: string = '0';
   searchQuery: string = '';
   fabToHide;
-  private refreshTimer;
+  // private refreshTimer;
+  refreshChecker;
 
   oldScrollTop: number = 0;
   lastNewsId;
@@ -194,18 +195,21 @@ export class TabNews {
   ionViewDidLoad() {}
 
   ionViewWillEnter() {
-    if (this.api.newsCount >= 1) {
-      this.loadData(null, true);
-    }
+    this.refreshChecker = setInterval(() => {
+      this.logger.log('NewsCoun ->', this.api.newsCount);
+      if (this.api.newsCount >= 1) {
+        this.loadData(null, true);
+      }
+    }, 5000);
 
     this.logger.log('LAST ID0,', this.lastNewsId);
   }
 
   ngOnInit() {
-    this.refreshTimer = timer(1000, 15000).subscribe(() =>
-      this.loadData(null, true)
-    );
-    // this.loadData(null, true);
+    // this.refreshTimer = timer(1000, 15000).subscribe(() =>
+    //   this.loadData(null, true)
+    // );
+    this.loadData(null, true);
 
     this.fabToHide = this.element.nativeElement.getElementsByClassName(
       'fab'
@@ -229,19 +233,28 @@ export class TabNews {
 
     if (e.scrollTop > 70) {
       this.api.newsCount = '';
-      this.logger.log('Counter = ', this.api.newsCount);
+      this.logger.log('Counter = 0', this.api.newsCount);
       this.storage.set('lastNewsId', this.lastNewsId);
     }
 
     this.oldScrollTop = e.scrollTop;
   }
   ionViewWillLeave() {
-    this.refreshTimer.unsubscribe();
+    if (this.refreshChecker) {
+      clearInterval(this.refreshChecker);
+    }
+    // this.refreshTimer.unsubscribe();
   }
   ionViewDidLeave() {
-    this.refreshTimer.unsubscribe();
+    if (this.refreshChecker) {
+      clearInterval(this.refreshChecker);
+    }
+    // this.refreshTimer.unsubscribe();
   }
   ngOnDestroy() {
-    this.refreshTimer.unsubscribe();
+    if (this.refreshChecker) {
+      clearInterval(this.refreshChecker);
+    }
+    // this.refreshTimer.unsubscribe();
   }
 }

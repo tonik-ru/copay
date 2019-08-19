@@ -164,4 +164,10 @@ page-datafeednew{
   .list-ios > .item-block:first-child {
     border-top: none;
 }}
+
+.action-sheet.opened{ 
+  .info-container{background-color: #424242}
+  .sheet-text, .sheet-title{color:#FFF}
+}
+page-wallet-details{ .tx-history .amount{color:#FFF}}
 }

@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
 import { InfoSheetTemplate } from './info-sheet-template';
 
+import { AppProvider } from '../../providers/app/app';
+
 @Component({
   selector: 'info-sheet',
   templateUrl: 'info-sheet.html'
@@ -9,7 +11,7 @@ import { InfoSheetTemplate } from './info-sheet-template';
 export class InfoSheetComponent extends ActionSheetParent {
   @ViewChild(InfoSheetTemplate)
   infoSheetTemplate: InfoSheetTemplate;
-  constructor() {
+  constructor(public appProvider: AppProvider) {
     super();
   }
   ngAfterViewInit() {

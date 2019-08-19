@@ -12,14 +12,20 @@ info-sheet {
         align-items: center;
         color: #060606;
         font-size: 19px;
-        font-weight: 500;
-        display: flex;
+        font-weight: 800;
+        display: table;
         justify-content: start;
-
+        margin: 10px auto;
+span{display:block; text-align: center}
         .title-icon {
-          padding-right: 15px;
-          display: flex;
+          // padding-right: 15px;
+          display: table;
           align-self: center;
+          margin: 10px auto 20px;
+          img{
+            width:60px;
+          }
+        
         }
       }
 
@@ -27,7 +33,8 @@ info-sheet {
         font-size: 16px;
         color: rgb(46, 46, 46);
         font-weight: 300;
-        padding: 25px 0px;
+        padding: 10px 0px 25px;
+        text-align: center;
       }
 
       .text-address {
@@ -37,38 +44,52 @@ info-sheet {
       .sheet-btn-group {
         color: #69caa7;
         font-size: 16px;
-        border-top: 1px solid #ebebeb;
+        // border-top: 1px solid #ebebeb;
         cursor: pointer;
         display: flex;
+        
+        text-align: center;
+        justify-content: center;
 
-        $button-padding: 15px;
+        $button-padding: 10px;flex-direction: column;
 
         .sheet-btn {
-          color: #69caa7;
+          color: #FFF;
           flex-grow: 1;
           padding-top: $button-padding;
-          margin-right: 30px;
+          padding-bottom: $button-padding;
+          // margin-right: 30px;
+          font-weight:800;
+          background: #fac239;
+        border-radius: 30px;
+        margin-bottom:10px;
         }
 
         .sheet-btn.blue {
-          color: #5476eb;
+          color: #FFF;
         }
 
         .sheet-btn.yellow {
-          color: #fdb455;
+          color: #FFF;
         }
 
         .sheet-btn.red {
-          color: #df5264;
+          color: #FFF;
         }
 
         .sheet-second-btn {
-          color: #464c5e;
+          // background: #c11039;
+          // color: #FFF;
+          // padding-right: 10px; padding-left: 10px;
+          // border-left: 1px solid #c17809;
+          // border-top-right-radius: 30px;
+          // border-bottom-right-radius: 30px;
+          color: #c11039; font-weight: 800;
           padding-top: $button-padding;
         }
 
         .sheet-second-btn.primary {
-          color: color($colors, primary);
+          color:#c11039; font-weight: 800;
         }
       }
     }

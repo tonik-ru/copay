@@ -145,15 +145,13 @@ export class TabBcdbazaar {
       let target = '_system';
       this.iab.create(url, target, this.options);
       this.logger.log('ios');
-    }
-    // else   if (this.plt.is('windows')) {
-    //   let target = "_system";
-    //   this.iab.create(url, target, this.options);
-    //   this.logger.log('windows');
-    // }
-    else {
+    } else if (this.plt.is('android')) {
+      let target = '_system';
+      this.iab.create(url, target, this.options);
+      this.logger.log('android');
+    } else {
       this.selectShop(url, '');
-      this.logger.log('android or windows');
+      this.logger.log('windows');
     }
   }
 
