@@ -8,65 +8,65 @@
     ></ion-tab>
   -->
 
-  <ion-tab
-    [root]="tab2Root"
-    tabTitle="{{'Trade'|translate}}"
-    tabIcon="seccustom-trade"
-  ></ion-tab>
-
-  <ion-tab
-    [root]="homeRoot"
-    tabTitle="{{'Wallet'|translate}}"
-    tabIcon="seccustom-wallet"
-  ></ion-tab>
-
-  <ion-tab
-    [root]="tab4Root"
-    tabTitle="{{'News'|translate}}"
-    tabIcon="seccustom-invest"
-    tabBadge="{{ newsApi.newsCount}}"
-    tabBadgeStyle="danger"
-  ></ion-tab>
-  <ion-tab
-    [root]="bcd4Root"
-    tabTitle="{{'Shop'|translate}}"
-    tabIcon="seccustom-shop"
-  ></ion-tab>
-  <ion-tab
-    [root]="tab3Root"
-    tabTitle="{{'Help'|translate}}"
-    tabIcon="seccustom-help"
-  ></ion-tab>
-
   <!--
     <ion-tab
       [root]="tab2Root"
       tabTitle="{{'Trade'|translate}}"
-      tabIcon="ios-stats"
+      tabIcon="seccustom-trade"
     ></ion-tab>
 
     <ion-tab
       [root]="homeRoot"
       tabTitle="{{'Wallet'|translate}}"
-      tabIcon="ios-card"
-    ></ion-tab>
-    <ion-tab
-      [root]="tab4Root"
-      tabTitle="{{'News'|translate}}"
-      tabIcon="ios-globe"
-      tabBadge="{{ newsApi.newsCount}}"
-      tabBadgeStyle="danger"
+      tabIcon="seccustom-wallet"
     ></ion-tab>
 
     <ion-tab
+      [root]="tab4Root"
+      tabTitle="{{'News'|translate}}"
+      tabIcon="seccustom-invest"
+      tabBadge="{{ newsApi.newsCount}}"
+      tabBadgeStyle="danger"
+    ></ion-tab>
+    <ion-tab
       [root]="bcd4Root"
       tabTitle="{{'Shop'|translate}}"
-      tabIcon="ios-pricetags"
+      tabIcon="seccustom-shop"
     ></ion-tab>
     <ion-tab
       [root]="tab3Root"
-      tabTitle="{{'Chat'|translate}}"
-      tabIcon="ios-chatbubbles-outline"
+      tabTitle="{{'Help'|translate}}"
+      tabIcon="seccustom-help"
     ></ion-tab>
   -->
+
+  <ion-tab
+    [root]="tab2Root"
+    tabTitle="{{'Trade'|translate}}"
+    tabIcon="ios-stats"
+  ></ion-tab>
+
+  <ion-tab
+    [root]="homeRoot"
+    tabTitle="{{'Wallet'|translate}}"
+    tabIcon="ios-card"
+  ></ion-tab>
+  <ion-tab
+    [root]="tab4Root"
+    tabTitle="{{'News'|translate}}"
+    tabIcon="ios-globe"
+    tabBadge="{{ newsApi.newsCount}}"
+    tabBadgeStyle="danger"
+  ></ion-tab>
+
+  <ion-tab
+    [root]="bcd4Root"
+    tabTitle="{{'Shop'|translate}}"
+    tabIcon="ios-pricetags"
+  ></ion-tab>
+  <ion-tab
+    [root]="tab3Root"
+    tabTitle="{{'Chat'|translate}}"
+    tabIcon="ios-chatbubbles-outline"
+  ></ion-tab>
 </ion-tabs>
