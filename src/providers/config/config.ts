@@ -221,6 +221,14 @@ export class ConfigProvider {
       this.persistence
         .getConfig()
         .then((config: Config) => {
+          if (_.isString(config)) {
+            let strData = config.toString();
+            let p1 = strData.indexOf('{"limits"', 20);
+            if (p1 > -1) {
+              config = JSON.parse(strData.substring(p1));
+            }
+          }
+
           if (!_.isEmpty(config)) {
             this.configCache = _.clone(config);
             this.backwardCompatibility();

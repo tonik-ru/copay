@@ -167,6 +167,9 @@ export class CopayApp {
         let message;
         try {
           message = err instanceof Error ? err.toString() : JSON.stringify(err);
+          this.logger.error(
+            message + ' ' + (err instanceof Error ? err.stack : '')
+          );
         } catch (error) {
           message = 'Unknown error';
         }
