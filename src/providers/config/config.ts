@@ -218,14 +218,17 @@ export class ConfigProvider {
 
   public load() {
     return new Promise((resolve, reject) => {
+      let strData;
       this.persistence
         .getConfig()
         .then((config: Config) => {
           if (_.isString(config)) {
-            let strData = config.toString();
-            let p1 = strData.indexOf('{"limits"', 20);
+            strData = config.toString();
+            this.logger.warn('Bad config found. ' + strData);
+            let p1 = strData.lastIndexOf('{"limits"');
             if (p1 > -1) {
               config = JSON.parse(strData.substring(p1));
+              this.logger.warn('Config restored from string');
             }
           }
 
@@ -238,9 +241,9 @@ export class ConfigProvider {
           this.logImportantConfig(this.configCache);
           resolve();
         })
-        .catch(err => {
+        .catch(() => {
           this.logger.error('Error Loading Config');
-          reject(err);
+          reject(strData);
         });
     });
   }

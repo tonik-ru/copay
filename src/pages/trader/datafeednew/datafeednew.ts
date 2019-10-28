@@ -686,11 +686,13 @@ export class DatafeednewPage {
   }
 
   private processLevelTouchDate(rdi, lti, k) {
+    /*
     if (Math.abs(k) > 7) {
       rdi.Data[k].Count = 0;
       rdi.Data[k].Age = '';
       return;
     }
+    */
 
     var d = Date.parse(lti[k].Date);
     if (d > -10000) {

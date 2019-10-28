@@ -660,12 +660,13 @@ export class DatafeedPage {
   }
 
   private processLevelTouchDate(rdi, lti, k) {
+    /*
     if (Math.abs(k) > 7) {
       rdi.Data[k].Count = 0;
       rdi.Data[k].Age = '';
       return;
     }
-
+  */
     var d = Date.parse(lti[k].Date);
     if (d > -10000) {
       var ageSeconds = (Date.now() - d) / 1000;
