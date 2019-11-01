@@ -54,7 +54,6 @@ export class AppProvider {
   private jsonPathServices: string = 'assets/externalServices.json';
   public activeTheme: string = 'theme-dark';
 
-
   constructor(
     public http: HttpClient,
     private logger: Logger,
@@ -71,17 +70,11 @@ export class AppProvider {
         this.activeTheme = val;
       }
 
-
-
       this.logger.log('theme - >' + this.activeTheme);
     });
-
-
-
   }
 
   public async load() {
-
     await Promise.all([this.getInfo(), this.loadProviders()]);
   }
 
@@ -126,6 +119,4 @@ export class AppProvider {
   saveStting() {
     this.storage.set('activeTheme', this.activeTheme);
   }
-
-
 }

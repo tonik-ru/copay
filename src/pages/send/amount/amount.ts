@@ -4,6 +4,7 @@ import {
   HostListener,
   NgZone
 } from '@angular/core';
+import { StatusBar } from '@ionic-native/status-bar';
 import {
   Events,
   NavController,
@@ -13,7 +14,11 @@ import {
 import * as _ from 'lodash';
 
 // Providers
-import { Config, ConfigProvider } from '../../../providers/config/config';
+import {
+  CoinOpts,
+  Config,
+  ConfigProvider
+} from '../../../providers/config/config';
 import { ElectronProvider } from '../../../providers/electron/electron';
 import { FilterProvider } from '../../../providers/filter/filter';
 import { Logger } from '../../../providers/logger/logger';
@@ -22,11 +27,8 @@ import { RateProvider } from '../../../providers/rate/rate';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 
 // Pages
-import {
-  ActionSheetProvider,
-  AppProvider,
-  GiftCardProvider
-} from '../../../providers';
+import { ActionSheetProvider, AppProvider, GiftCardProvider } from '../../../providers';
+import { getActivationFee } from '../../../providers/gift-card/gift-card';
 import { CardConfig } from '../../../providers/gift-card/gift-card.types';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { Coin } from '../../../providers/wallet/wallet';
@@ -69,8 +71,6 @@ export class AmountPage extends WalletTabsChild {
   public expression;
   public amount;
 
-  public shiftMax: number;
-  public shiftMin: number;
   public showSendMax: boolean;
   public allowSend: boolean;
   public recipientType: string;
@@ -82,6 +82,7 @@ export class AmountPage extends WalletTabsChild {
   public useSendMax: boolean;
   public useAsModal: boolean;
   public config: Config;
+  public coinOpts: CoinOpts;
   public toWalletId: string;
   private _id: string;
   public requestingAmount: boolean;
@@ -106,11 +107,13 @@ export class AmountPage extends WalletTabsChild {
     walletTabsProvider: WalletTabsProvider,
     private events: Events,
     private viewCtrl: ViewController,
-    public appProvider: AppProvider
+    public appProvider: AppProvider,
+    private statusBar: StatusBar
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.config = this.configProvider.get();
+    this.coinOpts = this.configProvider.getCoinOpts();
     this.useAsModal = this.navParams.data.useAsModal;
     this.recipientType = this.navParams.data.recipientType;
     this.toAddress = this.navParams.data.toAddress;
@@ -143,17 +146,11 @@ export class AmountPage extends WalletTabsChild {
       this.navParams.get('nextPage') === 'CustomAmountPage';
     this.nextView = this.getNextView();
 
-    this.unitToSatoshi = this.config.wallet.settings.unitToSatoshi;
-    this.satToUnit = 1 / this.unitToSatoshi;
-    this.unitDecimals = this.config.wallet.settings.unitDecimals;
-
     // BitPay Card ID or Wallet ID
     this._id = this.navParams.data.id;
 
     // Use only with ShapeShift
     this.toWalletId = this.navParams.data.toWalletId;
-    this.shiftMax = this.navParams.data.shiftMax;
-    this.shiftMin = this.navParams.data.shiftMin;
 
     this.cardName = this.navParams.get('cardName');
   }
@@ -161,12 +158,25 @@ export class AmountPage extends WalletTabsChild {
   async ionViewDidLoad() {
     this.setAvailableUnits();
     this.updateUnitUI();
+    const coinOpts = this.availableUnits[this.unitIndex].isFiat
+      ? this.coinOpts[this.availableUnits[this.altUnitIndex].id]
+      : this.coinOpts[this.unit.toLowerCase()];
+    const { unitToSatoshi, unitDecimals } = coinOpts;
+    this.unitToSatoshi = unitToSatoshi;
+    this.satToUnit = 1 / this.unitToSatoshi;
+    this.unitDecimals = unitDecimals;
     this.cardConfig =
       this.cardName &&
       (await this.giftCardProvider.getCardConfig(this.cardName));
   }
 
   ionViewWillEnter() {
+    if (
+      this.platformProvider.isCordova &&
+      (this.cardName || this._id || this.toWalletId)
+    ) {
+      this.statusBar.styleBlackOpaque();
+    }
     this.disableHardwareKeyboard = false;
     this.expression = '';
     this.useSendMax = false;
@@ -178,6 +188,12 @@ export class AmountPage extends WalletTabsChild {
   }
 
   ionViewWillLeave() {
+    if (
+      this.platformProvider.isCordova &&
+      (this.cardName || this._id || this.toWalletId)
+    ) {
+      this.statusBar.styleDefault();
+    }
     this._disableHardwareKeyboard();
   }
 
@@ -235,6 +251,14 @@ export class AmountPage extends WalletTabsChild {
         name: 'Bitcoin Diamond',
         id: 'bcd',
         shortName: 'BCD'
+      });
+    }
+
+    if (parentWalletCoin === 'eth' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Ethereum',
+        id: 'eth',
+        shortName: 'ETH'
       });
     }
 
@@ -339,7 +363,8 @@ export class AmountPage extends WalletTabsChild {
       return this.finish();
     }
     const maxAmount = this.txFormatProvider.satToUnit(
-      this.wallet.status.availableBalanceSat
+      this.wallet.cachedStatus.availableBalanceSat,
+      this.wallet.coin
     );
     this.zone.run(() => {
       this.expression = this.availableUnits[this.unitIndex].isFiat
@@ -430,6 +455,7 @@ export class AmountPage extends WalletTabsChild {
         let a = this.fromFiat(result);
         if (a) {
           this.alternativeAmount = this.txFormatProvider.formatAmount(
+            this.availableUnits[this.altUnitIndex].id,
             a * this.unitToSatoshi,
             true
           );
@@ -461,6 +487,7 @@ export class AmountPage extends WalletTabsChild {
       return this.filterProvider.formatFiatAmount(val);
     else
       return this.txFormatProvider.formatAmount(
+        this.unit.toLowerCase(),
         val.toFixed(this.unitDecimals) * this.unitToSatoshi,
         true
       );
@@ -476,7 +503,13 @@ export class AmountPage extends WalletTabsChild {
   }
 
   private toFiat(val: number, coin?: Coin): number {
-    if (!this.rateProvider.getRate(this.fiatCode)) return undefined;
+    if (
+      !this.rateProvider.getRate(
+        this.fiatCode,
+        coin || this.availableUnits[this.unitIndex].id
+      )
+    )
+      return undefined;
 
     return parseFloat(
       this.rateProvider
@@ -526,7 +559,8 @@ export class AmountPage extends WalletTabsChild {
       .present();
   }
 
-  public finish(): void {
+  public finish(skipActivationFeeAlert: boolean = false): void {
+    if (!this.allowSend) return;
     let unit = this.availableUnits[this.unitIndex];
     let _amount = this.evaluate(this.format(this.expression));
     let coin = unit.id;
@@ -575,9 +609,31 @@ export class AmountPage extends WalletTabsChild {
       }
     }
     this.useSendMax = null;
+
+    if (this.cardName && !skipActivationFeeAlert) {
+      const activationFee = getActivationFee(data.amount, this.cardConfig);
+      if (activationFee) {
+        return this.alertActivationFeeIncluded(activationFee);
+      }
+    }
+
     this.useAsModal
       ? this.closeModal(data)
       : this.navCtrl.push(this.nextView, data);
+  }
+
+  private alertActivationFeeIncluded(fee) {
+    if (!fee) return;
+    const sheet = this.actionSheetProvider.createInfoSheet(
+      'activation-fee-included',
+      {
+        currency: this.cardConfig.currency,
+        displayName: this.cardConfig.displayName,
+        fee
+      }
+    );
+    sheet.present();
+    sheet.onDidDismiss(ok => ok && this.finish(true));
   }
 
   private updateUnitUI(): void {
@@ -622,6 +678,18 @@ export class AmountPage extends WalletTabsChild {
   }
 
   public closeModal(item): void {
-    this.viewCtrl.dismiss(item);
+    if (this.viewCtrl.name === 'AmountPage') {
+      if (!item) {
+        this.viewCtrl.dismiss();
+        return;
+      }
+
+      this.events.publish('addRecipient', item);
+      this.navCtrl.remove(this.viewCtrl.index - 1).then(() => {
+        this.viewCtrl.dismiss();
+      });
+    } else {
+      this.viewCtrl.dismiss(item);
+    }
   }
 }

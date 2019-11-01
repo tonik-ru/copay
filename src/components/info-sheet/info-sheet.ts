@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
+import { AppProvider } from '../../providers/app/app';
+import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
 import { InfoSheetTemplate } from './info-sheet-template';
 
-import { AppProvider } from '../../providers/app/app';
 
 @Component({
   selector: 'info-sheet',
@@ -11,13 +12,17 @@ import { AppProvider } from '../../providers/app/app';
 export class InfoSheetComponent extends ActionSheetParent {
   @ViewChild(InfoSheetTemplate)
   infoSheetTemplate: InfoSheetTemplate;
-  constructor(public appProvider: AppProvider) {
+  constructor(private externalLinkProvider: ExternalLinkProvider, public appProvider: AppProvider) {
     super();
   }
   ngAfterViewInit() {
     this.infoSheetTemplate.onDismiss.subscribe(option => {
       this.dismiss(option);
     });
+  }
+  public openInBrowser(url) {
+    this.externalLinkProvider.open(url);
+    this.dismiss();
   }
 }
 

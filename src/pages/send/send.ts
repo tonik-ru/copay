@@ -12,12 +12,17 @@ import { ExternalLinkProvider } from '../../providers/external-link/external-lin
 import { IncomingDataProvider } from '../../providers/incoming-data/incoming-data';
 import { Logger } from '../../providers/logger/logger';
 import { ProfileProvider } from '../../providers/profile/profile';
-import { Coin } from '../../providers/wallet/wallet';
 import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
 
 // Pages
 import { WalletTabsChild } from '../wallet-tabs/wallet-tabs-child';
 import { MultiSendPage } from './multi-send/multi-send';
+
+export enum CoinName {
+  BTC = 'Bitcoin',
+  BCH = 'Bitcoin Cash',
+  ETH = 'Ethereum'
+}
 
 @Component({
   selector: 'page-send',
@@ -28,15 +33,19 @@ export class SendPage extends WalletTabsChild {
   public walletsBtc;
   public walletsBch;
   public walletsBcd;
+  public walletsEth;
   public hasBtcWallets: boolean;
   public hasBchWallets: boolean;
   public hasBcdWallets: boolean;
+  public hasEthWallets: boolean;
   public invalidAddress: boolean;
 
   private scannerOpened: boolean;
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
     'BitcoinCashAddress',
+    'EthereumAddress',
+    'EthereumUri',
     'BitcoinUri',
     'BitcoinCashUri',
     'BitcoinDiamondUri'
@@ -67,18 +76,20 @@ export class SendPage extends WalletTabsChild {
   }
 
   ionViewWillEnter() {
-    this.events.subscribe('update:address', this.updateAddressHandler);
+    this.events.subscribe('Local/AddressScan', this.updateAddressHandler);
 
     this.walletsBtc = this.profileProvider.getWallets({ coin: 'btc' });
     this.walletsBch = this.profileProvider.getWallets({ coin: 'bch' });
     this.walletsBcd = this.profileProvider.getWallets({ coin: 'bcd' });
+    this.walletsEth = this.profileProvider.getWallets({ coin: 'eth' });
     this.hasBtcWallets = !_.isEmpty(this.walletsBtc);
     this.hasBchWallets = !_.isEmpty(this.walletsBch);
     this.hasBcdWallets = !_.isEmpty(this.walletsBcd);
+    this.hasEthWallets = !_.isEmpty(this.walletsEth);
   }
 
   ionViewWillLeave() {
-    this.events.unsubscribe('update:address', this.updateAddressHandler);
+    this.events.unsubscribe('Local/AddressScan', this.updateAddressHandler);
   }
 
   private updateAddressHandler: any = data => {
@@ -88,19 +99,15 @@ export class SendPage extends WalletTabsChild {
 
   public shouldShowZeroState() {
     return (
-      this.wallet && this.wallet.status && !this.wallet.status.totalBalanceSat
+      this.wallet &&
+      this.wallet.cachedStatus &&
+      !this.wallet.cachedStatus.totalBalanceSat
     );
   }
 
   public async goToReceive() {
     await this.walletTabsProvider.goToTabIndex(0);
-    const coinName =
-      this.wallet.coin === Coin.BCD
-        ? 'bitcoin diamond'
-        : this.wallet.coin === Coin.BCH
-        ? 'bitcoin cash'
-        : 'bitcoin';
-
+    const coinName = CoinName[this.wallet.coin.toUpperCase()];
     const infoSheet = this.actionSheetProvider.createInfoSheet(
       'receiving-bitcoin',
       { coinName }
@@ -120,19 +127,15 @@ export class SendPage extends WalletTabsChild {
   }
 
   private checkCoinAndNetwork(data, isPayPro?): boolean {
-    let isValid;
+    let isValid, addrData;
     if (isPayPro) {
-      isValid = this.addressProvider.checkCoinAndNetworkFromPayPro(
-        this.wallet.coin,
-        this.wallet.network,
-        data
-      );
+      isValid =
+        data.coin == this.wallet.coin && data.network == this.wallet.network;
     } else {
-      isValid = this.addressProvider.checkCoinAndNetworkFromAddr(
-        this.wallet.coin,
-        this.wallet.network,
-        data
-      );
+      addrData = this.addressProvider.getCoinAndNetwork(data);
+      isValid =
+        this.wallet.coin == addrData.coin &&
+        addrData.network == this.wallet.network;
     }
 
     if (isValid) {
@@ -140,9 +143,8 @@ export class SendPage extends WalletTabsChild {
       return true;
     } else {
       this.invalidAddress = true;
-      let network = isPayPro
-        ? data.network
-        : this.addressProvider.getNetwork(data);
+      let network = isPayPro ? data.network : addrData.network;
+
       if (this.wallet.coin === 'bch' && this.wallet.network === network) {
         const isLegacy = this.checkIfLegacy();
         isLegacy ? this.showLegacyAddrMessage() : this.showErrorMessage();
@@ -205,8 +207,7 @@ export class SendPage extends WalletTabsChild {
     if (!hasContacts) {
       const parsedData = this.incomingDataProvider.parseData(this.search);
       if (parsedData && parsedData.type == 'PayPro') {
-        const coin: string =
-          this.search.indexOf('bitcoincash') === 0 ? Coin.BCH : Coin.BTC;
+        const coin = this.incomingDataProvider.getCoinFromUri(parsedData.data);
         this.incomingDataProvider
           .getPayProDetails(this.search)
           .then(payProDetails => {
@@ -224,6 +225,11 @@ export class SendPage extends WalletTabsChild {
       ) {
         const isValid = this.checkCoinAndNetwork(this.search);
         if (isValid) this.redir();
+      } else if (parsedData && parsedData.type == 'InvoiceUri') {
+        this.incomingDataProvider.redir(this.search);
+      } else if (parsedData && parsedData.type == 'BitPayCard') {
+        this.close();
+        this.incomingDataProvider.redir(this.search);
       } else {
         this.invalidAddress = true;
       }

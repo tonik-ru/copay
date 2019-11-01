@@ -4,11 +4,29 @@ export enum ClaimCodeType {
   link = 'link'
 }
 
+export interface GiftCardDiscount {
+  hidden: boolean;
+  code: string;
+  type: 'percentage';
+  amount: number;
+}
+
+export interface GiftCardActivationFee {
+  amountRange: {
+    min: number;
+    max: number;
+  };
+  fee: number;
+  type: 'fixed' | 'percentage';
+}
+
 export interface CommonCardConfig {
+  activationFees?: GiftCardActivationFee[];
   cardImage: string;
   currency: string;
   defaultClaimCodeType: ClaimCodeType;
   description?: string;
+  discounts?: GiftCardDiscount[];
   displayName: string;
   emailRequired: boolean;
   featured?: boolean;
@@ -19,6 +37,8 @@ export interface CommonCardConfig {
   logoBackgroundColor: string;
   minAmount?: number;
   maxAmount?: number;
+  printRequired?: boolean;
+  redeemButtonText?: string;
   redeemInstructions?: string;
   redeemUrl?: string;
   terms: string;

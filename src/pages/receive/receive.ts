@@ -13,7 +13,6 @@ import { AmountPage } from '../send/amount/amount';
 
 // Providers
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
-import { AddressProvider } from '../../providers/address/address';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { PlatformProvider } from '../../providers/platform/platform';
@@ -36,8 +35,10 @@ export class ReceivePage extends WalletTabsChild {
   public showShareButton: boolean;
   public loading: boolean;
   public playAnimation: boolean;
+  public newAddressError: boolean;
 
   private onResumeSubscription: Subscription;
+  private retryCount: number = 0;
 
   constructor(
     private actionSheetProvider: ActionSheetProvider,
@@ -51,7 +52,6 @@ export class ReceivePage extends WalletTabsChild {
     private bwcErrorProvider: BwcErrorProvider,
     private translate: TranslateService,
     private externalLinkProvider: ExternalLinkProvider,
-    private addressProvider: AddressProvider,
     walletTabsProvider: WalletTabsProvider,
     private platform: Platform
   ) {
@@ -62,8 +62,9 @@ export class ReceivePage extends WalletTabsChild {
   ionViewWillEnter() {
     this.onResumeSubscription = this.platform.resume.subscribe(() => {
       this.setAddress();
-      this.events.subscribe('Wallet/setAddress', this.walletSetAddressHandler);
+      this.events.subscribe('bwsEvent', this.bwsEventHandler);
     });
+    this.setAddress();
   }
 
   ionViewWillLeave() {
@@ -71,12 +72,21 @@ export class ReceivePage extends WalletTabsChild {
   }
 
   ionViewDidLoad() {
-    this.setAddress();
-    this.events.subscribe('Wallet/setAddress', this.walletSetAddressHandler);
+    this.events.subscribe('bwsEvent', this.bwsEventHandler);
   }
 
-  private walletSetAddressHandler: any = (newAddr?: boolean) => {
-    this.setAddress(newAddr);
+  private bwsEventHandler: any = (walletId, type, n) => {
+    if (
+      this.wallet.credentials.walletId == walletId &&
+      type == 'NewIncomingTx' &&
+      n.data
+    ) {
+      let addr =
+        this.address.indexOf(':') > -1
+          ? this.address.split(':')[1]
+          : this.address;
+      if (n.data.address == addr) this.setAddress(true);
+    }
   };
 
   public requestSpecificAmount(): void {
@@ -88,60 +98,75 @@ export class ReceivePage extends WalletTabsChild {
       color: this.wallet.color,
       coin: this.wallet.coin,
       nextPage: 'CustomAmountPage',
-      network: this.addressProvider.getNetwork(this.address)
+      network: this.wallet.network
     });
   }
 
   public async setAddress(newAddr?: boolean, failed?: boolean): Promise<void> {
+    if (
+      !this.wallet ||
+      !this.wallet.isComplete() ||
+      (this.wallet.needsBackup && this.wallet.network == 'livenet')
+    )
+      return;
+
     this.loading = newAddr || _.isEmpty(this.address) ? true : false;
 
-    const addr: string = (await this.walletProvider
+    this.walletProvider
       .getAddress(this.wallet, newAddr)
-      .catch(err => {
+      .then(addr => {
+        this.newAddressError = false;
         this.loading = false;
-        if (err == 'INVALID_ADDRESS') {
-          // Generate a new address if the first one is invalid
+        if (!addr) return;
+        const address = this.walletProvider.getAddressView(
+          this.wallet.coin,
+          this.wallet.network,
+          addr
+        );
+        if (this.address && this.address != address) {
+          this.playAnimation = true;
+        }
+        this.updateQrAddress(address, newAddr);
+      })
+      .catch(err => {
+        this.logger.warn('Retrying to create new adress:' + ++this.retryCount);
+        if (this.retryCount > 3) {
+          this.retryCount = 0;
+          this.loading = false;
+          this.showErrorInfoSheet(err);
+        } else if (err == 'INVALID_ADDRESS') {
+          // Generate new address if the first one is invalid ( fix for concatenated addresses )
           if (!failed) {
             this.setAddress(newAddr, true);
+            this.logger.warn(this.bwcErrorProvider.msg(err, 'Receive'));
+            return;
           }
-          return;
+          this.setAddress(false); // failed to generate new address -> get last saved address
+        } else {
+          this.setAddress(false); // failed to generate new address -> get last saved address
         }
         this.logger.warn(this.bwcErrorProvider.msg(err, 'Receive'));
-      })) as string;
-    this.loading = false;
-    if (!addr) return;
-    const address = this.walletProvider.getAddressView(
-      this.wallet.coin,
-      this.wallet.network,
-      addr
-    );
-
-    if (this.address && this.address != address) {
-      this.playAnimation = true;
-    }
-
-    const qrAddress = this.walletProvider.getAddressView(
-      this.wallet.coin,
-      this.wallet.network,
-      addr,
-      true
-    );
-
-    this.updateQrAddress(addr, qrAddress, newAddr);
+      });
   }
 
-  private async updateQrAddress(
-    address,
-    qrAddress,
-    newAddr?: boolean
-  ): Promise<void> {
+  public showErrorInfoSheet(error: Error | string): void {
+    this.newAddressError = true;
+    const infoSheetTitle = this.translate.instant('Error');
+    const errorInfoSheet = this.actionSheetProvider.createInfoSheet(
+      'default-error',
+      { msg: this.bwcErrorProvider.msg(error), title: infoSheetTitle }
+    );
+    errorInfoSheet.present();
+  }
+
+  private async updateQrAddress(address, newAddr?: boolean): Promise<void> {
     if (newAddr) {
       await Observable.timer(400).toPromise();
     }
     this.address = address;
-    this.qrAddress = qrAddress;
     await Observable.timer(200).toPromise();
     this.playAnimation = false;
+    this.qrAddress = address;
   }
 
   public shareAddress(): void {
@@ -151,7 +176,7 @@ export class ReceivePage extends WalletTabsChild {
 
   public goToBackup(): void {
     this.navCtrl.push(BackupKeyPage, {
-      walletId: this.wallet.credentials.walletId
+      keyId: this.wallet.credentials.keyId
     });
   }
 

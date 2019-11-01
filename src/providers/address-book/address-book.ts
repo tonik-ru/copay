@@ -71,13 +71,14 @@ export class AddressBookProvider {
 
   public add(entry): Promise<any> {
     return new Promise((resolve, reject) => {
-      var network = this.addressProvider.getNetwork(entry.address);
-      if (_.isEmpty(network)) {
+      const addrData = this.addressProvider.getCoinAndNetwork(entry.address);
+      if (_.isEmpty(addrData)) {
         let msg = this.translate.instant('Not valid bitcoin address');
         return reject(msg);
       }
+
       this.persistenceProvider
-        .getAddressBook(network)
+        .getAddressBook(addrData.network)
         .then(ab => {
           if (ab && _.isString(ab)) ab = JSON.parse(ab);
           ab = ab || {};
@@ -88,7 +89,7 @@ export class AddressBookProvider {
           }
           ab[entry.address] = entry;
           this.persistenceProvider
-            .setAddressBook(network, JSON.stringify(ab))
+            .setAddressBook(addrData.network, JSON.stringify(ab))
             .then(() => {
               this.list()
                 .then(ab => {
@@ -111,13 +112,15 @@ export class AddressBookProvider {
 
   public remove(addr): Promise<any> {
     return new Promise((resolve, reject) => {
-      var network = this.addressProvider.getNetwork(addr);
-      if (_.isEmpty(network)) {
+      const addrData = this.addressProvider.getCoinAndNetwork(addr);
+
+      if (_.isEmpty(addrData)) {
         let msg = this.translate.instant('Not valid bitcoin address');
         return reject(msg);
       }
+
       this.persistenceProvider
-        .getAddressBook(network)
+        .getAddressBook(addrData.network)
         .then(ab => {
           if (ab && _.isString(ab)) ab = JSON.parse(ab);
           ab = ab || {};
@@ -131,7 +134,7 @@ export class AddressBookProvider {
           }
           delete ab[addr];
           this.persistenceProvider
-            .setAddressBook(network, JSON.stringify(ab))
+            .setAddressBook(addrData.network, JSON.stringify(ab))
             .then(() => {
               this.list()
                 .then(ab => {
@@ -148,26 +151,6 @@ export class AddressBookProvider {
         })
         .catch(err => {
           return reject(err);
-        });
-    });
-  }
-
-  public removeAll(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.persistenceProvider
-        .removeAddressbook('livenet')
-        .then(() => {
-          this.persistenceProvider.removeAddressbook('testnet').then(() => {
-            return resolve();
-          });
-        })
-        .catch(() => {
-          let msg = this.translate.instant('Error deleting addressbook');
-          return reject(msg);
-        })
-        .catch(() => {
-          let msg = this.translate.instant('Error deleting addressbook');
-          return reject(msg);
         });
     });
   }

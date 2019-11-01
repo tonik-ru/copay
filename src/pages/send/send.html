@@ -1,5 +1,5 @@
-<ion-header [ngClass]="{ 'wallet-details-header': wallet }">
-  <ion-navbar [navbar-bg]="wallet && wallet.color">
+<ion-header [ngClass]="{'wallet-details-header': wallet}">
+  <ion-navbar class="app-color">
     <ion-buttons *ngIf="wallet" left>
       <button class="modal-close-button" (click)="closeCam()" ion-button>
         <ion-icon ios="md-close" md="md-close"></ion-icon>
@@ -21,18 +21,10 @@
       </ion-buttons>
     -->
   </ion-navbar>
-
-  <ion-toolbar *ngIf="wallet" [navbar-bg]="wallet.color">
-    <div
-      *ngIf="!wallet.balanceHidden && !wallet.scanning && wallet.status"
-      class="wallet-details-header__balance"
-    >
-      <span>{{ wallet.status && wallet.status.totalBalanceStr }}</span>
-      <ion-icon
-        *ngIf="wallet.status.totalBalanceSat != wallet.status.spendableAmount"
-        ios="ios-timer-outline"
-        md="md-timer"
-      ></ion-icon>
+  <ion-toolbar *ngIf="wallet" class="app-color">
+    <div *ngIf="!wallet.balanceHidden && !wallet.scanning && wallet.cachedStatus" class="wallet-details-header__balance">
+      <span>{{wallet.cachedStatus && wallet.cachedStatus.spendableBalanceStr}}</span>
+      <ion-icon *ngIf="wallet.cachedStatus.totalBalanceSat != wallet.cachedStatus.spendableAmount" ios="ios-timer-outline" md="md-timer"></ion-icon>
     </div>
     <div
       *ngIf="wallet.balanceHidden && !wallet.scanning"
@@ -62,7 +54,7 @@
   </div>
 
   <div *ngIf="!shouldShowZeroState()">
-    <div *ngIf="hasBtcWallets || hasBchWallets || hasBcdWallets">
+    <div *ngIf="hasBtcWallets || hasBchWallets || hasBcdWallets || hasEthWallets">
       <div class="send-header-wrapper">
         <span class="send-heading" translate>Recipient</span>
         <ion-item
@@ -92,7 +84,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div *ngIf="wallet.coin !== 'eth'" class="card">
         <ion-item-divider class="title">
           <span translate>Transfer to Multiple Recipients</span>
         </ion-item-divider>
@@ -114,7 +106,7 @@
       ></page-transfer-to>
     </div>
     <div
-      *ngIf="!hasBtcWallets && !hasBchWallets && !hasBcdWallets"
+      *ngIf="!hasBtcWallets && !hasBchWallets && !hasBcdWallets && !hasEthWallets"
       class="no-wallet-message"
     >
       <span translate

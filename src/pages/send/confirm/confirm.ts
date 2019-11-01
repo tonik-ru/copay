@@ -1,5 +1,6 @@
 import { DecimalPipe } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
+import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import {
   App,
@@ -15,6 +16,7 @@ import { Logger } from '../../../providers/logger/logger';
 import { FinishModalPage } from '../../finish/finish';
 import { TabsPage } from '../../tabs/tabs';
 import { ChooseFeeLevelPage } from '../choose-fee-level/choose-fee-level';
+import { CoinName } from '../send';
 
 // Providers
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
@@ -22,9 +24,10 @@ import { AppProvider } from '../../../providers/app/app';
 import { BwcErrorProvider } from '../../../providers/bwc-error/bwc-error';
 import { BwcProvider } from '../../../providers/bwc/bwc';
 import { ClipboardProvider } from '../../../providers/clipboard/clipboard';
-import { ConfigProvider } from '../../../providers/config/config';
+import { CoinOpts, ConfigProvider } from '../../../providers/config/config';
 import { ExternalLinkProvider } from '../../../providers/external-link/external-link';
 import { FeeProvider } from '../../../providers/fee/fee';
+import { KeyProvider } from '../../../providers/key/key';
 import { OnGoingProcessProvider } from '../../../providers/on-going-process/on-going-process';
 import { PlatformProvider } from '../../../providers/platform/platform';
 import { PopupProvider } from '../../../providers/popup/popup';
@@ -33,8 +36,8 @@ import { ReplaceParametersProvider } from '../../../providers/replace-parameters
 import { TxConfirmNotificationProvider } from '../../../providers/tx-confirm-notification/tx-confirm-notification';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 import {
-  CoinNames,
   TransactionProposal,
+  UTXO_COINS,
   WalletProvider
 } from '../../../providers/wallet/wallet';
 import { WalletTabsChild } from '../../wallet-tabs/wallet-tabs-child';
@@ -74,10 +77,12 @@ export class ConfirmPage extends WalletTabsChild {
   public recipients;
   public coin: string;
   public appName: string;
+  public merchantFeeLabel: string;
 
   // Config Related values
   public config;
   public configFeeLevel: string;
+  public coinOpts: CoinOpts;
 
   // Platform info
   public isCordova: boolean;
@@ -89,8 +94,8 @@ export class ConfirmPage extends WalletTabsChild {
   public isOpenSelector: boolean;
 
   constructor(
-    protected actionSheetProvider: ActionSheetProvider,
     protected app: App,
+    protected actionSheetProvider: ActionSheetProvider,
     protected bwcErrorProvider: BwcErrorProvider,
     protected bwcProvider: BwcProvider,
     protected configProvider: ConfigProvider,
@@ -113,15 +118,22 @@ export class ConfirmPage extends WalletTabsChild {
     walletTabsProvider: WalletTabsProvider,
     protected clipboardProvider: ClipboardProvider,
     protected events: Events,
-    protected appProvider: AppProvider
+    protected appProvider: AppProvider,
+    protected keyProvider: KeyProvider,
+    protected statusBar: StatusBar
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
-    this.bitcore = this.bwcProvider.getBitcore();
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
     this.bitcoreDiamond = this.bwcProvider.getBitcoreDiamond();
+    this.bitcore = {
+      btc: this.bwcProvider.getBitcore(),
+      bch: this.bitcoreCash,
+      bcd: this.bitcoreDiamond
+    };
     this.CONFIRM_LIMIT_USD = 20;
     this.FEE_TOO_HIGH_LIMIT_PER = 15;
     this.config = this.configProvider.get();
+    this.coinOpts = this.configProvider.getCoinOpts();
     this.configFeeLevel = this.config.wallet.settings.feeLevel
       ? this.config.wallet.settings.feeLevel
       : 'normal';
@@ -138,28 +150,34 @@ export class ConfirmPage extends WalletTabsChild {
   }
 
   ionViewWillLeave() {
+    if (this.isCordova) {
+      this.statusBar.styleBlackOpaque();
+    }
     this.navCtrl.swipeBackEnabled = true;
   }
 
   ionViewWillEnter() {
+    if (this.isCordova) {
+      this.statusBar.styleDefault();
+    }
     this.navCtrl.swipeBackEnabled = false;
     this.isOpenSelector = false;
-    const B =
-      this.navParams.data.coin == 'bcd'
-        ? this.bitcoreDiamond
-        : this.navParams.data.coin == 'bch'
-        ? this.bitcoreCash
-        : this.bitcore;
+    this.coin = this.navParams.data.coin;
+    const B = this.bitcore[this.coin];
     let networkName;
     let amount;
     if (this.fromMultiSend) {
       networkName = this.navParams.data.network;
       amount = this.navParams.data.totalAmount;
-      this.coin = this.navParams.data.coin;
     } else {
       amount = this.navParams.data.amount;
       try {
-        networkName = new B.Address(this.navParams.data.toAddress).network.name;
+        if (B) {
+          networkName = new B.Address(this.navParams.data.toAddress).network
+            .name;
+        } else {
+          networkName = this.navParams.data.network || 'livenet';
+        }
       } catch (e) {
         const message = this.replaceParametersProvider.replace(
           this.translate.instant(
@@ -189,6 +207,7 @@ export class ConfirmPage extends WalletTabsChild {
       amount: this.navParams.data.useSendMax ? 0 : parseInt(amount, 10),
       description: this.navParams.data.description,
       paypro: this.navParams.data.paypro,
+      data: this.navParams.data.data, // eth
       payProUrl: this.navParams.data.payProUrl,
       spendUnconfirmed: this.config.wallet.spendUnconfirmed,
 
@@ -214,10 +233,9 @@ export class ConfirmPage extends WalletTabsChild {
     }
 
     if (this.tx.coin && this.tx.coin == 'bch' && !this.fromMultiSend) {
-      // Use legacy address
       this.tx.toAddress = this.bitcoreCash
         .Address(this.tx.toAddress)
-        .toString();
+        .toString(true);
     }
 
     this.getAmountDetails();
@@ -234,6 +252,16 @@ export class ConfirmPage extends WalletTabsChild {
       .catch(err => {
         this.showErrorInfoSheet(err, null, true);
       });
+
+    if (this.isCordova) {
+      window.addEventListener('keyboardWillShow', () => {
+        this.hideSlideButton = true;
+      });
+
+      window.addEventListener('keyboardWillHide', () => {
+        this.hideSlideButton = false;
+      });
+    }
   }
 
   ionViewDidLoad() {
@@ -241,7 +269,10 @@ export class ConfirmPage extends WalletTabsChild {
   }
 
   private getAmountDetails() {
-    this.amount = this.decimalPipe.transform(this.tx.amount / 1e8, '1.2-6');
+    this.amount = this.decimalPipe.transform(
+      this.tx.amount / this.coinOpts[this.coin].unitToSatoshi,
+      '1.2-6'
+    );
   }
 
   private afterWalletSelectorSet() {
@@ -271,63 +302,18 @@ export class ConfirmPage extends WalletTabsChild {
     ) {
       return Promise.resolve();
     }
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       // no min amount? (sendMax) => look for no empty wallets
       minAmount = minAmount ? minAmount : 1;
-      const filteredWallets = [];
-      let index: number = 0;
-      let walletsUpdated: number = 0;
 
       this.wallets = this.profileProvider.getWallets({
         onlyComplete: true,
+        hasFunds: true,
         network,
         coin
       });
 
-      if (!this.wallets || !this.wallets.length) {
-        return reject(this.translate.instant('No wallets available'));
-      }
-
-      _.each(this.wallets, wallet => {
-        this.walletProvider
-          .getStatus(wallet, {})
-          .then(status => {
-            walletsUpdated++;
-            wallet.status = status;
-
-            if (!status.availableBalanceSat) {
-              this.logger.debug('No balance available in: ' + wallet.name);
-            }
-
-            if (status.availableBalanceSat > minAmount) {
-              filteredWallets.push(wallet);
-            }
-
-            if (++index == this.wallets.length) {
-              if (!walletsUpdated) return reject('Could not update any wallet');
-
-              if (_.isEmpty(filteredWallets)) {
-                return reject(this.translate.instant('Insufficient funds'));
-              }
-              this.wallets = _.clone(filteredWallets);
-              return resolve();
-            }
-          })
-          .catch(err => {
-            this.logger.error(err);
-            if (++index == this.wallets.length) {
-              if (!walletsUpdated) return reject('Could not update any wallet');
-
-              if (_.isEmpty(filteredWallets)) {
-                return reject(
-                  this.translate.instant('Insufficient funds for fee')
-                );
-              }
-              this.wallets = _.clone(filteredWallets);
-              return resolve();
-            }
-          });
-      });
+      return resolve();
     });
   }
 
@@ -353,13 +339,23 @@ export class ConfirmPage extends WalletTabsChild {
       const previousView = this.navCtrl.getPrevious().name;
       switch (err) {
         case 'insufficient_funds':
-          // Do not allow user to change or use max amount if previous view is not Amount
-          if (previousView === 'AmountPage') {
+          if (this.showUseUnconfirmedMsg()) {
+            this.showErrorInfoSheet(
+              this.translate.instant(
+                'You do not have enough confirmed funds to make this payment. Wait for your pending transactions to confirm or enable "Use unconfirmed funds" in Advanced Settings.'
+              ),
+              this.translate.instant('No enough confirmed funds'),
+              true
+            );
+          } else if (previousView === 'AmountPage') {
+            // Do not allow user to change or use max amount if previous view is not Amount
             this.showInsufficientFundsInfoSheet();
           } else {
             this.showErrorInfoSheet(
+              this.translate.instant(
+                'You are trying to send more funds than you have available. Make sure you do not have funds locked by pending transaction proposals.'
+              ),
               this.translate.instant('Insufficient funds'),
-              null,
               true
             );
           }
@@ -369,6 +365,15 @@ export class ConfirmPage extends WalletTabsChild {
           break;
       }
     });
+  }
+
+  private showUseUnconfirmedMsg(): boolean {
+    return (
+      this.wallet.cachedStatus &&
+      this.wallet.cachedStatus.balance.totalAmount >=
+        this.tx.amount + this.tx.feeRate &&
+      !this.tx.spendUnconfirmed
+    );
   }
 
   private setButtonText(isMultisig: boolean, isPayPro: boolean): void {
@@ -392,7 +397,7 @@ export class ConfirmPage extends WalletTabsChild {
     }
   }
 
-  private paymentTimeControl(expires: string): void {
+  protected paymentTimeControl(expires: string): void {
     const expirationTime = Math.floor(new Date(expires).getTime() / 1000);
     this.paymentExpired = false;
     this.setExpirationTime(expirationTime);
@@ -436,7 +441,8 @@ export class ConfirmPage extends WalletTabsChild {
 
       const maxAllowedMerchantFee = {
         btc: 'urgent',
-        bch: 'normal'
+        bch: 'normal',
+        eth: 'urgent'
       };
 
       this.onGoingProcessProvider.set('calculatingFee');
@@ -465,8 +471,10 @@ export class ConfirmPage extends WalletTabsChild {
               this.showHighFeeSheet();
             }
 
-            msg = this.translate.instant('Suggested by Merchant');
-            tx.feeLevelName = msg;
+            msg = this.translate.instant(
+              'This payment requires a miner fee of:'
+            );
+            this.merchantFeeLabel = msg;
           } else {
             const feeOpts = this.feeProvider.getFeeOpts();
             tx.feeLevelName = feeOpts[tx.feeLevel];
@@ -515,7 +523,7 @@ export class ConfirmPage extends WalletTabsChild {
           if (sendMaxInfo) {
             this.logger.debug('Send max info', sendMaxInfo);
 
-            if (sendMaxInfo.amount == 0) {
+            if (sendMaxInfo.amount <= 0) {
               this.showErrorInfoSheet(
                 this.translate.instant('Not enough funds for fee')
               );
@@ -578,8 +586,10 @@ export class ConfirmPage extends WalletTabsChild {
           tx.txp[wallet.id] = txp;
           this.tx = tx;
           this.logger.debug(
-            'Confirm. TX Fully Updated for wallet:' + wallet.id,
-            JSON.stringify(tx)
+            'Confirm. TX Fully Updated for wallet:' +
+              wallet.id +
+              ' Txp:' +
+              txp.id
           );
           return resolve();
         })
@@ -621,13 +631,18 @@ export class ConfirmPage extends WalletTabsChild {
 
     const warningMsg = this.verifyExcludedUtxos(wallet, sendMaxInfo);
 
-    const coinName = CoinNames[this.wallet.coin];
+    const coinName = CoinName[this.wallet.coin.toUpperCase()];
+
+    const { unitToSatoshi } = this.coinOpts[this.tx.coin];
+
+    const fee =
+      sendMaxInfo.fee / unitToSatoshi || sendMaxInfo.gas / unitToSatoshi;
 
     const minerFeeNoticeInfoSheet = this.actionSheetProvider.createInfoSheet(
       'miner-fee-notice',
       {
         coinName,
-        fee: sendMaxInfo.fee / 1e8,
+        fee,
         coin: this.tx.coin.toUpperCase(),
         msg: !_.isEmpty(warningMsg) ? warningMsg : ''
       }
@@ -638,7 +653,8 @@ export class ConfirmPage extends WalletTabsChild {
   private verifyExcludedUtxos(_, sendMaxInfo) {
     const warningMsg = [];
     if (sendMaxInfo.utxosBelowFee > 0) {
-      const amountBelowFeeStr = sendMaxInfo.amountBelowFee / 1e8;
+      const amountBelowFeeStr =
+        sendMaxInfo.amountBelowFee / this.coinOpts[this.tx.coin].unitToSatoshi;
       const message = this.replaceParametersProvider.replace(
         this.translate.instant(
           'A total of {{amountBelowFeeStr}} {{coin}} were excluded. These funds come from UTXOs smaller than the network fee provided.'
@@ -649,7 +665,9 @@ export class ConfirmPage extends WalletTabsChild {
     }
 
     if (sendMaxInfo.utxosAboveMaxSize > 0) {
-      const amountAboveMaxSizeStr = sendMaxInfo.amountAboveMaxSize / 1e8;
+      const amountAboveMaxSizeStr =
+        sendMaxInfo.amountAboveMaxSize /
+        this.coinOpts[this.tx.coin].unitToSatoshi;
       const message = this.replaceParametersProvider.replace(
         this.translate.instant(
           'A total of {{amountAboveMaxSizeStr}} {{coin}} were excluded. The maximum size allowed for a transaction was exceeded.'
@@ -670,8 +688,10 @@ export class ConfirmPage extends WalletTabsChild {
         );
         return reject(msg);
       }
-
-      if (tx.amount > Number.MAX_SAFE_INTEGER) {
+      if (
+        UTXO_COINS[tx.coin.toUpperCase()] &&
+        tx.amount > Number.MAX_SAFE_INTEGER
+      ) {
         const msg = this.translate.instant('Amount too big');
         return reject(msg);
       }
@@ -682,10 +702,9 @@ export class ConfirmPage extends WalletTabsChild {
         txp.outputs = [];
         this.navParams.data.recipients.forEach(recipient => {
           if (tx.coin && tx.coin == 'bch') {
-            // Use legacy address
             recipient.toAddress = this.bitcoreCash
               .Address(recipient.toAddress)
-              .toString();
+              .toString(true);
 
             recipient.addressToShow = this.walletProvider.getAddressView(
               tx.coin,
@@ -728,6 +747,7 @@ export class ConfirmPage extends WalletTabsChild {
       txp.excludeUnconfirmedUtxos = !tx.spendUnconfirmed;
       txp.dryRun = dryRun;
 
+      txp.data = tx.data; // eth
       if (tx.recipientType == 'wallet') {
         txp.customData = {
           toWalletName: tx.name ? tx.name : null
@@ -735,9 +755,17 @@ export class ConfirmPage extends WalletTabsChild {
       }
 
       this.walletProvider
-        .createTx(wallet, txp)
-        .then(ctxp => {
-          return resolve(ctxp);
+        .getAddress(this.wallet, false)
+        .then(address => {
+          txp.from = address;
+          this.walletProvider
+            .createTx(wallet, txp)
+            .then(ctxp => {
+              return resolve(ctxp);
+            })
+            .catch(err => {
+              return reject(err);
+            });
         })
         .catch(err => {
           return reject(err);
@@ -747,8 +775,7 @@ export class ConfirmPage extends WalletTabsChild {
 
   private showInsufficientFundsInfoSheet(): void {
     const insufficientFundsInfoSheet = this.actionSheetProvider.createInfoSheet(
-      'insufficient-funds',
-      { amount: this.amount, coin: this.tx.coin }
+      'insufficient-funds'
     );
     insufficientFundsInfoSheet.present();
     insufficientFundsInfoSheet.onDidDismiss(option => {
@@ -796,7 +823,7 @@ export class ConfirmPage extends WalletTabsChild {
           ? this.navCtrl.popToRoot()
           : this.navCtrl.last().name == 'ConfirmCardPurchasePage'
           ? this.navCtrl.pop()
-          : this.app.getRootNavs()[0].setRoot(TabsPage);
+          : this.app.getRootNavs()[0].setRoot(TabsPage); // using setRoot(TabsPage) as workaround when coming from scanner
       }
     });
   }
@@ -807,18 +834,6 @@ export class ConfirmPage extends WalletTabsChild {
 
   public onWalletSelect(wallet): void {
     this.setWallet(wallet);
-  }
-
-  public showDescriptionPopup(tx) {
-    const message = this.translate.instant('Add Memo');
-    const opts = {
-      defaultText: tx.description
-    };
-    this.popupProvider.ionicPrompt(null, message, opts).then((res: string) => {
-      if (res) {
-        tx.description = res;
-      }
-    });
   }
 
   public approve(tx, wallet): Promise<void> {
@@ -837,7 +852,10 @@ export class ConfirmPage extends WalletTabsChild {
       .then(txp => {
         return this.confirmTx(txp, wallet).then((nok: boolean) => {
           if (nok) {
-            if (this.isCordova) this.slideButton.isConfirmed(false);
+            if (this.isCordova) {
+              this.slideButton.isConfirmed(false);
+              this.hideSlideButton = false;
+            }
             this.onGoingProcessProvider.clear();
             return;
           }
@@ -852,13 +870,14 @@ export class ConfirmPage extends WalletTabsChild {
 
   private confirmTx(txp, wallet) {
     return new Promise<boolean>(resolve => {
-      if (this.walletProvider.isEncrypted(wallet)) return resolve(false);
+      if (wallet.isPrivKeyEncrypted) return resolve(false);
       this.txFormatProvider.formatToUSD(wallet.coin, txp.amount).then(val => {
         const amountUsd = parseFloat(val);
         if (amountUsd <= this.CONFIRM_LIMIT_USD) return resolve(false);
-
-        const amount = (this.tx.amount / 1e8).toFixed(8);
         const unit = txp.coin.toUpperCase();
+        const amount = (
+          this.tx.amount / this.coinOpts[txp.coin].unitToSatoshi
+        ).toFixed(8);
         const name = wallet.name;
         const message = this.replaceParametersProvider.replace(
           this.translate.instant(
@@ -878,7 +897,7 @@ export class ConfirmPage extends WalletTabsChild {
   }
 
   protected publishAndSign(txp, wallet) {
-    if (!wallet.canSign() && !wallet.isPrivKeyExternal()) {
+    if (!wallet.canSign) {
       return this.onlyPublish(txp, wallet);
     }
 
@@ -900,6 +919,12 @@ export class ConfirmPage extends WalletTabsChild {
         if (this.isCordova) this.slideButton.isConfirmed(false);
         this.onGoingProcessProvider.clear();
         this.showErrorInfoSheet(err);
+        if (txp.payProUrl) {
+          this.logger.warn('Paypro error: removing payment proposal');
+          this.walletProvider.removeTx(wallet, txp).catch(() => {
+            this.logger.warn('Could not delete payment proposal');
+          });
+        }
       });
   }
 
@@ -939,7 +964,8 @@ export class ConfirmPage extends WalletTabsChild {
     this.clipboardProvider.clearClipboardIfValidData([
       'PayPro',
       'BitcoinUri',
-      'BitcoinCashUri'
+      'BitcoinCashUri',
+      'InvoiceUri'
     ]);
 
     if (this.isWithinWalletTabs()) {
@@ -947,8 +973,15 @@ export class ConfirmPage extends WalletTabsChild {
         this.events.publish('OpenWallet', this.wallet);
       });
     } else {
-      this.app.getRootNavs()[0].setRoot(TabsPage);
-      this.events.publish('OpenWallet', this.wallet);
+      // using setRoot(TabsPage) as workaround when coming from scanner
+      this.app
+        .getRootNavs()[0]
+        .setRoot(TabsPage)
+        .then(() => {
+          setTimeout(() => {
+            this.events.publish('OpenWallet', this.wallet);
+          }, 1000);
+        });
     }
   }
 

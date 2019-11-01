@@ -26,17 +26,6 @@ page-bitpay-card-topup {
       color: color($colors, grey);
     }
   }
-  .wallets-list {
-    .wallet {
-      display: flex;
-      align-items: center;
-      margin-top: 1rem;
-      .icon-wallet {
-        background-color: color($colors, primary);
-        margin-right: 1rem;
-      }
-    }
-  }
 
   .last-item {
     margin-left: auto !important;
@@ -48,6 +37,20 @@ page-bitpay-card-topup {
     ion-icon {
       margin-left: 1rem;
       cursor: pointer;
+    }
+  }
+
+  @mixin row-flex {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  .container-from {
+    .wallet {
+      @include row-flex;
+    }
+    &.not-clickable {
+      pointer-events: none;
     }
   }
 }

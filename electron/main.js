@@ -129,6 +129,7 @@ app.setAsDefaultProtocolClient('bitcoin');
 app.setAsDefaultProtocolClient('bitcoincash');
 app.setAsDefaultProtocolClient('bchtest');
 app.setAsDefaultProtocolClient('bitcoindiamond');
+app.setAsDefaultProtocolClient('ethereum');
 app.setAsDefaultProtocolClient(appConfig.name);
 app.setVersion(appConfig.version);
 app.setName(appConfig.nameCase);

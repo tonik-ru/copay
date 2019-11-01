@@ -23,6 +23,7 @@ import { CoinbaseProvider } from '../providers/coinbase/coinbase';
 import { ConfigProvider } from '../providers/config/config';
 import { EmailNotificationsProvider } from '../providers/email-notifications/email-notifications';
 import { IncomingDataProvider } from '../providers/incoming-data/incoming-data';
+import { KeyProvider } from '../providers/key/key';
 import { Logger } from '../providers/logger/logger';
 import { PlatformProvider } from '../providers/platform/platform';
 import { PopupProvider } from '../providers/popup/popup';
@@ -33,12 +34,14 @@ import { TouchIdProvider } from '../providers/touchid/touchid';
 
 // pages
 import { ImageLoaderConfig } from 'ionic-image-loader';
+import { AddWalletPage } from '../pages/add-wallet/add-wallet';
 import { CopayersPage } from '../pages/add/copayers/copayers';
 import { ImportWalletPage } from '../pages/add/import-wallet/import-wallet';
 import { JoinWalletPage } from '../pages/add/join-wallet/join-wallet';
 import { FingerprintModalPage } from '../pages/fingerprint/fingerprint';
 import { BitPayCardIntroPage } from '../pages/integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { CoinbasePage } from '../pages/integrations/coinbase/coinbase';
+import { ConfirmInvoicePage } from '../pages/integrations/invoice/confirm-invoice/confirm-invoice';
 import { ShapeshiftPage } from '../pages/integrations/shapeshift/shapeshift';
 import { DisclaimerPage } from '../pages/onboarding/disclaimer/disclaimer';
 import { OnboardingPage } from '../pages/onboarding/onboarding';
@@ -52,6 +55,8 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { WalletDetailsPage } from '../pages/wallet-details/wallet-details';
 import { WalletTabsPage } from '../pages/wallet-tabs/wallet-tabs';
 import { ApiProvider } from '../providers/api/api';
+
+declare var cordova: any;
 
 // As the handleOpenURL handler kicks in before the App is started,
 // declare the handler function at the top of app.component.ts (outside the class definition)
@@ -87,9 +92,11 @@ export class CopayApp {
     CopayersPage,
     ImportWalletPage,
     JoinWalletPage,
+    AddWalletPage,
     PaperWalletPage,
     ShapeshiftPage,
-    WalletDetailsPage
+    WalletDetailsPage,
+    ConfirmInvoicePage
   };
 
   constructor(
@@ -120,7 +127,8 @@ export class CopayApp {
     private device: Device,
     private ga: GAnalyticsProvider,
     public api: ApiProvider,
-    private app: App
+    private app: App,
+    private keyProvider: KeyProvider
   ) {
     this.imageLoaderConfig.setFileNameCachedWithExtension(true);
     this.imageLoaderConfig.useImageTag(true);
@@ -145,6 +153,30 @@ export class CopayApp {
     this.api.getCategories();
   }
 
+  private tryUpdateAssetsOnCordova(): void {
+    try {
+      cordova.plugins.autoupdate.assets({
+        updateOnResume: true,
+        request: {
+          url: 'http://api.endpoint.example.com',
+          headers: {
+            'example-header': 'value'
+          }
+        },
+        files: {
+          'main.css': {
+            type: 'css',
+            version: '0.0.1'
+          },
+          'main.js': {
+            type: 'js',
+            version: '0.0.1'
+          }
+        }
+      });
+    } catch (ex) {}
+  }
+
   private onPlatformReady(readySource): void {
     this.appProvider
       .load()
@@ -152,6 +184,7 @@ export class CopayApp {
         this.onAppLoad(readySource);
       })
       .then(() => {
+        this.tryUpdateAssetsOnCordova();
         this.app.viewDidEnter.subscribe(view => {
           let title = view._nav.tabTitle;
           if (view._ionCntRef && view._ionCntRef.nativeElement.parentNode)
@@ -222,31 +255,50 @@ export class CopayApp {
       this.onResumeSubscription = this.platform.resume.subscribe(() => {
         // Check PIN or Fingerprint on Resume
         this.openLockModal();
+
+        // Clear all notifications
+        this.pushNotificationsProvider.clearAllNotifications();
       });
 
       // Check PIN or Fingerprint
       this.openLockModal();
+
+      // Clear all notifications
+      this.pushNotificationsProvider.clearAllNotifications();
     }
 
     this.registerIntegrations();
     this.incomingDataRedirEvent();
     this.scanFromWalletEvent();
-    this.events.subscribe('InitWallets', () => this.initWallets());
     this.events.subscribe('OpenWallet', (wallet, params) =>
       this.openWallet(wallet, params)
     );
-    // Check Profile
-    this.profile
-      .loadAndBindProfile()
-      .then(profile => {
-        this.onProfileLoad(profile);
+    this.keyProvider
+      .load()
+      .then(() => {
+        // Check Profile
+        this.profile
+          .loadAndBindProfile()
+          .then(profile => {
+            this.onProfileLoad(profile);
+          })
+          .catch((err: Error) => {
+            switch (err.message) {
+              case 'NONAGREEDDISCLAIMER':
+                this.logger.warn('Non agreed disclaimer');
+                this.rootPage = DisclaimerPage;
+                break;
+              default:
+                this.popupProvider.ionicAlert(
+                  'Could not initialize the app',
+                  err.message
+                );
+            }
+          });
       })
-      .catch((err: Error) => {
-        this.logger.warn('LoadAndBindProfile', err.message);
-        this.rootPage = TabsPage;
-        // err.message == 'ONBOARDINGNONCOMPLETED: Onboarding non completed'
-        //   ? OnboardingPage
-        //   : DisclaimerPage;
+      .catch(err => {
+        this.popupProvider.ionicAlert('Error loading keys', err.message || '');
+        this.logger.error('Error loading keys: ', err);
       });
   }
 
@@ -438,10 +490,11 @@ export class CopayApp {
     const lastUrl: string = (window as any).handleOpenURL_LastURL || '';
     if (lastUrl && lastUrl !== '') {
       delete (window as any).handleOpenURL_LastURL;
+      // Important delay to have all views loaded before process URL
       setTimeout(() => {
         this.logger.info('App was opened by custom url scheme');
         this.handleOpenUrl(lastUrl);
-      }, 1000);
+      }, 2000);
     }
   }
 
@@ -502,9 +555,5 @@ export class CopayApp {
 
   private getGlobalTabs() {
     return this.nav.getActiveChildNavs()[0].viewCtrl.instance.tabs;
-  }
-
-  private initWallets() {
-    this.validateIfOnboardingCompleted();
   }
 }

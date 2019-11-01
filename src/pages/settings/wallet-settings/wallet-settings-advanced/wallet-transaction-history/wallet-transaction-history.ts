@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Events, NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
 import * as papa from 'papaparse';
 
@@ -23,13 +23,13 @@ export class WalletTransactionHistoryPage {
   public isCordova: boolean;
   public err;
   public config;
+  public coinOpts;
   public csvContent;
   public csvFilename;
   public csvHeader: string[];
   public unitToSatoshi: number;
   public unitDecimals: number;
   public satToUnit: number;
-  public satToBtc: number;
 
   private currency: string;
 
@@ -42,7 +42,8 @@ export class WalletTransactionHistoryPage {
     private platformProvider: PlatformProvider,
     private appProvider: AppProvider,
     private translate: TranslateService,
-    private walletProvider: WalletProvider
+    private walletProvider: WalletProvider,
+    private events: Events
   ) {
     this.csvReady = false;
     this.csvContent = [];
@@ -58,10 +59,10 @@ export class WalletTransactionHistoryPage {
     this.isCordova = this.platformProvider.isCordova;
     this.appName = this.appProvider.info.nameCase;
     this.config = this.configProvider.get();
-    this.unitToSatoshi = this.config.wallet.settings.unitToSatoshi;
-    this.unitDecimals = this.config.wallet.settings.unitDecimals;
+    this.coinOpts = this.configProvider.getCoinOpts()[this.wallet.coin];
+    this.unitToSatoshi = this.coinOpts.unitToSatoshi;
+    this.unitDecimals = this.coinOpts.unitDecimals;
     this.satToUnit = 1 / this.unitToSatoshi;
-    this.satToBtc = 1 / 100000000;
     this.csvHistory();
   }
 
@@ -81,7 +82,7 @@ export class WalletTransactionHistoryPage {
   public csvHistory() {
     this.logger.info('Generating CSV from History');
     this.walletProvider
-      .getTxHistory(this.wallet, null, {})
+      .fetchTxHistory(this.wallet, null, {})
       .then(txs => {
         if (_.isEmpty(txs)) {
           this.logger.warn('Failed to generate CSV: no transactions');
@@ -127,12 +128,12 @@ export class WalletTransactionHistoryPage {
           }
           _amount =
             (it.action == 'sent' ? '-' : '') +
-            (amount * this.satToBtc).toFixed(8);
+            (amount * this.satToUnit).toFixed(8);
           _note = it.message || '';
           _comment = it.note ? it.note.body : '';
 
           if (it.action == 'moved')
-            _note += ' Moved:' + (it.amount * this.satToBtc).toFixed(8);
+            _note += ' Moved:' + (it.amount * this.satToUnit).toFixed(8);
 
           this.csvContent.push({
             Date: this.formatDate(it.time * 1000),
@@ -147,7 +148,7 @@ export class WalletTransactionHistoryPage {
           });
 
           if (it.fees && (it.action == 'moved' || it.action == 'sent')) {
-            const _fee = (it.fees * this.satToBtc).toFixed(8);
+            const _fee = (it.fees * this.satToUnit).toFixed(8);
             this.csvContent.push({
               Date: this.formatDate(it.time * 1000),
               Destination: 'Bitcoin Network Fees',
@@ -192,10 +193,14 @@ export class WalletTransactionHistoryPage {
     document.body.removeChild(a);
   }
 
-  public async clearTransactionHistory(): Promise<void> {
+  public clearTransactionHistory() {
     this.logger.info('Removing Transaction history ' + this.wallet.id);
     this.walletProvider.clearTxHistory(this.wallet);
     this.logger.info('Transaction history cleared for :' + this.wallet.id);
-    return this.navCtrl.popToRoot();
+    this.navCtrl.popToRoot().then(() => {
+      setTimeout(() => {
+        this.events.publish('OpenWallet', this.wallet);
+      }, 1000);
+    });
   }
 }

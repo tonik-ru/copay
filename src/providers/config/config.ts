@@ -4,6 +4,13 @@ import { PersistenceProvider } from '../persistence/persistence';
 
 import * as _ from 'lodash';
 
+export interface CoinOpts {
+  btc: Partial<Config['wallet']['settings']>;
+  bch: Partial<Config['wallet']['settings']>;
+  eth: Partial<Config['wallet']['settings']>;
+  bcd: Partial<Config['wallet']['settings']>;
+}
+
 export interface Config {
   limits: {
     totalCopayers: number;
@@ -11,7 +18,6 @@ export interface Config {
   };
 
   wallet: {
-    useLegacyAddress: boolean;
     requiredCopayers: number;
     totalCopayers: number;
     spendUnconfirmed: boolean;
@@ -97,6 +103,7 @@ export interface Config {
     btc: string;
     bch: string;
     bcd: string;
+    eth: string;
   };
 
   trader: {
@@ -109,12 +116,40 @@ export interface Config {
 export class ConfigProvider {
   public configCache: Config;
   public readonly configDefault: Config;
+  public coinOpts: CoinOpts;
 
   constructor(
     private logger: Logger,
     private persistence: PersistenceProvider
   ) {
     this.logger.debug('ConfigProvider initialized');
+    this.coinOpts = {
+      btc: {
+        unitName: 'BTC',
+        unitToSatoshi: 100000000,
+        unitDecimals: 8,
+        unitCode: 'btc'
+      },
+      bch: {
+        unitName: 'BCH',
+        unitToSatoshi: 100000000,
+        unitDecimals: 8,
+        unitCode: 'bch'
+      },
+      // BCD HACK
+      bcd: {
+        unitName: 'BCD',
+        unitToSatoshi: 10000000,
+        unitDecimals: 8,
+        unitCode: 'bcd'
+      },
+      eth: {
+        unitName: 'ETH',
+        unitToSatoshi: 1e18,
+        unitDecimals: 18,
+        unitCode: 'eth'
+      }
+    };
     this.configDefault = {
       // wallet limits
       limits: {
@@ -124,7 +159,6 @@ export class ConfigProvider {
 
       // wallet default config
       wallet: {
-        useLegacyAddress: false,
         requiredCopayers: 2,
         totalCopayers: 3,
         spendUnconfirmed: false,
@@ -207,7 +241,8 @@ export class ConfigProvider {
       blockExplorerUrl: {
         btc: 'insight.bitcore.io/#/BTC/',
         bch: 'insight.bitcore.io/#/BCH/',
-        bcd: 'explorer.btcd.io/#/'
+        bcd: 'explorer.btcd.io/#/',
+        eth: 'insight.bitcore.io/#/ETH/'
       },
 
       trader: {
@@ -250,14 +285,11 @@ export class ConfigProvider {
 
   private logImportantConfig(config: Config): void {
     const spendUnconfirmed = config.wallet.spendUnconfirmed;
-    const useLegacyAddress = config.wallet.useLegacyAddress;
     const lockMethod = config && config.lock ? config.lock.method : null;
 
     this.logger.debug(
       'Config | spendUnconfirmed: ' +
         spendUnconfirmed +
-        ' - useLegacyAddress: ' +
-        useLegacyAddress +
         ' - lockMethod: ' +
         lockMethod
     );
@@ -277,6 +309,10 @@ export class ConfigProvider {
     this.persistence.storeConfig(this.configCache).then(() => {
       this.logger.info('Config saved');
     });
+  }
+
+  public getCoinOpts(): CoinOpts {
+    return this.coinOpts;
   }
 
   public get(): Config {

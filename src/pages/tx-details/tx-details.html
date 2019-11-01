@@ -1,4 +1,4 @@
-<ion-header class="wallet-details-header">
+<ion-header>
   <ion-navbar>
     <ion-title>{{title | translate}}</ion-title>
   </ion-navbar>
@@ -33,7 +33,10 @@
               <img class="sending-img" src="assets/img/tx-action/icon-confirming.svg">
             </span>
           </div>
-          <div class="alternative">{{btx.alternativeAmountStr}}</div>
+          <div class="alternative">
+            <span *ngIf="!btx.fiatRateStr">...</span>
+            <span *ngIf="btx.fiatRateStr">{{btx.fiatRateStr}}</span>
+          </div>
         </div>
       </div>
     </ion-item>
@@ -48,7 +51,7 @@
     </label-tip>
 
     <ion-item class="container-tx-info" [ngClass]="{'with-label': btx.action == 'received' && btx.lowFees}" *ngIf="btx && btx.feeStr && btx.action != 'received'">
-      <span>{{'Bitcoin miner fee:' | translate}}</span>
+      <span>{{'Miner fee:' | translate}}</span>
       <div class="tx-info">
         <span class="ellipsis comment">
           <div>{{btx.feeStr}}</div>
@@ -70,16 +73,6 @@
     </label-tip>
 
     <page-multiple-outputs *ngIf="btx.action === 'sent'" [tx]="btx"></page-multiple-outputs>
-
-    <ion-item class="container-from">
-      <span *ngIf="btx.action === 'sent'" translate>From</span>
-      <span *ngIf="btx.action !== 'sent'" translate>To</span>
-      <div class="wallet" *ngIf="wallet">
-        <img *ngIf="wallet.network == 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet-testnet.svg" class="icon-wallet" />
-        <img *ngIf="wallet.network != 'testnet'" [ngStyle]="{'background-color': wallet.color}" src="assets/img/icon-wallet.svg" class="icon-wallet" />
-        <div>{{wallet.name}}</div>
-      </div>
-    </ion-item>
 
     <ion-item class="container-tx-info" *ngIf="btx.action != 'received' && isShared">
       <span>{{'Created by' | translate}}</span>
@@ -124,9 +117,10 @@
       </a>
     </div>
 
-    <editable-item (valChange)="saveMemoInfo($event)" [value]="txMemo" [itemPlaceholder]="'Enter a transaction memo' | translate">
-      <span item-label translate>Memo</span>
-    </editable-item>
+    <ion-item>
+      <ion-label stacked>{{'Memo' | translate}}</ion-label>
+      <ion-textarea placeholder="{{'Enter a transaction memo' | translate}}" (blur)="saveMemoInfo()" [(ngModel)]="txMemo" name="tx.description" autocomplete="off" autocorrect="off"></ion-textarea>
+    </ion-item>
 
     <ion-item class="container-tx-info">
       <span translate>Transaction ID</span>
@@ -143,7 +137,9 @@
     </ion-item>
 
     <div *ngIf="actionList && actionList[0]">
-      <ion-item-divider>{{'Timeline' | translate}}</ion-item-divider>
+      <ion-item detail-none>
+        <div>{{'Timeline' | translate}}</div>
+      </ion-item>
       <div class="timeline-item" [ngClass]="{'action-created' : a.type == 'created' || a.type == 'accept', 'action-rejected' : a.type == 'reject'}" *ngFor="let a of actionList; let i = index">
         <div class="timeline-content">
           <div class="timeline-content-icon">

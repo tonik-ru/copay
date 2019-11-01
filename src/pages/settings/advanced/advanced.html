@@ -30,4 +30,9 @@
       </label-tip>
     -->
   </ion-list>
+  <ion-list class="settings-list bp-list">
+      <button ion-item *ngIf="oldProfileAvailable && wallets && wallets[0]" class="with-label no-border" (click)="openWalletRecoveryPage()" translate>
+        Recover old wallets
+      </button>
+    </ion-list>
 </ion-content>

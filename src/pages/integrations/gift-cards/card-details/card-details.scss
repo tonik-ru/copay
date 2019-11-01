@@ -15,7 +15,6 @@ card-details-page {
   }
 
   .balance {
-    color: $background-color;
     font-size: 25px;
     font-weight: 500;
     margin: 30px 0;
@@ -24,15 +23,30 @@ card-details-page {
 
   .card-image {
     img {
+      background: white;
       position: relative;
       z-index: 1;
       max-width: 82%;
       height: auto;
       width: 265px;
+      min-height: 130px;
+      min-width: 210px;
     }
 
     + .actions-wrapper {
       margin-top: 55px;
+    }
+  }
+
+  @media print {
+    .actions-wrapper {
+      display: none;
+    }
+
+    .card-info {
+      img.card-info__body.barcode-image {
+        filter: invert(0) !important;
+      }
     }
   }
 

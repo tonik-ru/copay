@@ -5,6 +5,7 @@ import { TestUtils } from '../../test';
 import { ActionSheetProvider } from '../action-sheet/action-sheet';
 import { BwcProvider } from '../bwc/bwc';
 import { Logger } from '../logger/logger';
+import { ProfileProvider } from '../profile/profile';
 import { IncomingDataProvider } from './incoming-data';
 
 describe('Provider: Incoming Data Provider', () => {
@@ -15,6 +16,7 @@ describe('Provider: Incoming Data Provider', () => {
   let loggerSpy;
   let eventsSpy;
   let actionSheetSpy;
+  let profileProvider;
 
   class AppProviderMock {
     public info = {};
@@ -51,6 +53,14 @@ describe('Provider: Incoming Data Provider', () => {
       present() {},
       onDidDismiss() {}
     });
+    profileProvider = testBed.get(ProfileProvider);
+    spyOn(profileProvider, 'getWallets').and.returnValue([
+      {
+        credentials: {
+          keyId: 'keyId1'
+        }
+      }
+    ]);
   });
 
   describe('Function: SCANNER Redir', () => {
@@ -95,7 +105,7 @@ describe('Provider: Incoming Data Provider', () => {
     it('Should handle Join Wallet', () => {
       let data =
         'copay:RTpopkn5KBnkxuT7x4ummDKx3Lu1LvbntddBC4ssDgaqP7DkojT8ccxaFQEXY4f3huFyMewhHZLbtc';
-      let stateParams = { url: data, fromScan: true };
+      let stateParams = { keyId: 'keyId1', url: data };
       let nextView = {
         name: 'JoinWalletPage',
         params: stateParams
@@ -112,7 +122,7 @@ describe('Provider: Incoming Data Provider', () => {
     it('Should handle Old Join Wallet', () => {
       let data =
         'RTpopkn5KBnkxuT7x4ummDKx3Lu1LvbntddBC4ssDgaqP7DkojT8ccxaFQEXY4f3huFyMewhHZLbtc';
-      let stateParams = { url: data, fromScan: true };
+      let stateParams = { keyId: 'keyId1', url: data };
       let nextView = {
         name: 'JoinWalletPage',
         params: stateParams
@@ -133,7 +143,7 @@ describe('Provider: Incoming Data Provider', () => {
         '3|'
       ];
       data.forEach(element => {
-        let stateParams = { code: element, fromScan: true };
+        let stateParams = { code: element };
         let nextView = {
           name: 'ImportWalletPage',
           params: stateParams
@@ -158,6 +168,15 @@ describe('Provider: Incoming Data Provider', () => {
         ).toBe(true);
         expect(loggerSpy).toHaveBeenCalledWith(
           'Incoming-data: Payment Protocol with non-backwards-compatible request'
+        );
+      });
+    });
+    it('Should parse valid BitPay Invoice Url', () => {
+      let data = ['https://bitpay.com/i/5GREtmntcTvB9aejVDhVdm'];
+      data.forEach(element => {
+        expect(incomingDataProvider.redir(element)).toBe(true);
+        expect(loggerSpy).toHaveBeenCalledWith(
+          'Incoming-data: Handling bitpay invoice'
         );
       });
     });
@@ -222,6 +241,7 @@ describe('Provider: Incoming Data Provider', () => {
       data.forEach(element => {
         let parsed = bwcProvider.getBitcoreCash().URI(element);
         let addr = parsed.address ? parsed.address.toString() : '';
+
         // keep address in original format
         if (parsed.address && element.indexOf(addr) < 0) {
           addr = parsed.address.toCashAddress();
@@ -233,7 +253,8 @@ describe('Provider: Incoming Data Provider', () => {
           amount,
           toAddress: addr,
           description: null,
-          coin: 'bch'
+          coin: 'bch',
+          requiredFeeRate: undefined
         };
         let nextView = {
           name: 'ConfirmPage',
@@ -269,7 +290,8 @@ describe('Provider: Incoming Data Provider', () => {
             amount,
             toAddress: addr,
             description: message,
-            coin: 'btc'
+            coin: 'btc',
+            requiredFeeRate: undefined
           };
           let nextView = {
             name: 'ConfirmPage',

@@ -3,89 +3,63 @@ import { Injectable } from '@angular/core';
 // Providers
 import { BwcProvider } from '../../providers/bwc/bwc';
 
+export interface CoinNetwork {
+  coin: string;
+  network: string;
+}
 @Injectable()
 export class AddressProvider {
   private bitcore;
   private bitcoreCash;
-  private Bitcore;
   private bitcoreDiamond;
+  private core;
 
   constructor(private bwcProvider: BwcProvider) {
     this.bitcore = this.bwcProvider.getBitcore();
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
-    this.bitcoreDiamond = this.bwcProvider.getBitcoreDiamond();
-    this.Bitcore = {
-      btc: {
-        lib: this.bitcore,
-        translateTo: 'bch'
-      },
-      bch: {
-        lib: this.bitcoreCash,
-        translateTo: 'btc'
-      }
-    };
-  }
-
-  public getCoin(str: string): string {
-    const address = this.extractAddress(str);
-    try {
-      new this.Bitcore['btc'].lib.Address(address);
-      return 'btc';
-    } catch (e) {
-      try {
-        new this.Bitcore['bch'].lib.Address(address);
-        return 'bch';
-      } catch (e) {
-        return null;
-      }
-    }
-  }
-
-  public getNetwork(str: string): string {
-    const address = this.extractAddress(str);
-    let network;
-    try {
-      network = this.bwcProvider.getBitcore().Address(address).network.name;
-    } catch (e) {
-      try {
-        network = this.bwcProvider.getBitcoreCash().Address(address).network
-          .name;
-      } catch (e) {}
-    }
-    return network;
-  }
-
-  public checkCoinAndNetworkFromAddr(
-    coin: string,
-    network: string,
-    str: string
-  ): boolean {
-    if (this.isValid(str)) {
-      const address = this.extractAddress(str);
-      return (this.getCoin(address) == coin  || (this.getCoin(address) == 'btc' && coin == 'bcd')) &&
-        this.getNetwork(address) == network
-        ? true
-        : false;
-    } else {
-      return false;
-    }
-  }
-
-  public checkCoinAndNetworkFromPayPro(
-    coin: string,
-    network: string,
-    payProDetails
-  ): boolean {
-    return payProDetails.coin == coin && payProDetails.network == network
-      ? true
-      : false;
+    this.bitcoreDiamond = this.bwcProvider.getBitcoreDiamond()
+    this.core = this.bwcProvider.getCore();
   }
 
   public extractAddress(str: string): string {
-    const extractedAddress = str
-      .replace(/^(bitcoincash:|bchtest:|bitcoin:|bitcoindiamond:)/i, '')
-      .replace(/\?.*/, '');
+    const extractedAddress = str.replace(/^[a-z]+:/i, '').replace(/\?.*/, '');
     return extractedAddress;
+  }
+
+  public getCoinAndNetwork(
+    str: string,
+    network: string = 'livenet'
+  ): CoinNetwork {
+    const address = this.extractAddress(str);
+    try {
+      network = this.bitcoreDiamond.Address(address).network.name;
+      return { coin: 'bcd', network };
+    } catch (e) {
+      try {
+        network = this.bitcore.Address(address).network.name;
+        return { coin: 'btc', network };
+      } catch (e) {
+        try {
+          network = this.bitcoreCash.Address(address).network.name;
+          return { coin: 'bch', network };
+        } catch (e) {
+          try {
+            const isValidEthAddress = this.core.Validation.validateAddress(
+              'ETH',
+              network,
+              address
+            );
+            if (isValidEthAddress) {
+              return { coin: 'eth', network };
+            } else {
+              return null;
+            }
+          } catch (e) {
+            return null;
+          }
+        }
+      }
+    }
   }
 
   public isValid(str: string): boolean {
@@ -94,39 +68,22 @@ export class AddressProvider {
     const Address = this.bitcore.Address;
     const URICash = this.bitcoreCash.URI;
     const AddressCash = this.bitcoreCash.Address;
-    const URIDiamond = this.bitcoreDiamond.URI;
+    const AddressDiamond = this.bitcoreDiamond.Address;
+    const AddressEth = this.core.Validation;
 
     // Bip21 uri
-    let uri, uriAddress;
-    if (/^bitcoin:/.test(str)) {
-      if (URI.isValid(str)) {
-        uri = new URI(str);
-        uriAddress = uri.address.toString();
-        if (Address.isValid(uriAddress, 'livenet')) return true;
-        if (Address.isValid(uriAddress, 'testnet')) return true;
-      }
-    }
-    else if (/^bitcoindiamond:/.test(str)) {
-      if (this.bitcoreDiamond.URI.isValid(str)) {
-        uri = new URIDiamond(str);
-        uriAddress = uri.address.toString();
-        if (this.bitcoreDiamond.Address.isValid(uriAddress, 'livenet')) return true;
-        if (this.bitcoreDiamond.Address.isValid(uriAddress, 'testnet')) return true;
-      }
-    } else if (/^bitcoincash:/i.test(str) || /^bchtest:/i.test(str)) {
-      if (URICash.isValid(str)) {
-        uri = new URICash(str);
-        uriAddress = uri.address.toString();
-        if (AddressCash.isValid(uriAddress, 'livenet')) return true;
-        if (AddressCash.isValid(uriAddress, 'testnet')) return true;
-      }
-    }
+    if (URI.isValid(str)) return true;
+    if (URICash.isValid(str)) return true;
+    if (AddressEth.validateUri('ETH', str)) return true;
 
     // Regular Address: try Bitcoin and Bitcoin Cash
+    if (AddressDiamond.isValid(str, 'livenet')) return true;
+    if (AddressDiamond.isValid(str, 'testnet')) return true;
     if (Address.isValid(str, 'livenet')) return true;
     if (Address.isValid(str, 'testnet')) return true;
     if (AddressCash.isValid(str, 'livenet')) return true;
     if (AddressCash.isValid(str, 'testnet')) return true;
+    if (AddressEth.validateAddress('ETH', 'livenet', str)) return true;
 
     return false;
   }

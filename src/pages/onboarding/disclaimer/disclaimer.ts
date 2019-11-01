@@ -82,6 +82,8 @@ export class DisclaimerPage {
   confirm() {
     this.persistenceProvider.setEmailLawCompliance('accepted');
     this.persistenceProvider.setDisclaimerAccepted();
+    this.persistenceProvider.setSurveyFlag();
+    this.persistenceProvider.setEthLiveCardFlag();
     this.navCtrl
       .setRoot(TabsPage)
       .then(() =>

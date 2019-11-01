@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Events, NavController, NavParams } from 'ionic-angular';
 import * as _ from 'lodash';
@@ -8,9 +9,12 @@ import { Logger } from '../../providers/logger/logger';
 import { AddressBookProvider } from '../../providers/address-book/address-book';
 import { ConfigProvider } from '../../providers/config/config';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
+import { FilterProvider } from '../../providers/filter/filter';
 import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
+import { PlatformProvider } from '../../providers/platform/platform';
 import { PopupProvider } from '../../providers/popup/popup';
 import { ProfileProvider } from '../../providers/profile/profile';
+import { RateProvider } from '../../providers/rate/rate';
 import { TxConfirmNotificationProvider } from '../../providers/tx-confirm-notification/tx-confirm-notification';
 import { TxFormatProvider } from '../../providers/tx-format/tx-format';
 import { WalletProvider } from '../../providers/wallet/wallet';
@@ -50,8 +54,24 @@ export class TxDetailsPage {
     private txConfirmNotificationProvider: TxConfirmNotificationProvider,
     private txFormatProvider: TxFormatProvider,
     private walletProvider: WalletProvider,
-    private translate: TranslateService
-  ) { }
+    private translate: TranslateService,
+    private filter: FilterProvider,
+    private rateProvider: RateProvider,
+    private platformProvider: PlatformProvider,
+    private statusBar: StatusBar
+  ) {}
+
+  ionViewWillEnter() {
+    if (this.platformProvider.isCordova) {
+      this.statusBar.styleDefault();
+    }
+  }
+
+  ionViewWillLeave() {
+    if (this.platformProvider.isCordova) {
+      this.statusBar.styleBlackOpaque();
+    }
+  }
 
   ionViewDidLoad() {
     this.config = this.configProvider.get();
@@ -67,13 +87,7 @@ export class TxDetailsPage {
       : true;
 
     let defaults = this.configProvider.getDefaults();
-    this.blockexplorerUrl =
-
-      this.wallet.coin === 'bcd'
-        ? defaults.blockExplorerUrl.bcd :
-        this.wallet.coin === 'bch'
-          ? defaults.blockExplorerUrl.bch
-          : defaults.blockExplorerUrl.btc;
+    this.blockexplorerUrl = defaults.blockExplorerUrl[this.wallet.coin];
 
     this.txConfirmNotificationProvider.checkIfEnabled(this.txId).then(res => {
       this.txNotification = {
@@ -84,17 +98,29 @@ export class TxDetailsPage {
     this.updateTx();
   }
 
-  ionViewWillEnter() {
+  ionViewWillLoad() {
     this.events.subscribe('bwsEvent', this.bwsEventHandler);
   }
 
-  ionViewWillLeave() {
+  ionViewWillUnload() {
     this.events.unsubscribe('bwsEvent', this.bwsEventHandler);
   }
 
   private bwsEventHandler: any = (_, type: string, n) => {
-    if (type == 'NewBlock' && n && n.data && n.data.network == 'livenet')
+    let match = false;
+    if (
+      type == 'NewBlock' &&
+      n &&
+      n.data &&
+      this.wallet &&
+      n.data &&
+      n.data.network == this.wallet.network &&
+      n.data.coin == this.wallet.coin
+    ) {
+      match = true;
       this.updateTxDebounced({ hideLoading: true });
+    }
+    this.logger.debug('bwsEvent handler @tx-details. Matched: ' + match);
   };
 
   public readMore(): void {
@@ -180,11 +206,7 @@ export class TxDetailsPage {
       .then(tx => {
         if (!opts.hideLoading) this.onGoingProcess.clear();
 
-        this.btx = this.txFormatProvider.processTx(
-          this.wallet.coin,
-          tx,
-          this.walletProvider.useLegacyAddress()
-        );
+        this.btx = this.txFormatProvider.processTx(this.wallet.coin, tx);
         this.btx.feeFiatStr = this.txFormatProvider.formatAlternativeStr(
           this.wallet.coin,
           tx.fees
@@ -214,6 +236,8 @@ export class TxDetailsPage {
         this.initActionList();
         this.contact();
 
+        this.updateFiatRate();
+
         this.walletProvider
           .getLowAmount(this.wallet)
           .then((amount: number) => {
@@ -235,14 +259,14 @@ export class TxDetailsPage {
       });
   }
 
-  public async saveMemoInfo(memo: string): Promise<void> {
-    this.logger.info('Saving memo');
+  public async saveMemoInfo(): Promise<void> {
+    this.logger.info('Saving memo: ', this.txMemo);
     this.btx.note = {
-      body: memo
+      body: this.txMemo
     };
     let args = {
       txid: this.btx.txid,
-      body: memo
+      body: this.txMemo
     };
 
     await this.walletProvider
@@ -332,5 +356,31 @@ export class TxDetailsPage {
       okText,
       cancelText
     );
+  }
+
+  private updateFiatRate() {
+    const settings = this.configProvider.get().wallet.settings;
+    this.rateProvider
+      .getHistoricFiatRate(
+        settings.alternativeIsoCode,
+        this.wallet.coin,
+        (this.btx.time * 1000).toString()
+      )
+      .then(fiat => {
+        if (fiat && fiat.rate) {
+          this.btx.fiatRateStr =
+            this.filter.formatFiatAmount(
+              parseFloat((fiat.rate * this.btx.amountValueStr).toFixed(2))
+            ) +
+            ' ' +
+            settings.alternativeIsoCode +
+            ' @ ' +
+            this.filter.formatFiatAmount(fiat.rate) +
+            ' USD per ' +
+            this.wallet.coin.toUpperCase();
+        } else {
+          this.btx.fiatRateStr = this.btx.alternativeAmountStr;
+        }
+      });
   }
 }

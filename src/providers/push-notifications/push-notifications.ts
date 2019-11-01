@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FCM } from '@ionic-native/fcm';
+import { FCMNG } from 'fcm-ng';
 import { Events } from 'ionic-angular';
 import { Observable } from 'rxjs';
 import { Logger } from '../../providers/logger/logger';
@@ -29,7 +29,7 @@ export class PushNotificationsProvider {
     public logger: Logger,
     public appProvider: AppProvider,
     private bwcProvider: BwcProvider,
-    private FCMPlugin: FCM,
+    private FCMPlugin: FCMNG,
     private events: Events
   ) {
     this.logger.debug('PushNotificationsProvider initialized');
@@ -63,13 +63,6 @@ export class PushNotificationsProvider {
 
   public handlePushNotifications(): void {
     if (this.usePushNotifications) {
-      this.FCMPlugin.onTokenRefresh().subscribe(token => {
-        if (!this._token) return;
-        this.logger.debug('Refresh and update token for push notifications...');
-        this._token = token;
-        this.enable();
-      });
-
       this.FCMPlugin.onNotification().subscribe(async data => {
         if (!this._token) return;
         this.logger.debug(
@@ -112,7 +105,10 @@ export class PushNotificationsProvider {
       return;
     }
 
-    const wallets = this.profileProvider.getWallets();
+    const opts = {
+      showHidden: true
+    };
+    const wallets = this.profileProvider.getWallets(opts);
     _.forEach(wallets, walletClient => {
       this._subscribe(walletClient);
     });
@@ -126,7 +122,10 @@ export class PushNotificationsProvider {
       return;
     }
 
-    const wallets = this.profileProvider.getWallets();
+    const opts = {
+      showHidden: true
+    };
+    const wallets = this.profileProvider.getWallets(opts);
     _.forEach(wallets, walletClient => {
       this._unsubscribe(walletClient);
     });
@@ -192,5 +191,10 @@ export class PushNotificationsProvider {
     });
 
     return wallet;
+  }
+
+  public clearAllNotifications(): void {
+    if (!this._token) return;
+    this.FCMPlugin.clearAllNotifications();
   }
 }

@@ -1,8 +1,15 @@
 import { Component } from '@angular/core';
-import { Logger } from '../../../providers/logger/logger';
+import { NavController } from 'ionic-angular';
+import * as _ from 'lodash';
 
 // providers
-import { ConfigProvider } from '../../../providers/config/config';
+import {
+  AppProvider,
+  ConfigProvider,
+  Logger,
+  ProfileProvider
+} from '../../../providers';
+import { WalletRecoverPage } from './wallet-recover-page/wallet-recover-page';
 
 @Component({
   selector: 'page-advanced',
@@ -10,9 +17,32 @@ import { ConfigProvider } from '../../../providers/config/config';
 })
 export class AdvancedPage {
   public spendUnconfirmed: boolean;
-  public useLegacyAddress: boolean;
+  public isCopay: boolean;
+  public oldProfileAvailable: boolean;
+  public wallets;
 
-  constructor(private configProvider: ConfigProvider, private logger: Logger) {}
+  constructor(
+    private configProvider: ConfigProvider,
+    private profileProvider: ProfileProvider,
+    private navCtrl: NavController,
+    private logger: Logger,
+    private appProvider: AppProvider
+  ) {
+    this.isCopay = this.appProvider.info.name === 'copay';
+    this.profileProvider
+      .getProfileLegacy()
+      .then(oldProfile => {
+        this.oldProfileAvailable = oldProfile ? true : false;
+        if (!this.oldProfileAvailable) return;
+        this.wallets = _.filter(oldProfile.credentials, value => {
+          return value && (value.mnemonic || value.mnemonicEncrypted);
+        });
+      })
+      .catch(err => {
+        this.oldProfileAvailable = false;
+        this.logger.info('Error retrieving old profile, ', err);
+      });
+  }
 
   ionViewDidLoad() {
     this.logger.info('Loaded: AdvancedPage');
@@ -22,7 +52,6 @@ export class AdvancedPage {
     let config = this.configProvider.get();
 
     this.spendUnconfirmed = config.wallet.spendUnconfirmed;
-    this.useLegacyAddress = config.wallet.useLegacyAddress;
   }
 
   public spendUnconfirmedChange(): void {
@@ -34,12 +63,7 @@ export class AdvancedPage {
     this.configProvider.set(opts);
   }
 
-  public useLegacyAddressChange(): void {
-    let opts = {
-      wallet: {
-        useLegacyAddress: this.useLegacyAddress
-      }
-    };
-    this.configProvider.set(opts);
+  public openWalletRecoveryPage() {
+    this.navCtrl.push(WalletRecoverPage);
   }
 }

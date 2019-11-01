@@ -17,6 +17,14 @@ info-sheet {
         justify-content: start;
         margin: 10px auto;
 span{display:block; text-align: center}
+
+        .truncate {
+          width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
         .title-icon {
           // padding-right: 15px;
           display: table;
