@@ -410,9 +410,9 @@ export class DatafeedPage {
     var spKey = rdi.Interval.TimeSpan;
     if (rdi.Interval.SpeedometerKey) spKey = rdi.Interval.SpeedometerKey;
     var curVal = speedometers.Speedometers[spKey];
-    if (!curVal) return;
     if (!rdi.Speedometer)
       rdi.Speedometer = { PrevData: { Score: 0 }, FutureScore: 0 };
+    if (!curVal) return;
 
     rdi.Speedometer.Score = curVal.Score;
     rdi.Speedometer.FutureScore = curVal.FutureScore.toFixed();

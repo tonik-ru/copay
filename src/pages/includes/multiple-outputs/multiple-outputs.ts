@@ -32,16 +32,19 @@ export class MultipleOutputsPage {
     this._tx = tx;
     this.tx.outputs.forEach(output => {
       const outputAddr = output.toAddress ? output.toAddress : output.address;
-      this.coin = this._tx.coin
-        ? this._tx.coin
-        : this.addressProvider.getCoinAndNetwork(outputAddr, this._tx.network)
-            .coin;
+      let addressToShow = 'false';
+      if (outputAddr != 'false') {
+        this.coin = this._tx.coin
+          ? this._tx.coin
+          : this.addressProvider.getCoinAndNetwork(outputAddr, this._tx.network)
+              .coin;
 
-      const addressToShow = this.walletProvider.getAddressView(
-        this.coin,
-        this._tx.network,
-        outputAddr
-      );
+        addressToShow = this.walletProvider.getAddressView(
+          this.coin,
+          this._tx.network,
+          outputAddr
+        );
+      }
       output.addressToShow =
         addressToShow == 'false' ? 'Unparsed address' : addressToShow;
     });

@@ -56,8 +56,6 @@ import { WalletDetailsPage } from '../pages/wallet-details/wallet-details';
 import { WalletTabsPage } from '../pages/wallet-tabs/wallet-tabs';
 import { ApiProvider } from '../providers/api/api';
 
-declare var cordova: any;
-
 // As the handleOpenURL handler kicks in before the App is started,
 // declare the handler function at the top of app.component.ts (outside the class definition)
 // to track the passed Url
@@ -155,30 +153,6 @@ export class CopayApp {
     this.api.getCategories();
   }
 
-  private tryUpdateAssetsOnCordova(): void {
-    try {
-      cordova.plugins.autoupdate.assets({
-        updateOnResume: true,
-        request: {
-          url: 'http://api.endpoint.example.com',
-          headers: {
-            'example-header': 'value'
-          }
-        },
-        files: {
-          'main.css': {
-            type: 'css',
-            version: '0.0.1'
-          },
-          'main.js': {
-            type: 'js',
-            version: '0.0.1'
-          }
-        }
-      });
-    } catch (ex) {}
-  }
-
   private onPlatformReady(readySource): void {
     this.appProvider
       .load()
@@ -186,7 +160,6 @@ export class CopayApp {
         this.onAppLoad(readySource);
       })
       .then(() => {
-        this.tryUpdateAssetsOnCordova();
         this.app.viewDidEnter.subscribe(view => {
           let title = view._nav.tabTitle;
           if (view._ionCntRef && view._ionCntRef.nativeElement.parentNode)

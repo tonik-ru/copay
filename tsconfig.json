@@ -15,7 +15,8 @@
     "sourceMap": true,
     "target": "es6",
     "baseUrl": "./",
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": ["node_modules/@types"],
+    "types": []
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/*spec.ts", "**/*.d.ts", "./src/test.ts"],

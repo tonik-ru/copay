@@ -19,7 +19,7 @@ export interface RedirParams {
   amount?: string;
   coin?: Coin;
   fromHomeCard?: boolean;
-  showBalance: boolean;
+  showBalance?: boolean;
 }
 
 @Injectable()
@@ -253,6 +253,9 @@ export class IncomingDataProvider {
     let address = parsed.address ? parsed.address.toString() : '';
     let message = parsed.message;
     let amount = parsed.amount || amountFromRedirParams;
+    // BCD HACK
+    if(_.isNumber(amount))
+      amount = amount / 10;
     if (parsed.r) this.goToPayPro(data, coin);
     else this.goSend(address, amount, message, coin);
   }
