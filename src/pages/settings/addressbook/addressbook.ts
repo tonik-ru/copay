@@ -43,7 +43,8 @@ export class AddressbookPage {
           contacts.push({
             name: _.isObject(contact) ? contact.name : contact,
             address: k,
-            email: _.isObject(contact) ? contact.email : null
+            email: _.isObject(contact) ? contact.email : null,
+            photo: _.isObject(contact) && (contact.photo !== undefined) ? contact.photo : "assets/img/contact-placeholder.svg"
           });
         });
         this.addressbook = _.clone(contacts);

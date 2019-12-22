@@ -12,8 +12,8 @@ export class WalletItemContent {
     const lastKnownBalance = this.getLastKownBalance(wallet, currency);
     const availableBalanceStr =
       wallet.cachedStatus &&
-      wallet.cachedStatus.availableBalanceStr &&
-      wallet.cachedStatus.availableBalanceStr.replace(` ${currency}`, '');
+      wallet.cachedStatus.totalBalanceStr &&
+      wallet.cachedStatus.totalBalanceStr.replace(` ${currency}`, '');
     return availableBalanceStr || lastKnownBalance;
   }
 

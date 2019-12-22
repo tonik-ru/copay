@@ -51,7 +51,7 @@ page-share {
   }
   .share-buttons__action {
     display: inline-block;
-    width: 90px;
+    width: 70px;
     height: 90px;
     img {
       width: 50px;
@@ -59,6 +59,7 @@ page-share {
     .name {
       padding-top: 10px;
       font-size: 0.9rem;
+      color: #000!important;
     }
   }
   .illustration-send {

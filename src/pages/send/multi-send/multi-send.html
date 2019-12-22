@@ -1,4 +1,4 @@
-<ion-header [ngClass]="{'wallet-details-header': wallet}">
+<ion-header  [ngClass]="{ bcdHead: wallet.coin == 'bcd',  btcHead: wallet.coin == 'btc', ethHead: wallet.coin == 'eth'}">
   <ion-navbar class="app-color">
     <ion-title>{{wallet && wallet.name || ('Amount' | translate)}}</ion-title>
     <ion-buttons end>

@@ -16,7 +16,8 @@ import {
   Content,
   Events,
   NavController,
-  Platform
+  Platform,
+  ToastController
 } from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -38,6 +39,7 @@ import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ClipboardProvider } from '../../providers/clipboard/clipboard';
 import { ConfigProvider } from '../../providers/config/config';
+import { DerivationPathHelperProvider } from '../../providers/derivation-path-helper/derivation-path-helper';
 import { EmailNotificationsProvider } from '../../providers/email-notifications/email-notifications';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
@@ -56,6 +58,11 @@ import { TopcoinsPage } from '../trader/topcoins/topcoins';
 import { UserstatsPage } from '../trader/userstats/userstats';
 
 import { ScanPage } from '../scan/scan';
+
+import { WalletExportPage } from '../settings/wallet-settings/wallet-settings-advanced/wallet-export/wallet-export';
+
+import { BackupKeyPage } from '../backup/backup-key/backup-key';
+
 interface UpdateWalletOptsI {
   walletId: string;
   force?: boolean;
@@ -79,18 +86,18 @@ export class HomePage {
   @ViewChild('showCard') showCard;
   @ViewChild('userNameId') userNameId: ElementRef;
   @ViewChild('scan') scanId: ElementRef;
-  @ViewChild('showSurvey')
-  showSurvey;
+  // @ViewChild('showSurvey')
+  // showSurvey;
   @ViewChild('showEthLiveCard')
   showEthLiveCard;
   @ViewChild('priceCard')
   priceCard;
   @ViewChild('balance')
   balanceId: ElementRef;
-  
+
   fabToHide;
   oldScrollTop: number = 0;
-
+  loading: boolean = false;
   public wallets: any[];
   public walletsGroups;
   public readOnlyWalletsGroup;
@@ -128,7 +135,7 @@ export class HomePage {
   constructor(
     private plt: Platform,
     private navCtrl: NavController,
-    private profileProvider: ProfileProvider,
+    public profileProvider: ProfileProvider,
     private walletProvider: WalletProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private logger: Logger,
@@ -148,7 +155,9 @@ export class HomePage {
     private statusBar: StatusBar,
     private invoiceProvider: InvoiceProvider,
     private configProvider: ConfigProvider,
-    private renderer: Renderer
+    private renderer: Renderer,
+    public toastCtrl: ToastController,
+    private derivationPathHelperProvider: DerivationPathHelperProvider
   ) {
     this.slideDown = false;
     this.isBlur = false;
@@ -267,6 +276,7 @@ export class HomePage {
 
   ionViewWillEnter() {
     this._willEnter();
+    this.logger.log('wallet', this.totalb());
   }
 
   ionViewDidEnter() {
@@ -344,7 +354,7 @@ export class HomePage {
 
     // Required delay to improve performance loading
     setTimeout(() => {
-      this.showSurveyCard();
+      // this.showSurveyCard();
       this.showEthLive();
       this.checkFeedbackInfo();
       this.checkEmailLawCompliance();
@@ -521,10 +531,10 @@ export class HomePage {
     }
   };
 
-  private async showSurveyCard() {
-    const hideSurvey = await this.persistenceProvider.getSurveyFlag();
-    this.showSurvey.setShowSurveyCard(!hideSurvey);
-  }
+  // private async showSurveyCard() {
+  //   const hideSurvey = await this.persistenceProvider.getSurveyFlag();
+  //   this.showSurvey.setShowSurveyCard(!hideSurvey);
+  // }
 
   private async showEthLive() {
     const hideEthLiveCard = await this.persistenceProvider.getEthLiveCardFlag();
@@ -542,7 +552,7 @@ export class HomePage {
   private checkFeedbackInfo() {
     // Hide feeback card if survey card is shown
     // TODO remove this condition
-    if (this.showSurvey) return;
+    // if (this.showSurvey) return;
     this.persistenceProvider.getFeedbackInfo().then(info => {
       if (!info) {
         this.initFeedBackInfo();
@@ -997,11 +1007,42 @@ export class HomePage {
     this.navCtrl.push(BitPayCardPage, { id: cardId });
   }
 
+  showToast(msg: string) {
+    const toast = this.toastCtrl.create({
+      message: msg,
+      // position: 'top',
+      duration: 3000
+    });
+
+    toast.present();
+  }
+
   public doRefresh(refresher): void {
     this.debounceSetWallets();
+    this.totalb();
+    this.loading = true;
+    this.showToast('Updating wallets');
+    this.renderer.setElementStyle(
+      this.balanceId.nativeElement,
+      'border-radius',
+      '65px'
+    );
+    this.renderer.setElementStyle(this.balanceId.nativeElement, 'width', '50%');
+
     setTimeout(() => {
       this.updateCharts();
       refresher.complete();
+      this.loading = false;
+      this.renderer.setElementStyle(
+        this.balanceId.nativeElement,
+        'border-radius',
+        '15px '
+      );
+      this.renderer.setElementStyle(
+        this.balanceId.nativeElement,
+        'width',
+        '85%'
+      );
     }, 2000);
   }
 
@@ -1059,33 +1100,40 @@ export class HomePage {
   public toggleBalanceNew() {
     for (var value of this.wallets) {
       this.logger.log(value.credentials.walletId);
-      this.profileProvider.toggleHideBalanceFlag(value.credentials.walletId);
+      this.profileProvider.toggleHideBalanceFlagShow(value.credentials.walletId);
     }
   }
 
   public totalb() {
-    return 'none';
-    // let isocode;
-    // let profit = 0;
-    // if (this.wallets !== undefined) {
-    //   if (this.wallets[0].status !== null) {
-    //     profit = _.sumBy(this.wallets, w => {
-    //       if (!w.cachedStatus || !w.cachedStatus.spendableBalanceAlternative) return 0;
-    //       isocode = w.cachedStatus.alternativeIsoCode;
-    //       return parseFloat(w.cachedStatus.spendableBalanceAlternative);
-    //     });
+    // return 'none';
+    let isocode;
+    let profit = 0;
+    if (this.wallets !== undefined && this.wallets !== null) {
+      // this.logger.log('---> ', this.wallets);
+      if (
+        this.wallets[0] !== null &&
+        this.wallets[0] !== undefined &&
+        this.wallets[0].cachedStatus !== null &&
+        this.wallets[0].cachedStatus !== undefined
+      ) {
+        profit = _.sumBy(this.wallets, w => {
+          if (!w.cachedStatus || !w.cachedStatus.totalBalanceAlternative)
+            return 0;
+          isocode = w.cachedStatus.alternativeIsoCode;
+          return parseFloat(w.cachedStatus.totalBalanceAlternative);
+        });
 
-    //     if (!isocode) {
-    //       return 'none';
-    //     } else {
-    //       return profit.toFixed(2) + ' ' + isocode;
-    //     }
-    //   } else {
-    //     return 'none';
-    //   }
-    // } else {
-    //   return 'none';
-    // }
+        if (!isocode) {
+          return 'none';
+        } else {
+          return profit.toFixed(2) + ' ' + isocode;
+        }
+      } else {
+        return 'none';
+      }
+    } else {
+      return 'none';
+    }
   }
 
 
@@ -1133,5 +1181,22 @@ export class HomePage {
         isMultipleSeed: compatibleKeyWallets.length > 1 ? true : false
       });
     }
+  }
+
+  public openBackupSettings(data): void {
+    const derivationStrategy = this.derivationPathHelperProvider.getDerivationStrategy(
+      data.credentials.rootPath
+    );
+
+    if (derivationStrategy == 'BIP45') {
+      this.navCtrl.push(WalletExportPage, {
+        walletId: data.credentials.walletId
+      });
+    } else {
+      this.navCtrl.push(BackupKeyPage, {
+        keyId: data.keyId
+      });
+    }
+    this.logger.log(data);
   }
 }

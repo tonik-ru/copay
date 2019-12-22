@@ -1,4 +1,4 @@
-<ion-slides #walletGroupOnboardingSlides pager="true" class="key-onboarding-slides">
+<ion-slides #walletGroupOnboardingSlides pager="true" class="" [class]="appProvider.activeTheme + ' key-onboarding-slides'">
   <ion-slide>
     <div class="img-container">
       <img src="assets/img/wallet-group-tour1.svg" />
@@ -8,7 +8,7 @@
         <div class="title" translate>Your funds, on your device</div>
         <div class="text" translate>
           A wallet is like a vault stored on your device containing your crypto funds. Much like a vault, your wallet will only be accesible with the master key.
-        </div>
+          </div>
       </div>
     </div>
   </ion-slide>
@@ -20,8 +20,8 @@
       <div class="info">
         <div class="title" translate>The "Key" to your funds</div>
         <div class="text" translate>
-          Your wallet master key is a phrase composed of 12 randomly selected words. If you were to ever lose or damage your device, you can restore access to your wallet as long as you have your 12 word master key.
-        </div>
+            Your wallet master key is a phrase composed of 12 randomly selected words. If you were to ever lose or damage your device, you can restore access to your wallet as long as you have your 12 word master key.
+          </div>
       </div>
     </div>
   </ion-slide>
@@ -33,8 +33,8 @@
       <div class="info">
         <div class="title" translate>Don't loose your key!</div>
         <div class="text" translate>
-          In order to protect your funds from being accessible to hackers and theives, the Master Key to your wallet must be kept somewhere safe and remain a secret.
-        </div>
+            In order to protect your funds from being accessible to hackers and theives, the Master Key to your wallet must be kept somewhere safe and remain a secret.
+          </div>
       </div>
     </div>
   </ion-slide>

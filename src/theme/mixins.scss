@@ -23,22 +23,22 @@
   }
 }
 
-@mixin toolbar-button-color($button-color: #464d5f) {
+@mixin toolbar-button-color($button-color: #fff) {
   .bar-button-default-ios,
   .bar-button-default.bar-button-ios-default,
   .bar-button-clear-ios-default {
-    color: $button-color !important;
+    color: #fff !important;
   }
 
   .bar-button-default-md,
   .bar-button-default.bar-button-md-default,
   .bar-button-clear-md-default {
-    color: $button-color !important;
+    color: #fff !important;
   }
 
   .bar-button-default-wp,
   .bar-button-default.bar-button-wp-default,
   .bar-button-clear-wp-default {
-    color: $button-color !important;
+    color: #fff!important;
   }
 }

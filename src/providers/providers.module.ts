@@ -15,6 +15,7 @@ import {
   BitPayAccountProvider,
   BitPayCardProvider,
   BitPayProvider,
+  BrowserTab,
   BwcErrorProvider,
   BwcProvider,
   Clipboard,
@@ -33,6 +34,8 @@ import {
   FeedProvider,
   FeeProvider,
   File,
+  FileChooser,
+  FileTransfer, FileTransferObject,
   FilterProvider,
   GAnalyticsProvider,
   GiftCardProvider,
@@ -57,6 +60,7 @@ import {
   QRScanner,
   RateProvider,
   ReplaceParametersProvider,
+  SafariViewController,
   ScanProvider,
   ScreenOrientation,
   ShapeshiftProvider,
@@ -75,7 +79,7 @@ import {
   UserAgent,
   Vibration,
   WalletProvider,
-  WalletTabsProvider
+  WalletTabsProvider 
 } from './index';
 
 @NgModule({
@@ -91,6 +95,7 @@ import {
     BitPayProvider,
     BitPayCardProvider,
     BitPayAccountProvider,
+
     BwcProvider,
     BwcErrorProvider,
     ConfigProvider,
@@ -126,6 +131,7 @@ import {
     PushNotificationsProvider,
     RateProvider,
     ReplaceParametersProvider,
+
     ShapeshiftProvider,
     StatusBar,
     SplashScreen,
@@ -153,7 +159,11 @@ import {
     ShopsProvider,
     InAppBrowser,
     ThemeableBrowser,
-    ApiProvider
+    ApiProvider,
+    BrowserTab,
+    SafariViewController,
+    FileTransfer, FileTransferObject,
+    FileChooser
   ]
 })
 export class ProvidersModule {}

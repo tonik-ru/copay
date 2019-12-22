@@ -9,6 +9,9 @@ page-wallet-details {
     display: flex;
     justify-content: center;
     margin-bottom: 15px;
+    background: #e66c22;
+    padding-bottom: 40px;
+    
     .text-address {
       color: #FFF;
     padding: 1.5rem 1rem;
@@ -37,7 +40,12 @@ page-wallet-details {
       }
     }
   }
-
+  .qr-container{background:transparent!important}
+  .qr-container .qr-card{max-width: 100px;margin-top: -20px;}
+  .qr-container .qr-card .aclass{padding: 0px;}
+  .swiper-pagination-fraction, .swiper-pagination-custom, .swiper-container-horizontal > .swiper-pagination-bullets{bottom:-3px}
+  .swiper-pagination-bullet-active {
+    background: #ffffff;}
   .tabs-ios .tabbar {
     width: 90%;
 
@@ -93,23 +101,27 @@ page-wallet-details {
   .search-icon {
     font-size: 2.5rem;
   }
-
+  .app-color .toolbar-background {
+    background: #fac239 !important;
+}
   .balance-card {
     // background: color($colors, primary);
-    background: linear-gradient(180deg, #14245e -0%, #22378c);
+    background: linear-gradient(180deg, #fac239 0%, #e66c22)!important;
     overflow: hidden;
   }
 
   .balance-header {
     position: relative;
     margin-top: 15px;
-    margin-left: 5rem;
+    margin-left: auto;
+    margin-left: right;
     height: 17rem;
     color: color($colors, light);
-    display: flex;
+    display: block;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    text-align: center;
   }
 
   .balance-str {
@@ -132,7 +144,7 @@ page-wallet-details {
 
   .balance-hidden {
     width: 100vw;
-    margin-left: -5rem;
+    // margin-left: -5rem;
     text-align: center;
 
     .title {
@@ -144,7 +156,7 @@ page-wallet-details {
 
   .balance-error {
     width: 100vw;
-    margin-left: -5rem;
+   
     padding: 0rem 2rem;
     text-align: center;
 
@@ -306,7 +318,7 @@ page-wallet-details {
     display: flex;
     align-items: center;
     height: 3rem;
-    padding: 0 0.5rem 7rem 0;
+    padding: 0 0.5rem 0rem 0;
 
     img {
       float: left;
@@ -432,4 +444,124 @@ page-wallet-details {
       margin-left: 5px;
     }
   }
+
+  .toolbar-title{text-align: center!important}
+
+
+
+ .bcdBg {
+    background: url(/assets/img/bcd-walletbg.svg) no-repeat;
+    background-size: 190px;
+    background-position: -50px;
+      position: relative;
+      margin-top: 15px;
+      margin-left: auto;
+      margin-left: right;
+      height: 17rem;
+      color: color($colors, light);
+      display: block;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      text-align: center;
+    
+} 
+
+
+.btdBg {
+  background: url(/assets/img/btc-walletbg.svg) no-repeat;
+  background-size: 190px;
+    background-position: -50px;
+
+    position: relative;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-left: right;
+    height: 17rem;
+    color: color($colors, light);
+    display: block;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
+  
+} 
+
+.ethBg {
+  background: url(/assets/img/eth-walletbg.svg) no-repeat;
+  background-size: 190px;
+  background-position: -50px;
+    position: relative;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-left: right;
+    height: 17rem;
+    color: color($colors, light);
+    display: block;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: center;
+  
+}
+
+.bcdHead{
+  .fixed-content{
+         background:linear-gradient(180deg, #1a202a 0%, #1a202a) !important;
+    }
+  
+ .toolbar-background{
+    background: #1A202A !important;
+  }
+  .balance-card{
+    background: linear-gradient(180deg, #1a202a 0%, #333B47) !important
+  }
+ .address-container{
+   background: #333B47!important;
+ }
+}
+
+.btcHead{
+  .fixed-content{
+    background:linear-gradient(180deg, #f2a900 0%, #f0a602) !important
+  }
+  .toolbar-background{
+     background: #f2a900 !important;
+   }
+   .balance-card{
+     background: linear-gradient(180deg, #f2a900 0%, #da7e30) !important;
+    
+    
+   }
+  .address-container{
+    background: #da7e30!important;
+  }
+ }
+
+ .ethHead{
+  .fixed-content{
+    background: linear-gradient(180deg, #9a71ec 0%, #9870eb) !important;
+  }
+  .toolbar-background{
+     background: #9a71ec !important;
+   }
+   .balance-card{
+    background: linear-gradient(180deg, #9a71ec 0%, #0051ca) !important;
+    
+    
+   }
+  .address-container{
+    background: #0051ca!important;
+  }
+ }
+
+ .scroll-content .wrapper--feather{background: transparent!important}
+
+ .hidePager .swiper-pagination-bullets {
+  display: none;
+}
+
+
+
+
 }

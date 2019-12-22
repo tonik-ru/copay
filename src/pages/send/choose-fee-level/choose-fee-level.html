@@ -9,7 +9,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content [class]="appProvider.activeTheme">
   <div class="testnet-warning" *ngIf="network!='livenet'">
     Testnet
   </div>

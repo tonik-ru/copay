@@ -87,7 +87,28 @@
   .recent td {
     color: #fff;
   }
+  page-send{
+    .lines-background {
+      background: url(../assets/img/curved-lines-background.png) center center no-repeat #ececec;
+      opacity: 0.1;
+      background-size: cover;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    
+  }
+  .qr-container{background: transparent!important;
+  img{display:block; margin:0 auto;}}
 
+  .send-header-wrapper {
+   
+    z-index: 999;
+    position: relative;
+  }
+
+  }
   table.table.table-hover.table-striped tr:nth-of-type(1) td:nth-of-type(1) img,
   table.table.table-hover.table-striped tr:nth-of-type(1) td:nth-of-type(3) img,
   table.table.table-hover.table-striped tr:nth-of-type(1) td:nth-of-type(4) img,
@@ -213,4 +234,7 @@ page-datafeednew{
           background: #dde1e8;
       }
 
+     .list-ios ion-item-sliding, .item-ios{
+      background:#fbfbfb;
+     }
 }

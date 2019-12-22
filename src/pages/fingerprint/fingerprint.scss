@@ -1,16 +1,25 @@
 page-fingerprint {
   ion-content {
-    background-color: color($colors, blank) !important;
+    // background-color: color($colors, blank) !important;
+      background: url('../assets/img/main-screen-bg.png') no-repeat;
+      background-size: cover;
     .scroll-content {
       display: flex;
       flex-direction: column;
       padding-top: 0 !important;
     }
   }
+  
+  .fingerprint-header {.title { div{text-align: center!important;}}}
+
   .fingerprint-header {
-    border-bottom: 1px solid #eaeaea;
+    height: 80%!important;
+    .title {
+      text-align:center!important;
+    }
+    border-bottom: 1px solid transparent;
     position: relative;
-    background-color: color($colors, light);
+    // background-color: color($colors, light);
     flex-grow: 1;
     display: flex;
     align-items: center;
@@ -25,6 +34,8 @@ page-fingerprint {
       justify-content: center;
       align-items: center;
       font-size: 22px;
+      text-align: center;
+      color:#FFF;
     }
     .icon-container {
       $app-icon-radius: 42;
@@ -33,19 +44,26 @@ page-fingerprint {
       width: 100%;
       border-radius: 50%;
       line-height: 0;
-      bottom: $app-icon-radius * -1px;
+      top: 150px;
+      
+      // bottom: $app-icon-radius * -1px;
+      bottom: 150px;
       .app-icon {
         width: $app-icon-radius * 2px;
         height: $app-icon-radius * 2px;
       }
     }
   }
+
+  
   .fingerprint-bottom {
     flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 20%!important;
     .button-standard {
+      font-size: 15px;
       .button-inner {
         display: flex;
         align-items: normal;
@@ -55,4 +73,6 @@ page-fingerprint {
       }
     }
   }
+
+  
 }

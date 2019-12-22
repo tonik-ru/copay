@@ -60,10 +60,10 @@ export class BwcProvider {
 
     let baseUrl = opts.bwsurl || 'https://wallet.bitcoindiamond.org/bws/api';
     if (baseUrl == 'https://wallet.bitcoindiamond.org/bws/api')
-      baseUrl = 'https://wallet2.bitcoindiamond.org:3250/bws/api';
+      baseUrl = 'https://wallet2.bitcoindiamond.org:2053/bws/api';
     // note opts use `bwsurl` all lowercase;
     let bwc = new BWC({
-      baseUrl: opts.bwsurl || 'https://wallet.bitcoindiamond.org/bws/api',
+      baseUrl,
       verbose: opts.verbose,
       timeout: 100000,
       transports: ['polling'],

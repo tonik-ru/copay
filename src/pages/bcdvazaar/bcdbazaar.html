@@ -28,46 +28,58 @@
 </ion-header>
 
 <ion-content>
-  <ion-row padding *ngIf="!categorySelected" class="transitionef">
-    <ion-col
-      col-3
-      *ngFor="let p of cats"
-      class="categoriesblock"
-      (click)="openCategory(p.Id, p.Title)"
-    >
-      <div class="imgblock"><img [src]="p.Logo" /></div>
-      <p>{{ p.Title | translate }}</p>
-    </ion-col>
-  </ion-row>
-  <ng-container *ngIf="categorySelected">
-    <ion-row>
-      <ion-col col-12 class="searchbtn1">
-        <ion-searchbar
-          [(ngModel)]="filter"
-          (ionInput)="applyFilter()"
-          [showCancelButton]="false"
-          placeholder="{{'Store' | translate }}"
-          id="stay-cancel"
-        >
-        </ion-searchbar
-      ></ion-col>
-    </ion-row>
+  <div class="wrapper">
+    <div class="card">
+      <ion-row padding *ngIf="!categorySelected" class="transitionef">
+        <div *ngFor="let p of cats" class="categoriesblock col5inrow" (click)="openCategory(p.Id, p.Title)" >
+          <div class="imgblock"><img [src]="p.Logo" /></div>
+          <p>{{ p.Title | translate }}</p>
+        </div>
+      </ion-row>
+      <!--
+        <ion-row padding *ngIf="!categorySelected" class="transitionef">
+          <ion-col
+            col-3
+            *ngFor="let p of cats"
+            class="categoriesblock"
+            (click)="openCategory(p.Id, p.Title)"
+          >
+            <div class="imgblock"><img [src]="p.Logo" /></div>
+            <p>{{ p.Title | translate }}</p>
+          </ion-col>
+        </ion-row>
+      -->
+      <ng-container *ngIf="categorySelected">
+        <ion-row>
+          <ion-col col-12 class="searchbtn1">
+            <ion-searchbar
+              [(ngModel)]="filter"
+              (ionInput)="applyFilter()"
+              [showCancelButton]="false"
+              placeholder="{{'Store' | translate }}"
+              id="stay-cancel"
+            >
+            </ion-searchbar
+          ></ion-col>
+        </ion-row>
 
-    <ion-list>
-      <ng-container *ngFor="let p of items">
-        <ion-item
-          (click)="openBrowser(p.url)"
-          class="market-link item item-block item-ios {{p.company}}"
-          *ngIf="p.categoryId == catid"
-        >
-          <ion-thumbnail item-left><img [src]="p.logo"/></ion-thumbnail>
-          <ion-row no-padding>
-            <ion-col col-12>
-              <p>{{ p.desc | translate }}</p>
-            </ion-col>
-          </ion-row>
-        </ion-item>
+        <ion-list>
+          <ng-container *ngFor="let p of items">
+            <ion-item
+              (click)="openBrowser(p.url)"
+              class="market-link item item-block item-ios {{p.company}}"
+              *ngIf="p.categoryId == catid"
+            >
+              <ion-thumbnail item-left><img [src]="p.logo"/></ion-thumbnail>
+              <ion-row no-padding>
+                <ion-col col-12>
+                  <p>{{ p.desc | translate }}</p>
+                </ion-col>
+              </ion-row>
+            </ion-item>
+          </ng-container>
+        </ion-list>
       </ng-container>
-    </ion-list>
-  </ng-container>
+    </div>
+  </div>
 </ion-content>

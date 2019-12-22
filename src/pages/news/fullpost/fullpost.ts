@@ -3,6 +3,8 @@ import { NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers';
 import { ApiProvider } from '../../../providers/api/api';
 
+import { SocialSharing } from '@ionic-native/social-sharing';
+
 import * as $ from 'jquery';
 /**
  * Generated class for the FullpostPage page.
@@ -24,16 +26,18 @@ export class FullpostPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public logger: Logger,
-    public api: ApiProvider
+    public api: ApiProvider,
+    private socialSharing: SocialSharing
   ) {
     this.logger.log(navParams.get('post'));
     this.post = navParams.get('post');
   }
 
-  ionViewWillEnter(){
-    $('a').attr("target","_blank");
+  ionViewWillEnter() {
+    $('a').attr('target', '_blank');
     $('p:contains("Also read:")').remove();
     $('p:contains("Source:")').remove();
+    this.logger.log(this.post);
   }
   ionViewDidLoad() {
     this.getRelated();
@@ -52,5 +56,12 @@ export class FullpostPage {
   }
   openFullPost(item) {
     this.navCtrl.push(FullpostPage, { post: item });
+  }
+  sharePost(title: string, img: string, posturl: string) {
+    // if (!this.telegram) {
+    //   this.showError();
+    //   return;
+    // }
+    this.socialSharing.share(title, null, img, posturl);
   }
 }

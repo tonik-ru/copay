@@ -8,6 +8,10 @@ import {
 } from '@angular/forms';
 import { Events, NavController, NavParams } from 'ionic-angular';
 
+// import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+// import { File } from '@ionic-native/file';
+// import { FileChooser } from '@ionic-native/file-chooser';
+
 // providers
 import { AddressBookProvider } from '../../../../providers/address-book/address-book';
 import { AddressProvider } from '../../../../providers/address/address';
@@ -18,7 +22,7 @@ import { PopupProvider } from '../../../../providers/popup/popup';
 // validators
 import { AddressValidator } from '../../../../validators/address';
 import { ScanPage } from '../../../scan/scan';
-
+ 
 @Component({
   selector: 'page-addressbook-add',
   templateUrl: 'add.html'
@@ -28,7 +32,9 @@ export class AddressbookAddPage {
 
   public isCordova: boolean;
   public appName: string;
-
+  public coinSelector: string;
+  public showWallet: boolean = false;
+  public photo: string = 'assets/img/contact-placeholder.svg';
   constructor(
     private navCtrl: NavController,
     private navParams: NavParams,
@@ -39,6 +45,7 @@ export class AddressbookAddPage {
     private formBuilder: FormBuilder,
     private logger: Logger,
     private popupProvider: PopupProvider
+    // private fileChooser: FileChooser
   ) {
     this.addressBookAdd = this.formBuilder.group({
       name: [
@@ -52,7 +59,8 @@ export class AddressbookAddPage {
           Validators.required,
           new AddressValidator(this.addressProvider).isValid
         ])
-      ]
+      ],
+      photo: [this.photo]
     });
     if (this.navParams.data.addressbookEntry) {
       this.addressBookAdd.controls['address'].setValue(
@@ -82,9 +90,13 @@ export class AddressbookAddPage {
   }
 
   public save(): void {
+   // this.addressBookAdd.value.address = this.coinSelector+this.addressBookAdd.value.address;
+   // this.logger.log('--->', this.addressBookAdd.value.address);
     this.addressBookAdd.controls['address'].setValue(
-      this.parseAddress(this.addressBookAdd.value.address)
+     // this.parseAddress(this.addressBookAdd.value.address);
+     this.coinSelector+this.addressBookAdd.value.address
     );
+    this.logger.log('address',this.addressBookAdd.controls['address']);
     this.ab
       .add(this.addressBookAdd.value)
       .then(() => {
@@ -93,6 +105,7 @@ export class AddressbookAddPage {
       .catch(err => {
         this.popupProvider.ionicAlert('Error', err);
       });
+     this.logger.log('result', this.addressBookAdd.value);
   }
 
   private parseAddress(str: string): string {
@@ -102,4 +115,16 @@ export class AddressbookAddPage {
   public openScanner(): void {
     this.navCtrl.push(ScanPage, { fromAddressbook: true });
   }
+
+  public coinSelcet(ev){
+    this.coinSelector = ev == 'bcd' ? 'bitcoindiamond:' : ev == 'btc' ? 'bitcoin:' : ev == 'bch' ?  'bitcoincash:' : 'eth:'; 
+    this.logger.log(ev, this.coinSelector);
+    this.showWallet = true;
+  }
+  public addPhoto(){
+   // this.photo='assets/img/currencies/bcd.svg'; to next release - upload photo for contact
+  }
+
+ 
+
 }

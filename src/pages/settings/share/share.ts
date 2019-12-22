@@ -21,6 +21,7 @@ export class SharePage {
   public googleplus: boolean;
   public email: boolean;
   public whatsapp: boolean;
+  public telegram: boolean;
   public title: string;
 
   private downloadUrl: string;
@@ -93,6 +94,16 @@ export class SharePage {
         this.logger.error('whatsapp error: ' + e);
         this.whatsapp = false;
       });
+
+    this.socialSharing
+      .canShareVia('telegram', 'msg', null, null, null)
+      .then(() => {
+        this.telegram = true;
+      })
+      .catch(e => {
+        this.logger.error('whatsapp error: ' + e);
+        this.telegram = false;
+      });
   }
 
   public shareFacebook() {
@@ -100,8 +111,10 @@ export class SharePage {
       this.showError();
       return;
     }
+    // this.socialSharing.share('Everything you need in a single app. Download BCD Pay Wallet Now', null, null, this.downloadUrl);
+    this.logger.log(this.shareFacebookVia);
     this.socialSharing.shareVia(
-      this.shareFacebookVia,
+      'telegram',
       'Everything you need in a single app. Download BCD Pay Wallet Now',
       null,
       null,
@@ -136,5 +149,18 @@ export class SharePage {
       'This app is not available for your device.'
     );
     this.popupProvider.ionicAlert(this.translate.instant('Error'), msg);
+  }
+
+  public shareOther() {
+    // if (!this.telegram) {
+    //   this.showError();
+    //   return;
+    // }
+    this.socialSharing.share(
+      'Everything you need in a single app. Download BCD Pay Wallet Now',
+      null,
+      null,
+      this.downloadUrl
+    );
   }
 }

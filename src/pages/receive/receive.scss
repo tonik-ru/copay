@@ -1,4 +1,50 @@
 page-receive {
+  .toolbar-background-ios{
+    background: #fac239!important;
+  }
+  .toolbar-title{ text-align:  center!important}
+  .wallet-details-header__balance{margin-left: auto; text-align: center}
+  .search-wrapper {
+    margin-top: 15px;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: baseline;
+    border: 1px solid #f2f2f2;
+    border-radius: 4px;
+
+    
+
+    ion-label{ text-transform: uppercase;
+     
+      margin: 8px;
+      right: 0;
+      position: absolute;
+      height: 52px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 0!important;
+  }
+    .item-inner {
+      align-items: center;
+      margin-left: 0rem !important;
+      border-bottom: 0px !important;
+      box-shadow: none !important;
+    }
+    .scan-icon {
+      margin: 0;
+      padding: 0.6rem 1rem 1rem 1rem;
+      z-index: 999;
+    }
+    .backspace-icon {
+      z-index: 999;
+    }
+  }
+  .input-ios .text-input-clear-icon{right: 40px}
+  .specInput{padding-left:15px; padding-right:15px;}
+  .second{margin-top: 50px;
+
+  }
   .bar-button {
     margin-right: 10px;
     .horizontal-lg {
@@ -23,51 +69,45 @@ page-receive {
   }
 
   .receive-content {
-    padding: 10px;
-    background-color: white;
-    box-shadow: 0px 5px 10px 0px #cccccc;
-    z-index: 1000;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
     .title {
-      font-size: 15px;
-      padding: 0 0 16px 0;
-      border: none;
+      font-size: 18px;
       font-weight: 500;
+      padding-left: 15px;
     }
     .address-container {
+      bottom: 0;
       color: rgb(80, 80, 80);
+      width: 100%;
+      padding: 15px;
       text-align: center;
       font-size: 15px;
+      display: flex;
+      justify-content: center;
       .text-address {
         background: color($colors, light);
         color: color($colors, light-grey);
-        padding: 1.3rem 1rem;
+        padding: 1.5rem 1rem;
         border-radius: 3px;
-        position: relative;
+        &.ellipsis img {
+          vertical-align: middle;
+        }
         .address-text {
-          width: 100%;
+          width: 70%;
+          max-width: 300px;
           vertical-align: middle;
           display: inline-block;
           opacity: 1;
           transition: opacity 500ms ease;
-          padding: 0 30px;
-          .address-placeholder {
-            font-size: 14px;
-            @media (max-height: 530px) {
-              font-size: 11.5px;
-            }
-          }
-        }
-        .copy-to-clip {
-          position: absolute;
-          left: 10px;
-          margin-top: 2px;
         }
         .new-address-btn {
-          position: absolute;
-          right: 10px;
           width: 25px;
           height: 25px;
           padding: 0px;
+          vertical-align: middle;
+          padding-bottom: 3px;
+          margin-left: 5px;
           background-color: transparent;
         }
       }
@@ -76,6 +116,18 @@ page-receive {
   .qr-container {
     height: 100%;
     position: relative;
+    .qr-card-amount {
+      text-align: center;
+      margin-bottom: -10px;
+      margin-top: 15px;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color:#000;
+      text-transform: uppercase;
+      small {
+        font-weight: normal;
+      }
+    }
     .card {
       z-index: 1;
       position: relative;
@@ -92,13 +144,8 @@ page-receive {
       left: 0;
     }
     .qr-card {
-      @media (max-height: 560px) {
+      @media (max-height: 530px) {
         width: 60%;
-      }
-    }
-    .prompt-user {
-      .title-icon {
-        position: relative;
       }
     }
   }
@@ -159,4 +206,57 @@ page-receive {
       transform: rotate(360deg);
     }
   }
+  button.new-address-btn.ng-star-inserted {
+    float: right;
+}
+  .text-address.ellipsis{ img{float:left}}
+
+  .bcdHead{
+    background: linear-gradient(180deg, #1a202a 0%, #333B47) !important;
+    .toolbar-background{
+       background: #1A202A !important;
+     }
+     .balance-card{
+       background: linear-gradient(180deg, #1a202a 0%, #333B47) !important
+     }
+    .address-container{
+      background: #333B47!important;
+    }
+   }
+   
+   .btcHead{
+    background: linear-gradient(180deg, #f2a900 0%, #da7e30) !important;
+     .toolbar-background{
+        background: #f2a900 !important;
+      }
+      .balance-card{
+        background: linear-gradient(180deg, #f2a900 0%, #da7e30) !important;
+       
+       
+      }
+     .address-container{
+       background: #da7e30!important;
+     }
+    }
+    .ethHead{
+      background: linear-gradient(180deg, #9a71ec 0%, #0051ca) !important;
+      
+     .toolbar-background{
+        background: #9a71ec !important;
+      }
+      .balance-card{
+       background: linear-gradient(180deg, #9a71ec 0%, #0051ca) !important;
+       
+       
+      }
+     .address-container{
+       background: #0051ca!important;
+     }
+    }
+
+    .wallet-details-header__balance-hidden.ng-star-inserted{
+      text-align: center;
+      margin-right: auto;
+      margin-left: auto;text-transform: uppercase;
+    }
 }

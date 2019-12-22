@@ -67,7 +67,7 @@ export class SettingsPage {
     private app: AppProvider,
     private language: LanguageProvider,
     private externalLinkProvider: ExternalLinkProvider,
-    private profileProvider: ProfileProvider,
+    public profileProvider: ProfileProvider,
     private configProvider: ConfigProvider,
     private logger: Logger,
     private homeIntegrationsProvider: HomeIntegrationsProvider,

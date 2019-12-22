@@ -150,7 +150,13 @@ ion-label p:first-of-type{
   .spinner-ios-crescent circle{stroke: #fac239}
 
 }
+.button-ios {
+    background-color: #a96e20;
+    .spinner-ios-ios line, .spinner-ios-ios-small line {
+      stroke: #ffffff;
+  }}
 
+.NEWITEMS{background:  #f79421!important;}
 
 
 @-webkit-keyframes example {

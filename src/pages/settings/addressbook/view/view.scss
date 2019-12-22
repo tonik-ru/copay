@@ -8,6 +8,7 @@ page-addressbook-view {
     text-align: center;
     .gravatar {
       display: inline-block;
+      background: #FFF; border-radius: 50px;
     }
   }
   .btn-send {

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Events, NavController, NavParams } from 'ionic-angular';
+import { AlertController, Events, NavController, NavParams} from 'ionic-angular';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 
@@ -21,7 +21,8 @@ import { MultiSendPage } from './multi-send/multi-send';
 export enum CoinName {
   BTC = 'Bitcoin',
   BCH = 'Bitcoin Cash',
-  ETH = 'Ethereum'
+  ETH = 'Ethereum',
+  BCD = 'Bitcoin Diamond'
 }
 
 @Component({
@@ -63,7 +64,8 @@ export class SendPage extends WalletTabsChild {
     private actionSheetProvider: ActionSheetProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private appProvider: AppProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public alertCtrl: AlertController
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
   }
@@ -86,6 +88,21 @@ export class SendPage extends WalletTabsChild {
     this.hasBchWallets = !_.isEmpty(this.walletsBch);
     this.hasBcdWallets = !_.isEmpty(this.walletsBcd);
     this.hasEthWallets = !_.isEmpty(this.walletsEth);
+    if (this.search == '') {
+      navigator['clipboard'].readText().then(text => {
+        if (text !== '' && text !== null && text !== undefined) {
+          if (
+            this.incomingDataProvider.parseData(text) !== undefined &&
+            this.incomingDataProvider.parseData(text) !== null
+          ) {
+            if (this.checkCoinAndNetwork(text)) {
+              //  this.presentConfirm(text);
+              this.showClipboard(text);
+            }
+          }
+        }
+      });
+    }
   }
 
   ionViewWillLeave() {
@@ -157,11 +174,15 @@ export class SendPage extends WalletTabsChild {
   }
 
   private redir() {
-    this.incomingDataProvider.redir(this.search, {
+     this.incomingDataProvider.redir(this.search, {
+      showBalance: true,
       amount: this.navParams.data.amount,
-      coin: this.navParams.data.coin
+  //    coin: this.navParams.data.coin
+     coin: this.wallet.coin
+    
     });
     this.search = '';
+    this.logger.log('coin',this.wallet.coin);
   }
 
   private showErrorMessage() {
@@ -196,6 +217,23 @@ export class SendPage extends WalletTabsChild {
     });
   }
 
+  private showClipboard(text: string) {
+    const appName = text;
+    // const appName = this.appProvider.info.nameCase;
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+      'clipboard-address-info',
+      // 'legacy-address-info',
+      { appName }
+    );
+    infoSheet.present();
+    infoSheet.onDidDismiss(option => {
+      if (option) {
+        this.search = text;
+        this.processInput();
+      }
+    });
+  }
+
   public cleanSearch() {
     this.search = '';
     this.invalidAddress = false;
@@ -206,6 +244,7 @@ export class SendPage extends WalletTabsChild {
     const hasContacts = await this.checkIfContact();
     if (!hasContacts) {
       const parsedData = this.incomingDataProvider.parseData(this.search);
+
       if (parsedData && parsedData.type == 'PayPro') {
         const coin = this.incomingDataProvider.getCoinFromUri(parsedData.data);
         this.incomingDataProvider
@@ -260,5 +299,36 @@ export class SendPage extends WalletTabsChild {
     if (this.scannerOpened) this.events.publish('ExitScan');
     else this.getParentTabs().dismiss();
     this.scannerOpened = false;
+  }
+
+  public pasteAddress() {
+    navigator['clipboard'].readText().then(text => {
+      this.search = text;
+      this.processInput();
+    });
+  }
+
+  public presentConfirm(address: string) {
+    let alert = this.alertCtrl.create({
+      title: 'Wallet addres was found in your clipboard',
+      message: 'Do you want to use this addres for sending?' + address,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            this.logger.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Use ',
+          handler: () => {
+            this.search = address;
+            this.processInput();
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 }

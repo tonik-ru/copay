@@ -27,7 +27,7 @@ import { RateProvider } from '../../../providers/rate/rate';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
 
 // Pages
-import { ActionSheetProvider, AppProvider, GiftCardProvider } from '../../../providers';
+import {ActionSheetProvider, AppProvider, GiftCardProvider} from '../../../providers';
 import { getActivationFee } from '../../../providers/gift-card/gift-card';
 import { CardConfig } from '../../../providers/gift-card/gift-card.types';
 import { ProfileProvider } from '../../../providers/profile/profile';
@@ -53,7 +53,7 @@ export class AmountPage extends WalletTabsChild {
   private reNr: RegExp;
   private reOp: RegExp;
   private nextView;
-  private fixedUnit: boolean;
+  public fixedUnit: boolean;
   public fiatCode: string;
   private altUnitIndex: number;
   private unitIndex: number;
@@ -89,6 +89,10 @@ export class AmountPage extends WalletTabsChild {
 
   public cardName: string;
   public cardConfig: CardConfig;
+
+    // public coin: string;
+  public headerClass: string = 'bcdHead';
+  public showBalance: boolean = true;
 
   constructor(
     private actionSheetProvider: ActionSheetProvider,
@@ -153,6 +157,8 @@ export class AmountPage extends WalletTabsChild {
     this.toWalletId = this.navParams.data.toWalletId;
 
     this.cardName = this.navParams.get('cardName');
+    this.showBalance  = this.navParams.data.showBalance;
+    this.logger.log('Show balance->', this.navParams.data);
   }
 
   async ionViewDidLoad() {
@@ -185,6 +191,17 @@ export class AmountPage extends WalletTabsChild {
       'Wallet/disableHardwareKeyboard',
       this.walletDisableHardwareKeyboardHandler
     );
+    this.changeUnit();
+  if (this.wallet){
+    this.headerClass = this.wallet.coin == 'bcd' 
+      ? 'bcdHead'
+      : this.wallet.coin == 'btc' 
+        ?  'btcHead' 
+        : this.wallet.coin = 'eth' 
+          ? 'ethHead' 
+          : 'bcdHead';
+    }
+
   }
 
   ionViewWillLeave() {
@@ -265,6 +282,8 @@ export class AmountPage extends WalletTabsChild {
     this.unitIndex = 0;
 
     if (this.navParams.data.coin) {
+      this.logger.log('coin:', this.navParams.data);
+
       let coins = this.navParams.data.coin.split(',');
       let newAvailableUnits = [];
 

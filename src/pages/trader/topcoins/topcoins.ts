@@ -264,37 +264,70 @@ export class TopcoinsPage {
       });
 
     this.logger.log('added to fav from datafeed');
+    // this.storage.get('bcdremove').then(val => {
+    //   this.logger.log('favorites remove storage', val);
+    //   if (val !== null) {
+    //     this.favorite = val;
+    //     this.logger.log('favorites remove storage', val);
+    //     this.logger.log('2fav', this.favorite);
+    //     if (this.favorite == false) {
+    //       this.storage.set('favList', [
+    //         { id: 76 },
+    //         { id: 1 },
+    //         { id: 3 },
+    //         { id: 1653 }
+    //       ]);
+    //     } else {
+    //       this.storage.get('favList').then(val => {
+    //         if (val !== null) {
+    //           this.fav = val;
+    //         }
+    //       });
+    //     }
+    //   } else {
+    //     this.storage.set('bcdremove', false);
+    //     this.logger.log('BCDREMOVE null');
+    //     this.storage.set('favList', [
+    //       { id: 76 },
+    //       { id: 1 },
+    //       { id: 3 },
+    //       { id: 1653 }
+    //     ]);
+    //     this.fav = [{ id: 76 }, { id: 1 }, { id: 3 }, { id: 1653 }];
+    //   }
+    // });
     this.storage.get('bcdremove').then(val => {
-      if (val !== null) {
-        this.favorite = val;
-        this.logger.log('2fav', this.favorite);
-        if (this.favorite == false) {
-          this.storage.set('favList', [
-            { id: 76 },
-            { id: 1 },
-            { id: 3 },
-            { id: 1653 }
-          ]);
-        }
-      } else {
-        this.storage.set('bcdremove', false);
+        this.logger.log('favorites remove storage', val); });
 
-        this.logger.log('BCDREMOVE null');
-        this.storage.set('favList', [
-          { id: 76 },
-          { id: 1 },
-          { id: 3 },
-          { id: 1653 }
-        ]);
-        this.fav = [{ id: 76 }, { id: 1 }, { id: 3 }, { id: 1653 }];
-      }
-    });
+        this.storage.get('favList').then(val => {
+          this.logger.log('---->', val);
+          setTimeout(() => {
+            if (val !== null) {
+              this.fav = val;
+            } else {
+              this.storage.set('favList', [
+                      { id: 76 },
+                      { id: 1 },
+                      { id: 3 },
+                      { id: 1653 }
+                    ]);
+              this.fav = [
+                { id: 76 },
+                { id: 1 },
+                { id: 3 },
+                { id: 1653 }
+              ];
+            }
+          }, 500);
+          
+                });
 
-    this.storage.get('favList').then(val => {
-      if (val !== null) {
-        this.fav = val;
-      }
-    });
+
+    // this.storage.get('favList').then(val => {
+    //   if (val !== null) {
+    //     this.fav = val;
+    //   }
+    // });
   }
 
   private resolveSelectedCurrency(cur) {

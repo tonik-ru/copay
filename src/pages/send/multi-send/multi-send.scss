@@ -98,4 +98,57 @@ page-multi-send {
     color: color($colors, error);
     background-color: #fff6f7;
   }
+
+  .bcdHead{
+    background: linear-gradient(180deg, #1a202a 0%, #333B47) !important;
+    .toolbar-background{
+       background: #1A202A !important;
+     }
+     .balance-card{
+       background: linear-gradient(180deg, #1a202a 0%, #333B47) !important
+     }
+    .address-container{
+      background: #333B47!important;
+    }
+   }
+   
+   .btcHead{
+    background: linear-gradient(180deg, #f2a900 0%, #da7e30) !important;
+     .toolbar-background{
+        background: #f2a900 !important;
+      }
+      .balance-card{
+        background: linear-gradient(180deg, #f2a900 0%, #da7e30) !important;
+       
+       
+      }
+     .address-container{
+       background: #da7e30!important;
+     }
+    }
+    .ethHead{
+      background: linear-gradient(180deg, #9a71ec 0%, #0051ca) !important;
+      
+     .toolbar-background{
+        background: #9a71ec !important;
+      }
+      .balance-card{
+       background: linear-gradient(180deg, #9a71ec 0%, #0051ca) !important;
+       
+       
+      }
+     .address-container{
+       background: #0051ca!important;
+     }
+    }
+    .wallet-details-header__balance-hidden.ng-star-inserted{
+      text-align: center;
+      margin-right: auto;
+      margin-left: auto; text-transform: uppercase;
+    }
+    ion-title .toolbar-title{text-align: center;}
+      .wallet-details-header__balance{
+        text-align: center;
+        margin-left: auto;
+      }
 }

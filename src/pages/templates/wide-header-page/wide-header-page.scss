@@ -46,21 +46,21 @@ card-catalog-page {
   }
 }
 
-card-catalog-page,
-page-add,
-page-add-wallet,
-page-settings,
-purchased-cards-page {
-  @include fix-ios-bg-scroll($top-color: white);
-  @include toolbar-button-color();
+// card-catalog-page,
+// page-add,
+// page-add-wallet,
+// page-settings,
+// purchased-cards-page {
+//   @include fix-ios-bg-scroll($top-color: white);
+//   @include toolbar-button-color();
 
-  ion-title .toolbar-title {
-    color: black;
-  }
-}
+//   ion-title .toolbar-title {
+//     color: black;
+//   }
+// }
 
-@include toolbar-button-color();
+// @include toolbar-button-color();
 
-ion-title .toolbar-title {
-  color: black;
-}
+// ion-title .toolbar-title {
+//  // color: black;
+// }

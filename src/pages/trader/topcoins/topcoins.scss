@@ -592,4 +592,9 @@ ul.trader-title.ontop li, ul.trader-title.first li {
 @media screen and (max-width:340px){ul.trader-title li{ font-size: 1rem}}
 ion-refresher{height: 100px!important}
 
+ion-item-options {
+  .button-ios{
+    background: linear-gradient(45deg,#f6b231, #f3893e );
+  }}
+
 }

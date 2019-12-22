@@ -16,7 +16,7 @@ import { Observable, Subscription } from 'rxjs';
 
 // providers
 import { WalletTabsProvider } from '../pages/wallet-tabs/wallet-tabs.provider';
-import { GAnalyticsProvider, GiftCardProvider } from '../providers';
+import { BrowserTab,  GAnalyticsProvider,  GiftCardProvider,  SafariViewController } from '../providers';
 import { AppProvider } from '../providers/app/app';
 import { BitPayCardProvider } from '../providers/bitpay-card/bitpay-card';
 import { CoinbaseProvider } from '../providers/coinbase/coinbase';
@@ -128,7 +128,9 @@ export class CopayApp {
     private ga: GAnalyticsProvider,
     public api: ApiProvider,
     private app: App,
-    private keyProvider: KeyProvider
+    private keyProvider: KeyProvider,
+    public safariViewController: SafariViewController,
+    public browserTab: BrowserTab
   ) {
     this.imageLoaderConfig.setFileNameCachedWithExtension(true);
     this.imageLoaderConfig.useImageTag(true);
@@ -482,8 +484,31 @@ export class CopayApp {
   private handleDeepLinks() {
     // Check if app was resume by custom url scheme
     (window as any).handleOpenURL = (url: string) => {
-      this.logger.info('App was resumed by custom url scheme');
-      this.handleOpenUrl(url);
+      this.safariViewController.isAvailable().then((available: boolean) => {
+        if (available) {
+          this.safariViewController.hide();
+        }
+      });
+
+      this.safariViewController.isAvailable().then((available: boolean) => {
+        if (available) {
+          this.safariViewController.hide();
+        }
+      });
+
+      this.browserTab.isAvailable().then(isAvailable => {
+        if (isAvailable) {
+          this.browserTab.close();
+        }
+      });
+
+      if (url == 'bcdpay://scan') {
+        this.nav.push(ScanPage);
+        this.logger.log('app was resumed by wdiget');
+      } else {
+        this.logger.info('App was resumed by custom url scheme');
+        this.handleOpenUrl(url);
+      }
     };
 
     // Check if app was opened by custom url scheme
@@ -492,8 +517,13 @@ export class CopayApp {
       delete (window as any).handleOpenURL_LastURL;
       // Important delay to have all views loaded before process URL
       setTimeout(() => {
-        this.logger.info('App was opened by custom url scheme');
-        this.handleOpenUrl(lastUrl);
+        if (lastUrl == 'bcdpay://scan') {
+          this.nav.push(ScanPage);
+          this.logger.info('App was opened by widget');
+        } else {
+          this.logger.info('App was opened by custom url scheme');
+          this.handleOpenUrl(lastUrl);
+        }
       }, 2000);
     }
   }

@@ -36,6 +36,9 @@ export class ReceivePage extends WalletTabsChild {
   public loading: boolean;
   public playAnimation: boolean;
   public newAddressError: boolean;
+  public specAmount: string;
+  public showSpecInfo: boolean = false;
+  public mainAddress: string;
 
   private onResumeSubscription: Subscription;
   private retryCount: number = 0;
@@ -123,6 +126,7 @@ export class ReceivePage extends WalletTabsChild {
           this.wallet.network,
           addr
         );
+        this.mainAddress = address;
         if (this.address && this.address != address) {
           this.playAnimation = true;
         }
@@ -228,5 +232,38 @@ export class ReceivePage extends WalletTabsChild {
       { address: this.address, coin: this.wallet.coin }
     );
     infoSheet.present();
+  }
+
+  processInput() {
+    this.logger.log('spec:', this.specAmount);
+    this.address = '';
+    if (parseFloat(this.specAmount) > 0 && this.specAmount !== '') {
+      this.logger.log('adrs', this.mainAddress);
+      this.showSpecInfo = true;
+      let protoAddr;
+      if (this.wallet.coin != 'bch') {
+        protoAddr = this.walletProvider.getProtoAddress(
+          this.wallet.coin,
+          this.wallet.network,
+          this.mainAddress
+        );
+      }
+      this.address =
+        (protoAddr ? protoAddr : this.mainAddress) +
+        '?amount=' +
+        Number(this.specAmount);
+      this.qrAddress =
+        (protoAddr ? protoAddr : this.mainAddress) +
+        '?amount=' +
+        Number(this.specAmount);
+    } else {
+      this.showSpecInfo = false;
+      this.address = this.mainAddress;
+      this.qrAddress = this.mainAddress;
+    }
+    if (parseFloat(this.specAmount) < 0) {
+      this.specAmount = Math.abs(parseFloat(this.specAmount)).toString();
+      this.processInput();
+    }
   }
 }

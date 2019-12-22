@@ -1,5 +1,5 @@
-<ion-header [ngClass]="{'wallet-details-header': wallet}">
-  <ion-navbar class="app-color" [hideBackButton]="useAsModal">
+<ion-header [ngClass]="headerClass" >
+  <ion-navbar [hideBackButton]="useAsModal">
     <ion-buttons left *ngIf="useAsModal">
       <button class="modal-close-button" (click)="closeModal()" ion-button>
         <ion-icon ios="md-close" md="md-close"></ion-icon>
@@ -8,17 +8,25 @@
     <ion-title>{{
       (wallet && wallet.name) || ('Amount' | translate)
     }}</ion-title>
+    <ion-buttons right>
+      <ion-icon>
+        <img class="next-button"
+          [ngClass]="{ show: expression && allowSend }"
+          src="assets/img/icon-next.svg"
+          (click)="finish()"
+          tappable
+      /></ion-icon>
+    </ion-buttons>
   </ion-navbar>
-  <ion-toolbar *ngIf="wallet && !requestingAmount" class="app-color">
+  <ion-toolbar *ngIf="wallet && !requestingAmount && showBalance">
     <div *ngIf="!wallet.balanceHidden && !wallet.scanning && wallet.cachedStatus" class="wallet-details-header__balance">
-      <span>{{wallet.cachedStatus && wallet.cachedStatus.spendableBalanceStr}}</span>
-      <ion-icon *ngIf="wallet.cachedStatus.totalBalanceSat != wallet.cachedStatus.spendableAmount" ios="ios-timer-outline" md="md-timer"></ion-icon>
+      <span>{{wallet.cachedStatus && wallet.cachedStatus.totalBalanceStr}}</span>
     </div>
     <div
       *ngIf="wallet.balanceHidden && !wallet.scanning"
       class="wallet-details-header__balance-hidden"
     >
-      <span class="title" translate>[Balance Hidden]</span>
+      <span class="title" translate>*.** {{ wallet.coin }}</span>
     </div>
   </ion-toolbar>
 </ion-header>
@@ -27,22 +35,45 @@
   <div class="amount-wrapper">
     <div class="amount-header-margin">
       <div class="amount-header">
-        <div style="flex: 1">
+        <div>
           <div
             class="switcher"
             (click)="changeUnit()"
             [hidden]="fixedUnit"
             tappable
           >
+            <div class="switcher__label">{{ alternativeUnit }}</div>
             <img class="switcher__icon" src="assets/img/icon-swap.svg" />
             <div class="switcher__label">{{ unit }}</div>
           </div>
         </div>
-        <img class="next-button" [ngClass]="{'show': expression && allowSend}" src="assets/img/icon-next.svg" (click)="finish()" tappable>
       </div>
     </div>
 
     <div class="amount-content">
+      <div class="spendableAmount" *ngIf="showBalance">
+        <div
+          *ngIf="
+            !wallet.balanceHidden && !wallet.scanning && wallet.cachedStatus
+          "
+          class="wallet-details-header__balance"
+        >
+          Spendable Balacne
+          <span
+            >{{
+              wallet.cachedStatus && wallet.cachedStatus.spendableBalanceStr
+            }}
+            <ion-icon
+              *ngIf="
+                wallet.cachedStatus.totalBalanceSat !=
+                wallet.cachedStatus.spendableAmount
+              "
+              ios="ios-timer-outline"
+              md="md-timer"
+            ></ion-icon
+          ></span>
+        </div>
+      </div>
       <div class="expression-container">
         <span class="expression">
           {{

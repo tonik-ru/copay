@@ -47,6 +47,41 @@
       </ion-col>
     </ion-row>
   -->
+  <ng-container *ngFor="let itema of itemsNew">
+    <ion-item
+      (click)="openFullPost(itema)"
+      id="{{itema.id}}"
+      *ngIf="itema.id > lastNewsId && endload == true"
+    >
+      >
+      <ion-thumbnail item-right>
+        <img
+          *ngIf="itema.better_featured_image !== null"
+          [src]="
+            itema.better_featured_image.media_details.sizes.medium.source_url
+          "
+        />
+        <img
+          src="assets/img/new-badge.png"
+          class="newpost"
+          *ngIf="itema.id > lastNewsId && api.newsCount !== ''"
+        />
+
+        <img
+          *ngIf="
+            itema.better_featured_image == null ||
+            itema.better_featured_image == undefined ||
+            itema.better_featured_image.media_details == null
+          "
+          src="assets/img/noimage.png"
+        />
+      </ion-thumbnail>
+
+      <ion-label item-content>
+        <p [innerHTML]="itema.title.rendered"></p>
+      </ion-label>
+    </ion-item>
+  </ng-container>
 
   <ion-refresher slot="fixed" (ionRefresh)="loadData($event, false)">
     <ion-refresher-content
@@ -64,85 +99,101 @@
       class="loaderblock"
     ></ion-spinner>
   -->
-  <div *ngIf="items.length <= 2" class="loaderblock">
+  <div *ngIf="endload == false" class="loaderblock">
     <img src="assets/img/loader-bcd.svg" />
   </div>
-  <ion-list>
-    <ion-item
-      *ngFor="let item of items"
-      (click)="openFullPost(item)"
-      id="{{item.id}}"
-    >
-      <ion-thumbnail item-right>
-        <img
-          *ngIf="item.better_featured_image !== null"
-          [src]="
-            item.better_featured_image.media_details.sizes.medium.source_url
-          "
-        />
-        <img
-          *ngIf="item.better_featured_image == null"
-          src="assets/img/noimage.png"
-        />
-        <!--
+
+  <ng-container *ngFor="let item of items">
+    <ion-list *ngIf="endload == true">
+      <ion-item
+        *ngIf="item.id <= lastNewsId"
+        (click)="openFullPost(item)"
+        id="{{item.id}}"
+      >
+        <ion-thumbnail item-right>
           <img
-            class="newpost"
-            *ngIf="api.counetNews !== '' && item.id > this.api.lastNewsId"
-            src="assets/img/new-post.png"
+            *ngIf="item.better_featured_image !== null"
+            [src]="
+              item.better_featured_image.media_details.sizes.medium.source_url
+            "
           />
-        -->
-      </ion-thumbnail>
+          <img
+            *ngIf="
+              item.better_featured_image == null ||
+              item.better_featured_image.media_details == null
+            "
+            src="assets/img/noimage.png"
+          />
 
-      <ion-label item-content>
-        <p>{{ item.title.rendered }}</p>
+          <!--
+            <img
+              class="newpost"
+              *ngIf="api.counetNews !== '' && item.id > this.api.lastNewsId"
+              src="assets/img/new-post.png"
+            />
+          -->
+        </ion-thumbnail>
+
+        <ion-label item-content>
+          <!-- <p>{{ item.title.rendered }}</p> -->
+          <p [innerHTML]="item.title.rendered"></p>
+          <!--
+            <p>
+               <ion-badge color="light" position="bottom">
+
+                   {{ item.date | amTimeAgo }}</ion-badge
+                 >
+               </p>
+          -->
+        </ion-label>
 
         <!--
-          <p>
-             <ion-badge color="light" position="bottom">
-
-                 {{ item.date | amTimeAgo }}</ion-badge
-               >
-             </p>
-        -->
-      </ion-label>
-
-      <!--
-        -<ion-row class="bottominfo">
-          <ion-col col-6 text-left>
-            <ion-badge
-              color="second"
-              *ngIf="api.getCatName(item.categories[0])"
+          -<ion-row class="bottominfo">
+            <ion-col col-6 text-left>
+              <ion-badge
+                color="second"
+                *ngIf="api.getCatName(item.categories[0])"
+              >
+                {{ api.getCatName(item.categories[0]) }}
+              </ion-badge>
+            </ion-col>
+            <ion-col col-6 text-right>
+              <ion-badge color="light" right>
+                <ion-icon name="time"></ion-icon>
+                {{ item.date | date: 'MMMM dd, yyyy ' }}</ion-badge
+              ></ion-col
             >
-              {{ api.getCatName(item.categories[0]) }}
-            </ion-badge>
-          </ion-col>
-          <ion-col col-6 text-right>
-            <ion-badge color="light" right>
-              <ion-icon name="time"></ion-icon>
-              {{ item.date | date: 'MMMM dd, yyyy ' }}</ion-badge
-            ></ion-col
-          >
-        </ion-row>
-      -->
-    </ion-item>
-  </ion-list>
+          </ion-row>
+        -->
+      </ion-item> </ion-list
+  ></ng-container>
   <!--
     <div *ngIf="isLoading" text-center padding><ion-spinner></ion-spinner></div>
     <button *ngIf="showLoadMore" ion-button full (click)="loadData()">
       Load more News
     </button>
   -->
-
-  <ion-infinite-scroll
-    threshold="250px"
-    (ionInfinite)="loadData($event, false)"
-  >
-    <ion-infinite-scroll-content
-      loadingSpinner="bubbles"
-      loadingText="Loading more news..."
+  <!--
+    <ion-infinite-scroll
+      *ngIf="page < 100"
+      (ionInfinite)="loadData($event, false)"
     >
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading more news..."
+      >
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  -->
+  <button
+    ion-button
+    full
+    (click)="loadD($event, false)"
+    *ngIf="showLoadMore && endload"
+  >
+    <span *ngIf="!isLoading"> Load more</span>
+    <ion-spinner name="ios" *ngIf="isLoading"></ion-spinner>
+  </button>
 
   <!--
     <ion-list

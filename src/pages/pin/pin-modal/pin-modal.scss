@@ -1,4 +1,12 @@
 page-pin {
+  pin-dots{
+    margin-bottom: 30px;
+    .filled {
+      background-color: #FAC239;
+      border: 1px solid #Fac239;
+  }
+  }
+  
   ion-header {
     .toolbar-background {
       background-color: color($colors, light);
@@ -13,9 +21,9 @@ page-pin {
     }
   }
   .pin-header {
-    border-bottom: 1px solid #eaeaea;
+    // border-bottom: 1px solid #eaeaea;
     position: relative;
-    background-color: color($colors, light);
+    // background-color: color($colors, light);
     flex-grow: 1;
     display: flex;
     align-items: center;
@@ -43,10 +51,11 @@ page-pin {
       width: 100%;
       border-radius: 50%;
       line-height: 0;
-      bottom: $app-icon-radius * -1px;
+      top: 80px;
+      
       .app-icon {
-        width: $app-icon-radius * 2px;
-        height: $app-icon-radius * 2px;
+       width: $app-icon-radius * 2px;
+       height: $app-icon-radius * 2px;
       }
     }
   }
@@ -63,7 +72,7 @@ page-pin {
       min-height: 400px;
 
       @media (max-height: 500px) {
-        min-height: 340px;
+       min-height: 340px;
       }
     }
   }

@@ -4,13 +4,13 @@ page-add {
     padding-bottom: 10px;
 
     .item-title {
-      color: black;
+      // color: black;
       font-size: 18px;
       font-weight: 500;
     }
 
     .item-subtitle {
-      color: black;
+      // color: black;
       font-size: 16px;
       white-space: normal;
     }
@@ -22,6 +22,8 @@ page-add {
         $icon-dimension: 40px;
         height: $icon-dimension;
         width: $icon-dimension;
+        background: #fff;
+        border-radius: 50px;
       }
     }
   }

@@ -236,6 +236,7 @@ export class DatafeedPage {
   }
   ionViewWillEnter() {
     this.logger.log('Starting feed');
+    this.logger.log('->->->', this.navParams.data.validPairs);
     var pairs = [];
     pairs = this.navParams.data.validPairs;
     this.coinId = this.navParams.data.validPairs[0].BaseAssetCurrencyId;

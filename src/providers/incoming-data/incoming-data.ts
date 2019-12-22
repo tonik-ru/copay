@@ -19,6 +19,7 @@ export interface RedirParams {
   amount?: string;
   coin?: Coin;
   fromHomeCard?: boolean;
+  showBalance: boolean;
 }
 
 @Injectable()
@@ -822,7 +823,7 @@ export class IncomingDataProvider {
         toAddress: addr,
         description: message,
         coin,
-        requiredFeeRate
+        requiredFeeRate        
       };
       let nextView = {
         name: 'ConfirmPage',
@@ -846,7 +847,8 @@ export class IncomingDataProvider {
   private goToAmountPage(toAddress: string, coin: Coin): void {
     let stateParams = {
       toAddress,
-      coin
+      coin,
+      showBalance: true
     };
     let nextView = {
       name: 'AmountPage',

@@ -7,6 +7,20 @@
 <ion-header>
   <ion-navbar>
     <ion-title>{{ post.title.rendered }}</ion-title>
+    <ion-buttons right>
+      <button
+        ion-button
+        (click)="
+          sharePost(
+            post.title.rendered,
+            post.better_featured_image,
+            post.guid.rendered
+          )
+        "
+      >
+        <ion-icon name="ios-share-outline"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 

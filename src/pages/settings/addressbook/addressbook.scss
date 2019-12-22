@@ -33,13 +33,18 @@ page-addressbook {
       max-width: 300px;
     }
   }
+  img.gravatar{
+      background: #FFF; border-radius:50px;
+  }
   .contact {
     ion-label {
       display: flex;
       align-items: center;
       gravatar {
         margin-right: 1.5rem;
+      
       }
+     
     }
     .contact-info {
       overflow: hidden;

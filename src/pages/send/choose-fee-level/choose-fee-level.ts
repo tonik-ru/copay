@@ -9,6 +9,8 @@ import { FeeProvider } from '../../../providers/fee/fee';
 import { PopupProvider } from '../../../providers/popup/popup';
 import { UTXO_COINS } from '../../../providers/wallet/wallet';
 
+import { AppProvider } from '../../../providers/app/app';
+
 @Component({
   selector: 'page-choose-fee-level',
   templateUrl: 'choose-fee-level.html'
@@ -48,7 +50,8 @@ export class ChooseFeeLevelPage {
     private logger: Logger,
     private popupProvider: PopupProvider,
     private feeProvider: FeeProvider,
-    private translate: TranslateService
+    private translate: TranslateService,
+    public appProvider: AppProvider
   ) {
     this.okText = this.translate.instant('Ok');
     this.cancelText = this.translate.instant('Cancel');

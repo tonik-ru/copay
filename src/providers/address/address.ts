@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 // Providers
 import { BwcProvider } from '../../providers/bwc/bwc';
+import { Logger } from '../../providers/logger/logger';
 
 export interface CoinNetwork {
   coin: string;
@@ -14,7 +15,7 @@ export class AddressProvider {
   private bitcoreDiamond;
   private core;
 
-  constructor(private bwcProvider: BwcProvider) {
+  constructor(private bwcProvider: BwcProvider,  public logger: Logger) {
     this.bitcore = this.bwcProvider.getBitcore();
     this.bitcoreCash = this.bwcProvider.getBitcoreCash();
     this.bitcoreDiamond = this.bwcProvider.getBitcoreDiamond()
@@ -31,9 +32,16 @@ export class AddressProvider {
     network: string = 'livenet'
   ): CoinNetwork {
     const address = this.extractAddress(str);
+    if (str.includes('bitcoindiamond')){
+      network = this.bitcoreDiamond.Address(address).network.name;
+     return { coin: 'bcd', network };
+      } else if (str.includes('bitcoin')){
+        network = this.bitcore.Address(address).network.name;
+        return { coin: 'btc', network };
+      } else{
     try {
       network = this.bitcoreDiamond.Address(address).network.name;
-      return { coin: 'bcd', network };
+     return { coin: 'bcd', network };
     } catch (e) {
       try {
         network = this.bitcore.Address(address).network.name;
@@ -61,6 +69,7 @@ export class AddressProvider {
       }
     }
   }
+  }
 
   public isValid(str: string): boolean {
     // Check if the input is a valid uri or address
@@ -70,7 +79,7 @@ export class AddressProvider {
     const AddressCash = this.bitcoreCash.Address;
     const AddressDiamond = this.bitcoreDiamond.Address;
     const AddressEth = this.core.Validation;
-
+ 
     // Bip21 uri
     if (URI.isValid(str)) return true;
     if (URICash.isValid(str)) return true;

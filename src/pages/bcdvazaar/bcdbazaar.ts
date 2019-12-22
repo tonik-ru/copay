@@ -12,6 +12,10 @@ import {
   InAppBrowserOptions
 } from '@ionic-native/in-app-browser';
 
+import { BrowserTab } from '@ionic-native/browser-tab';
+
+import { SafariViewController } from '@ionic-native/safari-view-controller';
+
 /**
  * Generated class for the Tab4Page page.
  *
@@ -58,7 +62,9 @@ export class TabBcdbazaar {
     private logger: Logger,
     private shopsProvider: ShopsProvider,
     private iab: InAppBrowser,
-    public plt: Platform
+    public plt: Platform,
+    private browserTab: BrowserTab,
+    private safariViewController: SafariViewController
   ) {
     this.cats;
     this.items;
@@ -142,13 +148,13 @@ export class TabBcdbazaar {
     // };
     // this.iab.create(url, '_self', options);
     if (this.plt.is('ios')) {
-      let target = '_system';
-      this.iab.create(url, target, this.options);
+      this.useSafariTab(url);
       this.logger.log('ios');
     } else if (this.plt.is('android')) {
-      let target = '_system';
-      this.iab.create(url, target, this.options);
-      this.logger.log('android');
+      // let target = '_system';
+      // this.iab.create(url, target, this.options);
+      // this.logger.log('android');
+      this.useBrowserTab(url);
     } else {
       this.selectShop(url, '');
       this.logger.log('windows');
@@ -159,5 +165,45 @@ export class TabBcdbazaar {
     this.categorySelected = !this.categorySelected;
     this.catid = id;
     title !== 'exit' ? (this.Title = title) : (this.Title = 'Shopping');
+  }
+
+  useBrowserTab(site: string) {
+    this.browserTab.isAvailable().then(isAvailable => {
+      if (isAvailable) {
+        this.browserTab.openUrl(site);
+      } else {
+        // open URL with InAppBrowser instead or SafariViewController
+        this.logger.log('Failed open browserTab');
+      }
+    });
+  }
+
+  useSafariTab(myurl: string) {
+    this.safariViewController.isAvailable().then((available: boolean) => {
+      if (available) {
+        this.safariViewController
+          .show({
+            url: myurl,
+            hidden: false,
+            animated: false,
+            transition: 'curl',
+            enterReaderModeIfAvailable: true,
+            tintColor: '#ff0000'
+          })
+          .toPromise()
+          .then(
+            (result: any) => {
+              if (result.event === 'opened') this.logger.log('Opened');
+              else if (result.event === 'loaded') this.logger.log('Loaded');
+              else if (result.event === 'closed') this.logger.log('Closed');
+            },
+            (error: any) => this.logger.error(error)
+          );
+      } else {
+        let target = '_system';
+        this.iab.create(myurl, target, this.options);
+        this.logger.log('ios not safari');
+      }
+    });
   }
 }

@@ -1,4 +1,5 @@
 page-bcdbazaar {
+  
   .scroll-content{overflow-y: auto!important; -webkit-overflow-scrolling:touch}
   ion-header.header.header-ios,
   ion-header.header.header-md {
@@ -67,7 +68,19 @@ page-bcdbazaar {
     padding: 6px 8px;
   }*/
 
-  
+  .card {
+    padding-top: 1px;
+    width: 100%;
+    padding-bottom: 10px;
+    -webkit-box-shadow: 0 7px 12px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 7px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    margin: 0 auto;
+    display: block;
+    border-radius: 3px;
+    background-color: transparent;
+}
+
   .scroll-content {
     overflow-y: auto;
   }
@@ -193,10 +206,18 @@ page-bcdbazaar {
   margin-top:0px;
 }
 }
-
+.col5inrow {
+  width: 20%;
+  float: left;
+ 
+  padding: 0 5px;
+}
 .categoriesblock{text-align: center;
 img{ filter: invert(1); }
-.imgblock{background: linear-gradient(9deg, #f7eb5a, #ffaf03); padding:10px;border-radius:10px;}
+.imgblock{
+  // background: linear-gradient(9deg, #f7eb5a, #ffaf03);
+  background: linear-gradient(9deg, #bf5a12, #f1b534);
+  padding:10px;border-radius:10px;}
 
 }
 .transitionef{
@@ -205,9 +226,15 @@ img{ filter: invert(1); }
 
 @media screen and (max-width:410px){
  .categoriesblock p {
-    font-size: 1rem!important;
+    font-size: 0.9rem!important;
+    white-space: nowrap;
 }}
 .categoriesblock p {
   font-size: 1.3rem;
+}
+
+.bar-button-clear-ios, .bar-button-default.bar-button-ios-clear, .bar-button-clear-ios-clear {
+  color: #ffffff;
+  background-color: transparent;
 }
 }

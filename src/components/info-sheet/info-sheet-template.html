@@ -1,24 +1,25 @@
 <div class="confirm-sheet">
-    <div class="sheet-title">
-      <div class="title-icon">
-        <img *ngIf="type === 'success'" src="assets/img/infosheet/green-check-circled.svg">
-        <img *ngIf="type === 'info'" src="assets/img/infosheet/icon-info-blue.svg">
-        <img *ngIf="type === 'warning'" src="assets/img/infosheet/icon-warning-circled.svg">
-        <img *ngIf="type === 'danger'" src="assets/img/infosheet/icon-danger.svg">
-        <img *ngIf="type === 'love'" src="assets/img/infosheet/icon-heart.svg">
-      </div>
-      <ng-content select="[sheet-title-text]"></ng-content>
+  <div class="sheet-title">
+    <div class="title-icon">
+      <img *ngIf="type === 'success'" src="assets/img/infosheet/green-check-circled.svg">
+      <img *ngIf="type === 'info'" src="assets/img/infosheet/icon-info-blue.svg">
+      <img *ngIf="type === 'warning'" src="assets/img/infosheet/icon-warning-circled.svg">
+      <img *ngIf="type === 'danger'" src="assets/img/infosheet/icon-danger.svg">
+      <img *ngIf="type === 'love'" src="assets/img/infosheet/icon-heart.svg">
+      <img *ngIf="type === 'clipboard'" src="assets/img/infosheet/clipboard.svg">
     </div>
-    <div class="sheet-text">
-      <ng-content select="[sheet-text]"></ng-content>
+    <ng-content select="[sheet-title-text]"></ng-content>
+  </div>
+  <div class="sheet-text">
+    <ng-content select="[sheet-text]"></ng-content>
+  </div>
+  <div class="sheet-btn-group">
+      <div class="sheet-btn" [ngClass]="{blue: type === 'info' || type === 'love', yellow: type === 'warning', red: type === 'danger'}"
+      (click)="dismiss(true)">
+      <ng-content select="[sheet-button-text]"></ng-content>
     </div>
-    <div class="sheet-btn-group">
-        <div class="sheet-btn" [ngClass]="{blue: type === 'info' || type === 'love', yellow: type === 'warning', red: type === 'danger'}"
-        (click)="dismiss(true)">
-        <ng-content select="[sheet-button-text]"></ng-content>
-      </div>
-      <div class="sheet-second-btn" [ngClass]="{primary: type == 'danger'}" (click)="dismiss(false)">
-        <ng-content select="[sheet-second-button-text]"></ng-content>
-      </div>
+    <div class="sheet-second-btn" [ngClass]="{primary: type == 'danger'}" (click)="dismiss(false)">
+      <ng-content select="[sheet-second-button-text]"></ng-content>
     </div>
   </div>
+</div>

@@ -90,3 +90,8 @@ export { TraderProvider } from '../providers/trader/trader';
 export { FeedProvider } from '../providers/trader/feed';
 export { GAnalyticsProvider } from '../providers/ganalytics/ganalytics';
 export { ShopsProvider } from '../providers/shops/shops';
+
+export { BrowserTab } from '@ionic-native/browser-tab';
+export { SafariViewController } from '@ionic-native/safari-view-controller';
+export { FileTransfer,  FileTransferObject } from '@ionic-native/file-transfer';
+export { FileChooser } from '@ionic-native/file-chooser';

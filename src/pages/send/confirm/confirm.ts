@@ -171,6 +171,7 @@ export class ConfirmPage extends WalletTabsChild {
       amount = this.navParams.data.totalAmount;
     } else {
       amount = this.navParams.data.amount;
+    
       try {
         if (B) {
           networkName = new B.Address(this.navParams.data.toAddress).network
@@ -178,6 +179,7 @@ export class ConfirmPage extends WalletTabsChild {
         } else {
           networkName = this.navParams.data.network || 'livenet';
         }
+        this.logger.log('networkName-->', networkName);
       } catch (e) {
         const message = this.replaceParametersProvider.replace(
           this.translate.instant(

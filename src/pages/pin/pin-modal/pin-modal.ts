@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Vibration } from '@ionic-native/vibration';
-import { NavParams, Platform, ViewController } from 'ionic-angular';
+import { NavController, NavParams, Platform, ViewController } from 'ionic-angular';
 
 import { Subscription } from 'rxjs';
 
@@ -9,8 +9,8 @@ import { Animate } from '../../../directives/animate/animate';
 import { ConfigProvider } from '../../../providers/config/config';
 import { Logger } from '../../../providers/logger/logger';
 import { PersistenceProvider } from '../../../providers/persistence/persistence';
-import { PlatformProvider } from '../../../providers/platform/platform';
 
+import { AppProvider } from '../../../providers/app/app';
 @Component({
   selector: 'page-pin',
   templateUrl: 'pin-modal.html'
@@ -40,12 +40,13 @@ export class PinModalPage {
     private configProvider: ConfigProvider,
     private logger: Logger,
     private platform: Platform,
+    private navCtrl: NavController,
     private navParams: NavParams,
     private persistenceProvider: PersistenceProvider,
     private statusBar: StatusBar,
     private vibration: Vibration,
     private viewCtrl: ViewController,
-    private platformProvider: PlatformProvider
+    public appProvider: AppProvider
   ) {
     this.ATTEMPT_LIMIT = 3;
     this.ATTEMPT_LOCK_OUT_TIME = 2 * 60;
@@ -68,28 +69,27 @@ export class PinModalPage {
   }
 
   ionViewWillEnter() {
-    if (this.platformProvider.isIOS) {
+    if (this.platform.is('ios')) {
       this.statusBar.styleDefault();
     }
   }
 
   ionViewWillLeave() {
-    if (this.platformProvider.isIOS) {
+    if (this.platform.is('ios')) {
       this.statusBar.styleLightContent();
     }
   }
 
   ionViewDidLoad() {
     this.onPauseSubscription = this.platform.pause.subscribe(() => {
-      this.lockReleaseTimeout.unref();
-      this.countDown.unref();
+      clearInterval(this.countDown);
+      clearTimeout(this.lockReleaseTimeout);
+      this.expires = this.disableButtons = null;
       this.currentPin = this.firstPinEntered = '';
     });
     this.onResumeSubscription = this.platform.resume.subscribe(() => {
       this.disableButtons = true;
-      setTimeout(() => {
-        this.checkIfLocked();
-      }, 1000);
+      this.checkIfLocked();
     });
   }
 
@@ -101,13 +101,13 @@ export class PinModalPage {
   private checkIfLocked(): void {
     this.persistenceProvider.getLockStatus().then((isLocked: string) => {
       if (!isLocked) {
-        this.disableButtons = null;
-        return;
+       this.disableButtons = null;
+       return;
       }
 
       if (this.action === 'checkPin') {
-        this.showLockTimer();
-        this.setLockRelease();
+       this.showLockTimer();
+       this.setLockRelease();
       }
     });
   }
@@ -117,7 +117,8 @@ export class PinModalPage {
       clearInterval(this.countDown);
     }
     this.unregister();
-    this.viewCtrl.dismiss(cancelClicked);
+    if (this.action === 'lockSetUp') this.viewCtrl.dismiss(cancelClicked);
+    else this.navCtrl.pop({ animate: true });
   }
 
   public newEntry(value: string): void {
@@ -130,22 +131,22 @@ export class PinModalPage {
     if (!this.isComplete()) return;
     if (this.action === 'checkPin' || this.action === 'lockSetUp') {
       setTimeout(() => {
-        this.checkIfCorrect();
+       this.checkIfCorrect();
       }, 100);
     }
     if (this.action === 'pinSetUp') {
       setTimeout(() => {
-        if (!this.confirmingPin) {
-          this.confirmingPin = true;
-          this.firstPinEntered = this.currentPin;
-          this.currentPin = '';
-        } else if (this.firstPinEntered === this.currentPin) this.save();
-        else {
-          this.firstPinEntered = this.currentPin = '';
-          this.incorrect = true;
-          this.confirmingPin = false;
-          this.shakeCode();
-        }
+       if (!this.confirmingPin) {
+       this.confirmingPin = true;
+       this.firstPinEntered = this.currentPin;
+       this.currentPin = '';
+       } else if (this.firstPinEntered === this.currentPin) this.save();
+       else {
+       this.firstPinEntered = this.currentPin = '';
+       this.incorrect = true;
+       this.confirmingPin = false;
+       this.shakeCode();
+       }
       }, 100);
     }
   }
@@ -158,7 +159,6 @@ export class PinModalPage {
       this.currentAttempts == this.ATTEMPT_LIMIT &&
       this.action !== 'lockSetUp'
     ) {
-      this.countDown = this.lockReleaseTimeout = null;
       this.currentAttempts = 0;
       this.persistenceProvider.setLockStatus('locked');
       this.showLockTimer();
@@ -170,10 +170,6 @@ export class PinModalPage {
 
   private showLockTimer(): void {
     this.disableButtons = true;
-    if (this.countDown) {
-      this.countDown.ref();
-      return;
-    }
     const bannedUntil =
       Math.floor(Date.now() / 1000) + this.ATTEMPT_LOCK_OUT_TIME;
     this.countDown = setInterval(() => {
@@ -186,10 +182,6 @@ export class PinModalPage {
   }
 
   private setLockRelease(): void {
-    if (this.lockReleaseTimeout) {
-      this.lockReleaseTimeout.ref();
-      return;
-    }
     this.lockReleaseTimeout = setTimeout(() => {
       clearInterval(this.countDown);
       this.expires = this.disableButtons = null;
@@ -220,7 +212,7 @@ export class PinModalPage {
     const pinValue = config.lock && config.lock.value;
     if (pinValue == this.currentPin) {
       if (this.action === 'checkPin' || this.action === 'lockSetUp') {
-        this.close();
+       this.close();
       }
     } else {
       this.currentPin = '';

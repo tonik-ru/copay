@@ -32,4 +32,58 @@ page-addressbook-add {
     border-color: #b2b2b2;
     background: transparent;
   }
+
+
+  ul.linksnew {
+    /* width: auto; */
+    /* display: inline-block; */
+    /* margin: 0 auto; */
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    padding: 0 0px !important;
+    display: flex;
+  }
+  ul.linksnew li {
+    display: inline-flex;
+    border: 1px solid #fff;
+    padding: 5px 10px;
+    margin: 0px 3px 10px;
+    border-radius: 8px;
+    line-height: 35px;
+  }
+  ul.linksnew li a {
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  ul.linksnew li:hover {
+    background: #fff;
+  }
+  ul.linksnew li:hover a {
+    color: #000;
+  }
+ .activelink {
+    background: #fff !important;
+    color: #000;
+}
+.icon-wallet {
+  border-radius: 30px;
+  background: #fff !important;
+  -webkit-box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  margin-right: 10px;
+}
+.contact-view-header {
+  position: relative;
+  height: 70px;
+  background-color: $toolbar-background;
+  padding-top: 20px;
+  margin-bottom: 50px;
+  text-align: center;
+  .gravatar {
+    display: inline-block;
+    background:#FFF; border-radius: 50px;  
+}
+}
 }

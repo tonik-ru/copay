@@ -31,6 +31,7 @@ export type InfoSheetType =
   | 'above-maximum-gift-card-amount'
   | 'below-minimum-gift-card-amount'
   | 'legacy-address-info'
+  | 'clipboard-address-info'
   | 'miner-fee'
   | 'miner-fee-notice'
   | 'payment-request'

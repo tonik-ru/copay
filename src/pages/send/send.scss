@@ -71,7 +71,64 @@ page-send {
     padding: 10px;
   }
 
-  .qr-container img {
-    width: 100%;
+  .qr-container {
+    border: none!important;
+    img{
+    width: 35%; border:1px solid #000; border-radius: 5px; padding: 5px;}
   }
+  .toolbar-background-ios{
+    background: #fac239!important;
+  }
+  .toolbar-title{ text-align:  center!important}
+  .wallet-details-header__balance{margin-left: auto; text-align: center}
+
+  .scan{z-index: 99}
+
+  .bcdHead{
+    background: linear-gradient(180deg, #1a202a 0%, #333B47) !important;
+    .toolbar-background{
+       background: #1A202A !important;
+     }
+     .balance-card{
+       background: linear-gradient(180deg, #1a202a 0%, #333B47) !important
+     }
+    .address-container{
+      background: #333B47!important;
+    }
+   }
+   
+   .btcHead{
+    background: linear-gradient(180deg, #f2a900 0%, #da7e30) !important;
+     .toolbar-background{
+        background: #f2a900 !important;
+      }
+      .balance-card{
+        background: linear-gradient(180deg, #f2a900 0%, #da7e30) !important;
+       
+       
+      }
+     .address-container{
+       background: #da7e30!important;
+     }
+    }
+    .ethHead{
+      background: linear-gradient(180deg, #9a71ec 0%, #0051ca) !important;
+      
+     .toolbar-background{
+        background: #9a71ec !important;
+      }
+      .balance-card{
+       background: linear-gradient(180deg, #9a71ec 0%, #0051ca) !important;
+       
+       
+      }
+     .address-container{
+       background: #0051ca!important;
+     }
+    }
+    .wallet-details-header__balance-hidden.ng-star-inserted{
+      text-align: center;
+      margin-right: auto;
+      margin-left: auto; text-transform: uppercase;
+    }
 }

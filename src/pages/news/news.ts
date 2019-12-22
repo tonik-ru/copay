@@ -24,7 +24,7 @@ import { FullpostPage } from './fullpost/fullpost';
 import { NewsmenuPage } from './newsmenu/newsmenu';
 import { NewssearchPage } from './newssearch/newssearch';
 
-// import { timer } from 'rxjs/observable/timer';
+import { timer } from 'rxjs/observable/timer';
 
 import { Storage } from '@ionic/storage';
 
@@ -42,20 +42,24 @@ import { Storage } from '@ionic/storage';
 export class TabNews {
   @ViewChild('pageTop') pageTop: Content;
   public items = [];
+    public itemsNew = [];
   private per_page: number = 10;
   private page: number = 1;
-  private showLoadMore: boolean = false;
-  private isLoading: boolean = false;
+  public showLoadMore: boolean = false;
+  public isLoading: boolean = false;
   private category_id: number = 0;
   public cat_name_title: string = '';
   private sort: string = '0';
   searchQuery: string = '';
   fabToHide;
-  // private refreshTimer;
+  private refreshTimer;
   refreshChecker;
+  oldScrollTop: number = 10;
 
-  oldScrollTop: number = 0;
   lastNewsId;
+  scrollindex;
+  lastNewsIdTemp;
+  endload: boolean = false;
 
   constructor(
     private renderer: Renderer,
@@ -83,12 +87,53 @@ export class TabNews {
     // this.loadData();
   }
 
+  loadD() {
+    this.isLoading = true;
+    let url: string =
+      'posts?_embed&per_page=' + this.per_page + '&page=' + this.page;
+    url += this.category_id != 0 ? '&categories=' + this.category_id : '';
+    url +=
+      this.sort == '1'
+        ? '&order=asc'
+        : this.sort == '2'
+        ? '&order=title&order=asc'
+        : this.sort == '3'
+        ? '&order=title&order=desc'
+        : '';
+    url += this.searchQuery.length > 0 ? '&search=' + this.searchQuery : '';
+    this.api.get(url).subscribe(
+      (result: any[]) => {
+        this.isLoading = false;
+        this.items = this.items.concat(result);
+        this.lastNewsId =
+          this.lastNewsId == this.items[0].id
+            ? this.items[0].id
+            : this.lastNewsId;
+        if (this.lastNewsId == this.items[0].id) {
+          this.endload = true;
+        }
+
+        this.lastNewsIdTemp = this.items[0].id;
+        if (result.length === this.per_page) {
+          this.page++;
+          this.showLoadMore = true;
+        } else {
+          this.showLoadMore = false;
+        }
+      },
+      error => {
+        this.isLoading = false;
+        this.logger.log(error);
+      }
+    );
+  }
+
   loadData(infiniteScroll = null, manualRef) {
     if (!this.isLoading) {
       this.isLoading = true;
 
       this.logger.log('Loading news');
-
+      // this.page === 1;
       if (
         infiniteScroll !== null &&
         infiniteScroll.ionRefresh &&
@@ -96,9 +141,6 @@ export class TabNews {
       ) {
         this.page = 1;
         this.api.newsCount = '';
-      }
-      if (manualRef == true) {
-        this.page = 1;
       }
 
       let url: string =
@@ -113,6 +155,7 @@ export class TabNews {
           ? '&order=title&order=desc'
           : '';
       url += this.searchQuery.length > 0 ? '&search=' + this.searchQuery : '';
+      this.logger.log('search', this.searchQuery);
 
       /*let data: Observable<any>; data =*/
       this.api.get(url).subscribe(
@@ -129,7 +172,21 @@ export class TabNews {
           // infiniteScroll != null && infiniteScroll.ionRefresh
           //  ? result
           //  : this.items.concat(result);
-          this.lastNewsId = this.items[0].id;
+
+          this.lastNewsId =
+            this.lastNewsId == this.items[0].id
+              ? this.items[0].id
+              : this.lastNewsId;
+          if (this.lastNewsId == this.items[0].id) {
+            this.endload = true;
+          }
+
+          this.lastNewsIdTemp = this.items[0].id;
+          // if (this.items[0].id == val) {
+          //   this.lastNewsId = val;
+          // } else {
+          //   this.lastNewsId = this.items[0].id;
+          // }
 
           if (result.length === this.per_page) {
             this.page++;
@@ -152,6 +209,23 @@ export class TabNews {
       );
     }
     this.showLoadMore;
+  }
+
+  loadNewData() {
+    let url: string = 'posts?_embed&per_page=100&page=1';
+
+    this.api.get(url).subscribe(
+      (result: any[]) => {
+        this.itemsNew = result;
+        this.lastNewsIdTemp = this.itemsNew[0].id;
+
+        this.logger.log('Updated new news');
+        this.endload = true;
+      },
+      error => {
+        this.logger.log(error);
+      }
+    );
   }
 
   onSearch() {
@@ -195,22 +269,37 @@ export class TabNews {
   ionViewDidLoad() {}
 
   ionViewWillEnter() {
-    this.refreshChecker = setInterval(() => {
-      this.logger.log('NewsCoun ->', this.api.newsCount);
-      if (this.api.newsCount >= 1) {
-        this.loadData(null, true);
+    this.storage.get('lastNewsId').then(val => {
+      // this.logger.log('Val,', val);
+
+      this.lastNewsId = val;
+      if (this.api.newsCount !== '100+') {
+        this.page =
+          this.api.newsCount !== ''
+            ? Math.round(this.api.newsCount / this.per_page)
+            : 1;
+      } else if (this.api.newsCount == '100+') {
+        this.page =
+          this.api.newsCount !== '' ? Math.round(100 / this.per_page) : 1;
       }
-    }, 5000);
 
-    this.logger.log('LAST ID0,', this.lastNewsId);
-  }
+      this.loadNewData();
+      this.loadData(null, true);
+    });
 
-  ngOnInit() {
-    // this.refreshTimer = timer(1000, 15000).subscribe(() =>
-    //   this.loadData(null, true)
-    // );
-    this.loadData(null, true);
+    this.logger.log('Page,', this.page);
+    // this.refreshChecker = setInterval(() => {
+    //   this.logger.log('NewsCoun ->', this.api.newsCount);
+    //   if (this.api.newsCount >= 1) {
 
+    //   }
+
+    // }, 5000);
+    if (this.api.newsCount !== '' && this.api.newsCount !== '100+') {
+      this.scrollindex = this.api.newsCount * 102 - 200;
+    } else if (this.api.newsCount == '100+') {
+      this.scrollindex = 100 * 102 - 200;
+    }
     this.fabToHide = this.element.nativeElement.getElementsByClassName(
       'fab'
     )[0];
@@ -222,39 +311,59 @@ export class TabNews {
     this.renderer.setElementStyle(this.fabToHide, 'opacity', '0');
   }
 
+  ngOnInit() {
+    this.loadNewData();
+
+    this.refreshTimer = timer(1, 15000).subscribe(() => this.loadNewData());
+    this.loadData(null, true);
+    this.loadNewData();
+  }
+
   onContentScroll(e) {
-    if (e.scrollTop - this.oldScrollTop > 10) {
-      this.logger.log('DOWN');
-      this.renderer.setElementStyle(this.fabToHide, 'opacity', '1');
-    } else if (e.scrollTop - this.oldScrollTop < 0) {
-      this.renderer.setElementStyle(this.fabToHide, 'opacity', '0');
-      this.logger.log('UP');
-    }
+    this.logger.log(
+      'scrollindex',
+      this.api.newsCount + '  ' + this.scrollindex,
+      '-----',
+      e.scrollTop
+    );
+    if (e.scrollTop !== null) {
+      if (e.scrollTop - this.oldScrollTop > 10) {
+        this.logger.log('DOWN');
+        this.renderer.setElementStyle(this.fabToHide, 'opacity', '1');
+      } else if (e.scrollTop - this.oldScrollTop < 0) {
+        this.renderer.setElementStyle(this.fabToHide, 'opacity', '0');
+        this.logger.log('UP');
+      }
 
-    if (e.scrollTop > 70) {
-      this.api.newsCount = '';
-      this.logger.log('Counter = 0', this.api.newsCount);
-      this.storage.set('lastNewsId', this.lastNewsId);
-    }
+      if (e.scrollTop > this.scrollindex) {
+        this.api.newsCount = '';
+        this.logger.log('Counter = 0', this.api.newsCount);
+        this.storage.set('lastNewsId', this.lastNewsIdTemp);
+      }
 
-    this.oldScrollTop = e.scrollTop;
+      this.oldScrollTop = e.scrollTop;
+    }
   }
   ionViewWillLeave() {
     if (this.refreshChecker) {
       clearInterval(this.refreshChecker);
     }
-    // this.refreshTimer.unsubscribe();
+    this.refreshTimer.unsubscribe();
   }
   ionViewDidLeave() {
     if (this.refreshChecker) {
       clearInterval(this.refreshChecker);
     }
-    // this.refreshTimer.unsubscribe();
+    this.refreshTimer.unsubscribe();
   }
   ngOnDestroy() {
     if (this.refreshChecker) {
       clearInterval(this.refreshChecker);
     }
-    // this.refreshTimer.unsubscribe();
+    this.refreshTimer.unsubscribe();
+  }
+
+  testscroll(e) {
+    this.logger.log(e.scrollTop);
   }
 }

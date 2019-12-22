@@ -1,5 +1,5 @@
-<ion-header [ngClass]="{'wallet-details-header': wallet}">
-  <ion-navbar class="app-color">
+<ion-header [ngClass]="{bcdHead: wallet.coin == 'bcd', btcHead: wallet.coin == 'btc', ethHead: wallet.coin == 'eth'}">
+  <ion-navbar>
     <ion-buttons *ngIf="wallet" left>
       <button class="modal-close-button" (click)="closeCam()" ion-button>
         <ion-icon ios="md-close" md="md-close"></ion-icon>
@@ -9,28 +9,25 @@
       (wallet && wallet.name) || ('Amount' | translate)
     }}</ion-title>
 
-    <!--
-      <ion-buttons *ngIf="wallet" right>
-        <button
-          class="modal-close-button"
-          (click)="goToMultiSendPage()"
-          ion-button
-        >
-          <ion-icon name="person-add"></ion-icon>
-        </button>
-      </ion-buttons>
-    -->
+    <ion-buttons *ngIf="wallet && !shouldShowZeroState()" right>
+      <button
+        class="modal-close-button"
+        (click)="goToMultiSendPage()"
+        ion-button
+      >
+        <ion-icon name="person-add"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
-  <ion-toolbar *ngIf="wallet" class="app-color">
+  <ion-toolbar *ngIf="wallet">
     <div *ngIf="!wallet.balanceHidden && !wallet.scanning && wallet.cachedStatus" class="wallet-details-header__balance">
-      <span>{{wallet.cachedStatus && wallet.cachedStatus.spendableBalanceStr}}</span>
-      <ion-icon *ngIf="wallet.cachedStatus.totalBalanceSat != wallet.cachedStatus.spendableAmount" ios="ios-timer-outline" md="md-timer"></ion-icon>
-    </div>
+      <span>{{wallet.cachedStatus && wallet.cachedStatus.totalBalanceStr}}</span>
+     </div>
     <div
       *ngIf="wallet.balanceHidden && !wallet.scanning"
       class="wallet-details-header__balance-hidden"
     >
-      <span class="title" translate>[Balance Hidden]</span>
+      <span class="title" translate>*.** {{ wallet.coin }}</span>
     </div>
   </ion-toolbar>
 </ion-header>
@@ -73,30 +70,38 @@
             name="backspace"
             (click)="cleanSearch()"
           ></ion-icon>
-          <!--
-            <ion-icon item-end class="scan-icon" (click)="openScanner()">
-              <img src="assets/img/scan-ico.svg" />
-            </ion-icon>
-          -->
+
+          <ion-icon item-end class="scan-icon" (click)="pasteAddress()"
+            ><img src="assets/img/copy.svg" width="24" style="opacity: 0.4;" />
+          </ion-icon>
+
+          <ion-icon item-end class="scan-icon" (click)="openScanner()">
+            <img src="assets/img/scan-new-top.svg" />
+          </ion-icon>
         </ion-item>
-        <div class="qr-container" (click)="openScanner()">
+      </div>
+      <div class="qr-container">
+        <div class="lines-background"></div>
+        <div class="scan" (click)="openScanner()">
           <img src="assets/img/scan-button.svg" />
         </div>
       </div>
 
-      <div *ngIf="wallet.coin !== 'eth'" class="card">
-        <ion-item-divider class="title">
-          <span translate>Transfer to Multiple Recipients</span>
-        </ion-item-divider>
-        <ion-list>
-          <button ion-item (click)="goToMultiSendPage()">
-            <ion-icon class="item-img" item-start (click)="goToMultiSendPage()">
-              <img src="assets/img/address-book-add.svg" />
-            </ion-icon>
-            <div class="item-title">Add recipient</div>
-          </button>
-        </ion-list>
-      </div>
+      <!--
+        <div *ngIf="wallet.coin !== 'eth'" class="card">
+          <ion-item-divider class="title">
+            <span translate>Transfer to Multiple Recipients</span>
+          </ion-item-divider>
+          <ion-list>
+            <button ion-item (click)="goToMultiSendPage()">
+              <ion-icon class="item-img" item-start (click)="goToMultiSendPage()">
+                <img src="assets/img/address-book-add.svg" />
+              </ion-icon>
+              <div class="item-title">Add recipient</div>
+            </button>
+          </ion-list>
+        </div>
+      -->
 
       <page-transfer-to
         [wallet]="wallet"

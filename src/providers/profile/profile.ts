@@ -26,9 +26,9 @@ import { WalletOptions } from '../wallet/wallet';
 import { Profile } from '../../models/profile/profile.model';
 
 enum CoinName {
-  BTC = 'Bitcoin',
-  BCH = 'Bitcoin Cash',
-  ETH = 'Ethereum'
+  BTC = 'Personal Wallet [BTC]',
+  BCH = 'Personal Wallet [BTH]',
+  ETH = 'Personal Wallet [ETH]'
 }
 
 interface WalletGroups {
@@ -308,7 +308,7 @@ export class ProfileProvider {
       wallet.setNotificationsInterval(this.UPDATE_PERIOD);
       wallet.openWallet(() => {});
     });
-    
+
     this.events.subscribe('Local/ConfigUpdate', opts => {
       this.logger.debug('Local/ConfigUpdate handler @profile', opts);
 
@@ -1605,14 +1605,6 @@ export class ProfileProvider {
     return _.sortBy(ret, 'order');
   }
 
-  public toggleHideBalanceFlag(walletId: string): void {
-    this.wallet[walletId].balanceHidden = !this.wallet[walletId].balanceHidden;
-    this.persistenceProvider.setHideBalanceFlag(
-      walletId,
-      this.wallet[walletId].balanceHidden
-    );
-  }
-
   public toggleHideWalletFlag(walletId: string): void {
     this.wallet[walletId].hidden = !this.wallet[walletId].hidden;
     this.persistenceProvider.setHideWalletFlag(
@@ -1621,8 +1613,24 @@ export class ProfileProvider {
     );
   }
 
-  public toggleHideBalanceFlagall(walletId: string): void {
+  public toggleHideBalanceFlag(walletId: string): void {
+    this.wallet[walletId].balanceHidden = !this.wallet[walletId].balanceHidden;
+    this.persistenceProvider.setHideBalanceFlag(
+      walletId,
+      this.wallet[walletId].balanceHidden
+    );
+  }
+
+  public toggleHideBalanceFlagShow(walletId: string): void {
     this.wallet[walletId].balanceHidden = true;
+    this.persistenceProvider.setHideBalanceFlag(
+      walletId,
+      this.wallet[walletId].balanceHidden
+    );
+  }
+
+  public toggleHideBalanceFlagall(walletId: string): void {
+    this.wallet[walletId].balanceHidden = false;
     this.persistenceProvider.setHideBalanceFlag(
       walletId,
       this.wallet[walletId].balanceHidden

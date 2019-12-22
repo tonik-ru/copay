@@ -55,8 +55,9 @@ export class SelectCurrencyPage {
     private persistenceProvider: PersistenceProvider
   ) {
     this.coinsSelected = {
+      bcd: true,
       btc: true,
-      bch: true,
+      bch: false,
       eth: true
     };
     this.shouldShowKeyOnboarding();

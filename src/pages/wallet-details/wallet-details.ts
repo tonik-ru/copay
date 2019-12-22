@@ -32,6 +32,8 @@ import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
 import { SearchTxModalPage } from './search-tx-modal/search-tx-modal';
 import { WalletBalancePage } from './wallet-balance/wallet-balance';
 
+import { DatafeedPage } from '../trader/datafeed/datafeed';
+
 const HISTORY_SHOW_LIMIT = 10;
 const MIN_UPDATE_TIME = 2000;
 const TIMEOUT_FOR_REFRESHER = 1000;
@@ -127,7 +129,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     await Observable.timer(200).toPromise();
     // this.playAnimation = false;
   }
-  
+
   public async setAddress(newAddr?: boolean, failed?: boolean): Promise<void> {
     this.loading = newAddr || _.isEmpty(this.address) ? true : false;
 
@@ -198,7 +200,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     );
     infoSheet.present();
   }
-  
+
   subscribeEvents() {
     this.events.subscribe('Local/WalletUpdate', this.updateStatus);
     this.events.subscribe('Local/WalletHistoryUpdate', this.updateHistory);
@@ -212,10 +214,11 @@ export class WalletDetailsPage extends WalletTabsChild {
   ionViewWillEnter() {
     this.onResumeSubscription = this.platform.resume.subscribe(() => {
       this.profileProvider.setFastRefresh(this.wallet);
+      this.setAddress();
       this.subscribeEvents();
     });
-
-    this.logger.log(this.wallet.coin);
+    this.setAddress();
+    this.logger.log('coin',this.wallet.coin);
   }
 
   // Start by firing a walletFocus event.
@@ -554,6 +557,60 @@ export class WalletDetailsPage extends WalletTabsChild {
         txid: data.txid
       });
     });
+  }
+  public openTrader(): void {
+    let bcd = {
+      validPairs: [
+        {
+          BaseAsset: 'BCD',
+          BaseAssetCurrencyId: 76,
+          Exchange: 'BINA',
+          PairId: 99,
+          Precision: 1e-8,
+          QuoteAsset: 'BTC',
+          Symbol: 'BCDBTC'
+        }
+      ]
+    };
+
+    let btc = {
+      validPairs: [
+        {
+          BaseAsset: 'BTC',
+          BaseAssetCurrencyId: 1,
+          Exchange: 'BINA',
+          PairId: 2,
+          Precision: 0.01,
+          QuoteAsset: 'USDT',
+          Symbol: 'BTCUSDT'
+        }
+      ]
+    };
+
+    let eth = {
+      validPairs: [
+        {
+          BaseAsset: 'ETH',
+          BaseAssetCurrencyId: 3,
+          Exchange: 'BINA',
+          PairId: 3,
+          Precision: 0.01,
+          QuoteAsset: 'USDT',
+          Symbol: 'ETHUSDT'
+        }
+      ]
+    };
+
+    let coin =
+      this.wallet.coin == 'bcd'
+        ? bcd
+        : this.wallet.coin == 'btc'
+        ? btc
+        : this.wallet.coin == 'eth'
+        ? eth
+        : '';
+
+    this.navCtrl.push(DatafeedPage, coin);
   }
 
   public openExternalLink(url: string): void {

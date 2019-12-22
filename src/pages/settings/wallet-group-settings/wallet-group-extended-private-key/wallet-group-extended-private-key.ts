@@ -4,6 +4,7 @@ import { NavController, NavParams } from 'ionic-angular';
 
 // providers
 import { ActionSheetProvider } from '../../../../providers/action-sheet/action-sheet';
+import { AppProvider } from '../../../../providers/app/app';
 import { BwcErrorProvider } from '../../../../providers/bwc-error/bwc-error';
 import { KeyProvider } from '../../../../providers/key/key';
 import { Logger } from '../../../../providers/logger/logger';
@@ -19,6 +20,7 @@ export class WalletGroupExtendedPrivateKeyPage {
   public xPrivKey: string;
 
   private keyId;
+  public appName: string;
 
   constructor(
     private profileProvider: ProfileProvider,
@@ -28,8 +30,11 @@ export class WalletGroupExtendedPrivateKeyPage {
     private actionSheetProvider: ActionSheetProvider,
     private translate: TranslateService,
     private bwcErrorProvider: BwcErrorProvider,
-    private keyProvider: KeyProvider
-  ) {}
+    private keyProvider: KeyProvider,
+    private appProvider: AppProvider
+  ) {
+    this.appName = this.appProvider.info.userVisibleName;
+  }
 
   ionViewDidLoad() {
     this.logger.info('Loaded: WalletExtendedPrivateKeyPage');

@@ -8,8 +8,17 @@
 
 
 <ion-content>
-
+  
+      
   <form [formGroup]="addressBookAdd">
+      <!-- <div class="contact-view-header">
+       
+          <ion-avatar item-start (click)="addPhoto()" >
+              <img class="gravatar" [src]="photo" alt="" height="80" width="80">
+            <ion-input formControlName="photo" type="hidden" [value]="photo"></ion-input>
+            </ion-avatar> 
+        </div> -->
+
     <ion-item>
       <ion-label stacked>{{ 'Name' | translate }}</ion-label>
       <ion-input formControlName="name" type="text"></ion-input>
@@ -19,11 +28,20 @@
       <ion-label stacked>{{ 'Email' | translate }}</ion-label>
       <ion-input formControlName="email" type="email"></ion-input>
     </ion-item>
-
     <ion-item>
+        <p stacked>{{ 'Coin' | translate }}</p>
+        <ul class="linksnew">
+            <li [ngClass]="{'activelink': coinSelector == 'bitcoindiamond:'}" (click)="coinSelcet('bcd')"><img class="icon-wallet" src="assets/img/currencies/bcd.svg">BCD</li>
+            <li [ngClass]="{'activelink': coinSelector == 'bitcoin:'}" (click)="coinSelcet('btc')"><img class="icon-wallet" src="assets/img/currencies/btc.svg">BTC</li>
+            <!-- <li [ngClass]="{'activelink': coinSelector == 'bitcoincash:'}" (click)="coinSelcet('bch')"><img class="icon-wallet" src="assets/img/currencies/bch.svg">BCH</li> -->
+            <li [ngClass]="{'activelink': coinSelector == 'eth:'}" (click)="coinSelcet('eth')"><img class="icon-wallet" src="assets/img/currencies/eth.svg">ETH</li>
+          </ul>
+    </ion-item>
+
+    <ion-item *ngIf="showWallet">
       <ion-label stacked>{{ 'Wallet Address' | translate }}</ion-label>
       <ion-input formControlName="address" type="text" [value]="addressBookAdd.value.address" address-validator></ion-input>
-
+      
       <ion-icon *ngIf="addressBookAdd.controls['address'].status == 'VALID'" name="ios-checkmark-circle" class="check success" item-right></ion-icon>
       <ion-icon *ngIf="addressBookAdd.value.address && addressBookAdd.controls['address'].status == 'INVALID'" class="check fail" name="ios-close-circle" item-right></ion-icon>
 

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 // Providers
-import { Logger, PersistenceProvider } from '../../../providers';
+import { AppProvider, Logger, PersistenceProvider } from '../../../providers';
 
 @Component({
   selector: 'page-eth-live-card',
@@ -11,11 +11,14 @@ export class EthLiveCardPage {
   @Output() addEthClicked = new EventEmitter<any>();
 
   public showEthLiveCard: boolean;
+  public appName: string;
   constructor(
     private logger: Logger,
-    private persistenceProvider: PersistenceProvider
+    private persistenceProvider: PersistenceProvider,
+    private appProvider: AppProvider
   ) {
     this.showEthLiveCard = false;
+    this.appName = this.appProvider.info.nameCase;
   }
 
   public setShowEthLiveCard(value) {
