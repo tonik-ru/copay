@@ -747,6 +747,17 @@ export class HomePage {
       return;
     }
     const wallet = this.profileProvider.getWallet(opts.walletId);
+    this.persistenceProvider
+      .getInitialTxCacheCleared(opts.walletId)
+      .then(value => {
+        if (!value) {
+          this.walletProvider.clearTxHistory(wallet);
+          this.persistenceProvider.setInitialTxCacheCleared(
+            opts.walletId,
+            true
+          );
+        }
+      });
 
     const progressFn = ((_, newTxs) => {
       let args = {
@@ -1100,7 +1111,9 @@ export class HomePage {
   public toggleBalanceNew() {
     for (var value of this.wallets) {
       this.logger.log(value.credentials.walletId);
-      this.profileProvider.toggleHideBalanceFlagShow(value.credentials.walletId);
+      this.profileProvider.toggleHideBalanceFlagShow(
+        value.credentials.walletId
+      );
     }
   }
 
@@ -1136,7 +1149,7 @@ export class HomePage {
     }
   }
 
-
+  
   public collapseGroup(keyId: string) {
     this.collapsedGroups[keyId] = this.collapsedGroups[keyId] ? false : true;
   }

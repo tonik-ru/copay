@@ -663,6 +663,14 @@ export class PersistenceProvider {
   removeWalletGroupName(keyId: string) {
     return this.storage.remove(Keys.WALLET_GROUP_NAME(keyId));
   }
+
+  getInitialTxCacheCleared(keyId: string) {
+    return this.storage.get('initialTxCacheCleared_' + keyId);
+  }
+
+  setInitialTxCacheCleared(keyId: string, val: boolean) {
+    return this.storage.set('initialTxCacheCleared_' + keyId, val);
+  }
 }
 
 function getLegacyGiftCardKey(cardName: string, network: Network) {
