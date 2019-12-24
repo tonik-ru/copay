@@ -930,13 +930,22 @@ export class ProfileProvider {
     });
   }
 
+  private fixBwsUrl(bwsurl: string) {
+    if(!bwsurl)
+      return bwsurl;  
+    
+    if (bwsurl == 'https://wallet.bitcoindiamond.org/bws/api')
+      return 'https://wallet2.bitcoindiamond.org:2053/bws/api';
+    return bwsurl;
+  }
+
   // opts.words opts.xPrivKey
   private serverAssistedImport(opts): Promise<any> {
     return new Promise((resolve, reject) => {
       this.bwcProvider.Client.serverAssistedImport(
         opts,
         {
-          baseUrl: opts.bwsurl // clientOpts
+          baseUrl: this.fixBwsUrl(opts.bwsurl) // clientOpts
         },
         (err, key, walletClients) => {
           if (err) {
