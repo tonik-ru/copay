@@ -105,7 +105,7 @@
 
 <ion-content class="fullscreen-tab" [ngClass]="{ blur: isBlur }" #scrollArea>
   <div class="wrapper" [style.margin-top]="totalb() == 'none' ? '0' : '125px'">
-    <ion-refresher (ionRefresh)="doRefresh($event)" pullMin="30" pullMax="65">
+    <ion-refresher (ionRefresh)="doRefresh($event)" pullMin="30" pullMax="65"  *ngIf="wallets !== undefined && wallets[0] !== undefined">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
@@ -115,7 +115,8 @@
       }">
     </div>
       
-      <div class="card clipboard-card" *ngIf="validDataFromClipboard">
+   <!-- clipboard  -->  
+    <div class="card clipboard-card" *ngIf="validDataFromClipboard"> 
         <ion-item-divider>
           <div class="title" item-start>
               <img src="assets/img/paste-clipboard.svg" alt="Clipboard" width="20" />
@@ -127,7 +128,7 @@
             </button>
           </div>
         </ion-item-divider>
-        <page-clipboard-card [remainingTimeStr]="remainingTimeStr" [payProDetailsData]="payProDetailsData" [validDataFromClipboard]="validDataFromClipboard" (click)="processClipboardData(validDataFromClipboard.data)">
+       <page-clipboard-card [remainingTimeStr]="remainingTimeStr" [payProDetailsData]="payProDetailsData" [validDataFromClipboard]="validDataFromClipboard" (click)="processClipboardData(validDataFromClipboard.data)">
         </page-clipboard-card>
       </div>
 
@@ -193,7 +194,7 @@
 
       <div *ngFor="let walletGroup of walletsGroups; let i = index" class="wallets-container">
         <div class="section-header" *ngIf="walletGroup[0].canSign">
-          <span class="key-name" *ngIf="walletsGroups.length > 1">{{profileProvider.getWalletGroup(walletGroup[0].keyId).name}}</span>
+          <span class="key-name" *ngIf="walletsGroups.length > 1"><ion-icon name="options" style="margin-right: 10px;" (click)="renameKey(walletGroup[0].keyId)"></ion-icon>{{profileProvider.getWalletGroup(walletGroup[0].keyId).name}}</span>
           <span *ngIf="walletsGroups.length == 1" translate>Wallets</span>
           <div class="collapse">
             <span (click)="openBackupSettings(walletGroup[0])" *ngIf="walletGroup && walletGroup[0] && walletGroup[0].needsBackup" class="backupNew">NEED BACKUP<img src="assets/img/back-up-need.svg" class="backupIcon"/></span>
@@ -211,6 +212,12 @@
                 <wallet-item-content [wallet]="wallet"></wallet-item-content>
               </button>
               <!--<ion-item-options side="left"></ion-item-options>-->
+              <ion-item-options side="left">
+                  <button class="action action--settings" ion-button (click)="openWalletSettings(wallet.id)">
+                    <div class="action__icon"><img src="assets/img/settings-icon.svg" /></div>
+                    <div class="action__text">Settings</div>
+                  </button>
+              </ion-item-options>
               <ion-item-options side="right">
                 <button class="action action--send" ion-button (click)="onWalletAction(wallet, 'send', slidingItem)">
                   <div class="action__icon"><img src="assets/img/send.svg" /></div>
@@ -219,6 +226,10 @@
                 <button class="action action--receive" ion-button (click)="onWalletAction(wallet, 'receive', slidingItem)">
                   <div class="action__icon"><img src="assets/img/receive.svg" /></div>
                   <div class="action__text">Receive</div>
+                </button>
+                 <button class="action action--qr" ion-button (click)="openWalletQr(wallet)" *ngIf="!wallet.needsBackup">
+                  <div class="action__icon"><img src="assets/img/qr-wallet.svg" /></div>
+                  <div class="action__text">QR</div>
                 </button>
               </ion-item-options>
             </ion-item-sliding>

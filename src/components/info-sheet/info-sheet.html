@@ -264,10 +264,17 @@
       </info-sheet-template>
     <info-sheet-template *ngSwitchCase="'clipboard-address-info'" type="clipboard">
       <span sheet-title-text>{{ 'Wallet Address was found in your clipboard' | translate }}</span>
-      <span sheet-text translate>Do you want to use address:<b style="display:block;">{{ '{appName}' | translate: { appName: params.appName } }}</b>for sending ?
+      <span sheet-text translate>{{ 'Do you want to use address:'| translate }} <b style="display:block;" class="text-address">{{ '{appName}' | translate: { appName: params.appName } }}</b>{{ 'for sending' | translate }} ?
       </span>
       <span sheet-button-text translate>Use this address</span>
       <span sheet-second-button-text translate>Cancel</span>
+    </info-sheet-template>
+    <info-sheet-template *ngSwitchCase="'convert-to-fiat-notice'" type="notice">
+      <span sheet-title-text>{{ 'Preferred Currency Type' | translate }}</span>
+      <span sheet-text translate>{{ 'What currency do you prefer to use when sending a payment '| translate }} ?
+      </span>
+      <span sheet-button-text translate>Crypto</span>
+      <span sheet-second-button-text translate>Fiat</span>
     </info-sheet-template>
   </div>
 </action-sheet>

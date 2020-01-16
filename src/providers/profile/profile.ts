@@ -340,7 +340,8 @@ export class ProfileProvider {
         delete walletsGroups['read-only'];
 
         // use wallets name for wallets group name at migration
-        name = `Key ${Object.keys(walletsGroups).indexOf(keyId) + 1}`;
+      //  name = `Key ${Object.keys(walletsGroups).indexOf(keyId) + 1}`;
+      name = `GROUP ${Object.keys(walletsGroups).indexOf(keyId) + 1}`;
       }
     } else {
       keyId = 'read-only';

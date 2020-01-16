@@ -93,6 +93,7 @@
               placeholder="{{'Enter Amount' | translate}}"
               [(ngModel)]="specAmount"
               (keyup)="processInput()"
+              class="numberInput"
             ></ion-input>
             <ion-label item-right>{{ wallet.coin }}</ion-label>
           </ion-item>
@@ -122,7 +123,7 @@
         <div class="qr-card-amount" *ngIf="showSpecInfo">
           <span>{{ specAmount + ' ' + wallet.coin }}</span> <br />
         </div>
-        <ngx-qrcode (click)="showFullAddr()" *ngIf="address" copy-to-clipboard="{{ address }}" hide-toast="true" qrc-value="{{qrAddress}}" qrc-class="aclass" qrc-errorCorrectionLevel="M"></ngx-qrcode>
+        <ngx-qrcode (click)="showFullAddr()" *ngIf="address" copy-to-clipboard="{{ qrAddress }}" hide-toast="true" qrc-value="{{qrAddress}}" qrc-class="aclass" qrc-errorCorrectionLevel="M"></ngx-qrcode>
       </div>
     </div>
   </div>

@@ -13,8 +13,10 @@ import {
 } from '@ionic-native/in-app-browser';
 
 import { BrowserTab } from '@ionic-native/browser-tab';
+import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 
 import { SafariViewController } from '@ionic-native/safari-view-controller';
+
 
 /**
  * Generated class for the Tab4Page page.
@@ -64,7 +66,8 @@ export class TabBcdbazaar {
     private iab: InAppBrowser,
     public plt: Platform,
     private browserTab: BrowserTab,
-    private safariViewController: SafariViewController
+    private safariViewController: SafariViewController,
+    private externalLinkProvider: ExternalLinkProvider,
   ) {
     this.cats;
     this.items;
@@ -156,7 +159,8 @@ export class TabBcdbazaar {
       // this.logger.log('android');
       this.useBrowserTab(url);
     } else {
-      this.selectShop(url, '');
+     // this.selectShop(url, '');
+     this.externalLinkProvider.openBrowser(true, url);
       this.logger.log('windows');
     }
   }

@@ -40,7 +40,8 @@ export type InfoSheetType =
   | 'sensitive-info'
   | 'in-app-notification'
   | 'request-feature'
-  | 'report-issue';
+  | 'report-issue'
+  | 'convert-to-fiat-notice';
 
 export type OptionsSheetType =
   | 'address-options'

@@ -1,0 +1,45 @@
+<!--
+  Generated template for the WalletShowQrPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ wallet.name }}</ion-title>
+    <ion-buttons right>
+      <button class="modal-close-button" (click)="close()" ion-button>
+        <ion-icon ios="md-close" md="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="qr-container" *ngIf="wallet && wallet.isComplete() && !wallet.needsBackup">
+        <div class="lines-background"></div>
+        <div class="prompt-user-fullscreen-container" *ngIf="newAddressError && !address">
+          <div class="prompt-user">
+            <div class="title-icon larger-icon">
+              <img src="assets/img/ghost-straight-face.svg" />
+            </div>
+            <div class="title-info">
+              <span translate>Something goes wrong...</span>
+            </div>
+            <button ion-button class="button-standard" (click)="setAddress(true)">
+              {{'Generate New Address' | translate}}
+            </button>
+          </div>
+        </div>
+        <div class="card qr-card qr-placeholder" *ngIf="!address && !newAddressError">
+          <div>...</div>
+        </div>
+        <div class="card qr-card" [ngClass]="{'qr-code-bounce': playAnimation}" *ngIf="address">
+          <div class="qr-card-amount" *ngIf="showSpecInfo">
+            <span>{{ specAmount + ' ' + wallet.coin }}</span> <br />
+          </div>
+          <ngx-qrcode (click)="showFullAddr()" *ngIf="address" copy-to-clipboard="{{ address }}" hide-toast="true" qrc-value="{{qrAddress}}" qrc-class="aclass" qrc-errorCorrectionLevel="M"></ngx-qrcode>
+        </div>
+      </div>
+</ion-content>

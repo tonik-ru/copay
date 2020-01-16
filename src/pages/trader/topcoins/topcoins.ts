@@ -29,6 +29,8 @@ import { Storage } from '@ionic/storage';
 
 import { InstructionsPage } from '../instructions/instructions';
 
+import { AppProvider } from '../../../providers/app/app';
+
 /**
  * Generated class for the TopcoinsPage page.
  *
@@ -65,6 +67,7 @@ export class TopcoinsPage {
   public showfavriteslist: boolean = false;
   public showInstruction: boolean = true;
   safeSvg;
+  public exchange:string = "BINANCE";
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -75,7 +78,8 @@ export class TopcoinsPage {
     private renderer: Renderer,
     public storage: Storage,
     public modal: ModalController,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public appProvider: AppProvider
   ) {
     this.loadPairs();
     this.toggled = false;
@@ -135,12 +139,15 @@ export class TopcoinsPage {
 
   applyFilter() {
     let val = this.filter;
-
+    this.logger.log(this.exchange);
     if (val && val.trim() != '') {
+      
       this.items = this.topCoins.filter(item => {
-        return item.Symbol.toLowerCase().indexOf(val.toLowerCase()) > -1;
+      var res = (item.Exchange == this.exchange) ? item.Symbol.toLowerCase().indexOf(val.toLowerCase()) > -1 : null
+        return res;
+      
       });
-    } else this.items = this.topCoins;
+    } else this.items = this.topCoins.filter(x => x.Exchange === this.exchange);
   }
 
   showToast(msg: string) {

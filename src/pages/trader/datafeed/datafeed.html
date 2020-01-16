@@ -54,7 +54,7 @@
     </ion-segment> -->
     <ion-buttons right class="settings-button">
     <button
-          *ngIf="!isFav()"
+          *ngIf="!isFav() && exchange !== 'Nexo' && exchange !== 'BHW'"
           ion-button
           expandable
           (click)="addToFavorite(coinId)"
@@ -62,7 +62,7 @@
           <ion-icon name="star-outline"></ion-icon>
         </button>
         <button
-          *ngIf="isFav()"
+          *ngIf="isFav() && exchange !== 'Nexo' && exchange !== 'BHW'"
           ion-button
           expandable
           (click)="removeFavorite(coinId)"
@@ -83,7 +83,7 @@
             <ion-col col-12 text-center>
                 <ion-item class="pairsblock">
                    
-                  <ion-select placeholder="Pairs"
+                  <ion-select placeholder="Pairs" [selectOptions]="{cssClass: 'pairs '+appProvider.activeTheme}"
                     [(ngModel)]="selectedPair"
                     class="links"
                     (ionChange)="selectPair()"
@@ -421,7 +421,7 @@
 
               <ion-row  *ngIf="d && d.AvgIntData && d.Breakout">
                 <ion-col col-4 text-right>
-                    <h2 class="prevcore">Previous</h2>
+                    <h2 class="prevcore" *ngIf="d.Speedometer.PrevData.Score">Previous</h2>
                     <h2 class="prevscorescs" id="cursc"  *ngIf="d.Speedometer">
                       {{ d.Speedometer.PrevData.Score }} 
                     </h2>
@@ -429,7 +429,7 @@
                 </ion-col>
 
                 <ion-col col-4 text-center> 
-                  <h2 class="prevcore"> Score</h2>
+                  <h2 class="prevcore" *ngIf="d.Speedometer.Score"> Score</h2>
                   <h2 class="prevscoresc" id="BULLISH1" *ngIf="d.Speedometer">
                     {{ d.Speedometer.Score }}
                   <i id="curscc" class="fas fa-arrow-up"></i>
@@ -437,7 +437,7 @@
                 </ion-col>
 
                 <ion-col col-4 text-left>
-                    <h2 class="prevcore"> Future</h2>
+                    <h2 class="prevcore" *ngIf="d.Speedometer.FutureScore"> Future</h2>
                     <h2 *ngIf="d.Speedometer" class="prevscoresc" id="futurecolor">{{d.Speedometer.FutureScore}} <i id="future" class="fas fa-arrow-up"></i></h2>
                 </ion-col>
               </ion-row>

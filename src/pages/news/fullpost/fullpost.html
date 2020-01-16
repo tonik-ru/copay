@@ -7,13 +7,12 @@
 <ion-header>
   <ion-navbar>
     <ion-title>{{ post.title.rendered }}</ion-title>
-    <ion-buttons right>
+    <ion-buttons right *ngIf="isCordova">
       <button
         ion-button
         (click)="
           sharePost(
             post.title.rendered,
-            post.better_featured_image,
             post.guid.rendered
           )
         "

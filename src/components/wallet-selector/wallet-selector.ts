@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ActionSheetParent } from '../action-sheet/action-sheet-parent';
 
+import { AppProvider } from '../../providers/app/app';
+
 @Component({
   selector: 'wallet-selector',
   templateUrl: 'wallet-selector.html'
@@ -10,10 +12,11 @@ export class WalletSelectorComponent extends ActionSheetParent {
   public walletsBtc;
   public walletsBch;
   public walletsEth;
+  public walletsBcd;
   public title: string;
   public selectedWalletId: string;
 
-  constructor() {
+  constructor(public appProvider: AppProvider) {
     super();
   }
 
@@ -28,6 +31,7 @@ export class WalletSelectorComponent extends ActionSheetParent {
     this.walletsBtc = this.wallets.filter(wallet => wallet.coin === 'btc');
     this.walletsBch = this.wallets.filter(wallet => wallet.coin === 'bch');
     this.walletsEth = this.wallets.filter(wallet => wallet.coin === 'eth');
+    this.walletsBcd = this.wallets.filter(wallet => wallet.coin === 'bcd');
   }
 
   public optionClicked(option): void {

@@ -1,24 +1,11 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  HostListener,
-  NgZone
-} from '@angular/core';
+import { ChangeDetectorRef, Component,  ElementRef, HostListener, NgZone, Renderer, ViewChild } from '@angular/core';
 import { StatusBar } from '@ionic-native/status-bar';
-import {
-  Events,
-  NavController,
-  NavParams,
-  ViewController
-} from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+import { Events, NavController, NavParams, ViewController} from 'ionic-angular';
 import * as _ from 'lodash';
 
 // Providers
-import {
-  CoinOpts,
-  Config,
-  ConfigProvider
-} from '../../../providers/config/config';
+import { CoinOpts, Config, ConfigProvider } from '../../../providers/config/config';
 import { ElectronProvider } from '../../../providers/electron/electron';
 import { FilterProvider } from '../../../providers/filter/filter';
 import { Logger } from '../../../providers/logger/logger';
@@ -41,6 +28,7 @@ import { CustomAmountPage } from '../../receive/custom-amount/custom-amount';
 import { WalletTabsChild } from '../../wallet-tabs/wallet-tabs-child';
 import { WalletTabsProvider } from '../../wallet-tabs/wallet-tabs.provider';
 import { ConfirmPage } from '../confirm/confirm';
+
 
 @Component({
   selector: 'page-amount',
@@ -93,6 +81,7 @@ export class AmountPage extends WalletTabsChild {
     // public coin: string;
   public headerClass: string = 'bcdHead';
   public showBalance: boolean = true;
+  @ViewChild('swithcer') switcher: ElementRef;
 
   constructor(
     private actionSheetProvider: ActionSheetProvider,
@@ -112,7 +101,9 @@ export class AmountPage extends WalletTabsChild {
     private events: Events,
     private viewCtrl: ViewController,
     public appProvider: AppProvider,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    public storage: Storage,
+    private renderer: Renderer
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
     this.zone = new NgZone({ enableLongStackTrace: false });
@@ -191,7 +182,20 @@ export class AmountPage extends WalletTabsChild {
       'Wallet/disableHardwareKeyboard',
       this.walletDisableHardwareKeyboardHandler
     );
-    this.changeUnit();
+    // this.changeUnit(); select form starage if user already converted crypto to fiat execute this function, if no - not execute
+   // this.storage.get('FiatConverter').then(val => { if (val){ this.changeUnit() }});
+  //   this.storage.remove('FiatConverterNotice');
+  //  this.storage.remove('FiatConverter');
+  // this.changeUnit();
+
+  //  this.storage.get('FiatConverterNotice').then(val => { 
+  //    if (val !== 'false' && val !== null){ this.showConvertNotice(); } else {
+  //    }
+  //  }});
+
+  this.storage.get('FiatConverter').then(value => 
+    { if (value == true || value == null){ this.changeUnit('withoutSave') }});;
+  
   if (this.wallet){
     this.headerClass = this.wallet.coin == 'bcd' 
       ? 'bcdHead'
@@ -673,7 +677,8 @@ export class AmountPage extends WalletTabsChild {
     this.alternativeAmount = null;
   }
 
-  public changeUnit(): void {
+  public changeUnit(str): void {
+    this.logger.log('isFiat:->', this.availableUnits[this.unitIndex].isFiat);
     if (this.fixedUnit) return;
 
     this.unitIndex++;
@@ -681,11 +686,40 @@ export class AmountPage extends WalletTabsChild {
 
     if (this.availableUnits[this.unitIndex].isFiat) {
       // Always return to BTC... TODO?
+    //  this.storage.set('FiatConverter', true);
+    this.renderer.setElementStyle(
+      this.switcher.nativeElement,
+      'transform',
+      'rotate(-180deg)'
+    );
+    if (str !== 'withoutSave'){
+     
+    this.storage.get('FiatConverterNotice').then(val => { 
+      if (val !== 'false' || val == null ){ 
+        // this.storage.set('FiatConverterNotice', 'true'); 
+        this.showConvertNotice();
+      }});
+      }
       this.altUnitIndex = 0;
     } else {
+    //  this.storage.set('FiatConverter', false);
+    this.renderer.setElementStyle(
+      this.switcher.nativeElement,
+      'transform',
+      'rotate(0deg)'
+    );
+    if (str !== 'withoutSave'){
+      
+    this.storage.get('FiatConverterNotice').then(val => { 
+      if (val !== 'false' || val == null){
+      //  this.storage.set('FiatConverterNotice', 'true');
+      this.showConvertNotice(); }
+      });
+      }
       this.altUnitIndex = _.findIndex(this.availableUnits, {
         isFiat: true
       });
+      
     }
 
     this.resetValues();
@@ -710,5 +744,30 @@ export class AmountPage extends WalletTabsChild {
     } else {
       this.viewCtrl.dismiss(item);
     }
+  }
+
+  private showConvertNotice() {
+   
+    // const appName = this.appProvider.info.nameCase;
+    const infoSheet = this.actionSheetProvider.createInfoSheet(
+     // 'clipboard-address-info',
+     'convert-to-fiat-notice'
+      // 'legacy-address-info',
+     // 'appName'
+    );
+    infoSheet.present();
+    infoSheet.onDidDismiss(option => {
+      
+      if (option) {
+        this.logger.log(option);
+       this.storage.set('FiatConverter', true);
+       this.storage.set('FiatConverterNotice', 'false');
+     
+      } else {
+        this.storage.set('FiatConverter', false);
+        this.storage.set('FiatConverterNotice', 'false');
+        this.changeUnit('withoutSave');
+      }
+    });
   }
 }

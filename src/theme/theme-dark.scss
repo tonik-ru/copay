@@ -262,6 +262,48 @@ page-wallet-group-settings {
   page-addressbook-add, page-addressbook-view{ .contact-view-header{
     background-color: #1e232f;
   }}
+
+  .card.clipboard-card .item-divider{background: #1e232f}
+  button.clipboard.item.item-block.item-ios{
+    background-color: #1e232f;
+  }
+  page-clipboard-card {.clipboard ion-label{
+    background-color: transparent;
+    padding: 10px 8px;
+    margin: 0;
+    border-radius: 3px;
+    border: 0.55px solid #4a4a4a !important;
+    
+  }}
+
+  page-wallet-details{ .locked-balance.item {
+    background-color: #1e232f;}}
+    .box-notification.info {
+      background-color: #202a38;}
+ .proposal-deletion {
+        background-color: #202a38!important;}
+
+        page-multiple-outputs .address-coppied { background: #1e232f;
+      color: #FFF !important;
+    border: 0.55px solid #4a4a4a !important;}
+    page-transfer-to .card {
+      background:#1e232f;
+      .item-divider{
+      background-color: #1e232f;
+    }
+    }
+    .amount-header{ .switcher__label{color: #fac245!important;}}
+    .popover-arrow::after{
+      background-color: #202a38!important;
+    }
+    .popover-content{background:#202a38!important; }
+    popover-wrapper {
+      
+
+      .item-ios{
+      background: #202a38!important;
+    }
+  }
 }
 
 
@@ -298,5 +340,9 @@ page-wallet-group-onboarding {.theme-dark.key-onboarding-slides{
   }
 
 
+}
+action-sheet .theme-dark.action-sheet{
+  background: #1e232f;
+  .destination-title{color: #FFF;}
 }
 

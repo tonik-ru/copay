@@ -339,7 +339,7 @@ export class ScanPage {
       this.events.publish('Local/AddressScan', { value: contents });
       this.close();
     } else {
-      const redirParms = { activePage: 'ScanPage' };
+      const redirParms = { activePage: 'ScanPage', showBalance: false };
       this.incomingDataProvider.redir(contents, redirParms);
     }
   }

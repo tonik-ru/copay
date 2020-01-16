@@ -16,6 +16,7 @@ import { timer } from 'rxjs/observable/timer';
 import { ApiProvider } from '../../providers/api/api';
 
 import { Storage } from '@ionic/storage';
+import { NavParams } from 'ionic-angular';
 
 @Component({
   selector: 'page-tabs',
@@ -35,16 +36,18 @@ export class TabsPage {
 
   private refreshTimer;
   public unreadNewsCount: any = '';
+  public selectedTabIndex: number = 0;
 
   /*tab5Root = Tab4Page;*/
   constructor(
     public translate: TranslateService,
     private logger: Logger,
     public newsApi: ApiProvider,
-    public storage: Storage
+    public storage: Storage,
+    private navParams: NavParams
   ) {
     this.refreshTimer = timer(1, 300000).subscribe(() => this.loadTempNews());
-
+    this.selectedTabIndex = this.navParams.get('selectedTabIndex');
     this.refreshTimer = this.refreshTimer;
   }
 

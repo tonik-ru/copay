@@ -196,4 +196,17 @@ page-amount {
     margin-right: auto;
     margin-left: auto;text-transform: uppercase;
   }
+  .newUnit{font-weight: 900; color: #fac239}
+  .iconSwap {
+    width: 30px;
+    height: 30px;
+    background: #FFF;
+    border-radius: 30px;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img{transition: 1s ease;}
+  }
+
 }

@@ -92,6 +92,7 @@ export class ConfirmPage extends WalletTabsChild {
   public usingMerchantFee: boolean = false;
 
   public isOpenSelector: boolean;
+  public fromAddress: string;
 
   constructor(
     protected app: App,
@@ -166,6 +167,14 @@ export class ConfirmPage extends WalletTabsChild {
     const B = this.bitcore[this.coin];
     let networkName;
     let amount;
+    this.logger.log('data ADdress=>', this.navParams.data);
+    if (this.navParams.data.fromMultiSend == true){
+        for (let i=0; i < this.navParams.data.recipients.length; i++ ){
+          this.navParams.data.recipients[i].toAddress = this.navParams.data.recipients[i].toAddress.replace(/^[a-z]+:/i, '').replace(/\?.*/, '')
+        }
+    } else{
+    this.navParams.data.toAddress = (this.navParams.data.toAddress).replace(/^[a-z]+:/i, '').replace(/\?.*/, '');
+    }
     if (this.fromMultiSend) {
       networkName = this.navParams.data.network;
       amount = this.navParams.data.totalAmount;
@@ -173,6 +182,7 @@ export class ConfirmPage extends WalletTabsChild {
       amount = this.navParams.data.amount;
     
       try {
+        
         if (B) {
           networkName = new B.Address(this.navParams.data.toAddress).network
             .name;
@@ -264,6 +274,7 @@ export class ConfirmPage extends WalletTabsChild {
         this.hideSlideButton = false;
       });
     }
+  
   }
 
   ionViewDidLoad() {
@@ -323,7 +334,7 @@ export class ConfirmPage extends WalletTabsChild {
 
   private setWallet(wallet): void {
     this.wallet = wallet;
-
+    this.setAddress();
     // If select another wallet
     this.tx.coin = this.wallet.coin;
 
@@ -785,7 +796,7 @@ export class ConfirmPage extends WalletTabsChild {
         if (this.isWithinWalletTabs() || this.isOnShopPage()) {
           this.navCtrl.pop();
         } else {
-          this.app.getRootNavs()[0].setRoot(TabsPage);
+          this.app.getRootNavs()[0].setRoot(TabsPage, {selectedTabIndex: 1});
         }
       } else {
         this.tx.sendMax = true;
@@ -825,7 +836,7 @@ export class ConfirmPage extends WalletTabsChild {
           ? this.navCtrl.popToRoot()
           : this.navCtrl.last().name == 'ConfirmCardPurchasePage'
           ? this.navCtrl.pop()
-          : this.app.getRootNavs()[0].setRoot(TabsPage); // using setRoot(TabsPage) as workaround when coming from scanner
+          : this.app.getRootNavs()[0].setRoot(TabsPage, {selectedTabIndex: 1}); // using setRoot(TabsPage) as workaround when coming from scanner
       }
     });
   }
@@ -1059,4 +1070,29 @@ export class ConfirmPage extends WalletTabsChild {
     if (!_.isEmpty(wallet)) this.onWalletSelect(wallet);
     this.isOpenSelector = false;
   }
+
+  public async setAddress(newAddr?: boolean, failed?: boolean): Promise<void> {
+       const addr: string = (await this.walletProvider
+      .getAddress(this.wallet, newAddr)
+      .catch(err => {
+      
+        if (err == 'INVALID_ADDRESS') {
+          // Generate a new address if the first one is invalid
+          if (!failed) {
+            this.setAddress(newAddr, true);
+          }
+          return;
+        }
+      })) as string;
+  
+    if (!addr) return;
+    const address = this.walletProvider.getAddressView(
+      this.wallet.coin,
+      this.wallet.network,
+      addr
+    );
+    this.fromAddress= address; 
+   
+  }
+
 }

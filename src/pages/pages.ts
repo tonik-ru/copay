@@ -76,6 +76,7 @@ import { AddressbookPage } from '../pages/settings/addressbook/addressbook';
 import { AddressbookViewPage } from '../pages/settings/addressbook/view/view';
 import { AdvancedPage } from '../pages/settings/advanced/advanced';
 import { AltCurrencyPage } from '../pages/settings/alt-currency/alt-currency';
+import { DefaultWalletCurrencyPage } from '../pages/settings/default-wallet-currency/default-wallet-currency';
 import { FeePolicyPage } from '../pages/settings/fee-policy/fee-policy';
 import { LanguagePage } from '../pages/settings/language/language';
 import { LockPage } from '../pages/settings/lock/lock';
@@ -142,6 +143,7 @@ import { ShopTargetPage } from './bcdvazaar/shop-target/shop-target';
 import { InstructionsPage } from './trader/instructions/instructions';
 
 import { ApiPage } from './settings/api/api';
+import { WalletShowQrPage } from './wallet-details/wallet-show-qr/wallet-show-qr';
 
 export const PAGES = [
   AddPage,
@@ -253,5 +255,7 @@ export const PAGES = [
   InstructionsPage,
   ApiPage,
   DatafeednewPage,
-  CoinSelectorPage
+  CoinSelectorPage,
+  DefaultWalletCurrencyPage,
+  WalletShowQrPage
 ];

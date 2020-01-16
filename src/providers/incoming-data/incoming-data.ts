@@ -15,7 +15,7 @@ import { ProfileProvider } from '../profile/profile';
 import { Coin } from '../wallet/wallet';
 
 export interface RedirParams {
-  activePage?: any;
+  activePage?: string;
   amount?: string;
   coin?: Coin;
   fromHomeCard?: boolean;

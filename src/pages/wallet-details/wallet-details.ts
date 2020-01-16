@@ -15,7 +15,7 @@ import { AddressBookProvider } from '../../providers/address-book/address-book';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { GiftCardProvider } from '../../providers/gift-card/gift-card';
 import { CardConfigMap } from '../../providers/gift-card/gift-card.types';
-import { ActionSheetProvider } from '../../providers/index';
+import { ActionSheetProvider, PlatformProvider } from '../../providers/index';
 import { Logger } from '../../providers/logger/logger';
 import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
 import { ProfileProvider } from '../../providers/profile/profile';
@@ -74,6 +74,7 @@ export class WalletDetailsPage extends WalletTabsChild {
 
   public supportedCards: Promise<CardConfigMap>;
   public loading: boolean;
+  public isCordova: boolean;
 
   constructor(
     navCtrl: NavController,
@@ -91,10 +92,13 @@ export class WalletDetailsPage extends WalletTabsChild {
     private externalLinkProvider: ExternalLinkProvider,
     walletTabsProvider: WalletTabsProvider,
     private actionSheetProvider: ActionSheetProvider,
-    private platform: Platform
+    private platform: Platform,
+    private platformProvider: PlatformProvider
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
     this.zone = new NgZone({ enableLongStackTrace: false });
+    this.isCordova = this.platformProvider.isCordova;
+    this.logger.log('Cordova?', this.isCordova);
   }
 
   ionViewDidLoad() {
@@ -219,6 +223,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     });
     this.setAddress();
     this.logger.log('coin',this.wallet.coin);
+  
   }
 
   // Start by firing a walletFocus event.
@@ -560,6 +565,7 @@ export class WalletDetailsPage extends WalletTabsChild {
   }
   public openTrader(): void {
     let bcd = {
+      coin: {Exchange: "BINA"},
       validPairs: [
         {
           BaseAsset: 'BCD',
@@ -574,6 +580,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     };
 
     let btc = {
+      coin: {Exchange: "BINA"},
       validPairs: [
         {
           BaseAsset: 'BTC',
@@ -588,6 +595,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     };
 
     let eth = {
+      coin: {Exchange: "BINA"},
       validPairs: [
         {
           BaseAsset: 'ETH',

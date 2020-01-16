@@ -69,7 +69,7 @@
           <img class="coin-img-{{tx.coin}}" *ngIf="!tx.paypro" src="assets/img/icon-{{tx.coin}}-small.svg" alt="Coin" />
           <div class="ellipsis address-with-divider" *ngIf="!tx.paypro" copy-to-clipboard="{{ tx.origToAddress }}">
             <span *ngIf="!tx.name">{{tx.origToAddress}}</span>
-            <span *ngIf="tx.name">{{tx.name}}</span>
+            <span *ngIf="tx.name">{{tx.name}} <span class="addressTransfer">{{tx.origToAddress}}</span></span>
           </div>
   
           <div class="paypro" *ngIf="tx.paypro">
@@ -87,7 +87,7 @@
           </ion-icon>
           <div class="ellipsis" copy-to-clipboard="{{ tx.origToAddress }}">
             <span *ngIf="!tx.name">{{tx.origToAddress}}</span>
-            <span *ngIf="tx.name">{{tx.name}}</span>
+            <span *ngIf="tx.name">{{tx.name}}<span class="addressTransfer">{{tx.origToAddress}}</span></span>
           </div>
         </div>
   
@@ -145,7 +145,10 @@
           <ion-icon item-start>
             <img [ngClass]="{ testnet: wallet.network === 'testnet' }" src="assets/img/currencies/{{wallet.coin}}.svg" class="icon-wallet" />
           </ion-icon>
-          <div>{{wallet.name}}</div>
+          <div>{{wallet.name}} <span *ngIf="!wallet.balanceHidden && !wallet.scanning && wallet.cachedStatus" class="wallet-from-balance">
+              <span>- {{wallet.cachedStatus && wallet.cachedStatus.totalBalanceStr}}</span>
+          </span><span class="addressTransfer">{{ fromAddress }}</span>
+            </div>
           <div class="last-item" item-end *ngIf="!isWithinWalletTabs()">
             <button ion-button clear color="grey" icon-only>
               <ion-icon *ngIf="!isOpenSelector" name="ios-arrow-down-outline"></ion-icon>

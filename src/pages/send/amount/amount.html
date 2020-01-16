@@ -43,7 +43,7 @@
             tappable
           >
             <div class="switcher__label">{{ alternativeUnit }}</div>
-            <img class="switcher__icon" src="assets/img/icon-swap.svg" />
+            <div class="iconSwap"><img class="" src="assets/img/icon-swap.svg" #swithcer /></div>
             <div class="switcher__label">{{ unit }}</div>
           </div>
         </div>
@@ -82,9 +82,9 @@
               : onlyIntegers || unit == 'BTC' || unit == 'BCH'
               ? '0'
               : '0.00'
-          }}
+          }} <span class="newUnit">{{ unit }}</span>
         </span>
-        <span class="unit" [hidden]="globalResult">{{ unit }}</span>
+        <!-- <span class="unit" [hidden]="globalResult">{{ unit }}</span> -->
       </div>
       <div class="amount" [hidden]="!globalResult">
         {{ globalResult }} {{ unit }}

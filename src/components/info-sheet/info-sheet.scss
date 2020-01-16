@@ -3,7 +3,9 @@ info-sheet {
     width: 100%;
     height: 100%;
     background-color: white;
-
+    .text-address {
+      font-size: 1.3rem!important;
+     }
     .confirm-sheet {
       padding: 25px;
       padding-bottom: 15px;
@@ -71,6 +73,9 @@ span{display:block; text-align: center}
           background: #fac239;
         border-radius: 30px;
         margin-bottom:10px;
+        max-width: 300px;
+        margin: 0 auto 10px;
+        width: 100%;
         }
 
         .sheet-btn.blue {
@@ -106,4 +111,25 @@ span{display:block; text-align: center}
       padding-bottom: 20px;
     }
   }
+  info-sheet-template[type="info"] .sheet-btn, info-sheet-template[type="clipboard"] .sheet-btn {
+  display: table;
+  max-width: 200px;
+  margin: 10px auto;
+  width: 100%;} 
+  info-sheet-template[type="notice"] .sheet-btn-group {
+    flex-direction: row!important;
+    .sheet-second-btn , .sheet-btn { width: 100%;}
+  .sheet-second-btn {
+    color: #FFF!important;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: 800;
+    background: #69caa7;
+    border-radius: 30px;
+    margin-bottom: 10px;
+}}
 }

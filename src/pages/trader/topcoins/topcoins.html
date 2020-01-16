@@ -11,7 +11,7 @@
         <ion-icon name="search"></ion-icon>
       </button>
 
-      <button ion-button class="modal-close-button" (click)="goToFavariites()">
+      <button ion-button class="modal-close-button" (click)="goToFavariites()" *ngIf="exchange !== 'Nexo' && exchange !== 'BHW'">
         <ion-icon name="list" *ngIf="showfavriteslist"></ion-icon>
         <ion-icon name="star-outline" *ngIf="!showfavriteslist"></ion-icon>
         <ion-badge color="danger" *ngIf="fav.length !== 0 && !showfavriteslist"
@@ -47,6 +47,7 @@
           itemValueField="name"
           itemTextField="isoCode"
           [canSearch]="true"
+          [modalCssClass]="appProvider.activeTheme"
         >
           <ng-template
             ionicSelectableItemTemplate
@@ -141,8 +142,10 @@
         <ion-label class="labelexchange" style="display:none">{{
           'Select Exchange' | translate
         }}</ion-label>
-        <ion-select placeholder="Exchange" title="Exchange">
-          <ion-option value="binance" selected>Binance</ion-option>
+        <ion-select [selectOptions]="{cssClass: 'exPop '+appProvider.activeTheme}" placeholder="Exchange" title="Exchange" [(ngModel)]="exchange" (ionChange)="applyFilter()" class="excSelect">
+          <ion-option value="BINANCE" selected><span class='flag-Binance'></span>Binance</ion-option>
+          <ion-option *ngIf="!showfavriteslist" value="BHW" selected>Binance Hot Wallets</ion-option>
+          <ion-option *ngIf="!showfavriteslist" value="Nexo" selected>Nexo Hot Wallets</ion-option>
         </ion-select>
       </ion-item>
     </ion-col>
@@ -253,7 +256,7 @@
           </li>
         </ul>
       </ion-item>
-      <ion-item-options side="right">
+      <ion-item-options side="right"  *ngIf="exchange !== 'Nexo' && exchange !== 'BHW'">
         <button
           *ngIf="!isFav(p.CurrencyId)"
           ion-button

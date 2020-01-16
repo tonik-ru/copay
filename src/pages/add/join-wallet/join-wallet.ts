@@ -282,7 +282,7 @@ export class JoinWalletPage {
         // using setRoot(TabsPage) as workaround when coming from scanner
         this.app
           .getRootNavs()[0]
-          .setRoot(TabsPage)
+          .setRoot(TabsPage, {selectedTabIndex: 1})
           .then(() => {
             this.events.publish('Local/WalletListChange');
 

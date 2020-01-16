@@ -28,17 +28,22 @@ import { AboutPage } from './about/about';
 import { AddressbookPage } from './addressbook/addressbook';
 import { AdvancedPage } from './advanced/advanced';
 import { AltCurrencyPage } from './alt-currency/alt-currency';
+import { DefaultWalletCurrencyPage } from './default-wallet-currency/default-wallet-currency';
 import { FeePolicyPage } from './fee-policy/fee-policy';
 import { LanguagePage } from './language/language';
 import { LockPage } from './lock/lock';
 import { NotificationsPage } from './notifications/notifications';
-import { SharePage } from './share/share';
+// import { SharePage } from './share/share';
 import { WalletGroupSettingsPage } from './wallet-group-settings/wallet-group-settings';
 import { WalletSettingsPage } from './wallet-settings/wallet-settings';
 
 import { LiveChatPage } from './live-chat/live-chat';
 
 import { ApiPage } from './api/api';
+
+import { SocialSharing } from '@ionic-native/social-sharing';
+import { Storage } from '@ionic/storage';
+
 
 @Component({
   selector: 'page-settings',
@@ -61,7 +66,8 @@ export class SettingsPage {
   public touchIdEnabled: boolean;
   public touchIdPrevValue: boolean;
   public walletsGroups: any[];
-
+  public downloadUrl:string;
+  public defWallet:string;
   constructor(
     private navCtrl: NavController,
     private app: AppProvider,
@@ -76,14 +82,16 @@ export class SettingsPage {
     private translate: TranslateService,
     private modalCtrl: ModalController,
     private touchid: TouchIdProvider,
-    private externalLinkProvder: ExternalLinkProvider
+    private externalLinkProvder: ExternalLinkProvider,
+    private socialSharing: SocialSharing,
+    public storage: Storage
   ) {
     this.appName = this.app.info.nameCase;
     this.isCordova = this.platformProvider.isCordova;
     setTimeout(() => {
       this.nightMode = app.activeTheme === 'theme-dark';
     }, 500);
-  }
+      }
 
   changeMode() {
     this.app.activeTheme = this.nightMode ? 'theme-dark' : 'theme-light';
@@ -114,6 +122,9 @@ export class SettingsPage {
       this.config && this.config.lock && this.config.lock.method
         ? this.config.lock.method.toLowerCase()
         : null;
+        this.storage.get('FiatConverter').then((res) => {
+           this.defWallet = res == null ? 'FIAT' : res == true ? 'FIAT' : 'CRYPTO' });
+
   }
 
   ionViewDidEnter() {
@@ -135,6 +146,8 @@ export class SettingsPage {
         : false;
       this.bitpayCardItems = cards;
     });
+    this.storage.get('FiatConverter').then((res) => {
+       this.defWallet = res == null ? 'FIAT' : res == true ? 'FIAT' : 'CRYPTO' });
   }
 
   public openAltCurrencyPage(): void {
@@ -191,7 +204,19 @@ export class SettingsPage {
   }
 
   public openSharePage(): void {
-    this.navCtrl.push(SharePage);
+    // this.navCtrl.push(SharePage);
+    let defaults = this.configProvider.getDefaults();
+    this.downloadUrl =
+      this.app.info.name == 'copay'
+        ? defaults.download.copay.url
+        : defaults.download.bitpay.url;
+
+    this.socialSharing.share(
+      'Everything you need in a single app. Download BCD Pay Wallet Now',
+      null,
+      null,
+      this.downloadUrl
+    );
   }
 
   public openSettingIntegration(name: string): void {
@@ -293,5 +318,8 @@ export class SettingsPage {
     this.navCtrl.push(AddPage, {
       isZeroState: true
     });
+  }
+  public openDefaultWalletCurrencyPage(): void {
+    this.navCtrl.push(DefaultWalletCurrencyPage);
   }
 }

@@ -244,9 +244,10 @@ export class ImportWalletPage {
     }
 
     // using setRoot(TabsPage) as workaround when coming from scanner
+    this.logger.log('Get Roots', this.app.getRootNavs());
     this.app
       .getRootNavs()[0]
-      .setRoot(TabsPage)
+      .setRoot(TabsPage, {selectedTabIndex: 1})
       .then(() => {
         this.events.publish('Local/WalletListChange');
       });

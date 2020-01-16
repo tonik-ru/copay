@@ -17,6 +17,7 @@ import {
   Events,
   NavController,
   Platform,
+  PopoverController,
   ToastController
 } from 'ionic-angular';
 import * as _ from 'lodash';
@@ -62,6 +63,9 @@ import { ScanPage } from '../scan/scan';
 import { WalletExportPage } from '../settings/wallet-settings/wallet-settings-advanced/wallet-export/wallet-export';
 
 import { BackupKeyPage } from '../backup/backup-key/backup-key';
+import { WalletGroupSettingsPage } from '../settings/wallet-group-settings/wallet-group-settings';
+import { WalletSettingsPage } from '../settings/wallet-settings/wallet-settings';
+import { WalletShowQrPage } from '../wallet-details/wallet-show-qr/wallet-show-qr';
 
 interface UpdateWalletOptsI {
   walletId: string;
@@ -157,7 +161,8 @@ export class HomePage {
     private configProvider: ConfigProvider,
     private renderer: Renderer,
     public toastCtrl: ToastController,
-    private derivationPathHelperProvider: DerivationPathHelperProvider
+    private derivationPathHelperProvider: DerivationPathHelperProvider,
+    public popoverCtrl: PopoverController
   ) {
     this.slideDown = false;
     this.isBlur = false;
@@ -276,7 +281,13 @@ export class HomePage {
 
   ionViewWillEnter() {
     this._willEnter();
+    this.collapsedGroups = [];
     this.logger.log('wallet', this.totalb());
+    if (this.walletsGroups.length > 1){
+    this.collapsedGroups[this.walletsGroups[0][0].keyId] = false;
+    for (let i = 1; i < this.walletsGroups.length; i++) {
+      this.collapsedGroups[this.walletsGroups[i][0].keyId] = true;
+    }}
   }
 
   ionViewDidEnter() {
@@ -1149,9 +1160,21 @@ export class HomePage {
     }
   }
 
-  
-  public collapseGroup(keyId: string) {
-    this.collapsedGroups[keyId] = this.collapsedGroups[keyId] ? false : true;
+  public collapseGroup(keyIds: string) {
+    // this.collapsedGroups[keyId] = this.collapsedGroups[keyId] ? false : true;
+    this.logger.log(
+      'collapsed->',
+      this.collapsedGroups,
+      this.walletsGroups,
+      this.walletsGroups[0][0].keyId
+    );
+    for (let i = 0; i < this.walletsGroups.length; i++) {
+      if (this.walletsGroups[i][0].keyId == keyIds){
+        this.collapsedGroups[keyIds] = this.collapsedGroups[keyIds] ? false : true;
+      } else{
+      this.collapsedGroups[this.walletsGroups[i][0].keyId] = true;
+    }}
+    
   }
 
   public isCollapsed(keyId: string): boolean {
@@ -1211,5 +1234,20 @@ export class HomePage {
       });
     }
     this.logger.log(data);
+  }
+  public renameKey(key){
+    this.navCtrl.push(WalletGroupSettingsPage, {
+      keyId: key
+    });
+  }
+  openWalletSettings(id) {
+   this.navCtrl.push(WalletSettingsPage, { walletId: id });
+   // this.logger.log('WALLET ID:', id);
+  }
+  openWalletQr(walletVar){
+    const popover = this.popoverCtrl.create(WalletShowQrPage, { wallet: walletVar }, {cssClass: 'qrPop'});
+    popover.present();
+
+    // this.navCtrl.push(WalletShowQrPage, { wallet: walletVar });
   }
 }

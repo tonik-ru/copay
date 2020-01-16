@@ -1,11 +1,11 @@
 <ion-header>
   <ion-navbar>
     <ion-title>{{ 'Import Wallet' | translate }}</ion-title>
-    <ion-buttons end>
+    <!-- <ion-buttons end>
       <button ion-button (click)="import()" [disabled]="!importForm.valid">
         <span translate>Import</span>
       </button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-navbar>
 </ion-header>
 
@@ -48,12 +48,6 @@
         <ion-input type="password" formControlName="filePassword"></ion-input>
       </ion-item>
     </div>
-
-    <button ion-button class="button-standard button-secondary" (click)="showAdvOpts = !showAdvOpts">
-      <span *ngIf="!showAdvOpts">{{'Show advanced options' | translate}}</span>
-      <span *ngIf="showAdvOpts">{{'Hide advanced options' | translate}}</span>
-    </button>
-
     <div *ngIf="showAdvOpts" padding-bottom>
       <ion-item>
         <ion-label floating>Wallet Service URL</ion-label>
@@ -96,8 +90,15 @@
             This field is only for users who, in previous versions (it's not supported anymore), set a password to protect their recovery phrase. This field is not for your encrypt password.
           </div>
         </label-tip>
-      </div>
-
+      </div> 
     </div>
+    <button ion-button class="button-standard button-secondary" (click)="showAdvOpts = !showAdvOpts">
+      <span *ngIf="!showAdvOpts">{{'Show advanced options' | translate}}</span>
+      <span *ngIf="showAdvOpts">{{'Hide advanced options' | translate}}</span>
+    </button>
+ 
+    <button ion-button (click)="import()" class="button-standard" [disabled]="!importForm.valid">
+        <span translate><ion-icon><img src="assets/img/add-wallet/wallet-btn.svg" /></ion-icon> Import</span>
+      </button>
   </form>
 </ion-content>

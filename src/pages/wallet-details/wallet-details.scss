@@ -450,7 +450,7 @@ page-wallet-details {
 
 
  .bcdBg {
-    background: url(/assets/img/bcd-walletbg.svg) no-repeat;
+    background: url(../assets/img/bcd-walletbg.svg) no-repeat;
     background-size: 190px;
     background-position: -50px;
       position: relative;
@@ -469,7 +469,7 @@ page-wallet-details {
 
 
 .btdBg {
-  background: url(/assets/img/btc-walletbg.svg) no-repeat;
+  background: url(../assets/img/btc-walletbg.svg) no-repeat;
   background-size: 190px;
     background-position: -50px;
 
@@ -488,7 +488,7 @@ page-wallet-details {
 } 
 
 .ethBg {
-  background: url(/assets/img/eth-walletbg.svg) no-repeat;
+  background: url(../assets/img/eth-walletbg.svg) no-repeat;
   background-size: 190px;
   background-position: -50px;
     position: relative;
@@ -561,7 +561,30 @@ page-wallet-details {
   display: none;
 }
 
-
+.winBalance{
+  text-align: center;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 18px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
 
 }

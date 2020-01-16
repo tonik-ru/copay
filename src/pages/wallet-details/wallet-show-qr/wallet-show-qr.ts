@@ -1,33 +1,34 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Events, NavController, Platform } from 'ionic-angular';
+import {  Events, NavController, NavParams, Platform, ViewController} from 'ionic-angular';
 import { Observable, Subscription } from 'rxjs';
-import { Logger } from '../../providers/logger/logger';
-
-// Native
-import { SocialSharing } from '@ionic-native/social-sharing';
-
-// Pages
-import { BackupKeyPage } from '../backup/backup-key/backup-key';
-import { AmountPage } from '../send/amount/amount';
+import { Logger } from '../../../providers/logger/logger';
 
 // Providers
-import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
-import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
-import { ExternalLinkProvider } from '../../providers/external-link/external-link';
-import { PlatformProvider } from '../../providers/platform/platform';
-import { ProfileProvider } from '../../providers/profile/profile';
-import { WalletProvider } from '../../providers/wallet/wallet';
+import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
+import { BwcErrorProvider } from '../../../providers/bwc-error/bwc-error';
+import { ExternalLinkProvider } from '../../../providers/external-link/external-link';
+import { PlatformProvider } from '../../../providers/platform/platform';
+import { WalletProvider } from '../../../providers/wallet/wallet';
 
 import * as _ from 'lodash';
-import { WalletTabsChild } from '../wallet-tabs/wallet-tabs-child';
-import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
+
+
+// Pages
+import { BackupKeyPage } from '../../backup/backup-key/backup-key';
+
+/**
+ * Generated class for the WalletShowQrPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
 
 @Component({
-  selector: 'page-receive',
-  templateUrl: 'receive.html'
+  selector: 'page-wallet-show-qr',
+  templateUrl: 'wallet-show-qr.html',
 })
-export class ReceivePage extends WalletTabsChild {
+export class WalletShowQrPage {
   public protocolHandler: string;
   public address: string;
   public qrAddress: string;
@@ -43,23 +44,29 @@ export class ReceivePage extends WalletTabsChild {
   private onResumeSubscription: Subscription;
   private retryCount: number = 0;
 
+
   constructor(
-    private actionSheetProvider: ActionSheetProvider,
-    navCtrl: NavController,
+    // public navCtrl: NavController, public navParams: NavParams,  private logger: Logger
+    private actionSheetProvider: ActionSheetProvider, 
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public viewCtrl: ViewController,
     private logger: Logger,
-    profileProvider: ProfileProvider,
+    
     private walletProvider: WalletProvider,
     private platformProvider: PlatformProvider,
     private events: Events,
-    private socialSharing: SocialSharing,
-    private bwcErrorProvider: BwcErrorProvider,
     private translate: TranslateService,
+    private bwcErrorProvider: BwcErrorProvider,
+    
     private externalLinkProvider: ExternalLinkProvider,
-    walletTabsProvider: WalletTabsProvider,
+  
     private platform: Platform
-  ) {
-    super(navCtrl, profileProvider, walletTabsProvider);
-    this.showShareButton = this.platformProvider.isCordova;
+    
+    ) {
+     // super(navCtrl, profileProvider, walletTabsProvider);
+      this.showShareButton = this.platformProvider.isCordova;
+      this.wallet = this.navParams.data.wallet;
   }
 
   ionViewWillEnter() {
@@ -92,18 +99,7 @@ export class ReceivePage extends WalletTabsChild {
     }
   };
 
-  public requestSpecificAmount(): void {
-    this.navCtrl.push(AmountPage, {
-      toAddress: this.address,
-      id: this.wallet.credentials.walletId,
-      recipientType: 'wallet',
-      name: this.wallet.name,
-      color: this.wallet.color,
-      coin: this.wallet.coin,
-      nextPage: 'CustomAmountPage',
-      network: this.wallet.network
-    });
-  }
+ 
 
   public async setAddress(newAddr?: boolean, failed?: boolean): Promise<void> {
     if (
@@ -155,7 +151,7 @@ export class ReceivePage extends WalletTabsChild {
 
   public showErrorInfoSheet(error: Error | string): void {
     this.newAddressError = true;
-    const infoSheetTitle = this.translate.instant('Error');
+    const infoSheetTitle = 'Error';
     const errorInfoSheet = this.actionSheetProvider.createInfoSheet(
       'default-error',
       { msg: this.bwcErrorProvider.msg(error), title: infoSheetTitle }
@@ -173,11 +169,7 @@ export class ReceivePage extends WalletTabsChild {
     this.qrAddress = address;
   }
 
-  public shareAddress(): void {
-    if (!this.showShareButton) return;
-    this.socialSharing.share(this.address);
-  }
-
+ 
   public goToBackup(): void {
     this.navCtrl.push(BackupKeyPage, {
       keyId: this.wallet.credentials.keyId
@@ -202,24 +194,7 @@ export class ReceivePage extends WalletTabsChild {
     );
   }
 
-  public showMoreOptions(): void {
-    const showShare =
-      this.showShareButton &&
-      this.wallet &&
-      this.wallet.isComplete() &&
-      !this.wallet.needsBackup;
-    const optionsSheet = this.actionSheetProvider.createOptionsSheet(
-      'address-options',
-      { showShare }
-    );
-    optionsSheet.present();
-
-    optionsSheet.onDidDismiss(option => {
-      if (option == 'request-amount') this.requestSpecificAmount();
-      if (option == 'share-address') this.shareAddress();
-    });
-  }
-
+ 
   public showFullAddr(): void {
     // let data = document
     //  .getElementsByTagName('ngx-qrcode')[0]
@@ -266,4 +241,8 @@ export class ReceivePage extends WalletTabsChild {
       this.processInput();
     }
   }
+  public close(){
+    this.viewCtrl.dismiss();
+  }
 }
+

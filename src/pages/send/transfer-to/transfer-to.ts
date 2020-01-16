@@ -55,6 +55,7 @@ export class TransferToPage {
   public fiatCode: string;
   public _wallet;
   public _useAsModal: boolean;
+  public _showB: boolean;
   public hasContactsOrWallets: boolean;
 
   private CONTACTS_SHOW_LIMIT: number = 10;
@@ -78,6 +79,7 @@ export class TransferToPage {
     this.hasBchWallets = !_.isEmpty(this.walletsBch);
     this.hasBcdWallets = !_.isEmpty(this.walletsBcd);
     this.hasEthWallets = !_.isEmpty(this.walletsEth);
+   
   }
 
   @Input()
@@ -115,7 +117,14 @@ export class TransferToPage {
   get useAsModal() {
     return this._useAsModal;
   }
+  @Input()
+  set showB(showB: boolean) {
+    this._showB = showB;
+  }
 
+  get showB() {
+    return this._showB;
+  }
   private getBchWalletsList(): FlatWallet[] {
     return this.hasBchWallets ? this.getRelevantWallets(this.walletsBch) : [];
   }
@@ -153,6 +162,7 @@ export class TransferToPage {
           email: _.isObject(v) ? v.email : null,
           recipientType: 'contact',
           coin: addrData.coin,
+          showBalance: true,
           getAddress: () => Promise.resolve(k)
         });
       });
@@ -217,6 +227,7 @@ export class TransferToPage {
       this.updateContactsList();
       this.filteredWallets = [];
     }
+    this.logger.log('Filedred ->',this.filteredWallets )
   }
 
   public searchWallets(): void {
@@ -270,6 +281,7 @@ export class TransferToPage {
           this.popupProvider.ionicAlert('Error - no address');
           return;
         }
+        let showBalanceVar = this._showB == false ? false : true
         this.logger.debug('Got address:' + addr + ' | ' + item.name);
         this.navCtrl.push(AmountPage, {
           recipientType: item.recipientType,
@@ -280,7 +292,8 @@ export class TransferToPage {
           color: item.color,
           coin: item.coin,
           network: item.network,
-          useAsModal: this._useAsModal
+          useAsModal: this._useAsModal,
+          showBalance: showBalanceVar
         });
       })
       .catch(err => {

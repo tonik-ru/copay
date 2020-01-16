@@ -103,6 +103,20 @@
           </ion-note>
         </button>
 
+        <button ion-item (click)="openDefaultWalletCurrencyPage()">
+          <ion-icon class="item-img settings-icon" item-start>
+           <img src="assets/setting-icons/fiat.svg" class="darkinvert" width="22" *ngIf="defWallet == 'FIAT'"/> 
+            <img src="assets/img/settings-icons/info.svg" width="22" class="darkinvert" *ngIf="defWallet == 'CRYPTO'" />
+          </ion-icon>
+          <ion-label>
+            {{ 'Default Wallet Currency' | translate }} 
+          </ion-label>
+          <ion-note *ngIf="selectedAlternative" item-end>
+       {{defWallet}}
+          </ion-note>
+           
+        </button>
+
         <button ion-item (click)="openFeePolicyPage()">
           <ion-icon class="item-img settings-icon" item-start>
             <img src="assets/img/settings-icons/btc-fees.svg" class="darkinvert" width="22"/>

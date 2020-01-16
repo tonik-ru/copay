@@ -10,6 +10,7 @@ import { AppProvider } from '../../../providers/app/app';
 export class TransferToModalPage {
   public search: string = '';
   public wallet;
+  public showB:boolean = false;
 
   constructor(
     private navParams: NavParams,

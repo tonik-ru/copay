@@ -28,6 +28,8 @@ declare var topstart: any;
 
 import { Storage } from '@ionic/storage';
 
+import { AppProvider } from '../../../providers/app/app';
+
 /*declare var starttest: any;*/
 
 // import { TraderProvider } from '../../../providers/trader/trader';
@@ -130,6 +132,7 @@ export class DatafeedPage {
   public favorite: boolean = false;
   public showfavriteslist: boolean = false;
   public coinId;
+  public exchange: string;
   /*@ViewChild('slider') slider: Slides;*/
 
   showlook = '0';
@@ -141,7 +144,8 @@ export class DatafeedPage {
     public alertController: AlertController,
     public viewCtrl: ViewController,
     public storage: Storage,
-    public toastCtrl: ToastController
+    public toastCtrl: ToastController,
+    public appProvider: AppProvider
   ) {
     this.feedProvider.on('ProcessMarketTick', x => this.processMarketTick(x));
     this.feedProvider.on('ProcessResistance', x => this.onProcessResistance(x));
@@ -240,6 +244,7 @@ export class DatafeedPage {
     var pairs = [];
     pairs = this.navParams.data.validPairs;
     this.coinId = this.navParams.data.validPairs[0].BaseAssetCurrencyId;
+    this.exchange = this.navParams.data.coin.Exchange;
 
     this.storage.get('favList').then(val => {
       if (val !== null) {

@@ -32,7 +32,73 @@
               <ion-icon name="arrow-forward"></ion-icon>
             </a>
           </div> -->
-          <ion-slides pager [ngClass]="{'hidePager': wallet.needsBackup}">
+         
+          <div *ngIf="!isCordova" class="winBalance">
+              <div *ngIf="lowUtxosWarning && wallet.network == 'livenet'" class="top-notification warning">
+                  <a class="energized" (click)="openAddresses()">
+                    {{'Spending this balance will need significant Bitcoin network fees'|translate}}
+                    <ion-icon name="arrow-forward"></ion-icon>
+                  </a>
+                </div>
+        
+                <div>
+                  <div (tap)="updateAll(true)" *ngIf="!wallet.balanceHidden && !wallet.scanning && !walletNotRegistered && (wallet.cachedStatus || wallet.lastKnownBalance)">
+                    <div class="balance-str">
+                      {{ wallet.cachedStatus ? wallet.cachedStatus.totalBalanceStr  : wallet.lastKnownBalance }}   <ion-icon (click)="toggleBalance()" name="eye-off"></ion-icon></div>
+                    <div class="balance-alt-str" *ngIf="wallet.cachedStatus && wallet.cachedStatus.totalBalanceAlternative">
+                      {{wallet.cachedStatus.totalBalanceAlternative}} 
+                      {{wallet.cachedStatus.alternativeIsoCode}}
+                    </div>
+                    <div class="balance-alt-str" *ngIf="!wallet.scanning && !wallet.cachedStatus && wallet.lastKnownBalanceUpdatedOn">
+                      {{ wallet.lastKnownBalanceUpdatedOn * 1000 | amTimeAgo }}
+                    </div>
+        
+                  </div>
+        
+                  <div class="balance-hidden" *ngIf="!updateStatusError && wallet.balanceHidden  && !wallet.scanning">
+                      <div class="balance-str">
+                          *.** {{ wallet.coin }} <ion-icon name="eye" (click)="toggleBalance()"></ion-icon>
+                        </div>
+                        <div class="balance-alt-str">
+                          *.**
+                          {{ wallet.cachedStatus.alternativeIsoCode }}
+                        </div>
+                  </div>
+                </div>
+        
+                <div class="balance-scanning" *ngIf="!updateStatusError && wallet.scanning">
+                  <span class="title" translate>[Scanning Funds]</span>
+                  <div translate>
+                    Please wait...
+                  </div>
+                </div>
+        
+                <!-- <div class="balance-spendable" (click)="openBalanceDetails()" *ngIf="!wallet.balanceHidden && !wallet.scanning && !updateStatusError && showBalanceButton">
+                  <ion-icon ios="ios-timer-outline" md="md-timer"></ion-icon>
+                  <strong>
+                    {{wallet.cachedStatus.spendableBalanceStr}}
+                  </strong>
+                  &nbsp;
+                  <span>
+                    ({{wallet.cachedStatus.spendableBalanceAlternative}} {{wallet.cachedStatus.alternativeIsoCode}})
+                  </span>
+                  &rarr;
+                </div> -->
+        
+                <div class="balance-error" *ngIf="updateStatusError">
+                  <div>
+                    <span>{{wallet.error}}</span>
+                  </div>
+                </div>
+        
+                <div class="balance-error" *ngIf="walletNotRegistered" (tap)="recreate()">
+                  <span class="title" translate>Tap to recreate</span>
+                  <div translate>
+                    This wallet is not registered at the given Bitcore Wallet Service (BWS). You can recreate it from the local information.
+                  </div>
+                </div>
+              </div>
+          <ion-slides pager [ngClass]="{'hidePager': wallet.needsBackup}" *ngIf="isCordova">
               <ion-slide>
 
           <div *ngIf="lowUtxosWarning && wallet.network == 'livenet'" class="top-notification warning">
@@ -99,7 +165,7 @@
             </div>
           </div>
         </ion-slide>
-        <ion-slide *ngIf="wallet && wallet.isComplete() && !wallet.needsBackup">
+        <ion-slide *ngIf="wallet && wallet.isComplete() && !wallet.needsBackup && isCordova">
             <div class="qr-container" *ngIf="wallet && wallet.isComplete() && !wallet.needsBackup">
                 <div class="lines-background"></div>
                 <div class="card qr-card" [ngClass]="{'qr-code-bounce': playAnimation}" *ngIf="address">
@@ -130,7 +196,7 @@
   
          
           <ion-spinner name="crescent" *ngIf="shouldShowSpinner()"></ion-spinner>
-  
+        
         </expandable-header-footer>
   
       </expandable-header>
@@ -157,10 +223,12 @@
               </div>
             </div></div>
 
-            
+           
       <div class="fix-margin">
         <div class="history-wrapper">
-  
+             
+              
+              
           <ion-list *ngIf="wallet && wallet.isComplete() && !walletNotRegistered && txps && txps[0]" class="tx-history">
             <ion-item-divider *ngIf="wallet.incorrectDerivation">
               <span translate>

@@ -5,6 +5,8 @@ import { ApiProvider } from '../../../providers/api/api';
 
 import { SocialSharing } from '@ionic-native/social-sharing';
 
+import { PlatformProvider } from '../../../providers/platform/platform';
+
 import * as $ from 'jquery';
 /**
  * Generated class for the FullpostPage page.
@@ -21,16 +23,18 @@ export class FullpostPage {
   public post: any = [];
   public isLoading: boolean = false;
   public relatedItems: any = [];
-
+  public isCordova: boolean;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public logger: Logger,
     public api: ApiProvider,
-    private socialSharing: SocialSharing
+    private socialSharing: SocialSharing,
+    public platformProvider: PlatformProvider
   ) {
     this.logger.log(navParams.get('post'));
     this.post = navParams.get('post');
+    this.isCordova = this.platformProvider.isCordova;
   }
 
   ionViewWillEnter() {
@@ -57,11 +61,11 @@ export class FullpostPage {
   openFullPost(item) {
     this.navCtrl.push(FullpostPage, { post: item });
   }
-  sharePost(title: string, img: string, posturl: string) {
+  sharePost(title: string, posturl: string) {
     // if (!this.telegram) {
     //   this.showError();
     //   return;
     // }
-    this.socialSharing.share(title, null, img, posturl);
+    this.socialSharing.share(title, null, null, posturl);
   }
 }

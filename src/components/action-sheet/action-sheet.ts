@@ -3,6 +3,8 @@ import { Platform } from 'ionic-angular';
 import { Observable } from 'rxjs';
 import { DomProvider } from '../../providers/dom/dom';
 
+import { AppProvider } from '../../providers/app/app';
+
 @Component({
   selector: 'action-sheet',
   templateUrl: 'action-sheet.html'
@@ -18,7 +20,8 @@ export class ActionSheetComponent {
   constructor(
     private domProvider: DomProvider,
     private platform: Platform,
-    private zone: NgZone
+    private zone: NgZone,
+    public appProvider: AppProvider
   ) {}
 
   ngOnInit() {

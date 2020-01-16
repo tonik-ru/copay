@@ -1,4 +1,4 @@
 <div class="backdrop" [ngClass]="{'backdrop-fade-in': slideIn}" (click)="dismiss()"></div>
-<div class="action-sheet" [ngClass]="{'opened': slideIn, 'closed': !slideIn }">
+<div class="action-sheet" [ngClass]="{'opened': slideIn, 'closed': !slideIn }" [class]="appProvider.activeTheme">
   <ng-content></ng-content>
 </div>

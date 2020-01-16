@@ -15,73 +15,75 @@
     </ion-list>
   </div>
   
-  <div class="card" *ngIf="walletBcdList && walletBcdList[0]">
+  <div class="card" *ngIf="walletBcdList && walletBcdList[0] && walletBcdList.length >1">
       <ion-item-divider class="title">
         <span translate>Transfer to Bitcoin Diamond Wallet</span>
       </ion-item-divider>
     
       <ion-list>
-        <button ion-item class="button-item" *ngFor="let wallet of filteredWallets[0] ? filteredWallets : walletBcdList" (click)="close(wallet)">
-          <img [ngClass]="{ testnet: wallet.network === 'testnet' }" src="assets/img/currencies/{{wallet.coin}}.svg" class="icon-wallet" />
-          <span class="item-title">{{wallet.name}}</span>
-          <ion-note class="wallet-warning" *ngIf="!wallet.isComplete" item-end>
+        <ng-container  *ngFor="let walletT of filteredWallets[0] ? filteredWallets : walletBcdList">
+        <button *ngIf="wallet.name !== walletT.name" ion-item class="button-item" (click)="close(walletT)">
+          <img [ngClass]="{ testnet: walletT.network === 'testnet' }" src="assets/img/currencies/{{walletT.coin}}.svg" class="icon-wallet" />
+          <span class="item-title">{{walletT.name}}</span>
+          <ion-note class="wallet-warning" *ngIf="!walletT.isComplete" item-end>
             {{'Incomplete' | translate}}
           </ion-note>
-          <ion-note class="wallet-warning" *ngIf="wallet.isComplete && wallet.needsBackup" item-end>
+          <ion-note class="wallet-warning" *ngIf="walletT.isComplete && walletT.needsBackup" item-end>
             {{'Needs Backup' | translate}}
           </ion-note>
-          <ion-note *ngIf="wallet.m > 1 && wallet.isComplete && !wallet.needsBackup" item-end>
-            {{wallet.m}}-{{wallet.n}}
+          <ion-note *ngIf="walletT.m > 1 && walletT.isComplete && !walletT.needsBackup" item-end>
+            {{walletT.m}}-{{walletT.n}}
           </ion-note>
         </button>
+      </ng-container>
       </ion-list>
     </div>
 
-  <div class="card" *ngIf="walletBtcList && walletBtcList[0]">
+  <div class="card" *ngIf="walletBtcList && walletBtcList[0] && walletBtcList.length > 1">
     <ion-item-divider class="title">
       <span translate>Transfer to Bitcoin Wallet</span>
     </ion-item-divider>
   
     <ion-list>
-      <button ion-item class="button-item" *ngFor="let wallet of filteredWallets[0] ? filteredWallets : walletBtcList" (click)="close(wallet)" [ngClass]="{'wallet-disabled': !wallet.isComplete || wallet.needsBackup}">
-        <img [ngClass]="{ testnet: wallet.network === 'testnet' }" src="assets/img/currencies/{{wallet.coin}}.svg" class="icon-wallet" />
-        <span class="item-title">{{wallet.name}}</span>
-        <ion-note class="wallet-warning" *ngIf="!wallet.isComplete" item-end>
+        <ng-container  *ngFor="let walletT of filteredWallets[0] ? filteredWallets : walletBtcList">
+      <button  *ngIf="wallet.name !== walletT.name" ion-item class="button-item"  (click)="close(walletT)" [ngClass]="{'wallet-disabled': !walletT.isComplete || walletT.needsBackup}">
+        <img [ngClass]="{ testnet: walletT.network === 'testnet' }" src="assets/img/currencies/{{walletT.coin}}.svg" class="icon-wallet" />
+        <span class="item-title">{{walletT.name}}</span>
+        <ion-note class="wallet-warning" *ngIf="!walletT.isComplete" item-end>
           {{'Incomplete' | translate}}
         </ion-note>
-        <ion-note class="wallet-warning" *ngIf="wallet.isComplete && wallet.needsBackup" item-end>
+        <ion-note class="wallet-warning" *ngIf="walletT.isComplete && walletT.needsBackup" item-end>
           {{'Needs Backup' | translate}}
         </ion-note>
-        <ion-note *ngIf="wallet.m > 1 && wallet.isComplete && !wallet.needsBackup" item-end>
-          {{wallet.m}}-{{wallet.n}}
+        <ion-note *ngIf="walletT.m > 1 && walletT.isComplete && !walletT.needsBackup" item-end>
+          {{walletT.m}}-{{walletT.n}}
         </ion-note>
       </button>
+      </ng-container>
     </ion-list>
   </div>
   
-  <div class="card" *ngIf="walletEthList && walletEthList[0]">
+  <div class="card" *ngIf="walletEthList && walletEthList[0] && walletEthList.length > 1">
     <ion-item-divider class="title">
       <span translate>Transfer to Ethereum Wallet</span>
     </ion-item-divider>
   
     <ion-list>
-      <button ion-item class="button-item" *ngFor="
-          let wallet of filteredWallets[0] ? filteredWallets : walletEthList
-        " (click)="close(wallet)" [ngClass]="{
-          'wallet-disabled': !wallet.isComplete || wallet.needsBackup
-        }">
-        <img [ngClass]="{ testnet: wallet.network === 'testnet' }" src="assets/img/currencies/{{wallet.coin}}.svg" class="icon-wallet" />
-        <span class="item-title">{{ wallet.name }}</span>
-        <ion-note class="wallet-warning" *ngIf="!wallet.isComplete" item-end>
+        <ng-container *ngFor="let walletT of filteredWallets[0] ? filteredWallets : walletEthList">
+          <button  *ngIf="wallet.name !== walletT.name" ion-item class="button-item" (click)="close(walletT)" [ngClass]="{'wallet-disabled': !walletT.isComplete || walletT.needsBackup}">
+        <img [ngClass]="{ testnet: walletT.network === 'testnet' }" src="assets/img/currencies/{{walletT.coin}}.svg" class="icon-wallet" />
+        <span class="item-title">{{ walletT.name }}</span>
+        <ion-note class="wallet-warning" *ngIf="!walletT.isComplete" item-end>
           {{ 'Incomplete' | translate }}
         </ion-note>
-        <ion-note class="wallet-warning" *ngIf="wallet.isComplete && wallet.needsBackup" item-end>
+        <ion-note class="wallet-warning" *ngIf="walletT.isComplete && walletT.needsBackup" item-end>
           {{ 'Needs Backup' | translate }}
         </ion-note>
-        <ion-note *ngIf="wallet.m > 1 && wallet.isComplete && !wallet.needsBackup" item-end>
-          {{ wallet.m }}-{{ wallet.n }}
+        <ion-note *ngIf="walletT.m > 1 && walletT.isComplete && !walletT.needsBackup" item-end>
+          {{ walletT.m }}-{{ walletT.n }}
         </ion-note>
       </button>
+      </ng-container>
     </ion-list>
   </div>
   
@@ -91,18 +93,20 @@
     </ion-item-divider>
   
     <ion-list>
-      <button ion-item class="button-item" *ngFor="let wallet of filteredWallets[0] ? filteredWallets : walletBchList" (click)="close(wallet)">
-        <img [ngClass]="{ testnet: wallet.network === 'testnet' }" src="assets/img/currencies/{{wallet.coin}}.svg" class="icon-wallet" />
-        <span class="item-title">{{wallet.name}}</span>
-        <ion-note class="wallet-warning" *ngIf="!wallet.isComplete" item-end>
+      <ng-container  *ngFor="let walletT of filteredWallets[0] ? filteredWallets : walletBchList">
+      <button *ngIf="wallet.name !== walletT.name"  ion-item class="button-item" (click)="close(walletT)">
+        <img [ngClass]="{ testnet: walletT.network === 'testnet' }" src="assets/img/currencies/{{walletT.coin}}.svg" class="icon-wallet" />
+        <span class="item-title">{{walletT.name}}</span>
+        <ion-note class="wallet-warning" *ngIf="!walletT.isComplete" item-end>
           {{'Incomplete' | translate}}
         </ion-note>
-        <ion-note class="wallet-warning" *ngIf="wallet.isComplete && wallet.needsBackup" item-end>
+        <ion-note class="wallet-warning" *ngIf="walletT.isComplete && walletT.needsBackup" item-end>
           {{'Needs Backup' | translate}}
         </ion-note>
-        <ion-note *ngIf="wallet.m > 1 && wallet.isComplete && !wallet.needsBackup" item-end>
-          {{wallet.m}}-{{wallet.n}}
+        <ion-note *ngIf="walletT.m > 1 && walletT.isComplete && !walletT.needsBackup" item-end>
+          {{walletT.m}}-{{walletT.n}}
         </ion-note>
       </button>
+    </ng-container>
     </ion-list>
   </div>

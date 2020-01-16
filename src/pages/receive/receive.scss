@@ -259,4 +259,16 @@ page-receive {
       margin-right: auto;
       margin-left: auto;text-transform: uppercase;
     }
+    .numberInput{
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      
+      /* Firefox */
+      input[type=number] {
+        -moz-appearance:textfield;
+      }
+    }
 }

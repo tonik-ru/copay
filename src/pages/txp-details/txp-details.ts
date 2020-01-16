@@ -27,6 +27,8 @@ import { FinishModalPage } from '../finish/finish';
 
 import * as _ from 'lodash';
 
+import { AppProvider } from '../../providers/app/app';
+
 @Component({
   selector: 'page-txp-details',
   templateUrl: 'txp-details.html'
@@ -74,7 +76,8 @@ export class TxpDetailsPage {
     private decimalPipe: DecimalPipe,
     private payproProvider: PayproProvider,
     private actionSheetProvider: ActionSheetProvider,
-    private bwcErrorProvider: BwcErrorProvider
+    private bwcErrorProvider: BwcErrorProvider,
+    public appProvider: AppProvider
   ) {
     this.showMultiplesOutputs = false;
     let config = this.configProvider.get().wallet;

@@ -1092,3 +1092,38 @@ ion-modal{
   color: #ffffff;
   background-color: transparent;
 }
+.toolbar-background-ios {
+  background: transparent;
+}
+.button-secondary, .button-default, .button-standard {
+  border-radius: 30px;
+}
+
+.exPop{
+[id^="alert-input-"][id$="0"] .alert-radio-label{
+  background: url("https://chimpion.io/bcdpay/logoscoinss/BNB.png") no-repeat 10px center !important;
+  background-size: 18px!important;
+    padding-left: 35px!important;
+
+}
+[id^="alert-input-"][id$="1"] .alert-radio-label{
+  background: url("https://chimpion.io/bcdpay/logoscoinss/BNB.png")  no-repeat 10px center !important;
+  background-size: 18px!important;
+    padding-left: 35px!important;
+}   
+[id^="alert-input-"][id$="2"] .alert-radio-label{
+  background: url("https://chimpion.io/bcdpay/logoscoinss/NX1.png")  no-repeat 10px center !important;
+  background-size: 18px!important;
+    padding-left: 35px!important;
+}
+}
+
+ion-alert.theme-dark{ 
+  .alert-wrapper{
+  background:  #202a38!important; 
+ }
+ .alert-title{color: #fff!important;}
+ .alert-radio-label{color:#fff;}
+
+}
+.item-label-stacked .select-ios, .item-label-floating .select-ios{padding-left: 8px;}

@@ -597,4 +597,20 @@ ion-item-options {
     background: linear-gradient(45deg,#f6b231, #f3893e );
   }}
 
+  ion-select.select.select-ios[ng-reflect-model="BINANCE"] {
+    background: url(https://chimpion.io/bcdpay/logoscoinss/BNB.png) no-repeat 10px center;
+    background-size: 18px;
+    padding-left: 34px;
+}
+ion-select.select.select-ios[ng-reflect-model="BHW"] {
+  background: url(https://chimpion.io/bcdpay/logoscoinss/BNB.png) no-repeat 10px center;
+  background-size: 18px;
+  padding-left: 34px;
+}
+ion-select.select.select-ios[ng-reflect-model="Nexo"] {
+  background: url(https://chimpion.io/bcdpay/logoscoinss/NX1.png) no-repeat 10px center;
+  background-size: 18px;
+  padding-left: 34px;
+}
+
 }

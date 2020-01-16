@@ -6,11 +6,12 @@ page-home {
 }
 .settingIcon{max-width:20px; img{opacity: 1!important;}}
 .backupNew{
-  display: inline-flex;
+  display: block;
   color: red;
   font-size: 10px;
-  line-height: 25px;
-    .backupIcon{width:25px; margin-left: 5px;}
+  line-height: 25px;    
+  float: left;
+    .backupIcon{width:25px; margin-left: 5px;float: right}
 }
 
 p.totalTExt {
@@ -189,10 +190,11 @@ p.totalTExt::after {
     background: #fff;
   }
   page-home ion-refresher {
-    background: #f7b854 !important;
+    // background: #f7b854 !important;
+    background: transparent!important;
   }
   .refresherclass {
-    background: #f9b432 !important;
+    background: transparent!important;
     ion-spinner.spinner.spinner-ios.spinner-ios-ios{display: none}
   }
   .refresher-pulling-icon,
@@ -332,7 +334,8 @@ p.totalTExt::after {
 
   ion-refresher {
     height: 65px;
-    background: #f7b854;
+    // background: #f7b854;
+    background: transparent;
 
     &-content {
       margin-top: 25px;
@@ -462,6 +465,7 @@ p.totalTExt::after {
           background-color: #e9ebf9;
         }
       }
+     
 
       &__icon {
         img {
@@ -1258,6 +1262,25 @@ page-home {
           background-color: #e9ebf9;
         }
       }
+      &--settings {
+        //background-color: #eff1fe;
+        background: linear-gradient(45deg, #009688, #4CAF50);
+
+        &.activated,
+        &:hover:not(.disable-hover) {
+          background-color: #e9ebf9;
+        }
+      }
+      &--qr {
+        //background-color: #eff1fe;
+        background: linear-gradient(45deg, #bb41fa, #d4199a);
+
+        &.activated,
+        &:hover:not(.disable-hover) {
+          background-color: #e9ebf9;
+        }
+      }
+      
      
 
       &__icon {
@@ -1302,4 +1325,16 @@ page-home {
   .bar-button-default-ios:hover:not(.disable-hover), .bar-button-default.bar-button-ios-default:hover:not(.disable-hover), .bar-button-clear-ios-default:hover:not(.disable-hover) {
     color: #e0774e;
 }
+.zeroOpacity{
+  opacity:0;
+}
+.card.clipboard-card .item-divider{
+  border-radius: 10px 10px 0 0;
+  text-align: center;
+  margin-bottom: 0!important;
+}
+button.clipboard.item.item-block.item-ios{border-radius: 0 0 10px 10px;}
+
+}.qrPop .popover-content{
+  width:300px!important;
 }

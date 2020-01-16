@@ -1,6 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertController, Events, NavController, NavParams} from 'ionic-angular';
+import {
+  AlertController,
+  Events,
+  NavController,
+  NavParams,
+  Platform
+} from 'ionic-angular';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 
@@ -8,6 +14,7 @@ import { Observable } from 'rxjs/Observable';
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
 import { AddressProvider } from '../../providers/address/address';
 import { AppProvider } from '../../providers/app/app';
+import { ClipboardProvider } from '../../providers/clipboard/clipboard';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { IncomingDataProvider } from '../../providers/incoming-data/incoming-data';
 import { Logger } from '../../providers/logger/logger';
@@ -40,7 +47,7 @@ export class SendPage extends WalletTabsChild {
   public hasBcdWallets: boolean;
   public hasEthWallets: boolean;
   public invalidAddress: boolean;
-
+  public wallet_name: string;
   private scannerOpened: boolean;
   private validDataTypeMap: string[] = [
     'BitcoinAddress',
@@ -65,7 +72,9 @@ export class SendPage extends WalletTabsChild {
     private externalLinkProvider: ExternalLinkProvider,
     private appProvider: AppProvider,
     private translate: TranslateService,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public plt: Platform,
+    private clipboard: ClipboardProvider
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
   }
@@ -88,21 +97,40 @@ export class SendPage extends WalletTabsChild {
     this.hasBchWallets = !_.isEmpty(this.walletsBch);
     this.hasBcdWallets = !_.isEmpty(this.walletsBcd);
     this.hasEthWallets = !_.isEmpty(this.walletsEth);
+
     if (this.search == '') {
-      navigator['clipboard'].readText().then(text => {
-        if (text !== '' && text !== null && text !== undefined) {
-          if (
-            this.incomingDataProvider.parseData(text) !== undefined &&
-            this.incomingDataProvider.parseData(text) !== null
-          ) {
-            if (this.checkCoinAndNetwork(text)) {
-              //  this.presentConfirm(text);
-              this.showClipboard(text);
+      if (this.plt.is('ios') || this.plt.is('android')) {
+        this.clipboard.getData().then(
+          (resolve: string) => {
+            if (resolve !== '' && resolve !== undefined && resolve !== null) {
+              if (this.checkCoinAndNetwork(resolve, null, true)) {
+                //  this.presentConfirm(text);
+                this.showClipboard(resolve);
+              }
+            }
+          },
+          (reject: string) => {
+            this.logger.log('Error: ' + reject);
+          }
+        );
+      } else {
+        navigator['clipboard'].readText().then(text => {
+          if (text !== '' && text !== null && text !== undefined) {
+            if (
+              this.incomingDataProvider.parseData(text) !== undefined &&
+              this.incomingDataProvider.parseData(text) !== null
+            ) {
+              if (this.checkCoinAndNetwork(text,  null, true)) {
+                //  this.presentConfirm(text);
+                this.showClipboard(text);
+              }
             }
           }
-        }
-      });
+        });
+      }
     }
+    this.wallet_name = this.wallet && this.wallet.name;
+    this.logger.log(this.wallet_name);
   }
 
   ionViewWillLeave() {
@@ -143,7 +171,7 @@ export class SendPage extends WalletTabsChild {
     this.events.publish('ScanFromWallet');
   }
 
-  private checkCoinAndNetwork(data, isPayPro?): boolean {
+  private checkCoinAndNetwork(data, isPayPro?, clipboard?): boolean {
     let isValid, addrData;
     if (isPayPro) {
       isValid =
@@ -166,7 +194,8 @@ export class SendPage extends WalletTabsChild {
         const isLegacy = this.checkIfLegacy();
         isLegacy ? this.showLegacyAddrMessage() : this.showErrorMessage();
       } else {
-        this.showErrorMessage();
+        if (!clipboard){
+        this.showErrorMessage();}
       }
     }
 
@@ -174,15 +203,14 @@ export class SendPage extends WalletTabsChild {
   }
 
   private redir() {
-     this.incomingDataProvider.redir(this.search, {
+    this.incomingDataProvider.redir(this.search, {
       showBalance: true,
       amount: this.navParams.data.amount,
-  //    coin: this.navParams.data.coin
-     coin: this.wallet.coin
-    
+      //    coin: this.navParams.data.coin
+      coin: this.wallet.coin
     });
     this.search = '';
-    this.logger.log('coin',this.wallet.coin);
+    this.logger.log('coin', this.wallet.coin);
   }
 
   private showErrorMessage() {
@@ -302,10 +330,24 @@ export class SendPage extends WalletTabsChild {
   }
 
   public pasteAddress() {
-    navigator['clipboard'].readText().then(text => {
-      this.search = text;
-      this.processInput();
-    });
+    if (this.plt.is('ios') || this.plt.is('android')) {
+      this.clipboard.getData().then(
+        (resolve: string) => {
+          if (resolve !== '' && resolve !== undefined && resolve !== null) {
+            this.search = resolve;
+            this.processInput();
+          }
+        },
+        (reject: string) => {
+          this.logger.log('Error: ' + reject);
+        }
+      );
+    } else {
+      navigator['clipboard'].readText().then(text => {
+        this.search = text;
+        this.processInput();
+      });
+    }
   }
 
   public presentConfirm(address: string) {
