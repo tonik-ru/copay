@@ -8,7 +8,7 @@
     <ion-title>{{
       (wallet && wallet.name) || ('Amount' | translate)
     }}</ion-title>
-    <ion-buttons right>
+    <!-- <ion-buttons right>
       <ion-icon>
         <img class="next-button"
           [ngClass]="{ show: expression && allowSend }"
@@ -16,9 +16,10 @@
           (click)="finish()"
           tappable
       /></ion-icon>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-navbar>
   <ion-toolbar *ngIf="wallet && !requestingAmount && showBalance">
+    <div *ngIf="wallet.balanceHidden !== undefined && wallet.scanning !== undefined && wallet.cachedStatus !== undefined">
     <div *ngIf="!wallet.balanceHidden && !wallet.scanning && wallet.cachedStatus" class="wallet-details-header__balance">
       <span>{{wallet.cachedStatus && wallet.cachedStatus.totalBalanceStr}}</span>
     </div>
@@ -28,6 +29,7 @@
     >
       <span class="title" translate>*.** {{ wallet.coin }}</span>
     </div>
+  </div>
   </ion-toolbar>
 </ion-header>
 
@@ -52,13 +54,14 @@
 
     <div class="amount-content">
       <div class="spendableAmount" *ngIf="showBalance">
+        <div *ngIf="wallet.balanceHidden !== undefined && wallet.scanning !== undefined && wallet.cachedStatus !== undefined">
         <div
           *ngIf="
             !wallet.balanceHidden && !wallet.scanning && wallet.cachedStatus
           "
           class="wallet-details-header__balance"
         >
-          Spendable Balacne
+          {{ 'Spendable Balacne' | translate}}
           <span
             >{{
               wallet.cachedStatus && wallet.cachedStatus.spendableBalanceStr
@@ -72,10 +75,10 @@
               md="md-timer"
             ></ion-icon
           ></span>
-        </div>
+        </div></div>
       </div>
       <div class="expression-container">
-        <span class="expression">
+        <span class="expression" [ngClass]="{'minFont': expression.length >= 7}">
           {{
             expression
               ? expression
@@ -100,7 +103,10 @@
         {{ alternativeUnit }}
       </div>
     </div>
-
+    <button  [ngClass]="{ 'show': expression && allowSend }" ion-button  (click)="finish()" class="next-button">
+      <span translate> Send </span><ion-icon><img src="assets/img/icon-next.svg" /></ion-icon>
+    </button>
+    
     <pin-pad
       (keystroke)="pushDigit($event)"
       type="amount"

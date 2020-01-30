@@ -72,8 +72,9 @@ page-bcdbazaar {
     padding-top: 1px;
     width: 100%;
     padding-bottom: 10px;
-    -webkit-box-shadow: 0 7px 12px rgba(0, 0, 0, 0.06);
-    box-shadow: 0 7px 12px rgba(0, 0, 0, 0.06);
+    // -webkit-box-shadow: 0 7px 12px rgba(0, 0, 0, 0.06);
+    // box-shadow: 0 7px 12px rgba(0, 0, 0, 0.06);
+    box-shadow: none;
     overflow: hidden;
     margin: 0 auto;
     display: block;
@@ -207,21 +208,24 @@ page-bcdbazaar {
 }
 }
 .col5inrow {
-  width: 20%;
-  float: left;
- 
-  padding: 0 5px;
+  width: 25%;
+    float: left;
+    padding: 0 15px;
 }
 .categoriesblock{text-align: center;
 img{ filter: invert(1); }
 .imgblock{
   // background: linear-gradient(9deg, #f7eb5a, #ffaf03);
   background: linear-gradient(9deg, #bf5a12, #f1b534);
-  padding:10px;border-radius:10px;}
+  padding:10px;border-radius:15px;
+  box-shadow: 0 0 4px rgba(97, 93, 93, 0.42);}
 
 }
 .transitionef{
   transition: 0.5s ease;
+}
+.row{
+  padding: 16px 0!important;
 }
 
 @media screen and (max-width:610px){
@@ -231,10 +235,28 @@ img{ filter: invert(1); }
 }}
 .categoriesblock p {
   font-size: 1.3rem;
+  margin-top: 0;
+  width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .bar-button-clear-ios, .bar-button-default.bar-button-ios-clear, .bar-button-clear-ios-clear {
   color: #ffffff;
   background-color: transparent;
 }
+
+.imgblock.Automotive{  background: linear-gradient(0deg, #17CE28 0%, #9DEF89 100%); border: 0.55px solid #17CE28; }
+.imgblock.Beauty{  background: linear-gradient(0deg, #B04AF3 0%, #FC5BC9 100%); border: 0.55px solid #B04AF3; }
+.imgblock.Electronics{  background: linear-gradient(0deg,#505156 0%, #B2B2B2 100%); border: 0.55px solid #505156;}
+.imgblock.Gift.Cards{  background: linear-gradient(0deg,#FF5837 0%, #FE256A 100%);border: 0.55px solid #FF5837; }
+.imgblock.Grocery{  background: linear-gradient(0deg,#00E2DD 0%, #04F5B2 100%);border: 0.55px solid #00E2DD; }
+.imgblock.Home{  background: linear-gradient(0deg,#2B77E3 0%, #73EBFF 100%);border: 0.55px solid #2B77E3; }
+.imgblock.Jewelry{  background: linear-gradient(0deg,#F9069C 0%, #FA0C6C 100%); border: 0.55px solid #F9069C;}
+.imgblock.Lighting{  background: linear-gradient(0deg,#FFC900 0%, #F5AB16 100%);border: 0.55px solid #FFC900; }
+.imgblock.Sports{  background: linear-gradient(0deg,#FF5837 0%, #FE256A 100%); border: 0.55px solid #FF5837;}
+.imgblock.Services{  background: linear-gradient(0deg, #17CE28 0%, #9DEF89 100%);border: 0.55px solid #17CE28; }
+.imgblock.Clothing{  background: linear-gradient(0deg,#4996EE 0%, #54DFDA 100%);border: 0.55px solid #4996EE; }
+.imgblock.Games{  background: linear-gradient(0deg,#6C6D72 0%, #B2B2B2 100%);border: 0.55px solid #6C6D72; }
 }

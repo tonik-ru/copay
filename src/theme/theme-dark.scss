@@ -66,6 +66,9 @@ page-receive { .receive-content .address-container .text-address{
  background: transparent;
  color:#FFF;
  border: 0.55px solid #4a4a4a;
+ .AltSelect {
+  border-color: #4a4a4a!important;
+}
 }}
 .input-ios .text-input-clear-icon{filter: invert(1)!important}
  .tabs-ios .tab-button-icon{color:#FFF;}
@@ -120,7 +123,7 @@ page-receive { .receive-content .address-container .text-address{
  page-bcdbazaar {
    .scroll-content .wrapper {
      background-color: transparent;}
-   .card{background: #1e232f;}
+  //  .card{background: #1e232f;}
    }
  
  .select-text{color:#FFF}
@@ -272,12 +275,12 @@ page-wallet-group-settings {
     padding: 10px 8px;
     margin: 0;
     border-radius: 3px;
-    border: 0.55px solid #4a4a4a !important;
+    border: 0.55px solid transparent!important;
     
   }}
 
   page-wallet-details{ .locked-balance.item {
-    background-color: #1e232f;}}
+    background: #1e232f;}}
     .box-notification.info {
       background-color: #202a38;}
  .proposal-deletion {
@@ -304,10 +307,41 @@ page-wallet-group-settings {
       background: #202a38!important;
     }
   }
+  .timeline-item, .proposal-rejection{ background: transparent!important}
+  .timeline-item .timeline-content-label > .name{color:#444}
+  page-proposals {.txps-status{
+    .section-header{color:#FFF}
+     .card{
+    background:#202a38 ;
+  }}}
+  page-clipboard-card .clipboard-paypro-container ion-note .amount{color:#FFF!important;}
+  page-clipboard-card{
+    ion-item.clipboard-paypro-container.item.item-block.item-ios{
+         background:#17435d!important; color:#FF!important;
+    }
+  }
+  page-home{
+    button.clipboard.item.item-block.item-ios{
+      background:#17435d!important;
+    }
+    .card.clipboard-card{
+      ion-icon.icon.icon-ios.ng-tns-c0-0.ion-ios-close{color:#FFF}
+      ion-item-divider.item.item-divider.item-ios.item-divider-ios{
+       
+        background:#17435d!important;
+        border-bottom: 0.55px solid #02345f;
+        color:#FFF!important;
+      }
+  }}
 }
 
+ion-footer.theme-dark  .toolbar .toolbar-background {
+   background: #1e232f!important;
+}
 
-
+page-copayers {.theme-dark {.white-card .title{
+  color: #444;
+}}}
 
 
 

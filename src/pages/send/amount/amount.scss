@@ -208,5 +208,11 @@ page-amount {
     align-items: center;
     img{transition: 1s ease;}
   }
-
+  .minFont{font-size: 30px!important; text-align: center;}
+  .next-button.show{
+  background: linear-gradient(45deg, #009688, #4CAF50);
+  border-radius: 30px;   
+  margin: 0 auto;
+  }
+  .btnSend{display:none;}
 }

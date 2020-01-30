@@ -4,6 +4,15 @@ page-home {
  .refresherclass{
     top: 50px!important;
 }
+.card.clipboard-card{
+  ion-item-divider.item.item-divider.item-ios.item-divider-ios{
+    box-shadow:0 0 3px rgba(0,0,0,0.35);
+    margin: 10px auto 0!important; width: 95%;
+    // background:#3e6f66!important;
+    // border-bottom: 0.55px solid #234222; color:#FFF!important;
+  }
+ 
+}
 .settingIcon{max-width:20px; img{opacity: 1!important;}}
 .backupNew{
   display: block;
@@ -139,12 +148,14 @@ p.totalTExt::after {
   @supports (-webkit-overflow-scrolling: touch) {
     .header-extend{margin-top: 7px!important}
     .card:first-of-type{margin-top: 140px!important}
+    .wallets-container:first-of-type{margin-top: 140px!important}
    }
  
    @media screen and (max-width:415px){
      @supports (-webkit-overflow-scrolling: touch) {
        .header-extend{margin-top: 5px!important}
        .card:first-of-type{margin-top: 175px!important}
+       .wallets-container:first-of-type{margin-top: 175px!important}
       }
    }
   span.altbalance {
@@ -1333,7 +1344,7 @@ page-home {
   text-align: center;
   margin-bottom: 0!important;
 }
-button.clipboard.item.item-block.item-ios{border-radius: 0 0 10px 10px;}
+button.clipboard.item.item-block.item-ios{border-radius: 0 0 10px 10px; width: 95%; margin: 0 auto; display: block;}
 
 }.qrPop .popover-content{
   width:300px!important;

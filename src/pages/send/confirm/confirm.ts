@@ -93,7 +93,8 @@ export class ConfirmPage extends WalletTabsChild {
 
   public isOpenSelector: boolean;
   public fromAddress: string;
-
+  public toBalance: string;
+  public fromBalance: string;
   constructor(
     protected app: App,
     protected actionSheetProvider: ActionSheetProvider,
@@ -274,7 +275,7 @@ export class ConfirmPage extends WalletTabsChild {
         this.hideSlideButton = false;
       });
     }
-  
+    this.getWalletBalance();
   }
 
   ionViewDidLoad() {
@@ -286,6 +287,7 @@ export class ConfirmPage extends WalletTabsChild {
       this.tx.amount / this.coinOpts[this.coin].unitToSatoshi,
       '1.2-6'
     );
+    this.logger.log(this.amount, this.tx);
   }
 
   private afterWalletSelectorSet() {
@@ -1069,6 +1071,7 @@ export class ConfirmPage extends WalletTabsChild {
   private onSelectWalletEvent(wallet): void {
     if (!_.isEmpty(wallet)) this.onWalletSelect(wallet);
     this.isOpenSelector = false;
+    this.getWalletBalance();
   }
 
   public async setAddress(newAddr?: boolean, failed?: boolean): Promise<void> {
@@ -1094,5 +1097,45 @@ export class ConfirmPage extends WalletTabsChild {
     this.fromAddress= address; 
    
   }
+  public getWalletBalance(){
+    let wallets = this.profileProvider.getWallets();
+    
+    let address_;
+    wallets = wallets.filter(x=> x.needsBackup == false)
+  for (let i=0; i < wallets.length; i++){
+    this.walletProvider
+    .getAddress(wallets[i], false)
+    .then(addr => {
+     // this.newAddressError = false;
+       this.logger.log('Where Backup', wallets[i]);
+      if (!addr) return;
+       
+      const address = this.walletProvider.getAddressView(
+        wallets[i].coin,
+        wallets[i].network,
+        addr
+      );
+      address_ = address;
+      if (address_ == this.tx.origToAddress){
+        if (wallets[i].cachedStatus.totalBalanceStr !== undefined){
+        this.toBalance = wallets[i].cachedStatus.totalBalanceStr; 
+      }
+      // this.logger.log('Wallets', address_,   wallets[i].cachedStatus.totalBalanceStr);
+    
+      }
+      if (this.wallet.name == wallets[i].name){
+        if (wallets[i].cachedStatus.totalBalanceStr !== undefined){
+        this.fromBalance = wallets[i].cachedStatus.totalBalanceStr;
+        }
+      }
 
+      // if (this.address && this.address != address) {
+      //   this.playAnimation = true;
+      // }
+      // this.updateQrAddress(address, newAddr);
+    }) 
+  }
+ 
+   // wallets.filter((x)=>{x.})
+  }
 }

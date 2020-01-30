@@ -129,6 +129,7 @@ export class IncomingDataProvider {
   }
 
   private isValidEthereumAddress(data: string): boolean {
+    data = data.replace('amount','value');
     return !!this.bwcProvider
       .getCore()
       .Validation.validateAddress('ETH', 'livenet', data);
@@ -281,6 +282,7 @@ export class IncomingDataProvider {
 
   private handleEthereumUri(data: string, redirParams?: RedirParams): void {
     this.logger.debug('Incoming-data: Ethereum URI');
+    data = data.replace('amount', 'value');
     let amountFromRedirParams =
       redirParams && redirParams.amount ? redirParams.amount : '';
     const coin = Coin.ETH;
@@ -300,7 +302,7 @@ export class IncomingDataProvider {
     if (amount) {
       this.goSend(address, amount, message, coin, requiredFeeParam);
     } else {
-      this.handleEthereumAddress(address);
+      this.handleEthereumAddress(address, redirParams);
     }
   }
 
@@ -378,8 +380,8 @@ export class IncomingDataProvider {
       this.goToAmountPage(data, coin);
     }
   }
-
   private handleEthereumAddress(data: string, redirParams?: RedirParams): void {
+    data = data.replace('amount', 'value');
     this.logger.debug('Incoming-data: Ethereum address');
     const coin = Coin.ETH;
     if (redirParams && redirParams.activePage === 'ScanPage') {
@@ -391,7 +393,8 @@ export class IncomingDataProvider {
     } else if (redirParams && redirParams.amount) {
       this.goSend(data, redirParams.amount, '', coin);
     } else {
-      this.goToAmountPage(data, coin);
+      redirParams.showBalance = redirParams.showBalance== undefined ? false : redirParams.showBalance;
+      this.goToAmountPage(data, coin, redirParams.showBalance );
     }
   }
 
@@ -731,6 +734,8 @@ export class IncomingDataProvider {
   }
 
   private sanitizeEthereumUri(data): string {
+    this.logger.log('ETH', data);
+    data = data.replace('amount', 'value');
     let address = data;
     const ethereum = /ethereum:/;
     const value = /[\?\&]value=(\d+([\,\.]\d+)?)/i;
@@ -847,11 +852,11 @@ export class IncomingDataProvider {
     }
   }
 
-  private goToAmountPage(toAddress: string, coin: Coin): void {
+  private goToAmountPage(toAddress: string, coin: Coin, showB?: boolean ): void {
     let stateParams = {
       toAddress,
       coin,
-      showBalance: true
+      showBalance: showB == false ? false : true
     };
     let nextView = {
       name: 'AmountPage',

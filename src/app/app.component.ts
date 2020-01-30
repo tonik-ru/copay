@@ -511,6 +511,7 @@ export class CopayApp {
     const electron = (window as any).require('electron');
     electron.ipcRenderer.removeAllListeners('open-url-event');
     electron.ipcRenderer.on('open-url-event', (_, url) => {
+      this.logger.log('URL:', url);
       this.processUrl(url);
     });
   }
@@ -527,13 +528,19 @@ export class CopayApp {
       this.handleOpenUrl(
         pathData.substring(pathData.indexOf('bitcoindiamond:/'))
       );
+    }  else if (pathData.indexOf('ethereum:/') != -1) {
+      this.logger.debug('Ethereum URL found');
+      pathData = pathData.replace('amount', 'value');
+      this.handleOpenUrl(
+        pathData.substring(pathData.indexOf('ethereum:/'))
+      );
     } else if (pathData.indexOf(this.appProvider.info.name + '://') != -1) {
       this.logger.debug(this.appProvider.info.name + ' URL found');
       this.handleOpenUrl(
         pathData.substring(pathData.indexOf(this.appProvider.info.name + '://'))
       );
     } else {
-      this.logger.debug('URL found');
+      this.logger.debug('URL found', pathData);
       this.handleOpenUrl(pathData);
     }
   }

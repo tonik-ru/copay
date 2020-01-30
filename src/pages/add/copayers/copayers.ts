@@ -36,7 +36,7 @@ export class CopayersPage {
 
   constructor(
     private plt: Platform,
-    private appProvider: AppProvider,
+    public appProvider: AppProvider,
     private events: Events,
     private logger: Logger,
     private navParams: NavParams,

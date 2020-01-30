@@ -32,7 +32,7 @@
     <div class="card">
       <ion-row padding *ngIf="!categorySelected" class="transitionef">
         <div *ngFor="let p of cats" class="categoriesblock col5inrow" (click)="openCategory(p.Id, p.Title)" >
-          <div class="imgblock"><img [src]="p.Logo" /></div>
+          <div class="imgblock {{p.Title}}"><img [src]="p.Logo" /></div>
           <p>{{ p.Title | translate }}</p>
         </div>
       </ion-row>

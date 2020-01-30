@@ -71,7 +71,7 @@ export class TxpDetailsPage {
     private configProvider: ConfigProvider,
     private profileProvider: ProfileProvider,
     private txFormatProvider: TxFormatProvider,
-    private translate: TranslateService,
+    public translate: TranslateService,
     private modalCtrl: ModalController,
     private decimalPipe: DecimalPipe,
     private payproProvider: PayproProvider,

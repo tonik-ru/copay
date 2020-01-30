@@ -9,7 +9,7 @@
     </ion-navbar>
   </ion-header>
   
-  <ion-content [ngClass]="{'no-margin-bottom': hideSlideButton}" no-bounce>
+  <ion-content [ngClass]="{'no-margin-bottom': hideSlideButton}" no-bounce [class]="appProvider.activeTheme">
     <ion-list *ngIf="tx">
       <ion-item>
         <div class="header-container">
@@ -87,7 +87,7 @@
           </ion-icon>
           <div class="ellipsis" copy-to-clipboard="{{ tx.origToAddress }}">
             <span *ngIf="!tx.name">{{tx.origToAddress}}</span>
-            <span *ngIf="tx.name">{{tx.name}}<span class="addressTransfer">{{tx.origToAddress}}</span></span>
+          <span *ngIf="tx.name">{{tx.name}} <span class="wallet-from-balance" *ngIf="toBalance !== undefined">{{ '('+toBalance +')'}}</span><span class="addressTransfer">{{tx.origToAddress}}</span></span>
           </div>
         </div>
   
@@ -146,7 +146,7 @@
             <img [ngClass]="{ testnet: wallet.network === 'testnet' }" src="assets/img/currencies/{{wallet.coin}}.svg" class="icon-wallet" />
           </ion-icon>
           <div>{{wallet.name}} <span *ngIf="!wallet.balanceHidden && !wallet.scanning && wallet.cachedStatus" class="wallet-from-balance">
-              <span>- {{wallet.cachedStatus && wallet.cachedStatus.totalBalanceStr}}</span>
+              <span> {{'('+fromBalance+')'}}  </span>
           </span><span class="addressTransfer">{{ fromAddress }}</span>
             </div>
           <div class="last-item" item-end *ngIf="!isWithinWalletTabs()">
@@ -177,7 +177,7 @@
     </ion-list>
   </ion-content>
   
-  <ion-footer>
+  <ion-footer [class]="appProvider.activeTheme">
     <page-slide-to-accept #slideButton *ngIf="isCordova" [ngClass]="{'slide-confirm-fast slide-confirm-down': hideSlideButton, 'slide-confirm-slow': !hideSlideButton}" [disabled]="!wallet || !tx?.txp[wallet.id] || paymentExpired" [buttonText]="buttonText" (slideDone)="approve(tx, wallet)">
     </page-slide-to-accept>
     <ion-toolbar *ngIf="!isCordova">

@@ -123,7 +123,16 @@ export class SettingsPage {
         ? this.config.lock.method.toLowerCase()
         : null;
         this.storage.get('FiatConverter').then((res) => {
-           this.defWallet = res == null ? 'FIAT' : res == true ? 'FIAT' : 'CRYPTO' });
+          this.logger.log('cov->',res);
+          // this.defWallet = (res == true) ? 'CRYPTO' : 'FIAT';
+          //  this.defWallet = 
+          //  (res == null || res == false) 
+          //  ? 'FIAT' 
+          //  : (res == true)
+          //   ? 'CRYPTO' 
+          //   : 'FIAT';
+          this.defWallet = res;
+       });
 
   }
 
@@ -147,7 +156,7 @@ export class SettingsPage {
       this.bitpayCardItems = cards;
     });
     this.storage.get('FiatConverter').then((res) => {
-       this.defWallet = res == null ? 'FIAT' : res == true ? 'FIAT' : 'CRYPTO' });
+       this.defWallet = res == null ? 'FIAT' : res == true ? 'CRYPTO' : 'FIAT' });
   }
 
   public openAltCurrencyPage(): void {

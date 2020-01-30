@@ -27,13 +27,13 @@ export class DefaultWalletCurrencyPage {
 
   ionViewWillEnter(){
     this.storage.get('FiatConverter').then((res) => {
-        if (res == undefined ||  res == true) {
-          this.item[0].status = true;
-          this.item[1].status = false;
+        if (res == undefined ||  res == false) {
+          this.item[1].status = true;
+          this.item[0].status = false;
           this.current = 'FIAT';
         }else{
-          this.item[0].status = false;
-          this.item[1].status = true;
+          this.item[1].status = false;
+          this.item[0].status = true;
           this.current = 'CRYPTO';
         } 
       });
@@ -44,7 +44,8 @@ export class DefaultWalletCurrencyPage {
    
   }
   public select(val:string){
-    if (val == 'FIAT'){
+    
+    if (val == 'CRYPTO'){
       this.storage.set('FiatConverter', true);
     }else{
       this.storage.set('FiatConverter', false);

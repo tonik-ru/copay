@@ -34,8 +34,8 @@ import {
   FeedProvider,
   FeeProvider,
   File,
-  FileChooser,
-  FileTransfer, FileTransferObject,
+  // FileChooser,
+  // FileTransfer, FileTransferObject,
   FilterProvider,
   GAnalyticsProvider,
   GiftCardProvider,
@@ -162,8 +162,8 @@ import {
     ApiProvider,
     BrowserTab,
     SafariViewController,
-    FileTransfer, FileTransferObject,
-    FileChooser
+    // FileTransfer, FileTransferObject,
+    // FileChooser
   ]
 })
 export class ProvidersModule {}

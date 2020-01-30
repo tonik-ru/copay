@@ -500,7 +500,7 @@ export class DatafeedPage {
     this.logger.log(this.myPair as string);
 
     let p = this.selectedPair;
-    this.isTop20 = this.selectedPair.BaseAsset == 'TOP20';
+    this.isTop20 = (this.selectedPair.BaseAsset == 'TOP20' && this.exchange == "BINANCE") ? true : this.exchange !== "BINANCE" ? true : false;
     this.decimals =
       p.Precision == 0 ? 0 : Math.round(Math.log(1 / p.Precision) / Math.LN10);
 

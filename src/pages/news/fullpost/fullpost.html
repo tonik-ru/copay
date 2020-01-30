@@ -47,7 +47,7 @@
         ></ion-col
       >
     </ion-row>
-    <h1 text-center>{{ post.title.rendered }}</h1>
+    <h1 text-center [innerHTML]="post.title.rendered"></h1>
 
     <div [innerHTML]="post.content.rendered" class="contentpost"></div>
   </div>

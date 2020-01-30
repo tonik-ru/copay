@@ -2,6 +2,7 @@ page-receive {
   .toolbar-background-ios{
     background: #fac239!important;
   }
+  .AltSelect{border-color:#ccc!important}
   .toolbar-title{ text-align:  center!important}
   .wallet-details-header__balance{margin-left: auto; text-align: center}
   .search-wrapper {
@@ -30,6 +31,7 @@ page-receive {
       margin-left: 0rem !important;
       border-bottom: 0px !important;
       box-shadow: none !important;
+      padding-right:0!important;
     }
     .scan-icon {
       margin: 0;
@@ -40,7 +42,7 @@ page-receive {
       z-index: 999;
     }
   }
-  .input-ios .text-input-clear-icon{right: 40px}
+  .input-ios .text-input-clear-icon{right: 10px}
   .specInput{padding-left:15px; padding-right:15px;}
   .second{margin-top: 50px;
 
@@ -116,6 +118,9 @@ page-receive {
   .qr-container {
     height: 100%;
     position: relative;
+    .qr-card{
+      max-height:343px;
+    }
     .qr-card-amount {
       text-align: center;
       margin-bottom: -10px;
@@ -271,4 +276,8 @@ page-receive {
         -moz-appearance:textfield;
       }
     }
+    .AltSelect{
+      .select-text{text-transform: uppercase;}
+    }
+    .text-address {width:100%;}
 }

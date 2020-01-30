@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   Content,
   Events,
+  ModalController,
   NavController,
   Platform,
   PopoverController,
@@ -162,7 +163,8 @@ export class HomePage {
     private renderer: Renderer,
     public toastCtrl: ToastController,
     private derivationPathHelperProvider: DerivationPathHelperProvider,
-    public popoverCtrl: PopoverController
+    public popoverCtrl: PopoverController,
+    public modalController: ModalController
   ) {
     this.slideDown = false;
     this.isBlur = false;
@@ -1072,8 +1074,10 @@ export class HomePage {
     this.debounceSetWallets();
   }
 
-  public goscan(): void {
-    this.navCtrl.push(ScanPage);
+  public goscan(){
+    // this.navCtrl.push(ScanPage);
+    const modal =  this.modalController.create(ScanPage);
+     modal.present();
   }
 
   public settings(): void {
@@ -1158,6 +1162,53 @@ export class HomePage {
     } else {
       return 'none';
     }
+  }
+
+  public totalb_group(group) {
+    // return 'none';
+    let isocode;
+    // let profit = 0;
+    // let index = this.wallets.findIndex(x=> x.keyId == group.keyId);
+    // this.logger.log('Wallets', group);
+    if (group !== undefined && group !== null) {
+      // this.logger.log('---> ', this.wallets);
+      if (
+        group[0] !== null &&
+        group[0] !== undefined &&
+        group[0].cachedStatus !== null &&
+        group[0].cachedStatus !== undefined
+      ) {
+      var profit:any = _.sumBy(group, (w:any) =>{
+          // this.logger.log(group);
+          if (!w.cachedStatus || !w.cachedStatus.totalBalanceAlternative)
+            return 0;
+          isocode = w.cachedStatus.alternativeIsoCode;
+          return parseFloat(w.cachedStatus.totalBalanceAlternative);
+        });
+
+        if (!isocode) {
+          return 'none';
+        } else {
+          return profit.toFixed(2) + ' ' + isocode;
+        }
+      } else {
+        return 'none';
+      }
+    } else {
+      return 'none';
+    }
+  }
+
+  public groupBalanceHiddenCheck(group){
+    // balanceHidden: false
+    let col = 0;
+    for (let i =0; i < group.length; i++){
+      if (group[i].balanceHidden == true){
+        col = col +1;
+      }
+    }
+    return (group.length == col);
+
   }
 
   public collapseGroup(keyIds: string) {

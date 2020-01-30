@@ -82,4 +82,34 @@ page-clipboard-card {
       border-right: 1px solid rgba(0, 0, 0, 0.07);
     }
   }
+  .item-subtitle{text-align:left!important; width:100%}
+  button.paynowBtn {
+    width: 95%;
+    line-height: 40px;
+    font-size: 2rem;
+    border-radius: 0px 0px 20px 20px;
+    // background:linear-gradient(45deg, #009688, #4CAF50);
+    background:  -webkit-gradient(
+      linear,
+      left bottom,
+      left top,
+      from(#f79421),
+      to(#fac239)
+    );box-shadow:0 0 3px rgba(0,0,0,0.35);
+    // margin-bottom: 25px;
+    display: block; margin: 0 auto;
+    ion-icon.icon.icon-ios {
+      margin-top: -6px;
+      margin-right: 7px;
+  }
+ 
+} 
+ion-item.clipboard-paypro-container.item.item-block.item-ios{
+  display: block; margin: 0 auto!important; width: 95%;box-shadow:0 0 3px rgba(0,0,0,0.35);
+  // background:#3e6f66!important; color:#FF!important;
+}
+ion-item-divider.item.item-divider.item-ios.item-divider-ios, .card .item-block{
+    display: block; margin: 0 auto; width: 95%;
+  }
+  
 }

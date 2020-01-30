@@ -194,14 +194,14 @@ export class AmountPage extends WalletTabsChild {
   //  }});
 
   this.storage.get('FiatConverter').then(value => 
-    { if (value == true || value == null){ this.changeUnit('withoutSave') }});;
+    { if (value == false || value == null){ this.logger.log('Converter:', value);this.changeUnit('withoutSave') }});;
   
   if (this.wallet){
     this.headerClass = this.wallet.coin == 'bcd' 
       ? 'bcdHead'
       : this.wallet.coin == 'btc' 
         ?  'btcHead' 
-        : this.wallet.coin = 'eth' 
+        : this.wallet.coin == 'eth' 
           ? 'ethHead' 
           : 'bcdHead';
     }
@@ -477,6 +477,7 @@ export class AmountPage extends WalletTabsChild {
       if (this.availableUnits[this.unitIndex].isFiat) {
         let a = this.fromFiat(result);
         if (a) {
+          this.logger.log('->',this.availableUnits[this.altUnitIndex].id);
           this.alternativeAmount = this.txFormatProvider.formatAmount(
             this.availableUnits[this.altUnitIndex].id,
             a * this.unitToSatoshi,
@@ -759,7 +760,7 @@ export class AmountPage extends WalletTabsChild {
     infoSheet.onDidDismiss(option => {
       
       if (option) {
-        this.logger.log(option);
+        this.logger.log('SELECTED-->',option);
        this.storage.set('FiatConverter', true);
        this.storage.set('FiatConverterNotice', 'false');
      

@@ -19,6 +19,7 @@ import { AddressbookAddPage } from '../settings/addressbook/add/add';
 
 import env from '../../environments';
 import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
+import { e } from '@angular/core/src/render3';
 
 @Component({
   selector: 'page-scan',
@@ -257,7 +258,7 @@ export class ScanPage {
   }
 
   private sendPaymentToAddress(bitcoinAddress: string, coin: string): void {
-    this.navCtrl.push(AmountPage, { toAddress: bitcoinAddress, coin });
+    this.navCtrl.push(AmountPage, { toAddress: bitcoinAddress, coin, showBalance: false });
   }
 
   private addToAddressBook(bitcoinAddress: string): void {
@@ -339,8 +340,9 @@ export class ScanPage {
       this.events.publish('Local/AddressScan', { value: contents });
       this.close();
     } else {
-      const redirParms = { activePage: 'ScanPage', showBalance: false };
-      this.incomingDataProvider.redir(contents, redirParms);
+      const redirParms = { activePage: 'ScanPage' };
+      this.logger.log('Params', redirParms)
+      this.incomingDataProvider.redir(contents,{ activePage: 'ScanPage' });
     }
   }
 
@@ -401,8 +403,12 @@ export class ScanPage {
   }
 
   public close() {
+    if (this.fromAddressbook || this.fromImport || this.fromJoin || this.fromSend) {
     this.walletTabsProvider.getTabNav()
       ? this.events.publish('ExitScan')
       : this.navCtrl.parent.select(0);
+    }else{
+    this.navCtrl.pop();
+  }
   }
 }

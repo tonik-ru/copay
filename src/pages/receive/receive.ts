@@ -17,11 +17,16 @@ import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ExternalLinkProvider } from '../../providers/external-link/external-link';
 import { PlatformProvider } from '../../providers/platform/platform';
 import { ProfileProvider } from '../../providers/profile/profile';
-import { WalletProvider } from '../../providers/wallet/wallet';
+import { Coin, WalletProvider } from '../../providers/wallet/wallet';
 
 import * as _ from 'lodash';
 import { WalletTabsChild } from '../wallet-tabs/wallet-tabs-child';
 import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
+
+import { CoinOpts, Config, ConfigProvider } from '../../providers/config/config';
+import { RateProvider } from '../../providers/rate/rate';
+import { TxFormatProvider } from '../../providers/tx-format/tx-format';
+ 
 
 @Component({
   selector: 'page-receive',
@@ -42,7 +47,20 @@ export class ReceivePage extends WalletTabsChild {
 
   private onResumeSubscription: Subscription;
   private retryCount: number = 0;
-
+  public coinAmount:string;
+  public alternativeUnit: string;
+  private availableUnits;
+  private altUnitIndex: number;
+  public fiatCode: string;
+  public config: Config;
+  public unit: string;
+  public unitIndex: number;
+  private unitToSatoshi: number;
+  private satToUnit: number;
+  private unitDecimals: number;
+  public coinOpts: CoinOpts;
+  public amountUnitStr:string;
+  public altAmountStr:string;
   constructor(
     private actionSheetProvider: ActionSheetProvider,
     navCtrl: NavController,
@@ -56,10 +74,15 @@ export class ReceivePage extends WalletTabsChild {
     private translate: TranslateService,
     private externalLinkProvider: ExternalLinkProvider,
     walletTabsProvider: WalletTabsProvider,
-    private platform: Platform
+    private platform: Platform,
+    private configProvider: ConfigProvider,
+    private rateProvider: RateProvider,
+    private txFormatProvider: TxFormatProvider
   ) {
     super(navCtrl, profileProvider, walletTabsProvider);
     this.showShareButton = this.platformProvider.isCordova;
+    this.config = this.configProvider.get();
+    this.coinOpts = this.configProvider.getCoinOpts();
   }
 
   ionViewWillEnter() {
@@ -68,6 +91,11 @@ export class ReceivePage extends WalletTabsChild {
       this.events.subscribe('bwsEvent', this.bwsEventHandler);
     });
     this.setAddress();
+    // this.coinAmount = this.unit;
+    this.availableUnits = [];
+     
+   
+    
   }
 
   ionViewWillLeave() {
@@ -76,6 +104,16 @@ export class ReceivePage extends WalletTabsChild {
 
   ionViewDidLoad() {
     this.events.subscribe('bwsEvent', this.bwsEventHandler);
+    this.setAvailableUnits();
+    this.updateUnitUI();
+    const coinOpts = this.availableUnits[this.unitIndex].isFiat
+      ? this.coinOpts[this.availableUnits[this.altUnitIndex].id]
+      : this.coinOpts[this.unit.toLowerCase()];
+    const { unitToSatoshi, unitDecimals } = coinOpts;
+    this.unitToSatoshi = unitToSatoshi;
+    this.satToUnit = 1 / this.unitToSatoshi;
+    this.unitDecimals = unitDecimals;
+
   }
 
   private bwsEventHandler: any = (walletId, type, n) => {
@@ -235,6 +273,7 @@ export class ReceivePage extends WalletTabsChild {
   }
 
   processInput() {
+   let amount = this.wallet.coin == 'eth' ? '?value=' : '?amount=';
     this.logger.log('spec:', this.specAmount);
     // this.address = '';
     if (parseFloat(this.specAmount) > 0 && this.specAmount !== '') {
@@ -252,18 +291,198 @@ export class ReceivePage extends WalletTabsChild {
       //  (protoAddr ? protoAddr : this.mainAddress) +
      //   '?amount=' +
      //   Number(this.specAmount);
+     // this.logger.log('->', this.coinAmount, this.specAmount, this.chanageRate,  this.mainAddress);
+     if (this.coinAmount !== this.wallet.coin.toUpperCase()){
+
+      // this.qrAddress= (protoAddr ? protoAddr : this.mainAddress) + 
+      // '?amount=' + (Number(this.specAmount) /  this.chanageRate) ;
+      let a = this.fromFiat(this.specAmount);
+      this.logger.log('A->',a, this.unitToSatoshi);
+      if (a) {
+        var fiat = this.txFormatProvider.formatAmount(
+            this.wallet.coin,
+            a * this.unitToSatoshi,
+            true
+          );
+          var tst = this.txFormatProvider.parseAmount(
+            this.wallet.coin,
+            fiat,
+            this.wallet.coin.toUpperCase()
+          );
+
+        this.qrAddress = (protoAddr ? protoAddr : this.mainAddress) +
+        amount + ((isNaN(tst.amountSat) || this.wallet.coin !== 'eth') ? fiat : tst.amountSat);
+        
+        this.logger.log('show:', this.unitToSatoshi, a, tst);
+        // show price in CRYPTO after price on qr 
+        this.amountUnitStr= this.specAmount + this.coinAmount;
+        this.altAmountStr = fiat + this.wallet.coin;
+
+       // this.checkAmountForBitpaycard(this.specAmount);
+      } else {
+        this.qrAddress = (protoAddr ? protoAddr : this.mainAddress) +amount+ this.specAmount ? 'N/A' : null;
+       //  this.allowSend = false;
+      }
+
+     } else{
       this.qrAddress =
         (protoAddr ? protoAddr : this.mainAddress) +
-        '?amount=' +
+        amount +
         Number(this.specAmount);
+        var fiat_ = this.toFiat(Number(this.specAmount));
+        this.logger.log('FIAT',fiat_);
+        this.amountUnitStr= this.specAmount + this.coinAmount;
+        this.altAmountStr = fiat_ + this.alternativeUnit;
+      }
     } else {
       this.showSpecInfo = false;
       this.address = this.mainAddress;
       this.qrAddress = this.mainAddress;
+      this.altAmountStr = '';
+      this.amountUnitStr='';
     }
     if (parseFloat(this.specAmount) < 0) {
       this.specAmount = Math.abs(parseFloat(this.specAmount)).toString();
       this.processInput();
     }
   }
+
+  private setAvailableUnits(): void {
+    this.availableUnits = [];
+
+    const parentWalletCoin = this.wallet
+      ? this.wallet.coin
+      : this.wallet && this.wallet.coin;
+
+    if (parentWalletCoin === 'btc' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Bitcoin',
+        id: 'btc',
+        shortName: 'BTC'
+      });
+    }
+
+    if (parentWalletCoin === 'bch' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Bitcoin Cash',
+        id: 'bch',
+        shortName: 'BCH'
+      });
+    }
+
+    if (parentWalletCoin === 'bcd' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Bitcoin Diamond',
+        id: 'bcd',
+        shortName: 'BCD'
+      });
+    }
+
+    if (parentWalletCoin === 'eth' || !parentWalletCoin) {
+      this.availableUnits.push({
+        name: 'Ethereum',
+        id: 'eth',
+        shortName: 'ETH'
+      });
+    }
+
+    this.unitIndex = 0;
+   // var unitIndex = 0;
+
+    if (this.wallet.coin) {
+       
+
+      let coins = this.wallet.coin.split(',');
+      let newAvailableUnits = [];
+
+      _.each(coins, (c: string) => {
+        let coin = _.find(this.availableUnits, {
+          id: c
+        });
+        if (!coin) {
+          this.logger.warn(
+            'Could not find desired coin:' + this.wallet.coin
+          );
+        } else {
+          newAvailableUnits.push(coin);
+        }
+      });
+
+      if (newAvailableUnits.length > 0) {
+        this.availableUnits = newAvailableUnits;
+      }
+    }
+ //  currency have preference
+ this.logger.log('Wallet',this.wallet);
+ let fiatName;
+ if (this.wallet.currency !== undefined || this.wallet.currency) {
+   this.fiatCode = this.wallet.data.currency;
+   this.altUnitIndex = this.unitIndex;
+   this.unitIndex = this.availableUnits.length;
+ } else {
+   this.fiatCode = this.config.wallet.settings.alternativeIsoCode || 'USD';
+   fiatName = this.config.wallet.settings.alternativeName || this.fiatCode;
+   this.altUnitIndex = this.availableUnits.length;
+ }
+
+ this.availableUnits.push({
+   name: fiatName || this.fiatCode,
+   // TODO
+   id: this.fiatCode,
+   shortName: this.fiatCode,
+   isFiat: true
+ });
+
+//  if (this.wallet.fixedUnit) {
+//    this.fixedUnit = true;
+//  }
+}
+private updateUnitUI(): void {
+  this.unit = this.availableUnits[this.unitIndex].shortName;
+  this.alternativeUnit = this.availableUnits[this.altUnitIndex].shortName;
+  this.coinAmount = this.unit;
+}
+public changeUnit(ev){
+  this.specAmount = '';
+  this.amountUnitStr= '';
+        this.altAmountStr ='';
+        this.qrAddress = this.mainAddress;
+ this.logger.log('changed', ev);
+}
+
+private fromFiat(val, coin?: string): number {
+  coin = coin || this.wallet.coin;
+  return parseFloat(
+    (
+      this.rateProvider.fromFiat(val, this.fiatCode, coin) * this.satToUnit
+    ).toFixed(this.unitDecimals)
+  );
+}
+
+public toFiat(val: number, coin?: Coin): number {
+  if (
+    !this.rateProvider.getRate(
+      this.fiatCode,
+      coin || this.wallet.coin
+    )
+  )
+    return undefined;
+
+  return parseFloat(
+    this.rateProvider
+      .toFiat(
+        val * this.unitToSatoshi,
+        this.fiatCode,
+        coin || this.wallet.coin
+      )
+      .toFixed(2)
+  );
+}
+public clearAmount(){
+  this.specAmount = '';
+  this.amountUnitStr= '';
+        this.altAmountStr ='';
+        this.qrAddress = this.mainAddress;
+}
+
 }

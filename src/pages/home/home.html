@@ -119,7 +119,7 @@
     <div class="card clipboard-card" *ngIf="validDataFromClipboard"> 
         <ion-item-divider>
           <div class="title" item-start>
-              <img src="assets/img/paste-clipboard.svg" alt="Clipboard" width="20" />
+              <img src="assets/img/clipboard-icon.svg" alt="Clipboard" width="20" />
               <span>{{ 'Copied' | translate }} {{ validDataFromClipboard?.title }}</span>
           </div>
           <div item-end>
@@ -197,6 +197,12 @@
           <span class="key-name" *ngIf="walletsGroups.length > 1"><ion-icon name="options" style="margin-right: 10px;" (click)="renameKey(walletGroup[0].keyId)"></ion-icon>{{profileProvider.getWalletGroup(walletGroup[0].keyId).name}}</span>
           <span *ngIf="walletsGroups.length == 1" translate>Wallets</span>
           <div class="collapse">
+            <span *ngIf="walletGroup && walletGroup[0] && !walletGroup[0].needsBackup && totalb_group(walletGroup) !== 'none' && !groupBalanceHiddenCheck(walletGroup)"> 
+              {{totalb_group(walletGroup)}} 
+            </span>
+            <span *ngIf="walletGroup && walletGroup[0] && !walletGroup[0].needsBackup && totalb_group(walletGroup) !== 'none' && groupBalanceHiddenCheck(walletGroup)"> 
+              ***
+            </span>
             <span (click)="openBackupSettings(walletGroup[0])" *ngIf="walletGroup && walletGroup[0] && walletGroup[0].needsBackup" class="backupNew">NEED BACKUP<img src="assets/img/back-up-need.svg" class="backupIcon"/></span>
             <span (click)="collapseGroup(walletGroup[0].keyId)" *ngIf="!walletGroup[0].canAddNewAccount" class="legacy-tag" translate>Legacy</span>
             <span class="collapse-btn" *ngIf="walletsGroups.length > 1" (click)="collapseGroup(walletGroup[0].keyId)">

@@ -87,16 +87,21 @@
         <div class="specInput">
           <ion-item class="search-wrapper">
             <ion-input
-              clearInput
+            
               type="number"
               inputmode="numeric"
               placeholder="{{'Enter Amount' | translate}}"
               [(ngModel)]="specAmount"
               (keyup)="processInput()"
+              (ionCancel)="clearAmount()"
               class="numberInput"
             ></ion-input>
-            <ion-label item-right>{{ wallet.coin }}</ion-label>
-          </ion-item>
+            <!-- <ion-label item-right>{{ wallet.coin }}</ion-label> -->
+            <ion-select [(ngModel)]="coinAmount" interface="popover" class="AltSelect" (ionChange)="changeUnit(coinAmount)">
+              <ion-option [value]="unit">{{ unit }}</ion-option>
+              <ion-option [value]="alternativeUnit">{{ alternativeUnit }}</ion-option>
+            </ion-select>
+                    </ion-item>
         </div>
       </div>
     </div>
@@ -121,7 +126,10 @@
       </div>
       <div class="card qr-card" [ngClass]="{'qr-code-bounce': playAnimation}" *ngIf="address">
         <div class="qr-card-amount" *ngIf="showSpecInfo">
-          <span>{{ specAmount + ' ' + wallet.coin }}</span> <br />
+          <!-- <span>{{ specAmount + ' ' + coinAmount }}</span> <br /> -->
+          <span>{{amountUnitStr}}</span>
+          <br>
+          <small *ngIf="altAmountStr!==''">({{altAmountStr}})</small>
         </div>
         <ngx-qrcode (click)="showFullAddr()" *ngIf="address" copy-to-clipboard="{{ qrAddress }}" hide-toast="true" qrc-value="{{qrAddress}}" qrc-class="aclass" qrc-errorCorrectionLevel="M"></ngx-qrcode>
       </div>

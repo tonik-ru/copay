@@ -148,6 +148,7 @@ export class TopcoinsPage {
       
       });
     } else this.items = this.topCoins.filter(x => x.Exchange === this.exchange);
+    this.logger.log('resutl->', this.items)
   }
 
   showToast(msg: string) {
