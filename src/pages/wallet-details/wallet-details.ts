@@ -565,7 +565,7 @@ export class WalletDetailsPage extends WalletTabsChild {
   }
   public openTrader(): void {
     let bcd = {
-      coin: {Exchange: "BINA"},
+      coin: {Exchange: "BINANCE", CurrencyId: 76},
       validPairs: [
         {
           BaseAsset: 'BCD',
@@ -580,7 +580,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     };
 
     let btc = {
-      coin: {Exchange: "BINA"},
+      coin: {Exchange: "BINANCE", CurrencyId: 1},
       validPairs: [
         {
           BaseAsset: 'BTC',
@@ -595,7 +595,7 @@ export class WalletDetailsPage extends WalletTabsChild {
     };
 
     let eth = {
-      coin: {Exchange: "BINA"},
+      coin: {Exchange: "BINANCE", CurrencyId: 3},
       validPairs: [
         {
           BaseAsset: 'ETH',

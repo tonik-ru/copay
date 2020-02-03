@@ -19,7 +19,6 @@ import { AddressbookAddPage } from '../settings/addressbook/add/add';
 
 import env from '../../environments';
 import { WalletTabsProvider } from '../wallet-tabs/wallet-tabs.provider';
-import { e } from '@angular/core/src/render3';
 
 @Component({
   selector: 'page-scan',
@@ -403,12 +402,12 @@ export class ScanPage {
   }
 
   public close() {
-    if (this.fromAddressbook || this.fromImport || this.fromJoin || this.fromSend) {
+    // if (this.fromAddressbook || this.fromImport || this.fromJoin || this.fromSend) {
     this.walletTabsProvider.getTabNav()
       ? this.events.publish('ExitScan')
       : this.navCtrl.parent.select(0);
-    }else{
-    this.navCtrl.pop();
-  }
+  //   }else{
+  //   this.navCtrl.pop();
+  // }
   }
 }

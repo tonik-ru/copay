@@ -267,37 +267,37 @@ function startgraph(e) {
         if (parseFloat(znachenie3) > parseFloat(znachenie2)) {
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + -63 + 'deg)';
-            rangeClock2.setAttribute('values', verybearishcirc7);
+            rangeClock2.setAttribute('d', verybearishcirc7);
             rangeClock21.style.fill = 'url(#grad-bear)';
           }, 500);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + znachenie + 'deg)';
-            rangeClock2.setAttribute('values', verybearishcirc6);
+            rangeClock2.setAttribute('d', verybearishcirc6);
             rangeClock21.style.fill = 'url(#grad-bear)';
           }, 1000);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + -63 + 'deg)';
-            rangeClock2.setAttribute('values', verybearishcirc7);
+            rangeClock2.setAttribute('d', verybearishcirc7);
             rangeClock21.style.fill = 'url(#grad-bear)';
           }, 1500);
         } else {
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + -77 + 'deg)';
-            rangeClock2.setAttribute('values', verybearishcirc5);
+            rangeClock2.setAttribute('d', verybearishcirc5);
             rangeClock21.style.fill = 'url(#grad-vbear)';
           }, 500);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + znachenie + 'deg)';
-            rangeClock2.setAttribute('values', verybearishcirc6);
+            rangeClock2.setAttribute('d', verybearishcirc6);
             rangeClock21.style.fill = 'url(#grad-vbear)';
           }, 1000);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + -77 + 'deg)';
-            rangeClock2.setAttribute('values', verybearishcirc5);
+            rangeClock2.setAttribute('d', verybearishcirc5);
             rangeClock21.style.fill = 'url(#grad-vbear)';
           }, 1500);
         }
@@ -306,37 +306,37 @@ function startgraph(e) {
         if (parseFloat(znachenie3) > parseFloat(znachenie2)) {
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + -28 + 'deg)';
-            rangeClock2.setAttribute('values', bearishcirc7);
+            rangeClock2.setAttribute('d', bearishcirc7);
             rangeClock21.style.fill = 'url(#grad-st)';
           }, 500);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + znachenie + 'deg)';
-            rangeClock2.setAttribute('values', bearishcirc6);
+            rangeClock2.setAttribute('d', bearishcirc6);
             rangeClock21.style.fill = 'url(#grad-st)';
           }, 1000);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + -28 + 'deg)';
-            rangeClock2.setAttribute('values', bearishcirc7);
+            rangeClock2.setAttribute('d', bearishcirc7);
             rangeClock21.style.fill = 'url(#grad-st)';
           }, 1500);
         } else {
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + -42 + 'deg)';
-            rangeClock2.setAttribute('values', bearishcirc4);
+            rangeClock2.setAttribute('d', bearishcirc4);
             rangeClock21.style.fill = 'url(#grad-vbear)';
           }, 500);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + znachenie + 'deg)';
-            rangeClock2.setAttribute('values', bearishcirc5);
+            rangeClock2.setAttribute('d', bearishcirc5);
             rangeClock21.style.fill = 'url(#grad-vbear)';
           }, 1000);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + -42 + 'deg)';
-            rangeClock2.setAttribute('values', bearishcirc4);
+            rangeClock2.setAttribute('d', bearishcirc4);
             rangeClock21.style.fill = 'url(#grad-vbear)';
           }, 1500);
         }
@@ -345,37 +345,37 @@ function startgraph(e) {
         if (parseFloat(znachenie3) > parseFloat(znachenie2)) {
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + 7 + 'deg)';
-            rangeClock2.setAttribute('values', stablecirc6);
+            rangeClock2.setAttribute('d', stablecirc6);
             rangeClock21.style.fill = 'url(#grad-bull)';
           }, 500);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + znachenie + 'deg)';
-            rangeClock2.setAttribute('values', stablecirc5);
+            rangeClock2.setAttribute('d', stablecirc5);
             rangeClock21.style.fill = 'url(#grad-bull)';
           }, 1000);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + 7 + 'deg)';
-            rangeClock2.setAttribute('values', stablecirc6);
+            rangeClock2.setAttribute('d', stablecirc6);
             rangeClock21.style.fill = 'url(#grad-bull)';
           }, 1500);
         } else {
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + -7 + 'deg)';
-            rangeClock2.setAttribute('values', stablecirc4);
+            rangeClock2.setAttribute('d', stablecirc4);
             rangeClock21.style.fill = 'url(#grad-bear)';
           }, 500);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + znachenie + 'deg)';
-            rangeClock2.setAttribute('values', stablecirc5);
+            rangeClock2.setAttribute('d', stablecirc5);
             rangeClock21.style.fill = 'url(#grad-bear)';
           }, 1000);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + -7 + 'deg)';
-            rangeClock2.setAttribute('values', stablecirc4);
+            rangeClock2.setAttribute('d', stablecirc4);
             rangeClock21.style.fill = 'url(#grad-bear)';
           }, 1500);
         }
@@ -384,37 +384,37 @@ function startgraph(e) {
         if (parseFloat(znachenie3) > parseFloat(znachenie2)) {
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + 42 + 'deg)';
-            rangeClock2.setAttribute('values', bullishcirc5);
+            rangeClock2.setAttribute('d', bullishcirc5);
             rangeClock21.style.fill = 'url(#grad-vbull)';
           }, 500);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + znachenie + 'deg)';
-            rangeClock2.setAttribute('values', bullishcirc4);
+            rangeClock2.setAttribute('d', bullishcirc4);
             rangeClock21.style.fill = 'url(#grad-vbull)';
           }, 1000);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + 42 + 'deg)';
-            rangeClock2.setAttribute('values', bullishcirc5);
+            rangeClock2.setAttribute('d', bullishcirc5);
             rangeClock21.style.fill = 'url(#grad-vbull)';
           }, 1500);
         } else {
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + 28 + 'deg)';
-            rangeClock2.setAttribute('values', bullishcirc3);
+            rangeClock2.setAttribute('d', bullishcirc3);
             rangeClock21.style.fill = 'url(#grad-st)';
           }, 500);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + znachenie + 'deg)';
-            rangeClock2.setAttribute('values', bullishcirc4);
+            rangeClock2.setAttribute('d', bullishcirc4);
             rangeClock21.style.fill = 'url(#grad-st)';
           }, 1000);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + 28 + 'deg)';
-            rangeClock2.setAttribute('values', bullishcirc3);
+            rangeClock2.setAttribute('d', bullishcirc3);
             rangeClock21.style.fill = 'url(#grad-st)';
           }, 1500);
         }
@@ -423,37 +423,37 @@ function startgraph(e) {
         if (parseFloat(znachenie3) > parseFloat(znachenie2)) {
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + 77 + 'deg)';
-            rangeClock2.setAttribute('values', verybullishcirc5);
+            rangeClock2.setAttribute('d', verybullishcirc5);
             rangeClock21.style.fill = 'url(#grad-vbull)';
           }, 500);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + znachenie + 'deg)';
-            rangeClock2.setAttribute('values', verybullishcirc4);
+            rangeClock2.setAttribute('d', verybullishcirc4);
             rangeClock21.style.fill = 'url(#grad-vbull)';
           }, 1000);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + 77 + 'deg)';
-            rangeClock2.setAttribute('values', verybullishcirc5);
+            rangeClock2.setAttribute('d', verybullishcirc5);
             rangeClock21.style.fill = 'url(#grad-vbull)';
           }, 1500);
         } else {
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + 63 + 'deg)';
-            rangeClock2.setAttribute('values', verybullishcirc2);
+            rangeClock2.setAttribute('d', verybullishcirc2);
             rangeClock21.style.fill = 'url(#grad-bull)';
           }, 500);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + znachenie + 'deg)';
-            rangeClock2.setAttribute('values', verybullishcirc3);
+            rangeClock2.setAttribute('d', verybullishcirc3);
             rangeClock21.style.fill = 'url(#grad-bull)';
           }, 1000);
 
           setTimeout(function() {
             rangeClock.style.transform = 'rotate(' + 63 + 'deg)';
-            rangeClock2.setAttribute('values', verybullishcirc2);
+            rangeClock2.setAttribute('d', verybullishcirc2);
             rangeClock21.style.fill = 'url(#grad-bull)';
           }, 1500);
         }

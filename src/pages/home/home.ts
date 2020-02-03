@@ -1075,9 +1075,11 @@ export class HomePage {
   }
 
   public goscan(){
-    // this.navCtrl.push(ScanPage);
-    const modal =  this.modalController.create(ScanPage);
-     modal.present();
+    this.navCtrl.push(ScanPage,  null , {
+      duration: 100,
+  });
+    // const modal =  this.modalController.create(ScanPage);
+    //  modal.present();
   }
 
   public settings(): void {
@@ -1136,8 +1138,9 @@ export class HomePage {
     // return 'none';
     let isocode;
     let profit = 0;
+    
     if (this.wallets !== undefined && this.wallets !== null) {
-      // this.logger.log('---> ', this.wallets);
+  
       if (
         this.wallets[0] !== null &&
         this.wallets[0] !== undefined &&
@@ -1148,7 +1151,7 @@ export class HomePage {
           if (!w.cachedStatus || !w.cachedStatus.totalBalanceAlternative)
             return 0;
           isocode = w.cachedStatus.alternativeIsoCode;
-          return parseFloat(w.cachedStatus.totalBalanceAlternative);
+          return parseFloat((w.cachedStatus.totalBalanceAlternative).replace(",",""));
         });
 
         if (!isocode) {

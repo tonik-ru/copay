@@ -153,6 +153,7 @@ export class DatafeedPage {
     this.myPair = {};
     this.initKnownIntervals();
     this.selectedInterval = _.find(this.knownIntervals, x => x.Caption == '-2');
+    this.logger.log('NAV->',this.navParams.data);
   }
 
   showToast(msg: string) {
