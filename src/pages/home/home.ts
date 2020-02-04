@@ -68,6 +68,8 @@ import { WalletGroupSettingsPage } from '../settings/wallet-group-settings/walle
 import { WalletSettingsPage } from '../settings/wallet-settings/wallet-settings';
 import { WalletShowQrPage } from '../wallet-details/wallet-show-qr/wallet-show-qr';
 
+import { LanguageProvider } from '../../providers/language/language';
+
 interface UpdateWalletOptsI {
   walletId: string;
   force?: boolean;
@@ -164,7 +166,8 @@ export class HomePage {
     public toastCtrl: ToastController,
     private derivationPathHelperProvider: DerivationPathHelperProvider,
     public popoverCtrl: PopoverController,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private languageProvider: LanguageProvider
   ) {
     this.slideDown = false;
     this.isBlur = false;
@@ -290,6 +293,7 @@ export class HomePage {
     for (let i = 1; i < this.walletsGroups.length; i++) {
       this.collapsedGroups[this.walletsGroups[i][0].keyId] = true;
     }}
+    this.doRefreshButton();
   }
 
   ionViewDidEnter() {
@@ -1043,7 +1047,7 @@ export class HomePage {
 
   public doRefresh(refresher): void {
     this.debounceSetWallets();
-    this.totalb();
+    this.totalb(); 
     this.loading = true;
     this.showToast('Updating wallets');
     this.renderer.setElementStyle(
@@ -1072,6 +1076,7 @@ export class HomePage {
 
   public doRefreshButton(): void {
     this.debounceSetWallets();
+    this.totalb(); 
   }
 
   public goscan(){
@@ -1139,8 +1144,9 @@ export class HomePage {
     let isocode;
     let profit = 0;
     
-    if (this.wallets !== undefined && this.wallets !== null) {
-  
+       if (this.wallets !== undefined && this.wallets !== null) {
+       // this.logger.log('---> ', this.wallets);
+       // Test with more then 1k balance this.wallets[0].cachedStatus.totalBalanceAlternative = '1,027.15932';
       if (
         this.wallets[0] !== null &&
         this.wallets[0] !== undefined &&
@@ -1157,7 +1163,12 @@ export class HomePage {
         if (!isocode) {
           return 'none';
         } else {
-          return profit.toFixed(2) + ' ' + isocode;
+        // return profit.toLocaleString(undefined, {
+        //   minimumFractionDigits: 2,
+        //   maximumFractionDigits: 2
+        // }) + ' ' + isocode;
+        return this.toPriceFormat(profit, isocode);
+      
         }
       } else {
         return 'none';
@@ -1166,7 +1177,16 @@ export class HomePage {
       return 'none';
     }
   }
+  public toPriceFormat(amount, iso){
+    let lang = this.languageProvider.getCurrent() + '-'+ (this.languageProvider.getCurrent()).toUpperCase( );
+    var formatter = new Intl.NumberFormat(lang, {
+      style: 'currency',
+      currency: iso,
+    });
+    
+    return formatter.format(amount);
 
+  }
   public totalb_group(group) {
     // return 'none';
     let isocode;
@@ -1186,13 +1206,15 @@ export class HomePage {
           if (!w.cachedStatus || !w.cachedStatus.totalBalanceAlternative)
             return 0;
           isocode = w.cachedStatus.alternativeIsoCode;
-          return parseFloat(w.cachedStatus.totalBalanceAlternative);
+          // return parseFloat(w.cachedStatus.totalBalanceAlternative);
+          return parseFloat((w.cachedStatus.totalBalanceAlternative).replace(",",""));
         });
 
         if (!isocode) {
           return 'none';
         } else {
-          return profit.toFixed(2) + ' ' + isocode;
+         // return profit.toLocaleString() + ' ' + isocode;
+         return this.toPriceFormat(profit, isocode);
         }
       } else {
         return 'none';

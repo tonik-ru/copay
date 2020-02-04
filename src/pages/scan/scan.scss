@@ -1,5 +1,5 @@
 page-scan {
-  color: #fff;
+  // color: #fff;
   background: transparent none;
 
   & > ion-content.content {
@@ -16,7 +16,7 @@ page-scan {
   .page-scan-has-problems {
     z-index: 9999;
     height: 100%;
-    background-color: $toolbar-background;
+    // background-color: $toolbar-background;
 
     .header-container {
       display: flex;
@@ -30,7 +30,7 @@ page-scan {
         text-align: center;
 
         .image-container {
-          background: #fff;
+          // background: #fff;
           padding: 1rem;
           width: 5rem;
           margin: auto;
@@ -44,7 +44,7 @@ page-scan {
         }
 
         .title {
-          color: #fff;
+         // color: #fff;
           font-size: 1.2em;
         }
       }
@@ -55,7 +55,7 @@ page-scan {
         max-width: 300px;
         font-size: 0.9em;
         opacity: 0.6;
-        color: #fff;
+        // color: #fff;
       }
     }
 
@@ -67,7 +67,7 @@ page-scan {
       background-color: $toolbar-background;
 
       div {
-        color: #fff;
+       // color: #fff;
       }
     }
   }

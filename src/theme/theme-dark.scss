@@ -19,6 +19,13 @@
  page-scan {.scroll-content{
    background:transparent!important;
    
+ }
+ .page-scan-has-problems{
+  background:#161b26!important;
+  .body{
+    background:#161b26!important;
+  }
+  .header-container .header .image-container { filter: invert(1)}
  }}
  
  .tabs-md .tabbar, .tabs-ios .tabbar {
