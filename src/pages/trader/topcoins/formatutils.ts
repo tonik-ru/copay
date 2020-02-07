@@ -9,13 +9,21 @@ export class FormatUtils {
 
   static formatPrice(val: number, decimals: number = 2) {
     var v2 = val;
-    if (val > 100000000) {
+    if (val > 1000000000) {
       v2 = val / 1000000;
       decimals = 0;
+    } else if(( val > 1000000) &&  (val < 1000000000)){
+      v2 = val / 1000;
+      decimals = 2;
     }
+//              100000000
+// BHW          255663435.17644638
+// Top Coins 232461027108.89178
+// TOP formated: 232,461
+  
     // if (val < 10) decimals = 4;
-
-    return FormatUtils.formatMoney(v2, decimals);
+    var final = FormatUtils.formatMoney(v2, decimals)
+    return val >= 1000000000 ? final+'B' : ( val > 1000000) &&  (val < 1000000000) ? final + 'M'  : final ;
   }
 
   static formatMoney(n, c) {
