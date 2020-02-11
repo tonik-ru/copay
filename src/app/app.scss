@@ -1127,3 +1127,14 @@ ion-alert.theme-dark{
 
 }
 .item-label-stacked .select-ios, .item-label-floating .select-ios{padding-left: 8px;}
+
+@media all and (min-width:768px) and (max-width: 1024px ){
+  .ipadModal .modal-wrapper{
+    min-height: 800px;
+    top: 50%;
+    transform: translateY(-50%)!important;}
+    page-wallet-group-onboarding .key-onboarding-slides ion-slide .img-container {
+      height: 40vh!important;
+  }
+}
+ 

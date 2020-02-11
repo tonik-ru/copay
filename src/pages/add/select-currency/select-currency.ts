@@ -91,7 +91,8 @@ export class SelectCurrencyPage {
     this.logger.debug('Showing key onboarding');
     const modal = this.modalCtrl.create(WalletGroupOnboardingPage, null, {
       showBackdrop: false,
-      enableBackdropDismiss: false
+      enableBackdropDismiss: false,
+      cssClass: 'ipadModal'
     });
     modal.present();
     modal.onDidDismiss(() => {
