@@ -30,7 +30,7 @@
   "_enabledExtensions": {
     "coinbase": false,
     "glidera": false,
-    "debitcard": false
+    "debitcard": false,
     "shapeshift": false,
     "giftcards": false
   }
