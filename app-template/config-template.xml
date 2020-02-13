@@ -63,6 +63,9 @@
     <!-- Android Version: Marshmallow 6.0 (API Level 23) or higher -->
     <preference name="android-minSdkVersion" value="23" />
 
+    <preference name="android-targetSdkVersion" value="28" />
+
+
     <!-- iOS 10.3 or higher -->
     <preference name="deployment-target" value="10.3" />
 
@@ -154,7 +157,7 @@
       <preference name="android-manifest/application/@android:allowBackup" value="false" />
 
       <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application">
-          <application android:icon="@mipmap/ic_launcher" android:resource="@drawable/fcm_push_icon" android:roundIcon="@mipmap/ic_launcher_round" />
+          <application android:icon="@mipmap/ic_launcher" android:resource="@drawable/fcm_push_icon" android:roundIcon="@mipmap/ic_launcher_round" android:usesCleartextTraffic="true" />
       </edit-config>
       <resource-file src="resources/*PACKAGENAME*/android/icon/values/ic_launcher_background.xml" target="app/src/main/res/values/ic_launcher_background.xml" />
       <resource-file src="resources/*PACKAGENAME*/android/icon/mipmap-hdpi/ic_launcher.png" target="app/src/main/res/mipmap-hdpi/ic_launcher.png" />
