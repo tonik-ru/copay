@@ -146,7 +146,6 @@ export class WalletGroupSettingsPage {
     const derivationStrategy = this.derivationPathHelperProvider.getDerivationStrategy(
       this.wallets[0].credentials.rootPath
     );
-    this.logger.log(this.wallets[0].credentials.rootPath);
     if (derivationStrategy == 'BIP45') {
       this.navCtrl.push(WalletExportPage, {
         walletId: this.wallets[0].credentials.walletId

@@ -103,7 +103,7 @@
 
 </ion-header>
 
-<ion-content class="fullscreen-tab" [ngClass]="{ blur: isBlur }" #scrollArea>
+<ion-content class="fullscreen-tab add-padding-bottom" [ngClass]="{ blur: isBlur }" #scrollArea>
   <div class="wrapper" [style.margin-top]="totalb() == 'none' ? '0' : '125px'">
     <ion-refresher (ionRefresh)="doRefresh($event)" pullMin="30" pullMax="65">
       <ion-refresher-content></ion-refresher-content>
@@ -277,21 +277,40 @@
               <img src="assets/img/app/logo-negative.svg" />
               <ion-note class="ellipsis" item-end>
                 <div class="funds ellipsis">
-                  {{
-                    card.balance
-                      ? card.currencySymbol + (card.balance | number: '1.2-2')
-                      : ('Add
-                  funds to get started' | translate)
-                  }}
+                  <span *ngIf="card.balance">
+                    {{ card.currencySymbol + (card.balance | number: '1.2-2') }}
+                  </span>
+                  <span *ngIf="!card.balance">
+                    {{ 'Add funds to get started' | translate }}
+                  </span>
                 </div>
                 <div class="number ellipsis">
                   Card ({{ card.lastFourDigits }})
                 </div>
               </ion-note>
             </button>
+            <ion-item-options side="left">
+              <button class="action action--send" ion-button (click)="onWalletAction(wallet, 'send', slidingItem)">
+                <div class="action__icon"><img src="assets/img/send.svg" /></div>
+                <div class="action__text">Send</div>
+              </button>
+            </ion-item-options>
+            <ion-item-options side="right">
+              <button class="action action--receive" ion-button (click)="onWalletAction(wallet, 'receive', slidingItem)">
+                <div class="action__icon"><img src="assets/img/receive.svg" /></div>
+                <div class="action__text">Receive</div>
+              </button>
+            </ion-item-options>
           </ion-item-sliding>
         </div>
       </ion-list>
+      <label-tip type="warn" *ngIf="walletGroup && walletGroup[0] && walletGroup[0].needsBackup" margin-top>
+        <span label-tip-title translate>Needs Backup</span>
+        <div label-tip-body>
+          <span translate>Before retrieving your wallets addresses, it's recommended that you first write down your recovery phrase and store it securely so that your wallets can be recovered in the case your device was lost or stolen.</span>
+        </div>
+      </label-tip>
+    
 
       <bitpay-card-home *ngIf="
           showBitPayCard && showBitpayCardGetStarted && wallets && wallets[0]
@@ -309,7 +328,7 @@
           </ion-item-sliding>
         </div>
       </div>
-    </div>
+  </div>
 
     <!--
       <ion-fab *ngIf="wallets && wallets[0]" id="scan-button" right bottom>

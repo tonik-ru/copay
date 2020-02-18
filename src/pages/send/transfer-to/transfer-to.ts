@@ -5,10 +5,15 @@ import * as _ from 'lodash';
 // Providers
 import { AddressBookProvider } from '../../../providers/address-book/address-book';
 import { AddressProvider } from '../../../providers/address/address';
+import {
+  Coin,
+  CoinsMap,
+  CurrencyProvider
+} from '../../../providers/currency/currency';
 import { Logger } from '../../../providers/logger/logger';
 import { PopupProvider } from '../../../providers/popup/popup';
 import { ProfileProvider } from '../../../providers/profile/profile';
-import { Coin, WalletProvider } from '../../../providers/wallet/wallet';
+import { WalletProvider } from '../../../providers/wallet/wallet';
 
 // Pages
 import { AmountPage } from '../amount/amount';
@@ -33,21 +38,13 @@ export interface FlatWallet {
 })
 export class TransferToPage {
   public search: string = '';
-  public walletsBtc;
-  public walletsBch;
-  public walletsBcd;
-  public walletsEth;
-  public walletBchList: FlatWallet[];
-  public walletBtcList: FlatWallet[];
-  public walletBcdList: FlatWallet[];
-  public walletEthList: FlatWallet[];
+  public wallets = {} as CoinsMap<any>;
+  public hasWallets = {} as CoinsMap<boolean>;
+  public walletList = {} as CoinsMap<FlatWallet[]>;
+  public availableCoins: Coin[];
   public contactsList = [];
   public filteredContactsList = [];
   public filteredWallets = [];
-  public hasBtcWallets: boolean;
-  public hasBchWallets: boolean;
-  public hasBcdWallets: boolean;
-  public hasEthWallets: boolean;
   public hasContacts: boolean;
   public contactsShowMore: boolean;
   public amount: string;
@@ -61,6 +58,7 @@ export class TransferToPage {
   private currentContactsPage: number = 0;
 
   constructor(
+    private currencyProvider: CurrencyProvider,
     private navCtrl: NavController,
     private navParams: NavParams,
     private profileProvider: ProfileProvider,
@@ -70,14 +68,11 @@ export class TransferToPage {
     private popupProvider: PopupProvider,
     private addressProvider: AddressProvider
   ) {
-    this.walletsBtc = this.profileProvider.getWallets({ coin: 'btc' });
-    this.walletsBch = this.profileProvider.getWallets({ coin: 'bch' });
-    this.walletsBcd = this.profileProvider.getWallets({ coin: 'bcd' });
-    this.walletsEth = this.profileProvider.getWallets({ coin: 'eth' });
-    this.hasBtcWallets = !_.isEmpty(this.walletsBtc);
-    this.hasBchWallets = !_.isEmpty(this.walletsBch);
-    this.hasBcdWallets = !_.isEmpty(this.walletsBcd);
-    this.hasEthWallets = !_.isEmpty(this.walletsEth);
+    this.availableCoins = this.currencyProvider.getAvailableCoins();
+    for (const coin of this.availableCoins) {
+      this.wallets[coin] = this.profileProvider.getWallets({ coin });
+      this.hasWallets[coin] = !_.isEmpty(this.wallets[coin]);
+    }
   }
 
   @Input()
@@ -86,10 +81,9 @@ export class TransferToPage {
       ? this.navParams.data.wallet
       : wallet;
 
-    this.walletBchList = this.getBchWalletsList();
-    this.walletBtcList = this.getBtcWalletsList();
-    this.walletBcdList = this.getBcdWalletsList();
-    this.walletEthList = this.getEthWalletsList();
+    for (const coin of this.availableCoins) {
+      this.walletList[coin] = this.getWalletsList(coin);
+    }
     this.updateContactsList();
   }
 
@@ -116,20 +110,14 @@ export class TransferToPage {
     return this._useAsModal;
   }
 
-  private getBchWalletsList(): FlatWallet[] {
-    return this.hasBchWallets ? this.getRelevantWallets(this.walletsBch) : [];
+  public getCoinName(coin: Coin) {
+    return this.currencyProvider.getCoinName(coin);
   }
 
-  private getBtcWalletsList(): FlatWallet[] {
-    return this.hasBtcWallets ? this.getRelevantWallets(this.walletsBtc) : [];
-  }
-
-  private getBcdWalletsList(): FlatWallet[] {
-    return this.hasBcdWallets ? this.getRelevantWallets(this.walletsBcd) : [];
-  }
-
-  private getEthWalletsList(): FlatWallet[] {
-    return this.hasEthWallets ? this.getRelevantWallets(this.walletsEth) : [];
+  private getWalletsList(coin: string): FlatWallet[] {
+    return this.hasWallets[coin]
+      ? this.getRelevantWallets(this.wallets[coin])
+      : [];
   }
 
   private getRelevantWallets(rawWallets): FlatWallet[] {
@@ -220,37 +208,15 @@ export class TransferToPage {
   }
 
   public searchWallets(): void {
-    if (this.hasBchWallets && this._wallet.coin === 'bch') {
-      this.filteredWallets = this.walletBchList.filter(wallet => {
-        return (
-          wallet.id != this.wallet.id &&
-          _.includes(wallet.name.toLowerCase(), this.search.toLowerCase())
-        );
-      });
-    }
-    if (this.hasBtcWallets && this._wallet.coin === 'btc') {
-      this.filteredWallets = this.walletBtcList.filter(wallet => {
-        return (
-          wallet.id != this.wallet.id &&
-          _.includes(wallet.name.toLowerCase(), this.search.toLowerCase())
-        );
-      });
-    }
-    if (this.hasBcdWallets && this._wallet.coin === 'bcd') {
-      this.filteredWallets = this.walletBcdList.filter(wallet => {
-        return (
-          wallet.id != this.wallet.id &&
-          _.includes(wallet.name.toLowerCase(), this.search.toLowerCase())
-        );
-      });
-    }
-    if (this.hasEthWallets && this._wallet.coin === 'eth') {
-      this.filteredWallets = this.walletEthList.filter(wallet => {
-        return (
-          wallet.id != this.wallet.id &&
-        _.includes(wallet.name.toLowerCase(), this.search.toLowerCase())
-        );
-      });
+    for (const coin of this.availableCoins) {
+      if (this.hasWallets[coin] && this._wallet.coin === coin) {
+        this.filteredWallets = this.walletList[coin].filter(wallet => {
+          return _.includes(
+            wallet.name.toLowerCase(),
+            this.search.toLowerCase()
+          );
+        });
+      }
     }
   }
 

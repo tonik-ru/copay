@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { StatusBar } from '@ionic-native/status-bar';
 import { NavController, NavParams } from 'ionic-angular';
 import { Logger } from '../../../providers/logger/logger';
 
@@ -7,14 +8,11 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 
 // providers
 import { ActionSheetProvider } from '../../../providers/action-sheet/action-sheet';
+import { Coin, CurrencyProvider } from '../../../providers/currency/currency';
 import { PlatformProvider } from '../../../providers/platform/platform';
 import { ProfileProvider } from '../../../providers/profile/profile';
 import { TxFormatProvider } from '../../../providers/tx-format/tx-format';
-import {
-  Coin,
-  UTXO_COINS,
-  WalletProvider
-} from '../../../providers/wallet/wallet';
+import { WalletProvider } from '../../../providers/wallet/wallet';
 
 @Component({
   selector: 'page-custom-amount',
@@ -31,6 +29,7 @@ export class CustomAmountPage {
   public altAmountStr: string;
 
   constructor(
+    private currencyProvider: CurrencyProvider,
     private navParams: NavParams,
     private profileProvider: ProfileProvider,
     private platformProvider: PlatformProvider,
@@ -39,7 +38,8 @@ export class CustomAmountPage {
     private socialSharing: SocialSharing,
     private txFormatProvider: TxFormatProvider,
     private actionSheetProvider: ActionSheetProvider,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private statusBar: StatusBar
   ) {
     const walletId = this.navParams.data.id;
     this.showShareButton = this.platformProvider.isCordova;
@@ -95,7 +95,7 @@ export class CustomAmountPage {
         );
       }
 
-      if (UTXO_COINS[this.wallet.coin.toUpperCase()]) {
+      if (this.currencyProvider.isUtxoCoin(this.wallet.coin)) {
         this.qrAddress =
           (protoAddr ? protoAddr : this.address) + '?amount=' + this.amountCoin;
       } else {
@@ -109,6 +109,12 @@ export class CustomAmountPage {
 
   ionViewDidLoad() {
     this.logger.info('Loaded: CustomAmountPage');
+  }
+
+  ionViewWillEnter() {
+    if (this.platformProvider.isIOS) {
+      this.statusBar.styleLightContent();
+    }
   }
 
   public shareAddress(): void {

@@ -9,10 +9,10 @@ import { AddressProvider } from '../address/address';
 import { BwcErrorProvider } from '../bwc-error/bwc-error';
 import { BwcProvider } from '../bwc/bwc';
 import { ConfigProvider } from '../config/config';
+import { Coin, CurrencyProvider } from '../currency/currency';
 import { FeeProvider } from '../fee/fee';
 import { FilterProvider } from '../filter/filter';
 import { KeyProvider } from '../key/key';
-import { LanguageProvider } from '../language/language';
 import { Logger } from '../logger/logger';
 import { OnGoingProcessProvider } from '../on-going-process/on-going-process';
 import { PersistenceProvider } from '../persistence/persistence';
@@ -26,19 +26,6 @@ export interface HistoryOptionsI {
   lowAmount?: number;
   force?: boolean;
   retry?: boolean; // TODO: not used
-}
-
-export enum Coin {
-  BTC = 'btc',
-  BCD = 'bcd',
-  BCH = 'bch',
-  ETH = 'eth'
-}
-
-export enum UTXO_COINS {
-  BTC = 'btc',
-  BCD = 'bcd',
-  BCH = 'bch'
 }
 
 export interface WalletOptions {
@@ -64,14 +51,15 @@ export interface WalletOptions {
 }
 
 export interface TransactionProposal {
+  coin: string;
   amount: any;
-  data?: string; // eth
   from: string;
   toAddress: any;
   outputs: Array<{
     toAddress: any;
     amount: any;
     message: string;
+    data?: string;
   }>;
   inputs: any;
   fee: any;
@@ -87,6 +75,7 @@ export interface TransactionProposal {
   feePerKb: number;
   feeLevel: string;
   dryRun: boolean;
+  tokenAddress?: string;
 }
 
 @Injectable()
@@ -115,11 +104,11 @@ export class WalletProvider {
     private bwcProvider: BwcProvider,
     private txFormatProvider: TxFormatProvider,
     private configProvider: ConfigProvider,
+    private currencyProvider: CurrencyProvider,
     private persistenceProvider: PersistenceProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private rateProvider: RateProvider,
     private filter: FilterProvider,
-    private languageProvider: LanguageProvider,
     private popupProvider: PopupProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
     private touchidProvider: TouchIdProvider,
@@ -186,7 +175,6 @@ export class WalletProvider {
         if (!balance) return;
 
         const configGet = this.configProvider.get();
-        const coinOpts = this.configProvider.getCoinOpts();
         const config = configGet.wallet;
         const cache = wallet.cachedStatus;
 
@@ -214,7 +202,9 @@ export class WalletProvider {
         }
 
         // Selected unit
-        cache.unitToSatoshi = coinOpts[wallet.coin].unitToSatoshi;
+        cache.unitToSatoshi = this.currencyProvider.getPrecision(
+          wallet.coin
+        ).unitToSatoshi;
         cache.satToUnit = 1 / cache.unitToSatoshi;
 
         // STR
@@ -357,55 +347,65 @@ export class WalletProvider {
             // This will update exchange rates
             cacheStatus(wallet.cachedStatus);
 
-            //
-            checkAndUpdateAdddress();
+            if (this.currencyProvider.isUtxoCoin(wallet.coin)) {
+              checkAndUpdateAdddress();
+            }
 
             processPendingTxps(wallet.cachedStatus);
             return resolve(wallet.cachedStatus);
           }
 
           tries = tries || 0;
-          wallet.getStatus({}, (err, status) => {
-            if (err) {
-              if (err instanceof this.errors.NOT_AUTHORIZED) {
-                return reject('WALLET_NOT_REGISTERED');
-              }
-              return reject(err);
-            }
+          const { token } = wallet.credentials;
 
-            if (opts.until) {
-              if (
-                !hasMeet(opts.until, status.balance) &&
-                tries < this.WALLET_STATUS_MAX_TRIES
-              ) {
-                this.logger.debug(
-                  'Retrying update... ' +
-                    walletId +
-                    ' Try:' +
-                    tries +
-                    ' until:',
-                  opts.until
-                );
-                return setTimeout(() => {
-                  return resolve(doFetchStatus(++tries));
-                }, this.WALLET_STATUS_DELAY_BETWEEN_TRIES * tries);
+          wallet.getStatus(
+            { tokenAddress: token ? token.address : '' },
+            (err, status) => {
+              if (err) {
+                if (err instanceof this.errors.NOT_AUTHORIZED) {
+                  return reject('WALLET_NOT_REGISTERED');
+                }
+                return reject(err);
+              }
+
+              if (opts.until) {
+                if (
+                  !hasMeet(opts.until, status.balance) &&
+                  tries < this.WALLET_STATUS_MAX_TRIES
+                ) {
+                  this.logger.debug(
+                    'Retrying update... ' +
+                      walletId +
+                      ' Try:' +
+                      tries +
+                      ' until:',
+                    opts.until
+                  );
+                  return setTimeout(() => {
+                    return resolve(doFetchStatus(++tries));
+                  }, this.WALLET_STATUS_DELAY_BETWEEN_TRIES * tries);
+                } else {
+                  this.logger.debug(
+                    '# Got Wallet Status for: ' + wallet.id + ' after meeting:',
+                    opts.until
+                  );
+                }
               } else {
-                this.logger.debug(
-                  '# Got Wallet Status for: ' + wallet.id + ' after meeting:',
-                  opts.until
-                );
+                this.logger.debug('# Got Wallet Status for: ' + wallet.id);
               }
-            } else {
-              this.logger.debug('# Got Wallet Status for: ' + wallet.id);
+              processPendingTxps(status);
+              cacheStatus(status);
+
+      if (opts.until && hasMeet(opts.until, wallet.cachedStatus.balance)) {
+        this.logger.debug(
+          'Status change already meet: ' + wallet.credentials.walletName
+        );
+        return resolve(wallet.cachedStatus);
+      }
+
+              return resolve(status);
             }
-            processPendingTxps(status);
-            cacheStatus(status);
-
-            wallet.scanning =
-              status.wallet && status.wallet.scanStatus == 'running';
-
-            return resolve(status);
-          });
+          );
         });
       };
 
@@ -456,21 +456,13 @@ export class WalletProvider {
     });
   }
 
-  public getAddressView(
-    coin: string,
-    network: string,
-    address: string
-  ): string {
+  public getAddressView(coin: Coin, network: string, address: string): string {
     if (coin != 'bch') return address;
     const protoAddr = this.getProtoAddress(coin, network, address);
     return protoAddr;
   }
 
-  public getProtoAddress(
-    coin: string,
-    network: string,
-    address: string
-  ): string {
+  public getProtoAddress(coin: Coin, network: string, address: string): string {
     const proto: string = this.getProtocolHandler(coin, network);
     const protoAddr: string = proto + ':' + address;
     return protoAddr;
@@ -478,8 +470,14 @@ export class WalletProvider {
 
   public getAddress(wallet, forceNew: boolean): Promise<string> {
     return new Promise((resolve, reject) => {
+      let walletId = wallet.id;
+      const { token } = wallet.credentials;
+
+      if (token) {
+        walletId = wallet.id.replace(`-${token.address}`, '');
+      }
       this.persistenceProvider
-        .getLastAddress(wallet.id)
+        .getLastAddress(walletId)
         .then((addr: string) => {
           if (addr) {
             // prevent to show legacy address
@@ -498,7 +496,7 @@ export class WalletProvider {
           this.createAddress(wallet)
             .then(_addr => {
               this.persistenceProvider
-                .storeLastAddress(wallet.id, _addr)
+                .storeLastAddress(walletId, _addr)
                 .then(() => {
                   return resolve(_addr);
                 })
@@ -599,10 +597,13 @@ export class WalletProvider {
         shouldContinue: res.length >= limit
       };
 
+      const { token } = wallet.credentials;
+
       wallet.getTxHistory(
         {
           skip,
-          limit
+          limit,
+          tokenAddress: token ? token.address : ''
         },
         (err: Error, txsFromServer) => {
           if (err) return reject(err);
@@ -1195,76 +1196,47 @@ export class WalletProvider {
     });
   }
 
-  public updateRemotePreferences(clients, prefs?): Promise<any> {
+  // updates local and remote prefs for 1 wallet
+  public updateRemotePreferencesFor(client, prefs): Promise<any> {
     return new Promise((resolve, reject) => {
-      prefs = prefs ? prefs : {};
+      client.preferences = client.preferences || {};
+      if (!_.isEmpty(prefs)) {
+        _.assign(client.preferences, prefs);
+      }
 
-      if (!_.isArray(clients)) clients = [clients];
+      this.logger.debug(
+        'Saving remote preferences',
+        client.credentials.walletName,
+        JSON.stringify(client.preferences)
+      );
 
-      const updateRemotePreferencesFor = (clients, prefs): Promise<any> => {
-        return new Promise((resolve, reject) => {
-          const wallet = clients.shift();
-          if (!wallet) return resolve();
-          this.logger.debug(
-            'Saving remote preferences',
-            wallet.credentials.walletName,
-            prefs
+      client.savePreferences(client.preferences, err => {
+        if (err) {
+          this.popupProvider.ionicAlert(
+            this.bwcErrorProvider.msg(
+              err,
+              this.translate.instant('Could not save preferences on the server')
+            )
           );
-
-          wallet.savePreferences(prefs, err => {
-            if (err) {
-              this.popupProvider.ionicAlert(
-                this.bwcErrorProvider.msg(
-                  err,
-                  this.translate.instant(
-                    'Could not save preferences on the server'
-                  )
-                )
-              );
-              return reject(err);
-            }
-
-            updateRemotePreferencesFor(clients, prefs)
-              .then(() => {
-                return resolve();
-              })
-              .catch(err => {
-                return reject(err);
-              });
-          });
-        });
-      };
-
-      // Update this JIC.
-      const config = this.configProvider.get();
-
-      // Get email from local config
-      prefs.email = config.emailNotifications.email;
-
-      // Get current languge
-      prefs.language = this.languageProvider.getCurrent();
-
-      // Set OLD wallet in bits to btc
-      prefs.unit = 'btc'; // DEPRECATED
-
-      updateRemotePreferencesFor(_.clone(clients), prefs)
-        .then(() => {
-          this.logger.debug(
-            'Remote preferences saved for' +
-              _.map(clients, (x: any) => {
-                return x.credentials.walletId;
-              }).join(',')
-          );
-
-          _.each(clients, c => {
-            c.preferences = _.assign(prefs, c.preferences);
-          });
-          return resolve();
-        })
-        .catch(err => {
           return reject(err);
-        });
+        }
+        return resolve();
+      });
     });
+  }
+
+  public updateRemotePreferences(clients, prefs?): Promise<any> {
+    prefs = prefs ? prefs : {};
+    if (!_.isArray(clients)) clients = [clients];
+
+    let updates = [];
+    clients.forEach(c => {
+      if (this.currencyProvider.isERCToken(c.credentials.coin)) return;
+
+      updates.push(this.updateRemotePreferencesFor(c, prefs));
+    });
+
+    return Promise.all(updates);
   }
 
   public recreate(wallet): Promise<any> {
@@ -1681,17 +1653,8 @@ export class WalletProvider {
     });
   }
 
-  public getProtocolHandler(coin: string, network?: string): string {
-    if (coin == 'bch') {
-      return network == 'testnet' ? 'bchtest' : 'bitcoincash';
-    }
-    else if (coin == 'bcd')
-      return 'bitcoindiamond';
-    else if (coin == 'eth') {
-      return 'ethereum';
-    } else {
-      return 'bitcoin';
-    }
+  public getProtocolHandler(coin: Coin, network: string = 'livenet'): string {
+    return this.currencyProvider.getProtocolPrefix(coin, network);
   }
 
   public copyCopayers(wallet: any, newWallet: any): Promise<any> {

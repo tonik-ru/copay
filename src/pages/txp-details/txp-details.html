@@ -11,7 +11,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content no-bounce [ngClass]="{'margin-bottom':(tx && !tx.removed) && (tx && tx.pendingForUs && canSign && !paymentExpired)}">
+<ion-content [ngClass]="{'add-padding-bottom': isCordova}" no-bounce>
   <ion-list *ngIf="tx">
     <ion-item>
       <div class="header-container">
@@ -21,8 +21,8 @@
         <div class="amount-label">
           <div class="amount">
             <div>
-              {{amount}}
-              <span class="amount-coin">{{tx.coin | uppercase}}</span>
+              {{tx.amountValueStr}}
+              <span class="amount-coin">{{tx.amountUnitStr | uppercase}}</span>
             </div>
             <img class="sending-img" src="assets/img/icon-tx-sent-outline.svg">
           </div>
@@ -170,7 +170,7 @@
 </ion-content>
 
 <ion-footer>
-  <page-slide-to-accept #slideButton *ngIf="(tx && !tx.removed) && (tx && tx.pendingForUs && canSign && !paymentExpired) && isCordova" [buttonText]="buttonText" (slideDone)="onConfirm()" [ngClass]="{'slide-confirm-fast slide-confirm-down': hideSlideButton, 'slide-confirm-slow': !hideSlideButton}">
+  <page-slide-to-accept #slideButton *ngIf="(tx && !tx.removed) && (tx && tx.pendingForUs && canSign && !paymentExpired) && isCordova" [buttonText]="buttonText" (slideDone)="onConfirm()">
   </page-slide-to-accept>
   <ion-toolbar *ngIf="(tx && !tx.removed) && (tx && tx.pendingForUs && canSign && !paymentExpired) && !isCordova">
     <button ion-button full class="button-footer" (click)="onConfirm()">{{buttonText}}</button>

@@ -14,11 +14,8 @@ import {
 import * as _ from 'lodash';
 
 // Providers
-import {
-  CoinOpts,
-  Config,
-  ConfigProvider
-} from '../../../providers/config/config';
+import { Config, ConfigProvider } from '../../../providers/config/config';
+import { Coin, CurrencyProvider } from '../../../providers/currency/currency';
 import { ElectronProvider } from '../../../providers/electron/electron';
 import { FilterProvider } from '../../../providers/filter/filter';
 import { Logger } from '../../../providers/logger/logger';
@@ -31,7 +28,6 @@ import {ActionSheetProvider, AppProvider, GiftCardProvider} from '../../../provi
 import { getActivationFee } from '../../../providers/gift-card/gift-card';
 import { CardConfig } from '../../../providers/gift-card/gift-card.types';
 import { ProfileProvider } from '../../../providers/profile/profile';
-import { Coin } from '../../../providers/wallet/wallet';
 import { BitPayCardTopUpPage } from '../../integrations/bitpay-card/bitpay-card-topup/bitpay-card-topup';
 import { BuyCoinbasePage } from '../../integrations/coinbase/buy-coinbase/buy-coinbase';
 import { SellCoinbasePage } from '../../integrations/coinbase/sell-coinbase/sell-coinbase';
@@ -41,7 +37,6 @@ import { CustomAmountPage } from '../../receive/custom-amount/custom-amount';
 import { WalletTabsChild } from '../../wallet-tabs/wallet-tabs-child';
 import { WalletTabsProvider } from '../../wallet-tabs/wallet-tabs.provider';
 import { ConfirmPage } from '../confirm/confirm';
-
 @Component({
   selector: 'page-amount',
   templateUrl: 'amount.html'
@@ -82,7 +77,6 @@ export class AmountPage extends WalletTabsChild {
   public useSendMax: boolean;
   public useAsModal: boolean;
   public config: Config;
-  public coinOpts: CoinOpts;
   public toWalletId: string;
   private _id: string;
   public requestingAmount: boolean;
@@ -99,6 +93,7 @@ export class AmountPage extends WalletTabsChild {
     private configProvider: ConfigProvider,
     private filterProvider: FilterProvider,
     private giftCardProvider: GiftCardProvider,
+    private currencyProvider: CurrencyProvider,
     private logger: Logger,
     navCtrl: NavController,
     private navParams: NavParams,
@@ -117,7 +112,6 @@ export class AmountPage extends WalletTabsChild {
     super(navCtrl, profileProvider, walletTabsProvider);
     this.zone = new NgZone({ enableLongStackTrace: false });
     this.config = this.configProvider.get();
-    this.coinOpts = this.configProvider.getCoinOpts();
     this.useAsModal = this.navParams.data.useAsModal;
     this.recipientType = this.navParams.data.recipientType;
     this.toAddress = this.navParams.data.toAddress;
@@ -164,10 +158,12 @@ export class AmountPage extends WalletTabsChild {
   async ionViewDidLoad() {
     this.setAvailableUnits();
     this.updateUnitUI();
-    const coinOpts = this.availableUnits[this.unitIndex].isFiat
-      ? this.coinOpts[this.availableUnits[this.altUnitIndex].id]
-      : this.coinOpts[this.unit.toLowerCase()];
-    const { unitToSatoshi, unitDecimals } = coinOpts;
+    const { unitToSatoshi, unitDecimals } = this.availableUnits[this.unitIndex]
+      .isFiat
+      ? this.currencyProvider.getPrecision(
+          this.availableUnits[this.altUnitIndex].id
+        )
+      : this.currencyProvider.getPrecision(this.unit.toLowerCase() as Coin);
     this.unitToSatoshi = unitToSatoshi;
     this.satToUnit = 1 / this.unitToSatoshi;
     this.unitDecimals = unitDecimals;
@@ -197,7 +193,7 @@ export class AmountPage extends WalletTabsChild {
       ? 'bcdHead'
       : this.wallet.coin == 'btc' 
         ?  'btcHead' 
-        : this.wallet.coin = 'eth' 
+        : this.wallet.coin == 'eth' 
           ? 'ethHead' 
           : 'bcdHead';
     }
@@ -240,6 +236,10 @@ export class AmountPage extends WalletTabsChild {
     } else if (event.keyCode === 13) this.finish();
   }
 
+  public isCoin(coin: string): boolean {
+    return !!Coin[coin];
+  }
+
   private setAvailableUnits(): void {
     this.availableUnits = [];
 
@@ -247,20 +247,15 @@ export class AmountPage extends WalletTabsChild {
       ? this.navParams.data.wallet.coin
       : this.wallet && this.wallet.coin;
 
-    if (parentWalletCoin === 'btc' || !parentWalletCoin) {
-      this.availableUnits.push({
-        name: 'Bitcoin',
-        id: 'btc',
-        shortName: 'BTC'
-      });
-    }
-
-    if (parentWalletCoin === 'bch' || !parentWalletCoin) {
-      this.availableUnits.push({
-        name: 'Bitcoin Cash',
-        id: 'bch',
-        shortName: 'BCH'
-      });
+    for (const coin of this.currencyProvider.getAvailableCoins()) {
+      if (parentWalletCoin === coin || !parentWalletCoin) {
+        const { unitName, unitCode } = this.currencyProvider.getPrecision(coin);
+        this.availableUnits.push({
+          name: this.currencyProvider.getCoinName(coin),
+          id: unitCode,
+          shortName: unitName
+        });
+      }
     }
 
     if (parentWalletCoin === 'bcd' || !parentWalletCoin) {
@@ -378,6 +373,7 @@ export class AmountPage extends WalletTabsChild {
 
   public sendMax(): void {
     this.useSendMax = true;
+    this.allowSend = true;
     if (!this.wallet) {
       return this.finish();
     }
@@ -512,7 +508,7 @@ export class AmountPage extends WalletTabsChild {
       );
   }
 
-  private fromFiat(val, coin?: string): number {
+  private fromFiat(val, coin?: Coin): number {
     coin = coin || this.availableUnits[this.altUnitIndex].id;
     return parseFloat(
       (
@@ -605,6 +601,13 @@ export class AmountPage extends WalletTabsChild {
         toWalletId: this.toWalletId,
         cardName: this.cardName
       };
+
+      if (this.wallet) {
+        data.network = this.wallet.network;
+        if (this.wallet.credentials.token) {
+          data.tokenAddress = this.wallet.credentials.token.address;
+        }
+      }
     } else {
       let amount = _amount;
       amount = unit.isFiat
@@ -621,6 +624,13 @@ export class AmountPage extends WalletTabsChild {
         useSendMax: this.useSendMax,
         description: this.description
       };
+
+      if (this.wallet) {
+        data.network = this.wallet.network;
+        if (this.wallet.credentials.token) {
+          data.tokenAddress = this.wallet.credentials.token.address;
+        }
+      }
 
       if (unit.isFiat) {
         data.fiatAmount = _amount;

@@ -13,6 +13,10 @@ import { ShapeshiftPage } from '../shapeshift';
 import { BwcErrorProvider } from '../../../../providers/bwc-error/bwc-error';
 import { BwcProvider } from '../../../../providers/bwc/bwc';
 import { ConfigProvider } from '../../../../providers/config/config';
+import {
+  Coin,
+  CurrencyProvider
+} from '../../../../providers/currency/currency';
 import { ExternalLinkProvider } from '../../../../providers/external-link/external-link';
 import { FeeProvider } from '../../../../providers/fee/fee';
 import { OnGoingProcessProvider } from '../../../../providers/on-going-process/on-going-process';
@@ -67,7 +71,6 @@ export class ShapeshiftConfirmPage {
   public totalAmountStr: string;
   public txSent;
   public network: string;
-  public hideSlideButton: boolean;
   public remainingTimeStr: string;
   public paymentExpired: boolean;
 
@@ -75,6 +78,7 @@ export class ShapeshiftConfirmPage {
     private bwcProvider: BwcProvider,
     private bwcErrorProvider: BwcErrorProvider,
     private configProvider: ConfigProvider,
+    private currencyProvider: CurrencyProvider,
     private replaceParametersProvider: ReplaceParametersProvider,
     private externalLinkProvider: ExternalLinkProvider,
     private onGoingProcessProvider: OnGoingProcessProvider,
@@ -105,9 +109,9 @@ export class ShapeshiftConfirmPage {
     this.network = this.shapeshiftProvider.getNetwork();
     this.fromWallet = this.profileProvider.getWallet(this.fromWalletId);
     this.toWallet = this.profileProvider.getWallet(this.toWalletId);
-    this.unitToSatoshi = this.configProvider.getCoinOpts()[
+    this.unitToSatoshi = this.currencyProvider.getPrecision(
       this.fromWallet.coin
-    ].unitToSatoshi;
+    ).unitToSatoshi;
   }
 
   ionViewDidEnter() {
@@ -300,7 +304,6 @@ export class ShapeshiftConfirmPage {
   }
 
   private showErrorAndBack(title: string, msg) {
-    this.hideSlideButton = false;
     if (this.isCordova) this.slideButton.isConfirmed(false);
     title = title ? title : this.translate.instant('Error');
     this.logger.error(msg);
@@ -331,7 +334,7 @@ export class ShapeshiftConfirmPage {
     });
   }
 
-  private satToFiat(coin: string, sat: number, isoCode: string): Promise<any> {
+  private satToFiat(coin: Coin, sat: number, isoCode: string): Promise<any> {
     return new Promise(resolve => {
       this.txFormatProvider.toFiat(coin, sat, isoCode).then(value => {
         return resolve(value);
@@ -448,7 +451,6 @@ export class ShapeshiftConfirmPage {
           return resolve(ctxp);
         })
         .catch(err => {
-          this.hideSlideButton = false;
           return reject({
             title: this.translate.instant('Could not create transaction'),
             message: this.bwcErrorProvider.msg(err)
@@ -640,7 +642,6 @@ export class ShapeshiftConfirmPage {
       );
       return;
     }
-    this.hideSlideButton = true;
     let fromCoin = this.fromWallet.coin.toUpperCase();
     let toCoin = this.toWallet.coin.toUpperCase();
     let title = this.replaceParametersProvider.replace(
@@ -653,7 +654,6 @@ export class ShapeshiftConfirmPage {
     this.popupProvider.ionicConfirm(title, '', okText, cancelText).then(ok => {
       if (!ok) {
         if (this.isCordova) this.slideButton.isConfirmed(false);
-        this.hideSlideButton = false;
         return;
       }
 

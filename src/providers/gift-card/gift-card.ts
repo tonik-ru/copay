@@ -98,8 +98,7 @@ export class GiftCardProvider extends InvoiceProvider {
       amount: data.amount,
       clientId: data.uuid,
       discounts: data.discounts,
-      email: data.email,
-      transactionCurrency: data.buyerSelectedTransactionCurrency
+      email: data.email
     };
     const url = `${this.getApiPath()}/pay`;
     const headers = new HttpHeaders({
@@ -552,7 +551,8 @@ export class GiftCardProvider extends InvoiceProvider {
       brand: discountedCard.name,
       code: discount.code,
       context,
-      percentage: discount.amount
+      type: discount.type,
+      discountAmount: discount.amount
     };
   }
 
@@ -699,7 +699,11 @@ export function hasVisibleDiscount(cardConfig: CardConfig) {
 
 export function getVisibleDiscount(cardConfig: CardConfig) {
   const discounts = cardConfig.discounts;
-  return discounts && discounts.find(d => d.type === 'percentage' && !d.hidden);
+  const supportedDiscountTypes = ['flatrate', 'percentage'];
+  return (
+    discounts &&
+    discounts.find(d => supportedDiscountTypes.includes(d.type) && !d.hidden)
+  );
 }
 
 function appendFallbackImages(cardConfig: CardConfig) {

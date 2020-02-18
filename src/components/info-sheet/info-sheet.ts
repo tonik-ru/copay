@@ -24,6 +24,10 @@ export class InfoSheetComponent extends ActionSheetParent {
     this.externalLinkProvider.open(url);
     this.dismiss();
   }
+
+  public optionClicked(option): void {
+    this.dismiss(option);
+  }
 }
 
 export const INFO_SHEET_COMPONENTS = [InfoSheetComponent, InfoSheetTemplate];

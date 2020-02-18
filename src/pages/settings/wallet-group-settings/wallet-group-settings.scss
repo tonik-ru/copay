@@ -32,7 +32,6 @@ page-wallet-group-settings {
         }
       }
     }
-  
     ion-navbar {
       .ios & {
         padding-top: 3rem; // Fix iOS 10.3
@@ -78,8 +77,6 @@ page-wallet-group-settings {
 
   .icon-wallet {
     margin-right: 0px;
-    background: #FFF;
-    border-radius: 50px;
   }
 
   ion-icon.item-img {
@@ -91,9 +88,17 @@ page-wallet-group-settings {
       margin-top: 0px;
       padding: 12.5px 0px 12.5px 20px;
       background: #f8f8f9;
-      &.bp-list-title {
-        padding: 2px 0 2px 16px;
+      .reorder-option {
+        font-size: 1.4rem;
+        margin: 0 8px 0 !important;
       }
     }
+  }
+
+  .create-button {
+    background: white;
+    color: color($colors, primary);
+    margin-left: -12px;
+    text-align: center;
   }
 }

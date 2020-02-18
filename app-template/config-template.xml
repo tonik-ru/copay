@@ -31,6 +31,7 @@
     
     <allow-navigation href="*" /> 
 
+    <access origin="https://www.coinbase.com" />
     <allow-navigation href="gap://ready" />
     <preference name="AndroidPersistentFileLocation" value="Internal" />
     <preference name="iosPersistentFileLocation" value="Library" />
@@ -62,6 +63,8 @@
 
     <!-- Android Version: Marshmallow 6.0 (API Level 23) or higher -->
     <preference name="android-minSdkVersion" value="23" />
+    <!-- Android Version: Pie 9.0 (API Level 28) or higher -->
+    <preference name="android-targetSdkVersion" value="28" />
 
     <!-- iOS 10.3 or higher -->
     <preference name="deployment-target" value="10.3" />
@@ -102,20 +105,25 @@
       <variable name="URL_SCHEME" value="bitcoin" />
       <variable name="SECOND_URL_SCHEME" value="*APPURI*" />
       <variable name="THIRD_URL_SCHEME" value="bitcoincash" />
-      <variable name="FOURTH_URL_SCHEME" value="bchtest" />
+      <variable name="FOURTH_URL_SCHEME" value="bitcoindiamond" />
       <variable name="FIFTH_URL_SCHEME" value="ethereum" />
       <variable name="ANDROID_SCHEME" value="" />
       <variable name="ANDROID_HOST" value="" />
       <variable name="ANDROID_PATHPREFIX" value="" />
     </plugin>
-    <plugin name="cordova-plugin-fcm-ng" spec="4.2.0" />
+    <plugin name="cordova-plugin-fcm-ng" spec="5.1.1" />
 
     <plugin name="cordova-plugin-wkwebview-engine" spec="1.1.4" />
 
     <!-- Platform Specific Settings -->
     <platform name="ios">
       <config-file platform="ios" target="*-Info.plist" parent="UIStatusBarHidden"><true/></config-file>
-      <config-file platform="ios" target="*-Info.plist" parent="UIViewControllerBasedStatusBarAppearance"><false/></config-file>
+      <config-file target="*-Info.plist" parent="UIUserInterfaceStyle">
+        <string>Light</string>
+      </config-file>
+      <config-file platform="ios" target="*-Info.plist" parent="UIViewControllerBasedStatusBarAppearance">
+        <true />
+      </config-file>
       <config-file target="*-Info.plist" parent="ITSAppUsesNonExemptEncryption"><false/></config-file>
 
       <config-file platform="ios" target="*-Info.plist" parent="LSApplicationQueriesSchemes">

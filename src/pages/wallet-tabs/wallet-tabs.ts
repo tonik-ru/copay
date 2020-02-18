@@ -48,7 +48,6 @@ export class WalletTabsPage {
   selectedTabIndex: number = 1;
 
   walletId: string;
-  isElectron: boolean;
 
   constructor(
     private navParams: NavParams,
@@ -58,7 +57,6 @@ export class WalletTabsPage {
     public appProvider: AppProvider,
     private statusBar: StatusBar
   ) {
-      this.isElectron = this.platformProvider.isElectron;
       if (typeof this.navParams.get('selectedTabIndex') !== 'undefined') {
       this.selectedTabIndex = this.navParams.get('selectedTabIndex');
     }

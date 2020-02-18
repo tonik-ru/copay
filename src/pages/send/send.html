@@ -51,7 +51,7 @@
   </div>
 
   <div *ngIf="!shouldShowZeroState()">
-    <div *ngIf="hasBtcWallets || hasBchWallets || hasBcdWallets || hasEthWallets">
+    <div *ngIf="hasWallets[wallet.coin]">
       <div class="send-header-wrapper">
         <span class="send-heading" translate>Recipient</span>
         <ion-item
@@ -110,10 +110,7 @@
         #transferTo
       ></page-transfer-to>
     </div>
-    <div
-      *ngIf="!hasBtcWallets && !hasBchWallets && !hasBcdWallets && !hasEthWallets"
-      class="no-wallet-message"
-    >
+    <div *ngIf="!hasWallets[wallet.coin]" class="no-wallet-message">
       <span translate
         >To get started, you'll need to create a bitcoin wallet and get some
         bitcoin.</span

@@ -30,8 +30,7 @@ export class Profile {
     x.credentials = obj.credentials || [];
     x.disclaimerAccepted = obj.disclaimerAccepted || false;
     x.checked = obj.checked || {};
-    x.checkedUA = obj.checkedUA || {};
-    x.defaultWalletCreated = obj.defaultWalletCreated;
+    x.checkedUA = obj.checkedUA;
 
     if (x.credentials[0] && typeof x.credentials[0] != 'object')
       throw new Error('credentials should be an array of objects');

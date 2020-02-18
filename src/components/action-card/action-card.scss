@@ -8,7 +8,8 @@ action-card.card {
 
   .action-card {
     &__content {
-      background: transparent;
+      background: white;
+
       > * {
         margin: 15px;
       }

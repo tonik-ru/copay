@@ -28,6 +28,28 @@ body {
   line-height: 22px;
 }
 
+// all content without menu
+ion-content.add-bottom-safe-area,
+.hide-tabbar ion-content {
+  .fixed-content,
+  .scroll-content {
+    padding-bottom: 0;
+    padding-bottom: calc(env(safe-area-inset-bottom));
+    padding-bottom: -webkit-calc(env(safe-area-inset-bottom));
+  }
+}
+
+// expandable views
+ion-content.add-padding-bottom,
+.add-padding-bottom ion-content {
+  .fixed-content,
+  .scroll-content {
+    padding-bottom: 120px;
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
+    padding-bottom: -webkit-calc(120px + env(safe-area-inset-bottom));
+  }
+}
+
 // Alert position
 // --------------------------------------------------
 ion-alert.alert-top {
@@ -56,8 +78,10 @@ ion-label {
 .bottom-absolute {
   width: 100%;
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
+  bottom: calc(env(safe-area-inset-bottom));
   padding: 15px 15px calc(5vw + 1vh) 15px;
+  padding: 15px 15px -webkit-calc(5vw + 1vh) 15px;
 
   .button {
     margin: 1.2rem auto;
@@ -98,11 +122,13 @@ ion-spinner * {
 }
 
 .item-subtitle {
+  margin-top: 5px;
+  display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 300;
-  font-size: 12.5px;
+  font-size: 13px;
 
   ion-icon {
     vertical-align: text-bottom;
@@ -161,6 +187,7 @@ ion-spinner * {
   display: none;
 }
 .icon-wallet,
+
 .icon-card {
   width: 35px;
   height: 35px;
@@ -176,6 +203,30 @@ ion-spinner * {
   &.disabled {
     background-color: color($colors, grey);
   }
+  $icon-dim: 36px;
+  height: $icon-dim;
+  width: $icon-dim;
+  margin-right: 16px;
+  &.disabled {
+    background-color: color($colors, grey);
+  }
+}
+
+button.item {
+  &.activated {
+    background-color: $feather;
+  }
+}
+
+.button-item {
+  ion-label {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.testnet {
+  filter: grayscale(100%);
 }
 
 .icon-card {
@@ -204,6 +255,7 @@ ion-spinner * {
 }
 
 .icon-services {
+  overflow: hidden;
   background-color: none;
   border-radius: $icon-border-radius;
   width: 35px;
@@ -260,8 +312,8 @@ ion-spinner * {
 }
 
 .gravatar {
-  min-width: 3rem;
-  min-height: 3rem;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
 }
 
 
@@ -502,7 +554,7 @@ ion-app,
   &.activated {
     &.button-md,
     &.button-ios {
-      background-color: #e5e5e5;
+      background-color: $feather;
     }
   }
 }
@@ -648,15 +700,119 @@ ion-item.with-label.item {
 }
 
 .slide-confirm-down {
-  transform: translate(0px, 90px);
+  transform: translate(0px, 200px);
+  -webkit-transform: translate(0px, 200px);
 }
 
 .slide-confirm-slow {
-  transition: transform 0.7s;
+  transition: transform 0.6s;
+  -webkit-transition: -webkit-transform 0.6s;
 }
 
 .slide-confirm-fast {
-  transition: transform 0.3s;
+  transition: transform 0.2s;
+  -webkit-transition: -webkit-transform 0.2s;
+}
+
+.reorder-done {
+  color: color($colors, primary);
+}
+
+.reorder-button {
+  display: flex;
+  position: relative;
+
+  &:after {
+    // For easier tappability
+    content: '';
+    position: absolute;
+    height: 30px;
+    width: 40px;
+    top: -10px;
+    left: -10px;
+  }
+}
+
+.app-color {
+  .toolbar-background {
+    background: #14245e !important;
+  }
+}
+
+page-wallet-details,
+page-receive,
+page-send,
+page-multi-send,
+page-transfer-to-modal,
+page-bitpay-card-intro,
+page-bitpay-card,
+.wallet-details-header {
+  @include toolbar-button-color(white);
+
+  ion-title .toolbar-title {
+    color: color($colors, light);
+    font-weight: 75;
+  }
+
+  button.modal-close-button.bar-button {
+    margin-top: -1px;
+    color: white;
+  }
+  ion-title {
+    &.title-ios {
+      padding: 0 50px 1px;
+    }
+    .toolbar-title {
+      text-align: left;
+      opacity: 0.7;
+      font-weight: 600;
+    }
+  }
+
+  &:not(.no-subtitle) {
+    ion-title .toolbar-title {
+      font-weight: 100;
+      font-size: 16px;
+    }
+  }
+
+  ion-toolbar {
+    min-height: 0;
+    margin-top: -6px;
+
+    &.toolbar-md {
+      padding-top: 0;
+    }
+  }
+
+  &__balance,
+  &__balance-hidden,
+  &__subtitle {
+    text-align: left;
+    color: white;
+    padding-bottom: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 4.5rem;
+
+    ion-icon {
+      font-size: 16px;
+      font-weight: 100;
+      margin-left: 5px;
+    }
+  }
+}
+
+.icon-plus {
+  -webkit-mask-box-image: url(../assets/img/icon-plus.svg);
+  height: 18px;
+  width: 18px;
+  background-color: #cdd1d8;
+  mask-repeat: no-repeat;
+  mask-position: 50% 50%;
+  mask-size: 2rem;
+  margin: auto;
+  transform: translate(0, -10%);
 }
 
 .reorder-done {

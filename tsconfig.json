@@ -9,14 +9,15 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "lib": ["dom", "es2015"],
+    "lib": ["dom", "es2015", "es2017"],
     "module": "es2015",
     "moduleResolution": "node",
     "sourceMap": true,
     "target": "es6",
     "baseUrl": "./",
     "typeRoots": ["node_modules/@types"],
-    "types": []
+
+    "skipLibCheck": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "**/*spec.ts", "**/*.d.ts", "./src/test.ts"],

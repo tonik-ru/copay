@@ -36,6 +36,23 @@ page-amount {
       transform: translateY(0);
     }
   }
+  .cancel-button {
+    opacity: 1;
+    color: #060606;
+    font-size: 18px;
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0.75rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &.hide {
+      opacity: 0;
+    }
+  }
+  .add-top-safe-area {
+    padding-top: calc(env(safe-area-inset-top));
+    padding-top: -webkit-calc(env(safe-area-inset-top));
+  }
   .amount-header {
     // flex: 1;
     // display: flex;
@@ -105,7 +122,7 @@ page-amount {
       .unit {
         position: absolute;
         top: 2px;
-        right: -35px;
+        right: -45px;
         font-size: 16px;
         color: #4a4a4a;
       }

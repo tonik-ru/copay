@@ -3,10 +3,16 @@ info-sheet {
     width: 100%;
     height: 100%;
     background-color: white;
+    padding-bottom: calc(env(safe-area-inset-bottom));
+
+    .border-none {
+      .item-inner {
+        border-bottom: none !important;
+      }
+    }
 
     .confirm-sheet {
       padding: 25px;
-      padding-bottom: 15px;
 
       .sheet-title {
         align-items: center;
@@ -17,6 +23,13 @@ info-sheet {
         justify-content: start;
         margin: 10px auto;
 span{display:block; text-align: center}
+
+        .truncate {
+          width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
 
         .truncate {
           width: 100%;
@@ -83,6 +96,10 @@ span{display:block; text-align: center}
 
         .sheet-btn.red {
           color: #FFF;
+        }
+
+        .sheet-btn.default {
+          color: #464c5e;
         }
 
         .sheet-second-btn {

@@ -113,6 +113,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
       mode: 'ios',
       animate: env.enableAnimations,
       tabsHideOnSubPages: false,
+      scrollPadding: false,
       tabsPlacement: 'bottom',
       backButtonIcon: 'arrow-round-back',
       backButtonText: ''

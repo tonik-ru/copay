@@ -7,12 +7,12 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content [ngClass]="{'add-padding-bottom': isCordova}" no-bounce>
   <ion-list class="bp-list">
     <ion-item class="confirm-header">
       <div class="confirm-header__amount">
         <div class="gift-card-title">
-          {{cardConfig?.displayName}} Gift Card
+          {{cardConfig?.displayName}}<span *ngIf="!displayNameIncludesGiftCard">&nbsp;Gift Card</span>
         </div>
         <div class="amount-label">
           <div class="amount">{{amount | formatCurrency:currency}}</div>
@@ -65,7 +65,7 @@
             {{currencyIsoCode}}
           </ion-note>
         </ion-item>
-        <ion-item>
+        <ion-item *ngIf="invoiceFee">
           <span>{{'Network cost' | translate}}</span>
           <ion-note item-end>
             <span *ngIf="onlyIntegers">{{invoiceFee | number : '1.0-0'}}</span>
@@ -84,12 +84,12 @@
         <ion-item>
           <span>{{'Total' | translate}}</span>
           <ion-note item-end>
+            <span *ngIf="totalAmountStr && !isERCToken">{{totalAmountStr}} ~ </span>
             <span *ngIf="totalAmount">
               <span *ngIf="onlyIntegers">{{totalAmount | number : '1.0-0'}}</span>
               <span *ngIf="!onlyIntegers">{{totalAmount | number : '1.2-2'}}</span>
               {{currencyIsoCode}}
             </span>
-            <span *ngIf="totalAmountStr">({{totalAmountStr}})</span>
           </ion-note>
         </ion-item>
       </div>
@@ -102,8 +102,7 @@
 
 <ion-footer>
   <page-slide-to-accept #slideButton *ngIf="isCordova" [disabled]="!(wallet && totalAmountStr)"
-    buttonText="{{'Slide to confirm' | translate}}" (slideDone)="buyConfirm()"
-    [ngClass]="{'slide-confirm-fast slide-confirm-down': hideSlideButton, 'slide-confirm-slow': !hideSlideButton}">
+    buttonText="{{'Slide to confirm' | translate}}" (slideDone)="buyConfirm()">
   </page-slide-to-accept>
   <ion-toolbar *ngIf="!isCordova">
     <button ion-button full class="button-footer" (click)="buyConfirm()" [disabled]="!(wallet && totalAmountStr)">{{'Confirm

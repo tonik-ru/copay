@@ -91,9 +91,6 @@ export class DerivationPathHelperProvider {
       case 'btc':
         isValid = ["0'", "1'"].indexOf(coinCode) > -1;
         break;
-      case 'bcd':
-        isValid = ["0'", "1'"].indexOf(coinCode) > -1;
-        break;
       case 'bch':
         isValid = ["145'", "0'", "1'"].indexOf(coinCode) > -1;
         break;

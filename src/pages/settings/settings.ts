@@ -6,6 +6,7 @@ import { Logger } from '../../providers/logger/logger';
 import * as _ from 'lodash';
 
 // providers
+import { AnalyticsProvider } from '../../providers/analytics/analytics';
 import { AppProvider } from '../../providers/app/app';
 import { BitPayCardProvider } from '../../providers/bitpay-card/bitpay-card';
 import { ConfigProvider } from '../../providers/config/config';
@@ -76,7 +77,8 @@ export class SettingsPage {
     private translate: TranslateService,
     private modalCtrl: ModalController,
     private touchid: TouchIdProvider,
-    private externalLinkProvder: ExternalLinkProvider
+    private externalLinkProvder: ExternalLinkProvider,
+    private analyticsProvider: AnalyticsProvider
   ) {
     this.appName = this.app.info.nameCase;
     this.isCordova = this.platformProvider.isCordova;
@@ -129,10 +131,8 @@ export class SettingsPage {
     }, 200);
 
     // Only BitPay Wallet
-    this.bitPayCardProvider.get({}, (_, cards) => {
-      this.showBitPayCard = this.app.info._enabledExtensions.debitcard
-        ? true
-        : false;
+    this.bitPayCardProvider.get({ noHistory: true }).then(cards => {
+      this.showBitPayCard = !!this.app.info._enabledExtensions.debitcard;
       this.bitpayCardItems = cards;
     });
   }
@@ -220,6 +220,7 @@ export class SettingsPage {
   }
 
   public openHelpExternalLink(): void {
+    this.analyticsProvider.logEvent('help', {});
     const url =
       this.appName == 'Copay'
         ? 'https://github.com/bitpay/copay/issues'

@@ -13,6 +13,7 @@ import { Logger } from '../../providers/logger/logger';
 import { ActionSheetProvider } from '../../providers/action-sheet/action-sheet';
 import { BwcErrorProvider } from '../../providers/bwc-error/bwc-error';
 import { ConfigProvider } from '../../providers/config/config';
+import { CurrencyProvider } from '../../providers/currency/currency';
 import { FeeProvider } from '../../providers/fee/fee';
 import { OnGoingProcessProvider } from '../../providers/on-going-process/on-going-process';
 import { PayproProvider } from '../../providers/paypro/paypro';
@@ -52,7 +53,6 @@ export class TxpDetailsPage {
   public showMultiplesOutputs: boolean;
   public amount: string;
   public isCordova: boolean;
-  public hideSlideButton: boolean;
 
   private countDown;
 
@@ -67,6 +67,7 @@ export class TxpDetailsPage {
     private onGoingProcessProvider: OnGoingProcessProvider,
     private viewCtrl: ViewController,
     private configProvider: ConfigProvider,
+    private currencyProvider: CurrencyProvider,
     private profileProvider: ProfileProvider,
     private txFormatProvider: TxFormatProvider,
     private translate: TranslateService,
@@ -92,7 +93,6 @@ export class TxpDetailsPage {
     this.isShared = this.wallet.credentials.n > 1;
     this.canSign = this.wallet.canSign;
     this.color = this.wallet.color;
-    this.hideSlideButton = false;
 
     // To test multiple outputs...
 
@@ -122,7 +122,7 @@ export class TxpDetailsPage {
 
     this.amount = this.decimalPipe.transform(
       this.tx.amount /
-        this.configProvider.getCoinOpts()[this.wallet.coin].unitToSatoshi,
+        this.currencyProvider.getPrecision(this.wallet.coin).unitToSatoshi,
       '1.2-6'
     );
   }
@@ -154,12 +154,17 @@ export class TxpDetailsPage {
   };
 
   private displayFeeValues(): void {
+    const chain = this.currencyProvider
+      .getChain(this.wallet.coin)
+      .toLowerCase();
     this.tx.feeFiatStr = this.txFormatProvider.formatAlternativeStr(
-      this.wallet.coin,
+      chain,
       this.tx.fee
     );
-    this.tx.feeRateStr =
-      ((this.tx.fee / (this.tx.amount + this.tx.fee)) * 100).toFixed(2) + '%';
+    if (this.currencyProvider.isUtxoCoin(this.wallet.coin)) {
+      this.tx.feeRateStr =
+        ((this.tx.fee / (this.tx.amount + this.tx.fee)) * 100).toFixed(2) + '%';
+    }
     const feeOpts = this.feeProvider.getFeeOpts();
     this.tx.feeLevelStr = feeOpts[this.tx.feeLevel];
   }
@@ -269,7 +274,6 @@ export class TxpDetailsPage {
       (error as Error).message === 'FINGERPRINT_CANCELLED' ||
       (error as Error).message === 'PASSWORD_CANCELLED'
     ) {
-      this.hideSlideButton = false;
       return;
     }
 
@@ -280,14 +284,11 @@ export class TxpDetailsPage {
       { msg: this.bwcErrorProvider.msg(error), title: infoSheetTitle }
     );
     errorInfoSheet.present();
-    errorInfoSheet.onDidDismiss(() => {
-      this.hideSlideButton = false;
-    });
+    errorInfoSheet.onDidDismiss(() => {});
   }
 
   public sign(): void {
     this.loading = true;
-    this.hideSlideButton = true;
     this.walletProvider
       .publishAndSign(this.wallet, this.tx)
       .then(() => {
@@ -426,7 +427,6 @@ export class TxpDetailsPage {
 
   public close(): void {
     this.loading = false;
-    this.hideSlideButton = false;
     this.viewCtrl.dismiss();
   }
 

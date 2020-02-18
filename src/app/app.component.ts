@@ -41,7 +41,7 @@ import { JoinWalletPage } from '../pages/add/join-wallet/join-wallet';
 import { FingerprintModalPage } from '../pages/fingerprint/fingerprint';
 import { BitPayCardIntroPage } from '../pages/integrations/bitpay-card/bitpay-card-intro/bitpay-card-intro';
 import { CoinbasePage } from '../pages/integrations/coinbase/coinbase';
-import { ConfirmInvoicePage } from '../pages/integrations/invoice/confirm-invoice/confirm-invoice';
+import { SelectInvoicePage } from '../pages/integrations/invoice/select-invoice/select-invoice';
 import { ShapeshiftPage } from '../pages/integrations/shapeshift/shapeshift';
 import { DisclaimerPage } from '../pages/onboarding/disclaimer/disclaimer';
 import { OnboardingPage } from '../pages/onboarding/onboarding';
@@ -93,8 +93,8 @@ export class CopayApp {
     AddWalletPage,
     PaperWalletPage,
     ShapeshiftPage,
-    WalletDetailsPage,
-    ConfirmInvoicePage
+    SelectInvoicePage,
+    WalletDetailsPage
   };
 
   constructor(
@@ -290,7 +290,7 @@ export class CopayApp {
         this.handleDeepLinks();
       }
 
-      if (this.isElectronPlatform()) {
+      if (this.platformProvider.isElectron) {
         this.handleDeepLinksElectron();
       }
     } else {
@@ -387,10 +387,13 @@ export class CopayApp {
   private incomingDataRedirEvent(): void {
     this.events.subscribe('IncomingDataRedir', nextView => {
       this.closeScannerFromWithinWallet();
-      this.getSelectedTabNav().push(
-        this.pageMap[nextView.name],
-        nextView.params
-      );
+      // wait for wallets status
+      setTimeout(() => {
+        this.getSelectedTabNav().push(
+          this.pageMap[nextView.name],
+          nextView.params
+        );
+      }, 300);
     });
   }
 
@@ -535,18 +538,6 @@ export class CopayApp {
     } else {
       this.logger.debug('URL found');
       this.handleOpenUrl(pathData);
-    }
-  }
-
-  private isElectronPlatform(): boolean {
-    const userAgent =
-      navigator && navigator.userAgent
-        ? navigator.userAgent.toLowerCase()
-        : null;
-    if (userAgent && userAgent.indexOf(' electron/') > -1) {
-      return true;
-    } else {
-      return false;
     }
   }
 
