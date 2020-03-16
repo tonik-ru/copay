@@ -120,7 +120,7 @@ export class SendPage extends WalletTabsChild {
               this.incomingDataProvider.parseData(text) !== undefined &&
               this.incomingDataProvider.parseData(text) !== null
             ) {
-              if (this.checkCoinAndNetwork(text,  null, true)) {
+              if (this.checkCoinAndNetwork(text, null, true)) {
                 //  this.presentConfirm(text);
                 this.showClipboard(text);
               }
@@ -181,6 +181,11 @@ export class SendPage extends WalletTabsChild {
       isValid =
         this.wallet.coin == addrData.coin &&
         addrData.network == this.wallet.network;
+      if (
+        (addrData.coin == 'bcd' || addrData.coin == 'btc') &&
+        (this.wallet.coin == 'bcd' || this.wallet.coin == 'btc')
+      )
+        isValid = addrData.network == this.wallet.network;
     }
 
     if (isValid) {
@@ -194,8 +199,9 @@ export class SendPage extends WalletTabsChild {
         const isLegacy = this.checkIfLegacy();
         isLegacy ? this.showLegacyAddrMessage() : this.showErrorMessage();
       } else {
-        if (!clipboard){
-        this.showErrorMessage();}
+        if (!clipboard) {
+          this.showErrorMessage();
+        }
       }
     }
 

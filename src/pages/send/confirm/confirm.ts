@@ -285,7 +285,7 @@ export class ConfirmPage extends WalletTabsChild {
   private getAmountDetails() {
     this.amount = this.decimalPipe.transform(
       this.tx.amount / this.coinOpts[this.coin].unitToSatoshi,
-      '1.2-6'
+      '1.2-8'
     );
     this.logger.log(this.amount, this.tx);
   }
@@ -1133,7 +1133,10 @@ export class ConfirmPage extends WalletTabsChild {
       //   this.playAnimation = true;
       // }
       // this.updateQrAddress(address, newAddr);
-    }) 
+    })
+    .catch(ex => {
+      this.logger.error(ex);
+    });
   }
  
    // wallets.filter((x)=>{x.})
